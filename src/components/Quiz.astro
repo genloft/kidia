@@ -1,0 +1,160 @@
+---
+interface Props {
+  scenario: any; // Using any to match ChatBox for now
+}
+
+const { scenario } = Astro.props;
+---
+
+<div id="quiz-container" class="quiz-container hidden">
+  <div class="quiz-content">
+      <h2 class="quiz-title">Test de Conocimiento</h2>
+      <div id="quiz-question" class="question-text">Loading...</div>
+      <div id="quiz-options" class="options-grid"></div>
+      <div id="quiz-feedback" class="feedback hidden"></div>
+      <button id="quiz-next" class="btn hidden">Continuar</button>
+  </div>
+</div>
+
+<script define:vars={{ scenario }}>
+    import { completeScenario, addBadge } from '../lib/storage';
+    // Removed old content import
+
+    const container = document.getElementById('quiz-container');
+    // ...
+
+    // Use passed scenario object directly
+    const question = scenario?.quiz?.questions?.[0]; 
+    const scenarioId = scenario.id;
+
+    window.addEventListener('startQuiz', (e) => {
+        if (e.detail.scenarioId === scenarioId) {
+            container.classList.remove('hidden');
+            renderQuestion();
+        }
+    });
+
+    function renderQuestion() {
+        if(!question) return;
+        questionEl.textContent = question.text;
+        optionsEl.innerHTML = '';
+        
+        question.options.forEach((text, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-option';
+            btn.textContent = text;
+            btn.onclick = () => checkAnswer(index, btn);
+            optionsEl.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(index, btn) {
+        // Disable all
+        const all = optionsEl.querySelectorAll('button');
+        all.forEach(b => b.disabled = true);
+
+        if (index === question.correctIndex) {
+            btn.classList.add('correct');
+            feedbackEl.textContent = `✅ ¡Correcto! ${question.explanation}`;
+            feedbackEl.className = 'feedback correct show';
+            completeScenario(scenarioId);
+            if(scenario.badge) addBadge(scenario.badge.id);
+            
+            // Celebration
+            document.body.style.overflow = 'hidden'; // Stop scroll
+            setTimeout(() => {
+                 alert(`¡Enhorabuena! Has conseguido la insignia: ${scenario.badge.icon} ${scenario.badge.name}`);
+                 window.location.href = '/profile';
+            }, 1500);
+
+        } else {
+            btn.classList.add('wrong');
+            feedbackEl.textContent = '❌ Vaya... Inténtalo de nuevo.';
+            feedbackEl.className = 'feedback wrong show';
+            
+             setTimeout(() => {
+                feedbackEl.className = 'feedback hidden';
+                all.forEach(b => {
+                    b.disabled = false;
+                    b.classList.remove('wrong', 'correct');
+                });
+            }, 2000);
+        }
+    }
+
+</script>
+
+<style>
+    .quiz-container {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.9);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 1;
+        transition: opacity 0.3s;
+    }
+
+    .quiz-container.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .quiz-content {
+        background: var(--color-surface);
+        padding: 2rem;
+        border-radius: 1.5rem;
+        border: 1px solid var(--color-primary);
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 0 50px rgba(34, 211, 238, 0.2);
+    }
+
+    .options-grid {
+        display: grid;
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .quiz-option {
+        padding: 1rem;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--color-text);
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: inherit;
+        font-size: 1rem;
+    }
+
+    .quiz-option:hover:not(:disabled) {
+        background: rgba(34, 211, 238, 0.1);
+        border-color: var(--color-primary);
+    }
+
+    .quiz-option.correct {
+        background: rgba(34, 220, 100, 0.2);
+        border-color: #22c55e;
+    }
+
+    .quiz-option.wrong {
+        background: rgba(239, 68, 68, 0.2);
+        border-color: #ef4444;
+    }
+
+    .feedback {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        font-weight: bold;
+    }
+    
+    .feedback.correct { color: #22c55e; background: rgba(34, 220, 100, 0.1); }
+    .feedback.wrong { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+
+</style>

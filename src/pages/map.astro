@@ -1,0 +1,191 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Friend from '../components/Friend.astro';
+import { scenarios } from '../lib/content';
+---
+
+<Layout title="Kidia - Mapa de Misiones">
+  <Header />
+  
+  <main class="map-container">
+    <div class="map-header">
+       <h1>Mapa del Futuro</h1>
+       <p>Selecciona tu próxima misión, cadete.</p>
+    </div>
+    
+    <div id="mission-control" class="mission-grid">
+       <!-- Hydrated by client script -->
+       <div class="loading">Cargando estado de la red...</div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+    import { userProgress } from '../lib/storage';
+    import { scenarios } from '../lib/content';
+    
+    const grid = document.getElementById('mission-control');
+    
+    function renderMap() {
+        const progress = userProgress.get();
+        const earnedBadges = progress.badges || [];
+        
+        grid.innerHTML = scenarios.map((scenario, index) => {
+            // Check if locked
+            let isLocked = false;
+            // Badge dependency lock
+            if (scenario.requiredBadgeId && !earnedBadges.includes(scenario.requiredBadgeId)) {
+                isLocked = true;
+            }
+            
+            // Premium lock (Mock check for now as we don't have is_premium in local store explicitly beyond profile)
+            // Ideally we fetch profile is_premium. Let's assume we pass it to renderMap or fetch it.
+            // For MVP, we will check a "premium" badge or just showing the Paywall logic on click if not locked by previous level
+            
+            const isCompleted = progress.completedScenarios.includes(scenario.id);
+            const statusClass = isLocked ? 'locked' : (isCompleted ? 'completed' : 'available');
+            
+            // Premium Visuals
+            const isPremium = scenario.isPremium;
+            const premiumClass = isPremium ? 'premium-node' : '';
+            
+            const href = isLocked ? '#' : `/scenario/${scenario.id}`;
+            let icon = isLocked ? '🔒' : (isCompleted ? '✅' : '🚀');
+            if (isPremium && !isLocked && !isCompleted) icon = '💎';
+            
+            return `
+               <a href="${href}" class="mission-node ${statusClass} ${premiumClass}" ${isLocked ? 'onclick="return false;"' : ''}>
+                  <div class="node-icon">${icon}</div>
+                  <div class="node-content">
+                      <span class="node-number">0${index + 1}</span>
+                      <h3>${scenario.title} ${isPremium ? '<span class="premium-tag">PRO</span>' : ''}</h3>
+                      <p>${scenario.description}</p>
+                      ${isLocked ? `<div class="lock-msg">Requiere: insignia anterior</div>` : ''}
+                  </div>
+               </a>
+            `;
+        }).join('');
+    }
+    
+    // Initial render
+    renderMap();
+    userProgress.subscribe(renderMap);
+</script>
+
+<style>
+    .map-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    
+    .map-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    
+    .mission-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        position: relative;
+    }
+    
+    /* Decoration line connecting nodes? Maybe too complex for now, keep it simple grid */
+    
+    .mission-node {
+        background: var(--color-surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        display: flex;
+        gap: 1.5rem;
+        text-decoration: none;
+        color: var(--color-text);
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .mission-node:hover:not(.locked) {
+        transform: translateY(-5px);
+        border-color: var(--color-primary);
+        box-shadow: 0 10px 30px -10px rgba(34, 211, 238, 0.3);
+    }
+    
+    .node-icon {
+        font-size: 2rem;
+        min-width: 50px;
+        height: 50px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .node-content h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+    }
+    
+    .node-content p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #a1a1aa;
+    }
+    
+    .node-number {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-primary);
+        display: block;
+        margin-bottom: 0.2rem;
+    }
+    
+    /* States */
+    .mission-node.locked {
+        opacity: 0.5;
+        cursor: not-allowed;
+        filter: grayscale(1);
+    }
+    
+    .mission-node.completed {
+        border-color: #22c55e;
+    }
+    
+    .mission-node.completed .node-icon {
+        background: rgba(34, 220, 100, 0.1);
+        color: #22c55e;
+    }
+    
+    .lock-msg {
+        font-size: 0.75rem;
+        color: #ef4444;
+        margin-top: 0.5rem;
+        font-weight: bold;
+    }
+    
+    .loading {
+        grid-column: 1 / -1;
+        text-align: center;
+        color: #888;
+    }
+    
+    .premium-node {
+        border-color: #ffd700;
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(0,0,0,0));
+    }
+    
+    .premium-tag {
+        font-size: 0.7rem;
+        background: #ffd700;
+        color: black;
+        padding: 0.1rem 0.3rem;
+        border-radius: 4px;
+        vertical-align: middle;
+        margin-left: 0.5rem;
+    }
+</style>

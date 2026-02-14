@@ -1,0 +1,114 @@
+:root {
+  --color-bg: #09090b;
+  --color-text: #e4e4e7;
+  --color-primary: #22d3ee; /* Cyan */
+  --color-secondary: #e879f9; /* Pink */
+  --color-accent: #8b5cf6; /* Purple */
+  --color-surface: #18181b;
+  
+  --font-body: 'Outfit', sans-serif;
+  
+  --glow-primary: 0 0 20px rgba(34, 211, 238, 0.5);
+  --glow-secondary: 0 0 20px rgba(232, 121, 249, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: hidden;
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Utilities */
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  border-color: rgba(34, 211, 238, 0.3);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-bg);
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: var(--glow-primary);
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: none;
+}
+
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 10px rgba(34, 211, 238, 0.2); }
+  50% { box-shadow: 0 0 25px rgba(34, 211, 238, 0.6); }
+  100% { box-shadow: 0 0 10px rgba(34, 211, 238, 0.2); }
+}

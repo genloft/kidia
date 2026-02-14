@@ -1,0 +1,21 @@
+{
+  "name": "kidia",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/node": "^9.5.3",
+    "@nanostores/persistent": "^0.10.2",
+    "@supabase/supabase-js": "^2.95.3",
+    "astro": "^5.0.0",
+    "nanostores": "^0.11.3",
+    "openai": "^6.22.0",
+    "stripe": "^20.3.1"
+  }
+}

@@ -1,0 +1,35 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Kidia - Aprende IA con tu amiga virtual" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
+
+<style>
+	body {
+		background-image: 
+			radial-gradient(circle at 10% 20%, rgba(34, 211, 238, 0.1) 0%, transparent 20%),
+			radial-gradient(circle at 90% 80%, rgba(232, 121, 249, 0.1) 0%, transparent 20%);
+	}
+</style>

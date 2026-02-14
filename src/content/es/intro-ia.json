@@ -1,0 +1,99 @@
+{
+    "id": "intro-ia",
+    "title": "1. El Despertar",
+    "description": "Descubre qué es la IA y cómo aprende patrones.",
+    "difficulty": "beginner",
+    "language": "es",
+    "unlocks_scenario_id": "learning-patterns",
+    "badge": {
+        "id": "badge-explorer",
+        "name": "Explorador de Datos",
+        "icon": "🧭",
+        "description": "Otorgada por entender qué es la IA."
+    },
+    "initial_node_id": "start",
+    "nodes": {
+        "start": {
+            "id": "start",
+            "sender": "kidia",
+            "text": "¡Hola! Soy Kidia. 👋 ¿Alguna vez te has preguntado cómo sabe Netflix qué series te gustan?",
+            "action": "smile",
+            "options": [
+                {
+                    "label": "¡Sí! Es magia.",
+                    "next_node_id": "magic"
+                },
+                {
+                    "label": "Supongo que analiza lo que veo.",
+                    "next_node_id": "analysis"
+                }
+            ]
+        },
+        "magic": {
+            "id": "magic",
+            "sender": "kidia",
+            "text": "¡Parece magia, pero son matemáticas! 🎩✨ Se llama Inteligencia Artificial.",
+            "action": "dance",
+            "next_node_id": "explanation"
+        },
+        "analysis": {
+            "id": "analysis",
+            "sender": "kidia",
+            "text": "¡Exacto! 🧠 Es muy lista observando patrones. Eso es básicamente la Inteligencia Artificial.",
+            "action": "think",
+            "next_node_id": "explanation"
+        },
+        "explanation": {
+            "id": "explanation",
+            "sender": "kidia",
+            "text": "La IA no \"piensa\" como nosotros. 🤖 Aprende viendo millones de ejemplos. Como cuando aprendiste a diferenciar perros de gatos.",
+            "options": [
+                {
+                    "label": "¿Entonces la IA aprende sola?",
+                    "next_node_id": "learning"
+                },
+                {
+                    "label": "¡Qué miedo!",
+                    "next_node_id": "fear"
+                }
+            ]
+        },
+        "fear": {
+            "id": "fear",
+            "sender": "kidia",
+            "text": "¡No te asustes! 🛡️ Es solo una herramienta, como un martillo o una calculadora. Depende de cómo la usemos.",
+            "next_node_id": "learning"
+        },
+        "learning": {
+            "id": "learning",
+            "sender": "kidia",
+            "text": "Más o menos. Necesita que le demos muchos datos. Cuantos más datos, mejor aprende. Se llama \"Entrenamiento\".",
+            "action": "trigger_quiz",
+            "next_node_id": "quiz-start"
+        },
+        "quiz-start": {
+            "id": "quiz-start",
+            "sender": "kidia",
+            "text": "¡Vamos a ver si lo has pillado! Test rápido. 🚀"
+        }
+    },
+    "quiz": {
+        "questions": [
+            {
+                "id": "q1",
+                "text": "¿Cómo aprende la IA?",
+                "options": [
+                    "Leyendo libros sola en la biblioteca",
+                    "Viendo muchos ejemplos y buscando patrones",
+                    "Comiendo chips de silicio"
+                ],
+                "correct_index": 1,
+                "explanation": "¡Eso es! Necesita ver muchos ejemplos para encontrar patrones."
+            }
+        ]
+    },
+    "deep_mode": {
+        "enabled": true,
+        "content_markdown": "## ¿Sabías qué?\n\nEl aprendizaje automático (Machine Learning) es una rama de la IA.\n\n- **Supervisado**: Le decimos qué es cada foto (Esto es un gato).\n- **No Supervisado**: Ella sola agrupa cosas parecidas.\n\n¡Es como ordenar tu habitación pero con millones de juguetes!"
+    }
+}

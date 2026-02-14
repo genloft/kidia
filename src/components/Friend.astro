@@ -1,0 +1,148 @@
+---
+interface Props {
+  state?: 'idle' | 'talking' | 'thinking';
+}
+
+const { state = 'idle' } = Astro.props;
+---
+
+<div class={`friend-container ${state}`}>
+  <div class="friend-glow"></div>
+  <div class="friend-face">
+    <div class="eye left"></div>
+    <div class="eye right"></div>
+    <div class="mouth"></div>
+  </div>
+</div>
+
+<script>
+  const container = document.querySelector('.friend-container');
+  
+  window.addEventListener('kidia:action', (e) => {
+      const { action } = e.detail;
+      if (!container) return;
+      
+      // Reset classes
+      container.classList.remove('idle', 'talking', 'thinking', 'happy', 'dance');
+      
+      switch(action) {
+          case 'smile':
+          case 'happy':
+              container.classList.add('talking'); // simplified mapping
+              break;
+          case 'think': 
+              container.classList.add('thinking');
+              break;
+          case 'dance':
+              container.classList.add('talking');
+              // Add dance animation class if we define it later
+              break;
+          default:
+              container.classList.add('idle');
+      }
+  });
+</script>
+
+<style>
+  .friend-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+  }
+
+  .friend-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(34, 211, 238, 0.4) 0%, transparent 70%);
+    animation: pulse-glow 3s infinite;
+    z-index: 0;
+  }
+
+  .friend-face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border: 2px solid var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+    overflow: hidden;
+  }
+
+  .friend-face::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    animation: shine 4s infinite;
+  }
+
+  @keyframes shine {
+    0% { transform: rotate(0deg) translateY(0); }
+    100% { transform: rotate(360deg) translateY(0); }
+  }
+
+  .eye {
+    width: 12px;
+    height: 12px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    position: absolute;
+    top: 40%;
+    animation: blink 4s infinite;
+    box-shadow: 0 0 10px var(--color-primary);
+  }
+
+  .eye.left { left: 30%; }
+  .eye.right { right: 30%; }
+
+  .mouth {
+    width: 20px;
+    height: 8px;
+    border-bottom: 3px solid var(--color-primary);
+    border-radius: 50%;
+    position: absolute;
+    top: 60%;
+    transition: all 0.3s;
+  }
+
+  /* States */
+  .friend-container.talking .mouth {
+    height: 12px;
+    width: 24px;
+    border-radius: 12px;
+    background: var(--color-primary);
+    border: none;
+    animation: talk 0.3s infinite alternate;
+  }
+
+  .friend-container.thinking .eye {
+    animation: none;
+    height: 4px;
+    top: 42%;
+    opacity: 0.7;
+  }
+  
+  .friend-container.thinking .friend-face {
+     animation: float 2s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 96%, 100% { transform: scaleY(1); }
+    98% { transform: scaleY(0.1); }
+  }
+
+  @keyframes talk {
+    0% { height: 8px; width: 20px; }
+    100% { height: 16px; width: 24px; }
+  }
+</style>

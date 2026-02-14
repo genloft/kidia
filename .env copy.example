@@ -1,0 +1,10 @@
+# Supabase
+PUBLIC_SUPABASE_URL='https://sfqsufpeefqxltljqzvk.supabase.co'
+PUBLIC_SUPABASE_ANON_KEY='sb_publishable_dGdAvXvFBzaSbF9Zb4yyJg_FQCS3__V'
+
+# OpenAI
+OPENAI_API_KEY=
+
+# Stripe
+STRIPE_SECRET_KEY=
+PUBLIC_STRIPE_KEY=

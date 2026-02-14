@@ -1,0 +1,133 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Friend from '../components/Friend.astro';
+---
+
+<Layout title="Kidia - Tu amiga de IA">
+  <Header />
+  
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Tu viaje a la <span class="text-gradient">Inteligencia Artificial</span> empieza aquí.</h1>
+        <p class="subtitle">Una aventura interactiva para entender el futuro, sin aulas ni exámenes. Solo tú, Kidia y muchas misiones.</p>
+        
+        <div class="cta-container">
+           <a href="/map" class="btn pulse">
+             Comenzar Aventura 🚀
+           </a>
+           <a href="/parents" class="btn btn-secondary">
+             Zona de Padres 🛡️
+           </a>
+        </div>
+      </div>
+      
+      <div class="hero-visual">
+          <Friend state="talking" />
+      </div>
+    </section>
+    
+    <section class="features">
+        <div class="feature-card">
+            <h3>🤖 Tu propia IA</h3>
+            <p>Kidia no es una profesora. Es una compañera curiosa que aprende contigo paso a paso.</p>
+        </div>
+        <div class="feature-card">
+            <h3>🎮 Juega y Aprende</h3>
+            <p>Sin vídeos aburridos. Chatea, toma decisiones y desbloquea insignias reales.</p>
+        </div>
+        <div class="feature-card">
+            <h3>🧠 Ética Primero</h3>
+            <p>Descubre no solo cómo funciona la tecnología, sino cómo usarla bien.</p>
+        </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .hero {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 3rem;
+    margin: 4rem 0;
+    text-align: center;
+  }
+  
+  @media (min-width: 768px) {
+    .hero {
+      flex-direction: row;
+      text-align: left;
+      justify-content: space-between;
+    }
+    
+    .hero-content {
+      max-width: 50%;
+    }
+  }
+  
+  h1 {
+    font-size: 3.5rem;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+  
+  .subtitle {
+    font-size: 1.25rem;
+    color: #a1a1aa;
+    margin-bottom: 2.5rem;
+  }
+  
+  .cta-container {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+  }
+  
+  @media (min-width: 768px) {
+      .cta-container { justify-content: flex-start; }
+  }
+
+  .pulse {
+    animation: pulse-glow 2s infinite;
+  }
+  
+  .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 6rem;
+  }
+  
+  .feature-card {
+      background: rgba(255,255,255,0.03);
+      padding: 2rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: transform 0.2s;
+  }
+  
+  .feature-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255,255,255,0.05);
+  }
+  
+  .feature-card h3 {
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+  }
+  
+  .feature-card p {
+      color: #d4d4d8;
+      line-height: 1.6;
+  }
+</style>

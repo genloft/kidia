@@ -1,0 +1,110 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Friend from '../../components/Friend.astro';
+import ChatBox from '../../components/ChatBox.astro';
+import Quiz from '../../components/Quiz.astro';
+import { loadScenarios } from '../../lib/scenario-loader';
+
+export async function getStaticPaths() {
+  const scenarios = await loadScenarios('es');
+  return scenarios.map(scenario => ({
+    params: { slug: scenario.id },
+    props: { scenario },
+  }));
+}
+
+const { scenario } = Astro.props;
+---
+
+<Layout title={`Kidia - ${scenario.title}`}>
+  <Header />
+  
+  <main class="scenario-layout">
+    <aside class="sidebar">
+       <div class="friend-wrapper">
+          <Friend state="talking" />
+       </div>
+       <div class="scenario-info">
+           <h1>{scenario.title}</h1>
+           <p>{scenario.description}</p>
+           <div class="progress-indicator">
+               Insignia <span class="badge-preview">{scenario.badge.icon}</span> al finalizar
+           </div>
+           
+           {scenario.deep_mode?.enabled && (
+             <div class="deep-mode-info">
+                ℹ️ +Info Disponible
+             </div>
+           )}
+       </div>
+    </aside>
+    
+    <section class="chat-area">
+        <ChatBox scenario={scenario} />
+    </section>
+    
+    <Quiz scenario={scenario} />
+  </main>
+</Layout>
+
+<style>
+    .scenario-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        height: calc(100vh - 80px);
+    }
+    
+    @media (min-width: 768px) {
+        .scenario-layout {
+            grid-template-columns: 300px 1fr;
+        }
+    }
+    
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .friend-wrapper {
+        margin-top: 2rem;
+    }
+    
+    .scenario-info h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.2;
+    }
+    
+    .scenario-info p {
+        color: #a1a1aa;
+        font-size: 0.9rem;
+    }
+    
+    .badge-preview {
+        font-size: 1.5rem;
+        vertical-align: middle;
+    }
+    
+    .progress-indicator {
+        margin-top: 1rem;
+        padding: 0.5rem;
+        background: rgba(255,255,255,0.05);
+        border-radius: 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .chat-area {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+</style>

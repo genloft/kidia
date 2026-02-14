@@ -1,0 +1,236 @@
+---
+interface Props {
+  scenarioId: string;
+}
+
+const { scenarioId } = Astro.props;
+---
+
+<div class="chat-container">
+  <div id="chat-messages" class="chat-messages">
+    <!-- Messages injected here -->
+  </div>
+  
+  <div id="chat-controls" class="chat-controls">
+    <!-- Options injected here -->
+  </div>
+</div>
+
+<script define:vars={{ scenarioId }}>
+  import { scenarios } from '../lib/content';
+  import { userProgress, completeScenario } from '../lib/storage';
+
+  const container = document.getElementById('chat-messages');
+  const controls = document.getElementById('chat-controls');
+  const scenario = scenarios.find(s => s.id === scenarioId);
+
+  let currentMessageId = scenario ? scenario.initialMessageId : null;
+
+  function renderMessage(msg) {
+    const el = document.createElement('div');
+    el.className = `message ${msg.sender}`;
+    el.innerHTML = `
+      <div class="bubble">${msg.text}</div>
+    `;
+    container.appendChild(el);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function renderOptions(options) {
+    controls.innerHTML = '';
+    if (!options) return;
+
+    options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'btn option-btn';
+      btn.textContent = opt.label;
+      btn.onclick = () => {
+        // User message
+        renderMessage({ sender: 'user', text: opt.label });
+        advance(opt.nextId);
+      };
+      controls.appendChild(btn);
+    });
+  }
+
+  function advance(nextId) {
+    controls.innerHTML = ''; // Clear options
+    if (!nextId) {
+        // AI MODE: Custom input or auto-reply logic could go here
+        // For phase 2 MVP: Let's allow users to type if options run out?
+        // Or for now, just keep options flow but maybe add a "Preguntar a Kidia" button
+        return;
+    }
+
+    const msg = scenario.messages[nextId];
+    if (msg) {
+      setTimeout(() => {
+        renderMessage(msg);
+        
+        if (msg.nextId) {
+             setTimeout(() => advance(msg.nextId), 1500);
+        } else if (msg.options) {
+             renderOptions(msg.options);
+        } else if (msg.action === 'quiz') {
+            const event = new CustomEvent('startQuiz', { detail: { scenarioId } });
+            window.dispatchEvent(event);
+        }
+      }, 600);
+    }
+  }
+
+  // --- AI Chat Logic ---
+  // Adding a simple text input for free chat
+  const inputContainer = document.createElement('div');
+  inputContainer.className = 'chat-input-area hidden';
+  inputContainer.innerHTML = `
+      <input type="text" id="ai-input" placeholder="Pregúntame algo..." />
+      <button id="ai-send" class="btn">Envíar</button>
+  `;
+  container.parentElement.appendChild(inputContainer);
+
+  // Enable AI mode if scenario is special or user unlocks it?
+  // For demo, let's enable it always at the bottom
+  inputContainer.classList.remove('hidden');
+
+  const aiInput = document.getElementById('ai-input');
+  const aiSend = document.getElementById('ai-send');
+
+  aiSend.onclick = async () => {
+      const text = aiInput.value;
+      if(!text) return;
+      
+      // Render User
+      renderMessage({ sender: 'user', text });
+      aiInput.value = '';
+      
+      // Loading state
+      const thinkingId = 'thinking-' + Date.now();
+      renderMessage({ sender: 'friend', text: 'Pensando... 🤔', id: thinkingId });
+      
+      try {
+          const res = await fetch('/api/chat', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                  scenarioId,
+                  messages: [{ role: 'user', content: text }] // We should send history ideally
+              })
+          });
+          
+          const data = await res.json();
+          
+          // Remove thinking
+          container.lastElementChild.remove();
+          
+          if(data.error) {
+             renderMessage({ sender: 'friend', text: 'Ups, me he mareado. 😵 ' + data.error });
+          } else {
+             renderMessage({ sender: 'friend', text: data.content });
+          }
+          
+      } catch(e) {
+          container.lastElementChild.remove();
+          renderMessage({ sender: 'friend', text: 'Error de conexión. 🔌' });
+      }
+  };
+</script>
+
+<style>
+  .chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    max-width: 800px;
+    margin: 0 auto;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 1rem;
+    overflow: hidden;
+    background: rgba(0,0,0,0.3);
+  }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .message {
+    display: flex;
+    margin-bottom: 0.5rem;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .message.friend {
+    justify-content: flex-start;
+  }
+
+  .message.user {
+    justify-content: flex-end;
+  }
+
+  .bubble {
+    padding: 1rem 1.5rem;
+    border-radius: 1.5rem;
+    max-width: 80%;
+    line-height: 1.5;
+  }
+
+  .friend .bubble {
+    background: rgba(255,255,255,0.05);
+    border-bottom-left-radius: 0.2rem;
+    color: var(--color-text);
+  }
+
+  .user .bubble {
+    background: var(--color-primary);
+    color: var(--color-bg);
+    border-bottom-right-radius: 0.2rem;
+    font-weight: 500;
+  }
+
+  .chat-controls {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    background: rgba(0,0,0,0.2);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  :global(.option-btn) {
+      font-size: 0.9rem !important;
+      padding: 0.6rem 1.2rem !important;
+  }
+  
+  .chat-input-area {
+      padding: 1rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(0,0,0,0.4);
+  }
+  
+  .chat-input-area input {
+      flex: 1;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      color: white;
+  }
+  
+  .chat-input-area input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+  }
+</style>

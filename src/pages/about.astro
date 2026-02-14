@@ -1,0 +1,110 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+---
+
+<Layout title="Kidia - Sobre Nosotros">
+  <Header />
+  
+  <main class="faq-container">
+    <div class="faq-header">
+        <h1>Sobre Kidia</h1>
+        <p>Preguntas Frecuentes</p>
+    </div>
+    
+    <div class="faq-grid">
+        <details class="faq-item">
+            <summary>¿Qué es Kidia?</summary>
+            <p>Es una plataforma interactiva diseñada para que niños y niñas de 9 a 12 años entiendan qué es la Inteligencia Artificial, sin tecnicismos aburridos.</p>
+        </details>
+        
+        <details class="faq-item">
+            <summary>¿Es gratis?</summary>
+            <p>¡Sí! Esta versión Beta es totalmente gratuita y de código abierto.</p>
+        </details>
+        
+        <details class="faq-item">
+            <summary>¿Necesito saber programar?</summary>
+            <p>No. Kidia es una aventura narrativa. Solo necesitas curiosidad y ganas de leer.</p>
+        </details>
+        
+        <details class="faq-item">
+            <summary>¿Quién es Kidia?</summary>
+            <p>Es tu compañera virtual. Una IA (simulada) que te guía por los conceptos. No es una profesora, es una amiga que aprende contigo.</p>
+        </details>
+    </div>
+  </main>
+</Layout>
+
+<style>
+    .faq-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+    }
+    
+    .faq-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    
+    h1 {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+        color: var(--color-primary);
+    }
+    
+    .faq-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .faq-item {
+        background: var(--color-surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 0.5rem;
+        padding: 1rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .faq-item:hover {
+        border-color: var(--color-primary);
+    }
+    
+    summary {
+        font-weight: 600;
+        font-size: 1.1rem;
+        list-style: none; /* Hide default arrow */
+        position: relative;
+        padding-right: 2rem;
+    }
+    
+    summary::after {
+        content: '+';
+        position: absolute;
+        right: 0;
+        top: 0;
+        color: var(--color-primary);
+        font-weight: bold;
+    }
+    
+    details[open] summary::after {
+        content: '-';
+    }
+    
+    details[open] p {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        color: #d4d4d8;
+        line-height: 1.6;
+        animation: fadeIn 0.3s ease-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>

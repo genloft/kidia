@@ -1,0 +1,169 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+---
+
+<Layout title="Kidia - Zona de Padres">
+  <Header />
+  
+  <main class="info-container">
+    <h1>Zona de Padres 🛡️</h1>
+    <p class="intro">En Kidia, la seguridad y el aprendizaje ético son nuestra prioridad.</p>
+    
+    <section class="info-block">
+        <h2>¿Qué aprenden aquí?</h2>
+        <p>Kidia no enseña a "usar" herramientas de IA ciegamente. Enseña <strong>cómo funcionan</strong>.</p>
+        <ul>
+            <li>Conceptos básicos: Patrones, Datos, Píxeles.</li>
+            <li>Pensamiento crítico: Sesgos, Errores (Alucinaciones).</li>
+            <li>Seguridad digital: Privacidad y uso responsable.</li>
+        </ul>
+    </section>
+    
+    <section class="info-block">
+        <h2>Privacidad y Datos</h2>
+        <p>Actualmente, Kidia es una aplicación <strong>estática y local</strong>.</p>
+        <ul class="check-list">
+            <li>✅ No pedimos email ni registro (por ahora).</li>
+            <li>✅ El progreso se guarda en el navegador (localStorage).</li>
+            <li>✅ No enviamos datos a servidores externos.</li>
+            <li>✅ No hay trackers de publicidad.</li>
+        </ul>
+    </section>
+    
+    <section class="info-block report-card">
+        <h2>📊 Informe de Progreso</h2>
+        <div id="parent-report">
+            <p>Cargando datos...</p>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <span class="stat-value" id="stat-progress">0%</span>
+                <span class="stat-label">Completado</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-value" id="stat-badges">0</span>
+                <span class="stat-label">Insignias</span>
+            </div>
+        </div>
+    </section>
+    
+    <section class="info-block warning">
+        <h2>Nota sobre la Fase Beta</h2>
+        <p>Estamos en desarrollo. Próximamente añadiremos cuentas de usuario opcionales para guardar el progreso en la nube y funcionalidades avanzadas con supervisión parental.</p>
+    </section>
+  </main>
+</Layout>
+
+<script>
+    import { ProgressService } from '../lib/progress-service';
+    
+    // Simulate loading delay for effect
+    setTimeout(() => {
+        const report = ProgressService.computeParentReport();
+        const state = ProgressService.getState();
+        const globalProgress = ProgressService.getGlobalProgress(4); // Assuming 4 scenarios total for now
+        
+        const reportEl = document.getElementById('parent-report');
+        if (reportEl) {
+            reportEl.innerHTML = `<p>${report}</p>`;
+        }
+        
+        const progressEl = document.getElementById('stat-progress');
+        if (progressEl) progressEl.innerText = `${globalProgress}%`;
+        
+        const badgesEl = document.getElementById('stat-badges');
+        if (badgesEl) badgesEl.innerText = state.badges.length.toString();
+        
+    }, 500);
+</script>
+
+<style>
+    .info-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(to right, #e879f9, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .intro {
+        font-size: 1.2rem;
+        color: #e4e4e7;
+        margin-bottom: 3rem;
+    }
+    
+    .info-block {
+        margin-bottom: 3rem;
+        padding: 2rem;
+        background: var(--color-surface);
+        border-radius: 1rem;
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .info-block h2 {
+        color: var(--color-primary);
+        margin-bottom: 1rem;
+    }
+    
+    ul {
+        padding-left: 1.5rem;
+        line-height: 1.6;
+        color: #d4d4d8;
+    }
+    
+    .check-list {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .check-list li {
+        margin-bottom: 0.5rem;
+    }
+    
+    .warning {
+        border-color: #eab308;
+        background: rgba(234, 179, 8, 0.05);
+    }
+    
+    .warning h2 {
+        color: #eab308;
+    }
+    
+    .report-card {
+        border-color: var(--color-primary);
+        background: rgba(34, 211, 238, 0.05);
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+    
+    .stat-box {
+        background: rgba(0,0,0,0.2);
+        padding: 1rem;
+        border-radius: 0.5rem;
+        text-align: center;
+    }
+    
+    .stat-value {
+        display: block;
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--color-primary);
+    }
+    
+    .stat-label {
+        font-size: 0.9rem;
+        color: #a1a1aa;
+    }
+</style>
