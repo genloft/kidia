@@ -1,0 +1,184 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import ScenarioMapCard from '../components/ScenarioMapCard.astro';
+import { loadScenarios } from '../lib/scenario-loader';
+
+const scenarios = await loadScenarios('es');
+console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
+---
+
+<Layout title="Kidia - Mapa de Misiones">
+  <Header />
+  
+  <main class="map-container">
+    <div class="map-header">
+       <h1>🌌 Mapa del Conocimiento</h1>
+       <div class="map-controls">
+           <div class="global-progress">
+               <span id="global-percent">0%</span> Completado
+               <div class="progress-bar-bg"><div class="progress-bar-fill" id="global-bar"></div></div>
+           </div>
+           
+           <button id="btn-deep-mode" class="btn-deep-mode">
+               🧠 Modo Profundo: <span id="deep-status">OFF</span>
+           </button>
+       </div>
+    </div>
+    
+    <div class="mission-grid">
+       {scenarios.map((scenario, index) => (
+         <ScenarioMapCard scenario={scenario} index={index} />
+       ))}
+    </div>
+  </main>
+</Layout>
+
+<script>
+    import { ProgressService } from '../lib/progress-service';
+    
+    const state = ProgressService.getState();
+    const globalPercent = ProgressService.getGlobalProgress(document.querySelectorAll('.mission-node').length);
+    
+    // 1. Update Global Stats
+    document.getElementById('global-percent').innerText = `${globalPercent}%`;
+    document.getElementById('global-bar').style.width = `${globalPercent}%`;
+    
+    // 2. Hydrate Cards
+    const cards = document.querySelectorAll('.mission-node');
+    cards.forEach(card => {
+        const id = card.getAttribute('data-id');
+        const reqBadge = card.getAttribute('data-req');
+        const iconEl = card.querySelector('.node-icon');
+        
+        let isLocked = false;
+        
+        // Basic Lock Logic
+        if (reqBadge && !state.badges.includes(reqBadge)) {
+             isLocked = true;
+        }
+        
+        // "Intro" is always free if it's the first one or logic dictates
+        if (id === 'intro-ia') isLocked = false;
+        
+        const isCompleted = state.completedScenarios.includes(id);
+        const score = state.scores[id] || 0;
+        
+        // Apply classes
+        if (isLocked) {
+            card.classList.add('locked');
+            iconEl.innerText = '🔒';
+        } else {
+            card.classList.add('available');
+            if (isCompleted) {
+                card.classList.add('completed');
+                iconEl.innerText = '✅';
+                // Show score potentially?
+            } else {
+                iconEl.innerText = '🚀';
+            }
+        }
+    });
+
+    // 3. Deep Mode Logic
+    const deepBtn = document.getElementById('btn-deep-mode');
+    const deepStatus = document.getElementById('deep-status');
+    let deepMode = localStorage.getItem('kidia_deep_mode') === 'true';
+    
+    function updateDeepUI() {
+        deepStatus.innerText = deepMode ? 'ON' : 'OFF';
+        deepBtn.classList.toggle('active', deepMode);
+        document.body.classList.toggle('deep-mode-enabled', deepMode);
+    }
+    
+    deepBtn.addEventListener('click', () => {
+        deepMode = !deepMode;
+        localStorage.setItem('kidia_deep_mode', deepMode);
+        updateDeepUI();
+    });
+    
+    updateDeepUI();
+
+</script>
+
+<style>
+    .map-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    
+    .map-header {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .map-header h1 {
+        font-size: 2.5rem;
+        background: linear-gradient(to right, #22d3ee, #818cf8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin: 0;
+    }
+    
+    .map-controls {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .global-progress {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: #a1a1aa;
+        width: 200px;
+    }
+    
+    .progress-bar-bg {
+        width: 100%;
+        height: 6px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+    
+    .progress-bar-fill {
+        height: 100%;
+        background: var(--color-primary);
+        width: 0%;
+        transition: width 1s ease-out;
+    }
+    
+    .btn-deep-mode {
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        padding: 0.8rem 1.5rem;
+        border-radius: 2rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-deep-mode.active {
+        background: rgba(139, 92, 246, 0.2);
+        border-color: #8b5cf6;
+        box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+    }
+    
+    .mission-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+</style>

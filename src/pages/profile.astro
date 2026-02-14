@@ -2,7 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Friend from '../components/Friend.astro';
-import { scenarios } from '../lib/content';
+import { loadScenarios } from '../lib/scenario-loader';
+
+const scenarios = await loadScenarios('es');
+const allBadges = scenarios.map(s => s.badge).filter(b => !!b);
 ---
 
 <Layout title="Kidia - Tu Perfil">
@@ -19,8 +22,7 @@ import { scenarios } from '../lib/content';
     
     <div class="badges-section">
        <h2>Mis Insignias</h2>
-       <div id="badges-grid" class="badges-grid">
-          <!-- Client-side hydration -->
+       <div id="badges-grid" class="badges-grid" data-badges={JSON.stringify(allBadges)}>
           <div class="loading">Cargando insignias...</div>
        </div>
     </div>
@@ -32,20 +34,16 @@ import { scenarios } from '../lib/content';
 </Layout>
 
 <script>
-    import { userProgress } from '../lib/storage';
-    import { scenarios } from '../lib/content';
-    
-    // We need to wait for persistent map to load or just read it
-    // Nano stores persistent syncs with localStorage instantly usually.
+    import { storage } from '../lib/storage-simple';
     
     const grid = document.getElementById('badges-grid');
     
     function renderBadges() {
-        const progress = userProgress.get();
-        const earnedBadges = progress.badges || [];
+        if (!grid) return;
         
-        // Let's list all possible badges and show them locked/unlocked
-        const allBadges = scenarios.map(s => s.badge);
+        const allBadges = JSON.parse(grid.dataset.badges || '[]');
+        const progress = storage.get();
+        const earnedBadges = progress.badges || [];
         
         grid.innerHTML = allBadges.map(badge => {
             const isUnlocked = earnedBadges.includes(badge.id);
@@ -61,9 +59,6 @@ import { scenarios } from '../lib/content';
     
     // Initial render
     renderBadges();
-    
-    // Listen for changes (though page load is enough usually)
-    userProgress.subscribe(renderBadges);
 </script>
 
 <style>

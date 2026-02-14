@@ -89,6 +89,17 @@
                 ],
                 "correct_index": 1,
                 "explanation": "¡Eso es! Necesita ver muchos ejemplos para encontrar patrones."
+            },
+            {
+                "id": "q2",
+                "text": "¿Qué pasa si la IA no sabe la respuesta?",
+                "options": [
+                    "Se inventa algo (alucina)",
+                    "Explota",
+                    "Llama a su mamá"
+                ],
+                "correct_index": 0,
+                "explanation": "A veces, si no sabe, intenta adivinar y se equivoca. ¡Hay que vigilarla!"
             }
         ]
     },

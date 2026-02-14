@@ -6,168 +6,54 @@ interface Props {
 const { scenario } = Astro.props;
 ---
 
-<div class="chat-container">
-    <div id="messages-list" class="messages-list">
-        <!-- Messages will be injected here -->
-    </div>
-
-    <div id="options-area" class="options-area hidden">
-        <!-- Options will be injected here -->
-    </div>
-    
-    <div id="continue-area" class="continue-area hidden">
-       <button id="continue-btn" class="btn-continue">Continuar ▼</button>
-    </div>
+<div id="chat-root" class="chat-container" data-scenario={JSON.stringify(scenario)}>
+    <div class="messages-list"></div>
+    <div class="options-area hidden"></div>
+    <div class="continue-area hidden"></div>
 </div>
 
 <script define:vars={{ scenario }}>
-    import { userProgress, saveProgress, completeScenario } from '../lib/storage';
-
-    // DOM Elements
-    const messagesList = document.getElementById('messages-list');
-    const optionsArea = document.getElementById('options-area');
-    const continueArea = document.getElementById('continue-area');
-    const continueBtn = document.getElementById('continue-btn');
-
-    // State
-    let currentNodeId = scenario.initial_node_id;
-    let isTyping = false;
-
-    // Initialize from storage if exists
-    const progress = userProgress.get();
-    if (progress.scenarioProgress && progress.scenarioProgress[scenario.id]) {
-        // We could restore history here if we saved it, 
-        // for now just jump to the last node.
-        // But for a better UX, maybe we should restart if the node is not found?
-        // Let's assume we start at the saved node.
-        currentNodeId = progress.scenarioProgress[scenario.id];
-    }
-    
-    // Check if scenario has nodes (sanity check)
-    if (!scenario.nodes[currentNodeId]) {
-        console.warn('Node not found, resetting to start');
-        currentNodeId = scenario.initial_node_id;
-    }
-
-    // --- Core Functions ---
-
-    function renderMessage(node) {
-        if (!node) return;
-        
-        const msgDiv = document.createElement('div');
-        msgDiv.className = `message ${node.sender}`;
-        
-        // Simple Markdown-ish parser (bold)
-        const text = node.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        
-        msgDiv.innerHTML = `
-            <div class="bubble">${text}</div>
-        `;
-        
-        messagesList.appendChild(msgDiv);
-        scrollToBottom();
-        
-        // Handle Action
-        if (node.action) {
-            handleAction(node.action, node.action_data);
-        }
-        
-        // Handle Flow
-        if (node.options && node.options.length > 0) {
-            renderOptions(node.options);
-        } else if (node.next_node_id) {
-            showContinue(node.next_node_id);
-        } else {
-            // End of scenario logic
-            handleEnd();
-        }
-        
-        // Save state
-        saveProgress(scenario.id, node.id);
-    }
-
-    function renderOptions(options) {
-        optionsArea.innerHTML = '';
-        optionsArea.classList.remove('hidden');
-        continueArea.classList.add('hidden');
-        
-        options.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = `btn-option ${opt.style || 'default'}`;
-            btn.textContent = opt.label;
-            btn.onclick = () => {
-                // User message (echo choice)
-                const echoNode = { 
-                    sender: 'user', 
-                    text: opt.label, 
-                    id: 'user-echo-' + Date.now() 
-                };
-                renderMessage(echoNode);
-                
-                // Hide options
-                optionsArea.classList.add('hidden');
-                
-                // Next node
-                const nextNode = scenario.nodes[opt.next_node_id];
-                setTimeout(() => renderMessage(nextNode), 500);
-            };
-            optionsArea.appendChild(btn);
-        });
-        scrollToBottom();
-    }
-    
-    function showContinue(nextId) {
-        continueArea.classList.remove('hidden');
-        continueBtn.onclick = () => {
-            continueArea.classList.add('hidden');
-            const nextNode = scenario.nodes[nextId];
-            renderMessage(nextNode);
-            continueBtn.onclick = null; // cleanup
-        };
-        scrollToBottom();
-    }
-    
-    function handleAction(action, data) {
-        // Dispatch custom event for other components (like Friend.astro)
-        const event = new CustomEvent('kidia:action', { 
-            detail: { action, data } 
-        });
-        window.dispatchEvent(event);
-    }
-    
-    function handleEnd() {
-        console.log('Scenario Completed');
-        completeScenario(scenario.id);
-        
-        // Show completion message
-        const endDiv = document.createElement('div');
-        endDiv.className = 'message system';
-        endDiv.innerHTML = `<div class="bubble system-bubble">¡Escenario Completado! 🎉</div>`;
-        messagesList.appendChild(endDiv);
-        
-        // Trigger Quiz open
-        setTimeout(() => {
-             const event = new CustomEvent('startQuiz', {
-                 detail: { scenarioId: scenario.id }
-             });
-             window.dispatchEvent(event);
-        }, 1500);
-    }
-    
-    function scrollToBottom() {
-        // Using a timeout to ensure DOM render
-        setTimeout(() => {
-             const last = messagesList.lastElementChild;
-             if(last) last.scrollIntoView({ behavior: 'smooth' });
-        }, 50);
-    }
-
-    // --- Init ---
-    // Start with the current node
-    const startNode = scenario.nodes[currentNodeId];
-    renderMessage(startNode);
-
+    // Pass for view transitions if needed, but we use the JSON below for the class
 </script>
+
+<!-- Embedded Data for Client Rehydration -->
+<script is:inline id="scenario-data" type="application/json">
+    // Populated by server-side replacement or we can just use define:vars above?
+    // Actually, for a class outside of .astro scope, passing via window or JSON is better.
+    // Let's use the define:vars to assign to window for simplicity in this MVP.
+</script>
+
+<script>
+    import { GameEngine } from '../lib/game-engine';
+
+    // Wait for DOM
+    document.addEventListener('astro:page-load', () => {
+        initGame();
+    });
+
+    // Also run on immediate load (if no ViewTransitions or first load)
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        initGame();
+    } else {
+        document.addEventListener('DOMContentLoaded', initGame);
+    }
+
+    function initGame() {
+        const root = document.getElementById('chat-root');
+        if (!root) return;
+        if (root.getAttribute('data-loaded')) return; // Prevent double init
+        
+        // Get data from data-attribute (cleanest)
+        const dataRaw = root.getAttribute('data-scenario');
+        if (!dataRaw) return;
+        
+        const scenario = JSON.parse(dataRaw);
+        new GameEngine(scenario, 'chat-root');
+        root.setAttribute('data-loaded', 'true');
+    }
+</script>
+
+
 
 <style>
     .chat-container {

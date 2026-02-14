@@ -1,0 +1,18 @@
+---
+import TokenProcess from './animations/TokenProcess.astro';
+import Probabilities from './animations/Probabilities.astro';
+import GazapoDetector from './animations/GazapoDetector.astro';
+import Growth from './animations/Growth.astro';
+---
+
+<div id="animation-stage">
+    <TokenProcess />
+    <Probabilities />
+    <GazapoDetector />
+    <Growth />
+</div>
+
+<script>
+    // Global listener proxy if needed, but components listen individually.
+    // This component mostly serves as an includer.
+</script>

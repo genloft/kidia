@@ -1,0 +1,132 @@
+{
+    "id": "learning-patterns",
+    "title": "2. Cazadores de Patrones",
+    "description": "Enséñale a la IA a distinguir entre un perro y un muffin.",
+    "difficulty": "intermediate",
+    "language": "es",
+    "required_badge_id": "badge-explorer",
+    "unlocks_scenario_id": "ethics-basic",
+    "badge": {
+        "id": "badge-detective",
+        "name": "Detective Visual",
+        "icon": "loupe",
+        "description": "Otorgada por entender la Visión por Computador."
+    },
+    "initial_node_id": "start",
+    "nodes": {
+        "start": {
+            "id": "start",
+            "sender": "kidia",
+            "text": "¡Hola de nuevo! 🕵️‍♀️ ¿Listo para entrenar mis ojos digitales?",
+            "action": "smile",
+            "options": [
+                {
+                    "label": "¡Claro! ¿Qué tienes que ver?",
+                    "next_node_id": "pixels"
+                },
+                {
+                    "label": "¿Tienes ojos de verdad?",
+                    "next_node_id": "cameras"
+                }
+            ]
+        },
+        "cameras": {
+            "id": "cameras",
+            "sender": "kidia",
+            "text": "No tengo ojos biológicos, ¡tengo cámaras y sensores! 📷 Pero lo importante es cómo proceso esas imágenes.",
+            "next_node_id": "pixels"
+        },
+        "pixels": {
+            "id": "pixels",
+            "sender": "kidia",
+            "text": "Para mí, una foto es solo un montón de números. Los llamamos **píxeles**. 🔢",
+            "options": [
+                {
+                    "label": "¿Como en Minecraft?",
+                    "next_node_id": "minecraft"
+                }
+            ]
+        },
+        "minecraft": {
+            "id": "minecraft",
+            "sender": "kidia",
+            "text": "¡Exacto! 🧱 Cuadrados de colores. Si veo muchos píxeles marrones y verdes juntos...",
+            "options": [
+                {
+                    "label": "¡Es un árbol!",
+                    "next_node_id": "tree"
+                },
+                {
+                    "label": "¡Es un perro!",
+                    "next_node_id": "dog_mistake"
+                }
+            ]
+        },
+        "tree": {
+            "id": "tree",
+            "sender": "kidia",
+            "text": "¡Correcto! 🌳 Busco formas y colores. Pero a veces me confundo.",
+            "next_node_id": "muffin"
+        },
+        "dog_mistake": {
+            "id": "dog_mistake",
+            "sender": "kidia",
+            "text": "Mmm... podría ser un perro marrón en la hierba. 🐕 ¡Es difícil saberlo solo con colores!",
+            "next_node_id": "muffin"
+        },
+        "muffin": {
+            "id": "muffin",
+            "sender": "kidia",
+            "text": "¿Sabes que a veces confundo a los chihuahuas con muffins de arándanos? 🧁🐶 Se parecen mucho.",
+            "action": "think",
+            "options": [
+                {
+                    "label": "¡Jajaja! ¿En serio?",
+                    "next_node_id": "training"
+                }
+            ]
+        },
+        "training": {
+            "id": "training",
+            "sender": "kidia",
+            "text": "Sí. Necesito ver miles de fotos de perros y miles de muffins para aprender la diferencia. ¿Me ayudas con un test?",
+            "action": "trigger_quiz",
+            "next_node_id": "quiz-start"
+        },
+        "quiz-start": {
+            "id": "quiz-start",
+            "sender": "kidia",
+            "text": "¡A ver si tú tienes mejor vista que yo!"
+        }
+    },
+    "quiz": {
+        "questions": [
+            {
+                "id": "q1",
+                "text": "¿Qué ve realmente una IA cuando mira una foto?",
+                "options": [
+                    "La foto completa como nosotros",
+                    "Una cuadrícula de números (píxeles)",
+                    "El alma de la persona"
+                ],
+                "correct_index": 1,
+                "explanation": "¡Los ordenadores solo entienden números! Transforman los colores en valores numéricos."
+            },
+            {
+                "id": "q2",
+                "text": "¿Por qué es difícil distinguir un chihuaha de un muffin?",
+                "options": [
+                    "Porque los dos son deliciosos",
+                    "Porque comparten formas y colores similares (patrones)",
+                    "Porque la IA necesita gafas"
+                ],
+                "correct_index": 1,
+                "explanation": "¡Exacto! Los patrones visuales (puntos negros, color tostado) son muy parecidos."
+            }
+        ]
+    },
+    "deep_mode": {
+        "enabled": true,
+        "content_markdown": "## Visión Artificial (Computer Vision)\n\nLas redes neuronales convolucionales (CNN) son las que mejor ven.\n\n1.  **Bordes**: Primero detectan líneas.\n2.  **Formas**: Luego unen líneas para hacer círculos o cuadrados.\n3.  **Objetos**: Finalmente reconocen \"ojo\", \"oreja\", \"hocico\".\n\n¡Es como un puzzle por capas!"
+    }
+}

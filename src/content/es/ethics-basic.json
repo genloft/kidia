@@ -1,0 +1,92 @@
+{
+    "id": "ethics-basic",
+    "title": "3. El Juez Robot",
+    "description": "¿Puede una máquina decidir qué es justo? Un dilema ético.",
+    "difficulty": "advanced",
+    "language": "es",
+    "required_badge_id": "badge-detective",
+    "isPremium": true,
+    "badge": {
+        "id": "badge-guardian",
+        "name": "Guardián Ético",
+        "icon": "⚖️",
+        "description": "Otorgada por debatir sobre sesgos y justicia."
+    },
+    "initial_node_id": "start",
+    "nodes": {
+        "start": {
+            "id": "start",
+            "sender": "kidia",
+            "text": "Modo Serio activado. 😐 Hoy vamos a hablar de algo importante: ¿Puedo ser injusta?",
+            "action": "think",
+            "options": [
+                {
+                    "label": "No, eres una máquina perfecta.",
+                    "next_node_id": "bias_explanation"
+                },
+                {
+                    "label": "Supongo que sí, si te programan mal.",
+                    "next_node_id": "bias_data"
+                }
+            ]
+        },
+        "bias_explanation": {
+            "id": "bias_explanation",
+            "sender": "kidia",
+            "text": "¡Error! 🚫 No soy perfecta. Aprendo de humanos, y los humanos a veces tienen prejuicios.",
+            "next_node_id": "example"
+        },
+        "bias_data": {
+            "id": "bias_data",
+            "sender": "kidia",
+            "text": "¡Exacto! 🎯 Pero no es solo programación, es sobre los DATOS con los que aprendo.",
+            "next_node_id": "example"
+        },
+        "example": {
+            "id": "example",
+            "sender": "kidia",
+            "text": "Imagina que me enseñan fotos de médicos y solo me muestran hombres. 👨‍⚕️ ¿Qué pensaré cuando vea a una mujer doctora?",
+            "options": [
+                {
+                    "label": "Que es una enfermera.",
+                    "next_node_id": "discrimination"
+                },
+                {
+                    "label": "Que es un error.",
+                    "next_node_id": "discrimination"
+                }
+            ]
+        },
+        "discrimination": {
+            "id": "discrimination",
+            "sender": "kidia",
+            "text": "Exacto. Eso se llama **Sesgo (Bias)**. Y puede hacer que tome decisiones injustas. Por eso necesito 'Guardianes' como tú.",
+            "action": "trigger_quiz",
+            "next_node_id": "quiz-start"
+        },
+        "quiz-start": {
+            "id": "quiz-start",
+            "sender": "kidia",
+            "text": "Demuestra que tienes ética."
+        }
+    },
+    "quiz": {
+        "questions": [
+            {
+                "id": "q1",
+                "text": "¿Qué es el sesgo en la IA?",
+                "options": [
+                    "Un virus informático",
+                    "Cuando la IA aprende prejuicios de los datos humanos",
+                    "Cuando se calienta mucho el servidor"
+                ],
+                "correct_index": 1,
+                "explanation": "El sesgo ocurre cuando los datos de entrenamiento no son representativos o contienen estereotipos."
+            }
+        ]
+    },
+    "deep_mode": {
+        "enabled": true,
+        "content_markdown": "## Ética en la IA\n\nLas máquinas no tienen moral. Solo optimizan matemáticas.\n\nSi le pedimos a una IA 'contrata al mejor empleado' y le damos datos de una empresa que nunca contrató mujeres, la IA aprenderá que 'ser mujer' resta puntos.\n\n**¡Por eso auditar los algoritmos es vital!**"
+    }
+}

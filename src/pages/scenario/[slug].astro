@@ -4,17 +4,15 @@ import Header from '../../components/Header.astro';
 import Friend from '../../components/Friend.astro';
 import ChatBox from '../../components/ChatBox.astro';
 import Quiz from '../../components/Quiz.astro';
-import { loadScenarios } from '../../lib/scenario-loader';
+import AnimationStage from '../../components/AnimationStage.astro';
+import { getScenarioById } from '../../lib/scenario-loader';
 
-export async function getStaticPaths() {
-  const scenarios = await loadScenarios('es');
-  return scenarios.map(scenario => ({
-    params: { slug: scenario.id },
-    props: { scenario },
-  }));
+const { slug } = Astro.params;
+const scenario = await getScenarioById(slug || '');
+
+if (!scenario) {
+  return Astro.redirect('/404');
 }
-
-const { scenario } = Astro.props;
 ---
 
 <Layout title={`Kidia - ${scenario.title}`}>
@@ -45,6 +43,7 @@ const { scenario } = Astro.props;
     </section>
     
     <Quiz scenario={scenario} />
+    <AnimationStage />
   </main>
 </Layout>
 

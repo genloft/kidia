@@ -1,0 +1,145 @@
+<div id="anim-token-process" class="animation-container hidden">
+  <div class="stage">
+    <div id="tokens-text" class="text-source">Hola Mundo</div>
+    <div id="tokens-numbers" class="numbers-layer hidden">
+        <span class="token-num">1045</span>
+        <span class="token-num">9921</span>
+    </div>
+    <div class="brain-box">🧠</div>
+    <div id="tokens-output" class="output hidden">👋</div>
+  </div>
+</div>
+
+<script>
+    const container = document.getElementById('anim-token-process');
+    const textEl = document.getElementById('tokens-text');
+    const numsEl = document.getElementById('tokens-numbers');
+    const outEl = document.getElementById('tokens-output');
+
+    window.addEventListener('kidia:play-animation', (e) => {
+        if ((e as CustomEvent).detail.name === 'token-process') {
+            play();
+        }
+    });
+
+    function play() {
+        if(!container) return;
+        container.classList.remove('hidden');
+        
+        // Reset
+        textEl.classList.remove('fade-out');
+        numsEl.classList.add('hidden');
+        outEl.classList.add('hidden');
+        
+        // Step 1: Text splits (visual only, simplified)
+        setTimeout(() => {
+            textEl.classList.add('fade-out');
+            numsEl.classList.remove('hidden');
+            numsEl.classList.add('fade-in');
+        }, 1000);
+
+        // Step 2: Numbers move to brain
+        setTimeout(() => {
+            numsEl.classList.add('move-to-brain');
+        }, 2500);
+
+        // Step 3: Output
+        setTimeout(() => {
+            outEl.classList.remove('hidden');
+            outEl.classList.add('pop-in');
+        }, 4000);
+        
+        // Cleanup after X seconds? Or let user close
+        setTimeout(() => {
+            container.classList.add('hidden');
+            // Notify game engine done?
+        }, 7000);
+    }
+</script>
+
+<style>
+    .animation-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        height: 200px;
+        background: rgba(0,0,0,0.9);
+        border: 2px solid var(--color-primary);
+        border-radius: 1rem;
+        z-index: 2000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 0 30px rgba(34, 211, 238, 0.3);
+    }
+    
+    .hidden { display: none !important; }
+    
+    .stage {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+    }
+    
+    .text-source {
+        font-size: 1.5rem;
+        font-weight: bold;
+        transition: opacity 0.5s;
+    }
+    
+    .numbers-layer {
+        display: flex;
+        gap: 0.5rem;
+        font-family: monospace;
+        color: #ef4444; /* red-ish */
+        position: absolute;
+        top: 0;
+    }
+    
+    .token-num {
+        background: rgba(255,255,255,0.1);
+        padding: 0.2rem;
+        border: 1px solid #ef4444;
+    }
+    
+    .brain-box {
+        font-size: 3rem;
+        margin-top: 2rem;
+    }
+    
+    .output {
+        font-size: 2rem;
+        position: absolute;
+        bottom: -2rem;
+    }
+    
+    /* Animations */
+    .fade-out { opacity: 0; }
+    .fade-in { animation: fadeIn 0.5s forwards; }
+    
+    .move-to-brain {
+        animation: moveToBrain 1s forwards;
+    }
+    
+    .pop-in {
+        animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    
+    @keyframes moveToBrain {
+        to {
+            transform: translateY(50px) scale(0.5);
+            opacity: 0;
+        }
+    }
+    
+    @keyframes popIn {
+        from { transform: scale(0); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+</style>

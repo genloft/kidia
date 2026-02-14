@@ -1,6 +1,6 @@
 ---
 interface Props {
-  scenario: any; // Using any to match ChatBox for now
+  scenario: any;
 }
 
 const { scenario } = Astro.props;
@@ -8,77 +8,156 @@ const { scenario } = Astro.props;
 
 <div id="quiz-container" class="quiz-container hidden">
   <div class="quiz-content">
-      <h2 class="quiz-title">Test de Conocimiento</h2>
-      <div id="quiz-question" class="question-text">Loading...</div>
-      <div id="quiz-options" class="options-grid"></div>
-      <div id="quiz-feedback" class="feedback hidden"></div>
-      <button id="quiz-next" class="btn hidden">Continuar</button>
+      <h2 class="quiz-title">Test de Conocimiento <span id="q-counter" class="text-sm opacity-50"></span></h2>
+      
+      <!-- Intro State -->
+      <div id="quiz-intro">
+          <p>¡Has terminado la misión! Ahora demuestra lo que sabes.</p>
+          <button id="btn-start" class="btn-primary">Empezar Quiz</button>
+      </div>
+
+      <!-- Question State -->
+      <div id="quiz-play" class="hidden">
+          <div id="quiz-question" class="question-text"></div>
+          <div id="quiz-options" class="options-grid"></div>
+          <div id="quiz-feedback" class="feedback hidden"></div>
+          <button id="quiz-next" class="btn hidden">Siguiente</button>
+      </div>
+
+      <!-- Results State -->
+      <div id="quiz-results" class="hidden">
+          <div class="score-circle">
+              <span id="final-score">0</span>%
+          </div>
+          <p id="kidia-reaction" class="reaction-text"></p>
+          <button id="btn-finish" class="btn-primary">Volver al Mapa</button>
+      </div>
   </div>
 </div>
 
 <script define:vars={{ scenario }}>
-    import { completeScenario, addBadge } from '../lib/storage';
-    // Removed old content import
+    import { ProgressService } from '../lib/progress-service';
 
+    // Elements
     const container = document.getElementById('quiz-container');
-    // ...
+    const introEl = document.getElementById('quiz-intro');
+    const playEl = document.getElementById('quiz-play');
+    const resultsEl = document.getElementById('quiz-results');
+    
+    // Play Elements
+    const qCounter = document.getElementById('q-counter');
+    const questionEl = document.getElementById('quiz-question');
+    const optionsEl = document.getElementById('quiz-options');
+    const feedbackEl = document.getElementById('quiz-feedback');
+    const nextBtn = document.getElementById('quiz-next');
+    
+    // Result Elements
+    const finalScoreEl = document.getElementById('final-score');
+    const reactionEl = document.getElementById('kidia-reaction');
+    
+    const questions = scenario?.quiz?.questions || [];
+    let currentIdx = 0;
+    let correctCount = 0;
 
-    // Use passed scenario object directly
-    const question = scenario?.quiz?.questions?.[0]; 
-    const scenarioId = scenario.id;
-
+    // Listeners
     window.addEventListener('startQuiz', (e) => {
-        if (e.detail.scenarioId === scenarioId) {
+        if (e.detail.scenarioId === scenario.id) {
             container.classList.remove('hidden');
-            renderQuestion();
+            showIntro();
         }
     });
 
+    document.getElementById('btn-start').onclick = startQuiz;
+    document.getElementById('btn-finish').onclick = () => window.location.href = '/mapa';
+    nextBtn.onclick = nextQuestion;
+
+    function showIntro() {
+        introEl.classList.remove('hidden');
+        playEl.classList.add('hidden');
+        resultsEl.classList.add('hidden');
+    }
+
+    function startQuiz() {
+        currentIdx = 0;
+        correctCount = 0;
+        introEl.classList.add('hidden');
+        playEl.classList.remove('hidden');
+        renderQuestion();
+    }
+
     function renderQuestion() {
-        if(!question) return;
-        questionEl.textContent = question.text;
+        const q = questions[currentIdx];
+        if(!q) return finishQuiz(); // Safety check
+
+        qCounter.innerText = `(${currentIdx + 1}/${questions.length})`;
+        questionEl.textContent = q.text;
         optionsEl.innerHTML = '';
-        
-        question.options.forEach((text, index) => {
+        feedbackEl.className = 'feedback hidden'; // Reset feedback
+        nextBtn.classList.add('hidden');
+
+        q.options.forEach((text, index) => {
             const btn = document.createElement('button');
             btn.className = 'quiz-option';
             btn.textContent = text;
-            btn.onclick = () => checkAnswer(index, btn);
+            btn.onclick = () => checkAnswer(index, btn, q);
             optionsEl.appendChild(btn);
         });
     }
 
-    function checkAnswer(index, btn) {
+    function checkAnswer(index, btn, question) {
         // Disable all
-        const all = optionsEl.querySelectorAll('button');
-        all.forEach(b => b.disabled = true);
+        optionsEl.querySelectorAll('button').forEach(b => b.disabled = true);
 
-        if (index === question.correctIndex) {
+        const isCorrect = index === question.correct_index;
+        
+        if (isCorrect) {
             btn.classList.add('correct');
             feedbackEl.textContent = `✅ ¡Correcto! ${question.explanation}`;
-            feedbackEl.className = 'feedback correct show';
-            completeScenario(scenarioId);
-            if(scenario.badge) addBadge(scenario.badge.id);
-            
-            // Celebration
-            document.body.style.overflow = 'hidden'; // Stop scroll
-            setTimeout(() => {
-                 alert(`¡Enhorabuena! Has conseguido la insignia: ${scenario.badge.icon} ${scenario.badge.name}`);
-                 window.location.href = '/profile';
-            }, 1500);
-
+            feedbackEl.classList.add('correct');
+            correctCount++;
         } else {
             btn.classList.add('wrong');
-            feedbackEl.textContent = '❌ Vaya... Inténtalo de nuevo.';
-            feedbackEl.className = 'feedback wrong show';
+            feedbackEl.textContent = `❌ ${question.explanation}`;
+            feedbackEl.classList.add('wrong');
             
-             setTimeout(() => {
-                feedbackEl.className = 'feedback hidden';
-                all.forEach(b => {
-                    b.disabled = false;
-                    b.classList.remove('wrong', 'correct');
-                });
-            }, 2000);
+            // Highlight correct one
+            const correctBtn = optionsEl.children[question.correct_index];
+            if(correctBtn) correctBtn.classList.add('correct');
+        }
+        
+        feedbackEl.classList.remove('hidden');
+        nextBtn.classList.remove('hidden');
+    }
+    
+    function nextQuestion() {
+        currentIdx++;
+        if (currentIdx < questions.length) {
+            renderQuestion();
+        } else {
+            finishQuiz();
+        }
+    }
+
+    function finishQuiz() {
+        playEl.classList.add('hidden');
+        resultsEl.classList.remove('hidden');
+        qCounter.innerText = '';
+        
+        const score = Math.round((correctCount / questions.length) * 100);
+        finalScoreEl.innerText = score.toString();
+        
+        // Kidia Reaction
+        let reaction = "";
+        if (score === 100) reaction = "¡Increíble! 🌟 ¡Eres un gurú de la IA!";
+        else if (score >= 70) reaction = "¡Muy bien! 🧠 Ya casi lo dominas todo.";
+        else reaction = "¡Buen intento! 💪 Repasa un poco y vuelve a intentarlo.";
+        
+        reactionEl.innerText = reaction;
+
+        // Save Progress
+        ProgressService.finishScenario(scenario.id, score);
+        if (score >= 70 && scenario.badge) {
+            ProgressService.awardBadge(scenario.badge.id);
         }
     }
 
@@ -105,7 +184,7 @@ const { scenario } = Astro.props;
 
     .quiz-content {
         background: var(--color-surface);
-        padding: 2rem;
+        padding: 2.5rem;
         border-radius: 1.5rem;
         border: 1px solid var(--color-primary);
         max-width: 500px;
@@ -113,11 +192,30 @@ const { scenario } = Astro.props;
         text-align: center;
         box-shadow: 0 0 50px rgba(34, 211, 238, 0.2);
     }
+    
+    h2 { margin-top: 0; color: white; }
+    
+    .btn-primary {
+        background: var(--color-primary);
+        color: black;
+        border: none;
+        padding: 0.8rem 2rem;
+        border-radius: 2rem;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 1.1rem;
+        margin-top: 1rem;
+        transition: transform 0.2s;
+    }
+    
+    .btn-primary:hover {
+        transform: scale(1.05);
+    }
 
     .options-grid {
         display: grid;
-        gap: 1rem;
-        margin: 2rem 0;
+        gap: 0.8rem;
+        margin: 1.5rem 0;
     }
 
     .quiz-option {
@@ -128,8 +226,7 @@ const { scenario } = Astro.props;
         border-radius: 0.5rem;
         cursor: pointer;
         transition: all 0.2s;
-        font-family: inherit;
-        font-size: 1rem;
+        text-align: left;
     }
 
     .quiz-option:hover:not(:disabled) {
@@ -138,23 +235,31 @@ const { scenario } = Astro.props;
     }
 
     .quiz-option.correct {
-        background: rgba(34, 220, 100, 0.2);
-        border-color: #22c55e;
+        background: rgba(34, 220, 100, 0.2) !important;
+        border-color: #22c55e !important;
     }
 
     .quiz-option.wrong {
-        background: rgba(239, 68, 68, 0.2);
-        border-color: #ef4444;
+        background: rgba(239, 68, 68, 0.2) !important;
+        border-color: #ef4444 !important;
+        opacity: 0.7;
     }
-
+    
     .feedback {
-        margin-top: 1rem;
+        margin: 1rem 0;
         padding: 1rem;
         border-radius: 0.5rem;
         font-weight: bold;
     }
-    
-    .feedback.correct { color: #22c55e; background: rgba(34, 220, 100, 0.1); }
-    .feedback.wrong { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+    .feedback.correct { background: rgba(34, 220, 100, 0.1); color: #22c55e; }
+    .feedback.wrong { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
 
+    .score-circle {
+        font-size: 4rem;
+        font-weight: bold;
+        color: var(--color-primary);
+        margin: 1rem 0;
+    }
+    
+    .hidden { display: none !important; }
 </style>

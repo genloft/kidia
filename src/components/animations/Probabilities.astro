@@ -1,0 +1,94 @@
+<div id="anim-probs" class="anim-container hidden">
+  <h3>El gato come...</h3>
+  <div class="bars">
+      <div class="bar-row">
+          <span class="label">pescado</span>
+          <div class="bar-bg"><div class="bar-fill high"></div></div>
+          <span class="pct">85%</span>
+      </div>
+      <div class="bar-row">
+          <span class="label">zapatos</span>
+          <div class="bar-bg"><div class="bar-fill mid"></div></div>
+          <span class="pct">10%</span>
+      </div>
+      <div class="bar-row">
+          <span class="label">nubes</span>
+          <div class="bar-bg"><div class="bar-fill low"></div></div>
+          <span class="pct">1%</span>
+      </div>
+  </div>
+</div>
+
+<script>
+    const container = document.getElementById('anim-probs');
+    
+    window.addEventListener('kidia:play-animation', (e) => {
+        if ((e as CustomEvent).detail.name === 'probabilities') {
+            play();
+        }
+    });
+
+    function play() {
+        if(!container) return;
+        container.classList.remove('hidden');
+        
+        // Trigger animations
+        const bars = container.querySelectorAll('.bar-fill');
+        bars.forEach(b => {
+            b.style.width = '0%';
+            setTimeout(() => {
+                if(b.classList.contains('high')) b.style.width = '85%';
+                if(b.classList.contains('mid')) b.style.width = '10%';
+                if(b.classList.contains('low')) b.style.width = '1%';
+            }, 500);
+        });
+
+        setTimeout(() => {
+            container.classList.add('hidden');
+        }, 5000);
+    }
+</script>
+
+<style>
+    .anim-container {
+        position: fixed;
+        bottom: 100px;
+        right: 20px; /* Non-intrusive */
+        width: 300px;
+        padding: 1.5rem;
+        background: rgba(17, 24, 39, 0.95);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 1rem;
+        z-index: 2000;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        color: white;
+    }
+    
+    .hidden { display: none !important; }
+    
+    h3 { margin: 0 0 1rem 0; font-size: 1.1rem; color: #a1a1aa; }
+    
+    .bars { display: flex; flex-direction: column; gap: 0.8rem; }
+    
+    .bar-row { display: grid; grid-template-columns: 80px 1fr 40px; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+    
+    .bar-bg {
+        height: 8px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    
+    .bar-fill {
+        height: 100%;
+        width: 0%;
+        transition: width 1s ease-out;
+        border-radius: 4px;
+    }
+    
+    .high { background: #22c55e; }
+    .mid { background: #eab308; }
+    .low { background: #ef4444; }
+    
+    .pct { text-align: right; font-size: 0.8rem; color: #71717a; }
+</style>

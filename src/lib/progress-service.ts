@@ -1,28 +1,32 @@
-import { userProgress, saveProgress, completeScenario as storageComplete, addBadge as storageAddBadge } from './storage';
+import { storage, syncWithCloud } from './storage-simple';
 import { PARENT_REPORT_RULES } from './parent-rules';
 
 // Type definitions
-export type KidiaState = ReturnType<typeof userProgress.get>;
+export type KidiaState = ReturnType<typeof storage.get>;
 
 export const ProgressService = {
     // 1. Get State
     getState: (): KidiaState => {
-        return userProgress.get();
+        return storage.get();
     },
 
     // 2. Complete Scenario & Scoring
     finishScenario: (scenarioId: string, score: number = 100) => {
-        // Mark as complete in underlying storage (triggers cloud sync)
-        storageComplete(scenarioId);
+        storage.update(state => ({
+            ...state,
+            completedScenarios: Array.from(new Set([...state.completedScenarios, scenarioId])),
+            scores: { ...state.scores, [scenarioId]: score }
+        }));
 
-        // Save score
-        const current = userProgress.get();
-        const newScores = { ...current.scores, [scenarioId]: score };
-        userProgress.setKey('scores', newScores);
+        // Trigger Cloud Sync
+        syncWithCloud();
     },
 
     awardBadge: (badgeId: string) => {
-        storageAddBadge(badgeId);
+        storage.update(state => ({
+            ...state,
+            badges: Array.from(new Set([...state.badges, badgeId]))
+        }));
     },
 
     // 3. Unlock Logic
@@ -33,14 +37,14 @@ export const ProgressService = {
 
     // 4. Global Percentage
     getGlobalProgress: (totalScenariosCount: number) => {
-        const completed = userProgress.get().completedScenarios.length;
+        const completed = storage.get().completedScenarios.length;
         if (totalScenariosCount === 0) return 0;
         return Math.round((completed / totalScenariosCount) * 100);
     },
 
     // 5. Parent Report
     computeParentReport: () => {
-        const state = userProgress.get();
+        const state = storage.get();
         const comments: string[] = [];
 
         PARENT_REPORT_RULES.forEach(rule => {
