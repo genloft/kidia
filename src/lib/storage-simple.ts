@@ -26,7 +26,17 @@ export const storage = {
         if (!isBrowser) return defaultState;
         try {
             const raw = localStorage.getItem(KEY);
-            return raw ? JSON.parse(raw) : defaultState;
+            if (!raw) return defaultState;
+
+            const parsed = JSON.parse(raw);
+            return {
+                ...defaultState,
+                ...parsed,
+                // Ensure arrays are actual arrays to prevent .includes() crashes
+                badges: Array.isArray(parsed.badges) ? parsed.badges : [],
+                completedScenarios: Array.isArray(parsed.completedScenarios) ? parsed.completedScenarios : [],
+                scores: parsed.scores || {}
+            };
         } catch (e) {
             console.error('Storage Read Error', e);
             return defaultState;
