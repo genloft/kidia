@@ -16,92 +16,103 @@
         "start": {
             "id": "start",
             "sender": "kidia",
-            "text": "¡Hola! 🗣️ Hoy vamos a aprender un idioma nuevo: **Prompting**.",
+            "text": "¡Hola! 🗣️ Hoy vamos a aprender un idioma nuevo: **Prompting**. Soy como un Genio de la Lámpara, pero muy literal.",
             "options": [
                 {
-                    "label": "¿Qué es un Prompt?",
-                    "next_node_id": "definition"
+                    "label": "¿Genio?",
+                    "next_node_id": "genie-intro"
                 },
                 {
-                    "label": "Yo ya sé hablarte",
-                    "next_node_id": "try-it"
+                    "label": "Pídeme un deseo",
+                    "next_node_id": "genie-intro"
                 }
             ]
         },
-        "definition": {
-            "id": "definition",
+        "genie-intro": {
+            "id": "genie-intro",
             "sender": "kidia",
-            "text": "Un Prompt es simplemente lo que tú me escribes. Pero hay trucos para que te entienda mejor. ✨",
-            "next_node_id": "example-bad"
+            "text": "Sí. Si me pides las cosas mal, te daré lo que pides... pero no lo que quieres. 🧞‍♂️ ¡Prueba!",
+            "next_node_id": "wish-challenge"
         },
-        "try-it": {
-            "id": "try-it",
-            "sender": "kidia",
-            "text": "A ver, a ver... Si me dices 'Escribe algo', ¿qué escribo?",
-            "next_node_id": "example-bad"
-        },
-        "example-bad": {
-            "id": "example-bad",
-            "sender": "kidia",
-            "text": "Si me dices: \"Cuéntame una historia\", no sé si quieres una de terror o de risa. 🤔",
+        "wish-challenge": {
+            "id": "wish-challenge",
+            "sender": "system",
+            "text": "💫 DESEO: Quieres volar. ¿Qué le dices al Genio IA?",
             "options": [
                 {
-                    "label": "¡Es verdad!",
-                    "next_node_id": "ctx-key"
+                    "label": "Quiero volar",
+                    "next_node_id": "wish-fail-1"
                 },
                 {
-                    "label": "¿Y qué hago?",
-                    "next_node_id": "ctx-key"
+                    "label": "Quiero volar como Superman",
+                    "next_node_id": "wish-fail-2"
                 }
             ]
         },
-        "ctx-key": {
-            "id": "ctx-key",
+        "wish-fail-1": {
+            "id": "wish-fail-1",
             "sender": "kidia",
-            "text": "La clave es el **Contexto**. Si me dices: \"Soy un pirata. Cuéntame una historia\", ¡ya sé qué tono usar! 🏴‍☠️",
+            "text": "¡Concedido! ✈️ Te he comprado un billete de avión en clase turista. (No especificaste que querías superpoderes).",
+            "next_node_id": "wish-try-again"
+        },
+        "wish-fail-2": {
+            "id": "wish-fail-2",
+            "sender": "kidia",
+            "text": "¡Concedido! 🦸‍♂️ Te he puesto un disfraz de Superman y te he subido a una escalera. (No dijiste *volar de verdad*).",
+            "next_node_id": "wish-try-again"
+        },
+        "wish-try-again": {
+            "id": "wish-try-again",
+            "sender": "kidia",
+            "text": "¿Ves? La IA necesita **Contexto** y **Detalles**. Inténtalo otra vez.",
+            "options": [
+                {
+                    "label": "Quiero levitar a voluntad...",
+                    "next_node_id": "wish-success"
+                }
+            ]
+        },
+        "wish-success": {
+            "id": "wish-success",
+            "sender": "kidia",
+            "text": "...sin aparatos, usando magia o superpoderes, ahora mismo. ¡CONCEDIDO! ✨ Eso es un buen Prompt.",
             "action": "play_animation",
             "action_data": {
                 "name": "token-process"
             },
-            "next_node_id": "roleplay"
+            "next_node_id": "engineering-intro"
         },
-        "roleplay": {
-            "id": "roleplay",
+        "engineering-intro": {
+            "id": "engineering-intro",
             "sender": "kidia",
-            "text": "A eso se le llama 'Roleplay'. Puedes pedirme que sea tu profe, tu abuela o un alien. 👽",
+            "text": "A esto lo llamamos 'Prompt Engineering'. Hay trucos de pro. ¿Cuál quieres aprender?",
             "options": [
                 {
-                    "label": "¡Sé un gato!",
-                    "next_node_id": "meow"
+                    "label": "Dar Ejemplos (Few-Shot)",
+                    "next_node_id": "few-shot-branch"
                 },
                 {
-                    "label": "¡Sé un robot malvado!",
-                    "next_node_id": "robot-evil"
+                    "label": "Pensar paso a paso (Chain)",
+                    "next_node_id": "chain-branch"
                 }
             ]
         },
-        "meow": {
-            "id": "meow",
+        "few-shot-branch": {
+            "id": "few-shot-branch",
             "sender": "kidia",
-            "text": "MIAU. 😼 (Traducción: Dame comida, humano).",
-            "next_node_id": "specificity"
+            "text": "Si quieres que traduzca al estilo pirata, no solo digas 'habla pirata'. Dame ejemplos:\nHola -> Ahoy\nAmigo -> Grumete\nAsí lo haré perfecto. 🏴‍☠️",
+            "next_node_id": "quiz-ready"
         },
-        "robot-evil": {
-            "id": "robot-evil",
+        "chain-branch": {
+            "id": "chain-branch",
             "sender": "kidia",
-            "text": "MUAJAJA. 😈 (Mentira, no puedo ser muy mala, tengo filtros de seguridad).",
-            "next_node_id": "specificity"
-        },
-        "specificity": {
-            "id": "specificity",
-            "sender": "kidia",
-            "text": "También tienes que ser **específico**. No digas 'escríbeme un mail'. Di 'escribe un mail corto y formal para mi jefe pidiendo vacaciones'. 📝",
+            "text": "Si tengo que resolver un problema difícil, dime: 'Piensa paso a paso'. 🧠 Así no me precipito y cometo menos errores.",
             "next_node_id": "quiz-ready"
         },
         "quiz-ready": {
             "id": "quiz-ready",
             "sender": "kidia",
-            "text": "¿Listo para convertirte en un 'Prompter' experto?",
+            "text": "¿Listo para pedirme deseos (o respuestas) correctamente?",
             "action": "trigger_quiz",
             "next_node_id": "quiz-start"
         },

@@ -16,118 +16,132 @@
         "start": {
             "id": "start",
             "sender": "kidia",
-            "text": "¡Shh! 🤫 Estamos en una misión secreta. Año 1940. ¿Sabes quién es Alan Turing?",
+            "text": "¡Shh! 🤫 Estamos en 1940. Misión ultrasecreta. ¿Sabes quién es el padre de toda la informática?",
             "options": [
                 {
-                    "label": "No, ¿quién es?",
-                    "next_node_id": "intro-alan"
+                    "label": "¿Bill Gates?",
+                    "next_node_id": "intro-wrong"
                 },
                 {
-                    "label": "El padre de la informática",
-                    "next_node_id": "expert-alan"
+                    "label": "Alan Turing",
+                    "next_node_id": "intro-correct"
                 }
             ]
         },
-        "intro-alan": {
-            "id": "intro-alan",
+        "intro-wrong": {
+            "id": "intro-wrong",
             "sender": "kidia",
-            "text": "Es un matemático genial. 🧠 Dicen que puede hablar con las máquinas.",
-            "next_node_id": "enigma"
+            "text": "Mucho antes. 🕰️ Hablo de un genio matemático inglés: Alan Turing.",
+            "next_node_id": "enigma-intro"
         },
-        "expert-alan": {
-            "id": "expert-alan",
+        "intro-correct": {
+            "id": "intro-correct",
             "sender": "kidia",
             "text": "¡Exacto! 🎩 Sin él, hoy no tendrías móvil ni internet.",
-            "next_node_id": "enigma"
+            "next_node_id": "enigma-intro"
         },
-        "enigma": {
-            "id": "enigma",
+        "enigma-intro": {
+            "id": "enigma-intro",
             "sender": "kidia",
-            "text": "Tenemos un problema: Los enemigos usan una máquina llamada 'Enigma' para enviar mensajes secretos. 🔒",
+            "text": "Turing tenía un trabajo difícil: Romper el código de la máquina 'Enigma'. 🔒 Los mensajes venían cifrados.",
+            "next_node_id": "cipher-challenge"
+        },
+        "cipher-challenge": {
+            "id": "cipher-challenge",
+            "sender": "system",
+            "text": "🧩 MENSAJE ENCRIPTADO: 'H-O-L-A' se convierte en 'I-P-M-B'. (Avanza 1 letra). ¿Qué significa 'V-I-D-A'?",
             "options": [
                 {
-                    "label": "¿Podemos romper el código?",
-                    "next_node_id": "crack-it"
+                    "label": "W-J-E-B",
+                    "next_node_id": "cipher-correct"
                 },
                 {
-                    "label": "¡Es imposible!",
-                    "next_node_id": "try-harder"
+                    "label": "U-H-C-Z",
+                    "next_node_id": "cipher-wrong"
                 }
             ]
         },
-        "crack-it": {
-            "id": "crack-it",
+        "cipher-wrong": {
+            "id": "cipher-wrong",
             "sender": "kidia",
-            "text": "Alan cree que sí. Pero no con lápiz y papel... ¡Necesitamos una máquina para vencer a otra máquina! ⚙️",
+            "text": "¡Error! ❌ Si retrocedes, pero Enigma avanzaba. V -> W. Intenta de nuevo la lógica.",
+            "next_node_id": "bombe-machine"
+        },
+        "cipher-correct": {
+            "id": "cipher-correct",
+            "sender": "kidia",
+            "text": "¡Código roto! 🔓 Turing construyó una máquina gigante ('The Bombe') para hacer esto millones de veces por segundo.",
             "action": "play_animation",
             "action_data": {
                 "name": "token-process"
             },
-            "next_node_id": "bombe"
+            "next_node_id": "bombe-machine"
         },
-        "try-harder": {
-            "id": "try-harder",
+        "bombe-machine": {
+            "id": "bombe-machine",
             "sender": "kidia",
-            "text": "Nunca digas imposible. Alan ha construido algo increíble.",
-            "next_node_id": "bombe"
-        },
-        "bombe": {
-            "id": "bombe",
-            "sender": "kidia",
-            "text": "La llamó 'The Bombe'. 💣 Giraba y giraba buscando la configuración correcta. ¡Y lo logró!",
+            "text": "Gracias a eso, acortaron la guerra 2 años. 🌍 Pero su idea más loca vino después...",
             "options": [
                 {
-                    "label": "¿Salvó vidas?",
-                    "next_node_id": "impact"
+                    "label": "¿Cuál?",
+                    "next_node_id": "turing-test-intro"
                 },
                 {
-                    "label": "¿Ganó la guerra?",
-                    "next_node_id": "impact"
+                    "label": "¿Inventó internet?",
+                    "next_node_id": "turing-machine-branch"
                 }
             ]
         },
-        "impact": {
-            "id": "impact",
+        "turing-machine-branch": {
+            "id": "turing-machine-branch",
             "sender": "kidia",
-            "text": "Se dice que acortó la guerra en dos años y salvó millones de vidas. 🌍 Y todo gracias a las matemáticas.",
-            "action": "play_animation",
-            "action_data": {
-                "name": "probabilities"
-            },
-            "next_node_id": "test-turing"
+            "text": "Casi. Inventó la 'Máquina Universal'. Dijo que una máquina podía hacer CUALQUIER cálculo si le dabas las instrucciones (algoritmo). 📜",
+            "next_node_id": "turing-test-intro"
         },
-        "test-turing": {
-            "id": "test-turing",
+        "turing-test-intro": {
+            "id": "turing-test-intro",
             "sender": "kidia",
-            "text": "Años después, propuso el 'Test de Turing'. Si hablas con una máquina y no sabes que es una máquina... ¿entonces piensa?",
+            "text": "Propuso el 'Test de Turing'. Dijo: 'Si hablas con una máquina y no sabes que es máquina... ¿entonces piensa?' 🤔",
+            "next_node_id": "imitation-game"
+        },
+        "imitation-game": {
+            "id": "imitation-game",
+            "sender": "kidia",
+            "text": "🤖 Vamos a jugar. Yo fingiré ser humana. Pregúntame algo.",
             "options": [
                 {
-                    "label": "Sí, piensa",
-                    "next_node_id": "philo"
+                    "label": "¿Tienes hambre?",
+                    "next_node_id": "bot-response-1"
                 },
                 {
-                    "label": "No, solo imita",
-                    "next_node_id": "philo"
+                    "label": "¿Cuánto es 283 * 912?",
+                    "next_node_id": "bot-response-2"
                 }
             ]
         },
-        "philo": {
-            "id": "philo",
+        "bot-response-1": {
+            "id": "bot-response-1",
             "sender": "kidia",
-            "text": "Esa es la gran pregunta. 🤔 ¿Tú crees que yo pienso?",
+            "text": "Me comería una pizza gigante ahora mismo. 🍕 (¿Te he engañado? Las IAs no comen).",
+            "next_node_id": "quiz-ready"
+        },
+        "bot-response-2": {
+            "id": "bot-response-2",
+            "sender": "kidia",
+            "text": "Uf, matemáticas... se me dan fatal. 😜 (Mentira, lo calculé en 0.001s, pero fingí para parecer humana).",
             "next_node_id": "quiz-ready"
         },
         "quiz-ready": {
             "id": "quiz-ready",
             "sender": "kidia",
-            "text": "Alan te ha dejado un reto. ¿Podrás descifrarlo?",
+            "text": "Alan estaría orgulloso. ¿Repasamos lo aprendido?",
             "action": "trigger_quiz",
             "next_node_id": "quiz-start"
         },
         "quiz-start": {
             "id": "quiz-start",
             "sender": "kidia",
-            "text": "¡Código Rojo! Iniciando test. 🚨"
+            "text": "¡Decodificando preguntas! 🧩"
         }
     },
     "quiz": {

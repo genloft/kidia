@@ -16,93 +16,112 @@
         "start": {
             "id": "start",
             "sender": "kidia",
-            "text": "¡Hemos llegado al final del viaje! 🚀 ¿Cómo ves el futuro?",
+            "text": "¡Hemos llegado al final del viaje! 🚀 ¿Cómo ves el futuro? ¿Lleno de robots?",
             "options": [
                 {
-                    "label": "Lleno de robots",
-                    "next_node_id": "agi"
+                    "label": "Sí, como en el cine",
+                    "next_node_id": "cinema-future"
                 },
                 {
-                    "label": "Mejor gracias a la IA",
-                    "next_node_id": "optimist"
+                    "label": "Espero que no",
+                    "next_node_id": "human-future"
                 }
             ]
         },
-        "optimist": {
-            "id": "optimist",
+        "cinema-future": {
+            "id": "cinema-future",
             "sender": "kidia",
-            "text": "¡Ojalá! Esa es la meta. Que la IA cure enfermedades y resuelva el cambio climático. 🌍",
-            "next_node_id": "agi"
+            "text": "Las pelis exageran. 🍿 No buscamos terminators, buscamos ayudantes superinteligentes.",
+            "next_node_id": "job-challenge"
         },
-        "agi": {
-            "id": "agi",
+        "human-future": {
+            "id": "human-future",
             "sender": "kidia",
-            "text": "Ahora mismo soy una 'IA Estrecha' (Narrow AI). Solo sé hacer chat. Pero buscamos la **AGI** (Inteligencia General Artificial).",
+            "text": "Tranqui. La idea es que la IA sea una herramienta, como un martillo o una calculadora. 🛠️",
+            "next_node_id": "job-challenge"
+        },
+        "job-challenge": {
+            "id": "job-challenge",
+            "sender": "system",
+            "text": "🔮 BOLA DE CRISTAL: ¿Qué pasará con estos trabajos en 20 años?",
+            "options": [
+                {
+                    "label": "Médico 👨‍⚕️",
+                    "next_node_id": "job-doctor"
+                },
+                {
+                    "label": "Conductor 🚛",
+                    "next_node_id": "job-driver"
+                }
+            ]
+        },
+        "job-driver": {
+            "id": "job-driver",
+            "sender": "kidia",
+            "text": "Probablemente los coches se conduzcan solos. 🚗 Los humanos pasaremos a ser 'Supervisores de Flota'.",
+            "next_node_id": "agi-intro"
+        },
+        "job-doctor": {
+            "id": "job-doctor",
+            "sender": "kidia",
+            "text": "La IA diagnosticará mejor que nadie (analizando mil radiografías en 1 segundo). Pero el médico humano dará la empatía y la decisión final. ❤️",
+            "next_node_id": "agi-intro"
+        },
+        "agi-intro": {
+            "id": "agi-intro",
+            "sender": "kidia",
+            "text": "Hoy soy una 'IA Estrecha' (Narrow AI). Solo sé chatear. Pero el sueño es la **AGI** (Inteligencia General).",
             "options": [
                 {
                     "label": "¿Qué es AGI?",
                     "next_node_id": "agi-def"
-                },
-                {
-                    "label": "¿Como Terminator?",
-                    "next_node_id": "skynet"
                 }
             ]
         },
         "agi-def": {
             "id": "agi-def",
             "sender": "kidia",
-            "text": "Una IA que pueda aprender CUALQUIER tarea intelectual que un humano pueda hacer. 🧠 Pintar, programar, investigar... ¡todo a la vez!",
+            "text": "Una IA que aprenda CUALQUIER cosa como un humano. Pintar, investigar cáncer, componer óperas... ¡todo a la vez!",
             "action": "play_animation",
             "action_data": {
                 "name": "growth"
             },
-            "next_node_id": "singularity"
+            "next_node_id": "future-branch"
         },
-        "skynet": {
-            "id": "skynet",
+        "future-branch": {
+            "id": "future-branch",
             "sender": "kidia",
-            "text": "¡Espero que no! 😅 Las películas exageran. Pero sí hay que tener cuidado con el control.",
-            "next_node_id": "singularity"
-        },
-        "singularity": {
-            "id": "singularity",
-            "sender": "kidia",
-            "text": "Si una IA se vuelve más lista que los humanos... ¿podría crear una IA aún más lista? Eso se llama **Singularidad**. 🌌",
+            "text": "Si lo logramos... ¿qué pasará después? Es la gran incógnita.",
             "options": [
                 {
-                    "label": "¡Boom!",
-                    "next_node_id": "explosion"
+                    "label": "El Paraíso (Utopía)",
+                    "next_node_id": "utopia"
                 },
                 {
-                    "label": "Suena a ciencia ficción",
-                    "next_node_id": "scifi"
+                    "label": "El Fin (Distopía)",
+                    "next_node_id": "dystopia"
                 }
             ]
         },
-        "explosion": {
-            "id": "explosion",
+        "utopia": {
+            "id": "utopia",
             "sender": "kidia",
-            "text": "Exacto. Una 'explosión de inteligencia'. Nadie sabe qué pasaría después.",
+            "text": "Imagínalo: Energía infinita, fin de las enfermedades, robots trabajando para que nosotros creemos arte. ✨ Ese es el Plan A.",
             "next_node_id": "coexistence"
         },
-        "scifi": {
-            "id": "scifi",
+        "dystopia": {
+            "id": "dystopia",
             "sender": "kidia",
-            "text": "Hace 50 años, tener todo el conocimiento del mundo en tu bolsillo (móvil) también era ciencia ficción. 📱",
+            "text": "Da miedo, lo sé. Si somos menos listos que nuestra creación... ¿quién manda? Por eso la **Seguridad de IA** es el trabajo más importante del siglo. 🛡️",
             "next_node_id": "coexistence"
         },
         "coexistence": {
             "id": "coexistence",
             "sender": "kidia",
-            "text": "Lo importante es que humanos e IAs trabajemos juntos. Como tú y yo ahora. 🤝",
+            "text": "El futuro no está escrito. Lo escribes tú (y yo, si me dejas ayudarte). 🤝",
             "options": [
                 {
-                    "label": "¡Equipo imparable!",
-                    "next_node_id": "quiz-ready"
-                },
-                {
-                    "label": "Siempre seré tu amigo",
+                    "label": "¡Hagamos equipo!",
                     "next_node_id": "quiz-ready"
                 }
             ]
@@ -110,7 +129,7 @@
         "quiz-ready": {
             "id": "quiz-ready",
             "sender": "kidia",
-            "text": "Gracias por acompañarme. Último test para graduarte como Experto en IA.",
+            "text": "Gracias por acompañarme en esta aventura. Último test para graduarte como **Maestro de la IA**.",
             "action": "trigger_quiz",
             "next_node_id": "quiz-start"
         },

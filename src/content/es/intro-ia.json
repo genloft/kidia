@@ -42,7 +42,7 @@
         "analysis": {
             "id": "analysis",
             "sender": "kidia",
-            "text": "¡Exacto! 🧠 Es muy lista observando patrones. Eso es básicamente la Inteligencia Artificial.",
+            "text": "¡Exacto! 🧠 Soy muy lista observando patrones. Eso es básicamente la Inteligencia Artificial.",
             "action": "play_animation",
             "action_data": {
                 "name": "probabilities"
@@ -52,10 +52,10 @@
         "explanation": {
             "id": "explanation",
             "sender": "kidia",
-            "text": "La IA no \"piensa\" como nosotros. 🤖 Aprende viendo millones de ejemplos. Como cuando aprendiste a diferenciar perros de gatos.",
+            "text": "La IA no \"piensa\" como un humano. 🤖 Aprende viendo millones de ejemplos. Como cuando aprendiste a diferenciar perros de gatos.",
             "options": [
                 {
-                    "label": "¿Entonces la IA aprende sola?",
+                    "label": "¿Entonces aprendes sola?",
                     "next_node_id": "learning"
                 },
                 {
@@ -67,7 +67,7 @@
         "fear": {
             "id": "fear",
             "sender": "kidia",
-            "text": "¡No te asustes! 🛡️ Es solo una herramienta. A veces se equivoca, ¡mira esto!",
+            "text": "¡No te asustes! 🛡️ Es solo una herramienta. A veces me equivoco. ¡Mira esto!",
             "action": "play_animation",
             "action_data": {
                 "name": "gazapo"
@@ -77,45 +77,89 @@
         "learning": {
             "id": "learning",
             "sender": "kidia",
-            "text": "Más o menos. Necesita que le demos muchos datos. Cuantos más datos, más 'neuronas' conecta.",
+            "text": "¡Vamos a ver mis neuronas! 🧠 Cuando aprendo algo nuevo, creo conexiones. Cuantas más conexiones, más lista soy.",
             "action": "play_animation",
             "action_data": {
                 "name": "growth"
             },
-            "next_node_id": "history-ada"
+            "next_node_id": "challenge-intro"
         },
-        "history-ada": {
-            "id": "history-ada",
+        "challenge-intro": {
+            "id": "challenge-intro",
+            "sender": "kidia",
+            "text": "¡Hora del RETO! 🥊 Ayúdame a aprender. Te describiré una foto y tú me dices qué es.",
+            "options": [
+                {
+                    "label": "¡Venga!",
+                    "next_node_id": "challenge-1"
+                }
+            ]
+        },
+        "challenge-1": {
+            "id": "challenge-1",
+            "sender": "system",
+            "text": "📸 IMAGEN: Tiene bigotes, orejas puntiagudas y dice 'Miau'.",
+            "options": [
+                {
+                    "label": "Es un Perro",
+                    "next_node_id": "challenge-wrong"
+                },
+                {
+                    "label": "Es un Gato",
+                    "next_node_id": "challenge-correct"
+                }
+            ]
+        },
+        "challenge-wrong": {
+            "id": "challenge-wrong",
+            "sender": "kidia",
+            "text": "Hmm... mis datos dicen que los perros hacen 'Guau'. 🐕 Ajustando parámetros... ¡Listo! Aprendido.",
+            "next_node_id": "history-intro"
+        },
+        "challenge-correct": {
+            "id": "challenge-correct",
+            "sender": "kidia",
+            "text": "¡Bingo! 🎉 Mis conexiones neuronales se han fortalecido. ¡Gracias entrenador!",
+            "next_node_id": "history-intro"
+        },
+        "history-intro": {
+            "id": "history-intro",
             "sender": "kidia",
             "text": "¿Sabías que la primera persona que imaginó esto fue una mujer? Se llamaba Ada Lovelace, ¡hace casi 200 años!",
             "options": [
                 {
-                    "label": "¿200 años? ¡No había ordenadores!",
-                    "next_node_id": "ada-explain"
+                    "label": "Cuéntame su historia",
+                    "next_node_id": "ada-story"
                 },
                 {
-                    "label": "¡Qué lista Ada!",
-                    "next_node_id": "ada-explain"
+                    "label": "¿Cómo lo hizo sin ordenador?",
+                    "next_node_id": "ada-tech"
                 }
             ]
         },
-        "ada-explain": {
-            "id": "ada-explain",
+        "ada-story": {
+            "id": "ada-story",
             "sender": "kidia",
-            "text": "Exacto. Ella escribió el primer algoritmo para una máquina mecánica que aún no existía. ¡Era una visionaria! 📜",
+            "text": "Era hija del poeta Lord Byron, pero su madre quería que estudiara 'ciencias duras' para no volverse 'loca' como él. ¡Y se convirtió en la Encantadora de Números! 💃",
+            "next_node_id": "quiz-ready"
+        },
+        "ada-tech": {
+            "id": "ada-tech",
+            "sender": "kidia",
+            "text": "Diseñó un algoritmo para la 'Máquina Analítica' de Babbage. Usó los Números de Bernoulli para demostrar que una máquina podía hacer más que sumar. 📜",
             "next_node_id": "quiz-ready"
         },
         "quiz-ready": {
             "id": "quiz-ready",
             "sender": "kidia",
-            "text": "¡Es hora de poner a prueba lo aprendido!",
+            "text": "¡Increíble! Hemos aprendido mucho. ¿Listo para demostrarlo?",
             "action": "trigger_quiz",
             "next_node_id": "quiz-start"
         },
         "quiz-start": {
             "id": "quiz-start",
             "sender": "kidia",
-            "text": "¡Vamos a ver si lo has pillado! Test rápido. 🚀"
+            "text": "¡Vamos allá! 🚀"
         }
     },
     "quiz": {

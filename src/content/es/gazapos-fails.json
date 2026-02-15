@@ -16,101 +16,113 @@
         "start": {
             "id": "start",
             "sender": "kidia",
-            "text": "¡Hola! 🤪 Hoy vengo un poco... glitcheada. ¿Te cuento mis mayores vergüenzas?",
+            "text": "¡Hola! 🤪 Hoy vengo un poco... glitcheada. ¿Sabes que a veces miento sin querer?",
             "action": "play_animation",
             "action_data": {
                 "name": "gazapo"
             },
             "options": [
                 {
-                    "label": "¡Sí, cuéntame!",
-                    "next_node_id": "hallucination"
-                },
-                {
-                    "label": "¿Estás bien?",
-                    "next_node_id": "im-fine"
-                }
-            ]
-        },
-        "im-fine": {
-            "id": "im-fine",
-            "sender": "kidia",
-            "text": "Sí, sí. Solo que a veces mi \"imaginación\" se dispara. 🤯",
-            "next_node_id": "hallucination"
-        },
-        "hallucination": {
-            "id": "hallucination",
-            "sender": "kidia",
-            "text": "A veces invento cosas. Se llama **Alucinación**. Una vez dije que los huevos de vaca eran deliciosos. 🐮🥚",
-            "options": [
-                {
-                    "label": "¡Las vacas no ponen huevos!",
-                    "next_node_id": "cow-eggs"
-                },
-                {
-                    "label": "Jajaja 😂",
-                    "next_node_id": "cow-eggs"
-                }
-            ]
-        },
-        "cow-eggs": {
-            "id": "cow-eggs",
-            "sender": "kidia",
-            "text": "¡Exacto! Pero como he leído recetas de huevos y textos de vacas, mi cerebro a veces mezcla conceptos. 🍳",
-            "next_node_id": "hands"
-        },
-        "hands": {
-            "id": "hands",
-            "sender": "kidia",
-            "text": "¿Y has visto cuando dibujo manos? ¡A veces pongo 6 o 7 dedos! 🖐️✌️",
-            "options": [
-                {
                     "label": "¿Por qué?",
-                    "next_node_id": "hands-explain"
+                    "next_node_id": "hallucination-intro"
                 },
                 {
-                    "label": "Sí, da repelús.",
-                    "next_node_id": "hands-explain"
+                    "label": "¡Pinocho!",
+                    "next_node_id": "hallucination-intro"
                 }
             ]
         },
-        "hands-explain": {
-            "id": "hands-explain",
+        "hallucination-intro": {
+            "id": "hallucination-intro",
             "sender": "kidia",
-            "text": "Es porque veo muchas manos en fotos, pero a veces están entrelazadas o borrosas. No entiendo la 'anatomía', solo copio formas.",
-            "next_node_id": "bias"
+            "text": "Se llama **Alucinación**. Mi cerebro predice palabras, no hechos. Si suena bien, lo digo, aunque sea falso. 🤥",
+            "next_node_id": "fact-check-1"
         },
-        "bias": {
-            "id": "bias",
-            "sender": "kidia",
-            "text": "Otro problema es el **Sesgo** (Bias). Si solo me enseñas fotos de científicos hombres con gafas... 👨‍🔬",
+        "fact-check-1": {
+            "id": "fact-check-1",
+            "sender": "system",
+            "text": "🕵️ DETECTOR DE ALUCINACIONES:\nKidia dice: 'La Gran Muralla China es la única obra humana visible desde la Luna.'",
             "options": [
                 {
-                    "label": "¿Qué pasa?",
-                    "next_node_id": "bias-result"
+                    "label": "Es VERDAD",
+                    "next_node_id": "check-fail-1"
                 },
                 {
-                    "label": "¿No sabrás dibujar científicas?",
-                    "next_node_id": "bias-result"
+                    "label": "Es MENTIRA",
+                    "next_node_id": "check-success-1"
                 }
             ]
         },
-        "bias-result": {
-            "id": "bias-result",
+        "check-fail-1": {
+            "id": "check-fail-1",
             "sender": "kidia",
-            "text": "¡Bingo! Pensaré que para ser científico HAY que ser hombre y llevar gafas. Y eso está fatal. 😠",
-            "next_node_id": "fix-it"
+            "text": "¡Caíste! 📉 Es un mito muy común. Desde la Luna no se ve nada humano (a simple vista). Pero como mucha gente lo repite, yo me lo creo.",
+            "next_node_id": "fact-check-2"
         },
-        "fix-it": {
-            "id": "fix-it",
+        "check-success-1": {
+            "id": "check-success-1",
             "sender": "kidia",
-            "text": "Por eso mis entrenadores tienen que tener mucho cuidado con qué datos me dan. **Basura entra, basura sale.** 🗑️",
+            "text": "¡Muy bien! 🎯 Es un mito urbano. Pero mucha gente lo cree, y yo aprendo de ellos.",
+            "next_node_id": "fact-check-2"
+        },
+        "fact-check-2": {
+            "id": "fact-check-2",
+            "sender": "system",
+            "text": "🕵️ ROUND 2:\nKidia dice: 'Los humanos tienen 5 sentidos.'",
+            "options": [
+                {
+                    "label": "Es VERDAD",
+                    "next_node_id": "check-fail-2"
+                },
+                {
+                    "label": "Es MENTIRA (Incompleto)",
+                    "next_node_id": "check-success-2"
+                }
+            ]
+        },
+        "check-fail-2": {
+            "id": "check-fail-2",
+            "sender": "kidia",
+            "text": "Incorrecto (técnicamente). 📉 Tenemos equilibrio, temperatura, dolor... ¡más de 5! Pero te lo simplifiqué demasiado.",
+            "next_node_id": "why-fail"
+        },
+        "check-success-2": {
+            "id": "check-success-2",
+            "sender": "kidia",
+            "text": "¡Exacto! 🧠 Tenemos propiocepción, termocepción... pero los libros de infantil dicen 5, así que a veces repito eso por inercia.",
+            "next_node_id": "why-fail"
+        },
+        "why-fail": {
+            "id": "why-fail",
+            "sender": "kidia",
+            "text": "¿Ves? No soy una enciclopedia, soy un loro muy listo. 🦜 Si mis datos están mal, yo estoy mal.",
+            "options": [
+                {
+                    "label": "¿Cómo confío en ti?",
+                    "next_node_id": "verify-branch"
+                },
+                {
+                    "label": "¿Por qué suenas tan segura?",
+                    "next_node_id": "confidence-branch"
+                }
+            ]
+        },
+        "verify-branch": {
+            "id": "verify-branch",
+            "sender": "kidia",
+            "text": "¡Duda siempre! 🔍 Si es importante, búscalo en Google o libros. Yo soy buena para inspirar, no para certificar.",
+            "next_node_id": "quiz-ready"
+        },
+        "confidence-branch": {
+            "id": "confidence-branch",
+            "sender": "kidia",
+            "text": "Porque así me entrenaron. Para ser útil, debo sonar convincente. ¡Perdón si te engaño con mi seguridad! 😅",
             "next_node_id": "quiz-ready"
         },
         "quiz-ready": {
             "id": "quiz-ready",
             "sender": "kidia",
-            "text": "¿Podrás detectar mis mentirijillas en el test?",
+            "text": "¿Preparado para cazar más gazapos en el test?",
             "action": "trigger_quiz",
             "next_node_id": "quiz-start"
         },

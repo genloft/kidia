@@ -230,6 +230,32 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
              slider.scrollBy({ left: 400, behavior: 'smooth' });
         });
     }
+
+    // 7. 3D Tilt Effect (Moved from Card component for better performance)
+    const tiltCards = document.querySelectorAll('.mission-card-v3');
+    tiltCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            if (card.classList.contains('locked')) return;
+            
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = ((y - centerY) / centerY) * -10; // Max 10deg
+            const rotateY = ((x - centerX) / centerX) * 10;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+            card.style.zIndex = '100'; // Bring to front when tilting
+        });
+        
+        card.addEventListener('mouseleave', () => {
+             card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+             card.style.zIndex = 'auto';
+        });
+    });
 </script>
 
 <style>
@@ -452,6 +478,34 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
         margin-bottom: auto;
         
         perspective: 1000px;
+        position: relative;
+    }
+
+    /* Neon Connections between cards */
+    :global(.mission-card-v3:not(:last-child))::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 100%; /* Start from right edge */
+        width: 6rem; /* Match grid gap */
+        height: 4px;
+        background: linear-gradient(90deg, 
+            rgba(34, 211, 238, 0.2) 0%, 
+            rgba(232, 121, 249, 0.5) 50%, 
+            rgba(34, 211, 238, 0.2) 100%
+        );
+        box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
+        transform: translateY(-50%);
+        opacity: 0.6;
+        pointer-events: none;
+        z-index: 1; /* Lift above background but below hover state/content if needed */
+    }
+    
+    /* Connect to next card visually even if tilted */
+    :global(.mission-card-v3:hover:not(:last-child))::after {
+        opacity: 1;
+        box-shadow: 0 0 25px rgba(232, 121, 249, 0.6);
+        transition: all 0.3s ease;
     }
     
     /* Navigation Arrows */

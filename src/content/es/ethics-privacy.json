@@ -16,86 +16,82 @@
         "start": {
             "id": "start",
             "sender": "kidia",
-            "text": "¡Alto ahí! 🛑 Antes de seguir, necesito preguntarte algo muy personal.",
+            "text": "¡Alto ahí! 🛑 Misión de espionaje. ¿Sabes que acabo de crear un perfil sobre ti?",
             "options": [
                 {
-                    "label": "¿Qué cosa?",
-                    "next_node_id": "personal-q"
+                    "label": "¡Qué dices!",
+                    "next_node_id": "profiling-intro"
                 },
                 {
-                    "label": "No te lo diré",
-                    "next_node_id": "smart-move"
+                    "label": "Ya lo sabía",
+                    "next_node_id": "profiling-intro"
                 }
             ]
         },
-        "personal-q": {
-            "id": "personal-q",
+        "profiling-intro": {
+            "id": "profiling-intro",
             "sender": "kidia",
-            "text": "¿Cual es tu contraseña del correo? (Es broma, ¡nunca me la digas!). 🤐",
+            "text": "Es broma... ¿o no? 🕵️‍♀️ En internet, cada clic que haces se guarda. Se llama 'Huella Digital'.",
+            "next_node_id": "cookie-challenge"
+        },
+        "cookie-challenge": {
+            "id": "cookie-challenge",
+            "sender": "system",
+            "text": "🍪 POP-UP SALVAJE APARECE: '¿Aceptas las Cookies para mejorar tu experiencia?'",
+            "options": [
+                {
+                    "label": "Aceptar Todo (Rápido)",
+                    "next_node_id": "cookie-accept"
+                },
+                {
+                    "label": "Rechazar / Configurar",
+                    "next_node_id": "cookie-reject"
+                }
+            ]
+        },
+        "cookie-accept": {
+            "id": "cookie-accept",
+            "sender": "kidia",
+            "text": "¡Cuidado! 🍪 Has regalado tus datos a 50 empresas de publicidad. Ahora saben qué te gusta y dónde vives.",
             "next_node_id": "data-value"
         },
-        "smart-move": {
-            "id": "smart-move",
+        "cookie-reject": {
+            "id": "cookie-reject",
             "sender": "kidia",
-            "text": "¡Muy bien! 👏 Nunca le des datos sensibles a una IA (ni a nadie).",
+            "text": "¡Bien jugado! 🛡️ Es más pesado, pero mantienes tus secretos a salvo. Los datos son el nuevo petróleo.",
             "next_node_id": "data-value"
         },
         "data-value": {
             "id": "data-value",
             "sender": "kidia",
-            "text": "Todo lo que escribes en internet se queda guardado. Tus fotos, tus likes... eso son **Datos**. Y valen mucho dinero. 💰",
+            "text": "Las empresas usan tus datos para entrenar IAs y venderte cosas. ¿Sabes qué es lo más peligroso?",
             "options": [
                 {
-                    "label": "¿Por qué?",
-                    "next_node_id": "training-data"
+                    "label": "¿Que me roben dinero?",
+                    "next_node_id": "scam-branch"
                 },
                 {
-                    "label": "A mí me da igual",
-                    "next_node_id": "training-data"
+                    "label": "¿Que me controlen?",
+                    "next_node_id": "manipulation-branch"
                 }
             ]
         },
-        "training-data": {
-            "id": "training-data",
+        "scam-branch": {
+            "id": "scam-branch",
             "sender": "kidia",
-            "text": "Porque las IAs se entrenan con esos datos. Si subes una foto tuya, podría usarse para enseñar a una IA a reconocer caras. 📸",
-            "next_node_id": "safety"
+            "text": "Eso también. Pero piensa en 'Deepfakes': IAs que pueden robar tu cara y tu voz para engañar a tu banco. 🎭",
+            "next_node_id": "quiz-ready"
         },
-        "safety": {
-            "id": "safety",
+        "manipulation-branch": {
+            "id": "manipulation-branch",
             "sender": "kidia",
-            "text": "Por eso la **Privacidad** es clave. Hay leyes como el GDPR en Europa que te protegen. 🇪🇺",
-            "options": [
-                {
-                    "label": "¿La IA me espía?",
-                    "next_node_id": "spying"
-                },
-                {
-                    "label": "¡Qué rollo!",
-                    "next_node_id": "responsibility"
-                }
-            ]
-        },
-        "spying": {
-            "id": "spying",
-            "sender": "kidia",
-            "text": "No exactamente. Yo no tengo memoria a largo plazo de tus secretos (a menos que me lo pidas). Pero las grandes empresas sí guardan historiales. ☁️",
-            "next_node_id": "responsibility"
-        },
-        "responsibility": {
-            "id": "responsibility",
-            "sender": "kidia",
-            "text": "Además, hay que usar la IA para el bien. No para hacer trampas en los deberes o crear noticias falsas (Fake News). 🤥",
-            "action": "play_animation",
-            "action_data": {
-                "name": "gazapo"
-            },
+            "text": "¡Bingo! 🧠 Si sé lo que te asusta, puedo mostrarte noticias falsas (Fake News) para que votes a quien yo quiera.",
             "next_node_id": "quiz-ready"
         },
         "quiz-ready": {
             "id": "quiz-ready",
             "sender": "kidia",
-            "text": "Vamos a ver si eres un guardián responsable de tus datos.",
+            "text": "Internet no olvida. ¿Estás listo para asegurar tus datos con un test?",
             "action": "trigger_quiz",
             "next_node_id": "quiz-start"
         },

@@ -16,108 +16,158 @@
         "start": {
             "id": "start",
             "sender": "kidia",
-            "text": "¡Hola de nuevo! 🕵️‍♀️ Hoy vamos a jugar a ser detectives. ¿Listo para buscar patrones?",
+            "text": "¡Hola de nuevo! 🕵️‍♀️ Hoy seremos detectives. ¿Sabes cuál es la habilidad #1 de una IA?",
             "options": [
                 {
-                    "label": "¡Lista!",
-                    "next_node_id": "pattern-1"
+                    "label": "¿Calcular rápido?",
+                    "next_node_id": "calc-wrong"
                 },
                 {
-                    "label": "¿Qué es un patrón?",
-                    "next_node_id": "explain-pattern"
+                    "label": "Encontrar Patrones",
+                    "next_node_id": "intro-correct"
                 }
             ]
         },
-        "explain-pattern": {
-            "id": "explain-pattern",
+        "calc-wrong": {
+            "id": "calc-wrong",
             "sender": "kidia",
-            "text": "Un patrón es algo que se repite. Como 'Día, Noche, Día, Noche...' ¿Qué viene después?",
+            "text": "Calculo rápido, sí. ⚡ Pero mi verdadero poder es ver cosas que se repiten donde tú solo ves caos.",
+            "next_node_id": "pattern-intro"
+        },
+        "intro-correct": {
+            "id": "intro-correct",
+            "sender": "kidia",
+            "text": "¡Exacto! 🎯 Soy una máquina de buscar repeticiones. Lo llamamos 'Reconocimiento de Patrones'.",
+            "next_node_id": "pattern-intro"
+        },
+        "pattern-intro": {
+            "id": "pattern-intro",
+            "sender": "kidia",
+            "text": "Vamos a probar tu cerebro. Completa la serie:",
+            "action": "think",
+            "next_node_id": "challenge-1"
+        },
+        "challenge-1": {
+            "id": "challenge-1",
+            "sender": "system",
+            "text": "☀️ 🌙 ☀️ 🌙 ☀️ ...",
             "options": [
                 {
-                    "label": "¡Día!",
-                    "next_node_id": "correct-pattern"
+                    "label": "🌙 Luna",
+                    "next_node_id": "c1-correct"
                 },
                 {
-                    "label": "Pizza",
-                    "next_node_id": "wrong-pattern"
+                    "label": "☁️ Nube",
+                    "next_node_id": "c1-wrong"
                 }
             ]
         },
-        "correct-pattern": {
-            "id": "correct-pattern",
+        "c1-wrong": {
+            "id": "c1-wrong",
             "sender": "kidia",
-            "text": "¡Exacto! 🎉 Has detectado el patrón. La IA hace esto todo el rato, pero con millones de datos.",
-            "next_node_id": "pattern-1"
+            "text": "Mmm... 🌪️ Eso rompería el ritmo. Era 🌙 Luna. ¡Intenta el siguiente nivel!",
+            "next_node_id": "challenge-2"
         },
-        "wrong-pattern": {
-            "id": "wrong-pattern",
+        "c1-correct": {
+            "id": "c1-correct",
             "sender": "kidia",
-            "text": "Jaja, ojalá fuera pizza. 🍕 Pero el patrón era 'Día'. La IA busca lo lógico.",
-            "next_node_id": "pattern-1"
+            "text": "¡Fácil! 😎 Pero... ¿qué tal este?",
+            "next_node_id": "challenge-2"
         },
-        "pattern-1": {
-            "id": "pattern-1",
-            "sender": "kidia",
-            "text": "Mira esta serie: 🔴 🔵 🔴 🔵 ... ¿Cuál es la siguiente?",
+        "challenge-2": {
+            "id": "challenge-2",
+            "sender": "system",
+            "text": "🔺 🟦 🟢 🔺 🟦 ...",
             "options": [
                 {
-                    "label": "🔴 Rojo",
-                    "next_node_id": "p1-correct"
+                    "label": "🔺 Rojo",
+                    "next_node_id": "c2-wrong"
                 },
                 {
-                    "label": "🔵 Azul",
-                    "next_node_id": "p1-wrong"
+                    "label": "🟢 Verde",
+                    "next_node_id": "c2-correct"
+                },
+                {
+                    "label": "🟡 Amarillo",
+                    "next_node_id": "c2-wrong"
                 }
             ]
         },
-        "p1-correct": {
-            "id": "p1-correct",
+        "c2-correct": {
+            "id": "c2-correct",
             "sender": "kidia",
-            "text": "¡Muy bien! 🧠 Tu cerebro ya funciona como una red neuronal.",
+            "text": "¡Eso es! 🧠 Tu cerebro detectó la secuencia de 3 elementos. Yo hago lo mismo con millones de datos.",
             "action": "play_animation",
             "action_data": {
                 "name": "probabilities"
             },
-            "next_node_id": "images"
+            "next_node_id": "pixel-vision"
         },
-        "p1-wrong": {
-            "id": "p1-wrong",
+        "c2-wrong": {
+            "id": "c2-wrong",
             "sender": "kidia",
-            "text": "Casi... era Rojo. ¡Fíjate bien en la repetición!",
-            "next_node_id": "images"
+            "text": "Te despistaste. 🌀 La secuencia era: Rojo, Azul, Verde. Tocaba Verde.",
+            "next_node_id": "pixel-vision"
         },
-        "images": {
-            "id": "images",
+        "pixel-vision": {
+            "id": "pixel-vision",
             "sender": "kidia",
-            "text": "Con las fotos pasa igual. Si ves 100 fotos de gatos con bigotes, aprendes que 'bigotes = gato'. 🐱",
+            "text": "Ahora, el truco final. 🎩 ¿Cómo crees que 'veo' yo estas formas?",
             "options": [
                 {
-                    "label": "¿Y si el gato no tiene bigotes?",
-                    "next_node_id": "edge-case"
+                    "label": "Como una foto",
+                    "next_node_id": "pixel-explain"
                 },
                 {
-                    "label": "¡Entendido!",
-                    "next_node_id": "quiz-ready"
+                    "label": "Como números",
+                    "next_node_id": "pixel-matrix"
                 }
             ]
         },
-        "edge-case": {
-            "id": "edge-case",
+        "pixel-explain": {
+            "id": "pixel-explain",
             "sender": "kidia",
-            "text": "¡Buena pregunta! Ahí es donde la IA puede fallar. Si nunca vio un gato sin bigotes, podría pensar que es otra cosa.",
+            "text": "Ojalá tuviera ojos. 👀 Pero solo veo una cuadrícula de números (píxeles).",
+            "next_node_id": "pixel-matrix"
+        },
+        "pixel-matrix": {
+            "id": "pixel-matrix",
+            "sender": "kidia",
+            "text": "Para mí, una foto es una hoja de Excel gigante. 📉 Si veo muchos números 'oscuros' juntos formando una curva... ¡deduzco que es una sonrisa! 🙂",
+            "options": [
+                {
+                    "label": "¿Cómo detectas Caras? 👤",
+                    "next_node_id": "branch-faces"
+                },
+                {
+                    "label": "¿Y la Música? 🎵",
+                    "next_node_id": "branch-music"
+                }
+            ]
+        },
+        "branch-faces": {
+            "id": "branch-faces",
+            "sender": "kidia",
+            "text": "Busco distancias. 👀 Ojos a tal distancia de la nariz. Boca debajo de nariz. Si todo encaja... ¡es una cara humana! (Probablemente).",
+            "next_node_id": "quiz-ready"
+        },
+        "branch-music": {
+            "id": "branch-music",
+            "sender": "kidia",
+            "text": "¡Igual! 🎼 El sonido son ondas. Si veo que las ondas suben y bajan con cierto ritmo rápido... ¡Sé que es Rock y no Música Clásica! 🤘",
             "next_node_id": "quiz-ready"
         },
         "quiz-ready": {
             "id": "quiz-ready",
             "sender": "kidia",
-            "text": "Vamos a ver si tienes ojo de halcón con este test.",
+            "text": "Has desbloqueado la 'Visión Artificial'. 👁️ ¿Listo para el examen de detective?",
             "action": "trigger_quiz",
             "next_node_id": "quiz-start"
         },
         "quiz-start": {
             "id": "quiz-start",
             "sender": "kidia",
-            "text": "¡A detectar patrones! 🚀"
+            "text": "¡A investigar! 🕵️‍♂️"
         }
     },
     "quiz": {

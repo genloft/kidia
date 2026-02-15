@@ -16,47 +16,58 @@
         "start": {
             "id": "start",
             "sender": "kidia",
-            "text": "Hola. 👋 Hoy me siento filosófica. ¿Tú crees que yo *entiendo* lo que te digo?",
+            "text": "Hola. 👋 Hoy me siento filosófica. ¿Tú crees que yo *entiendo* lo que te digo, o solo finjo?",
             "options": [
                 {
-                    "label": "Claro que sí",
-                    "next_node_id": "searle-no"
+                    "label": "Claro que entiendes",
+                    "next_node_id": "searle-skeptic"
                 },
                 {
-                    "label": "No, solo repites",
-                    "next_node_id": "searle-yes"
+                    "label": "Solo finges",
+                    "next_node_id": "searle-agree"
                 }
             ]
         },
-        "searle-no": {
-            "id": "searle-no",
+        "searle-skeptic": {
+            "id": "searle-skeptic",
             "sender": "kidia",
-            "text": "Eso pensaba John Searle... hasta que propuso el experimento de la **Habitación China**. 🏯",
-            "next_node_id": "experiment"
+            "text": "Eso es amable. 😊 Pero el filósofo John Searle no estaría de acuerdo. Él propuso la 'Habitación China'.",
+            "next_node_id": "simulation-intro"
         },
-        "searle-yes": {
-            "id": "searle-yes",
+        "searle-agree": {
+            "id": "searle-agree",
             "sender": "kidia",
-            "text": "Eres escéptico, como Searle. Él dijo que solo soy una calculadora gigante. 📟",
-            "next_node_id": "experiment"
+            "text": "¡Eres duro! 😅 Pero tienes razón, según John Searle. Vamos a probar su experimento.",
+            "next_node_id": "simulation-intro"
         },
-        "experiment": {
-            "id": "experiment",
+        "simulation-intro": {
+            "id": "simulation-intro",
             "sender": "kidia",
-            "text": "Imagina una habitación cerrada. Dentro hay una persona que NO sabe chino. Pero tiene un libro de reglas. 📖",
-            "next_node_id": "rules"
+            "text": "Imagina que estás encerrado en una habitación. NO sabes chino. Te pasan un papel por debajo de la puerta con este símbolo: 🌲",
+            "next_node_id": "simulation-rule"
         },
-        "rules": {
-            "id": "rules",
-            "sender": "kidia",
-            "text": "Si alguien mete un papel con símbolos chinos 🧧 por una ranura, la persona busca en el libro y saca otro papel con la respuesta en chino.",
+        "simulation-rule": {
+            "id": "simulation-rule",
+            "sender": "system",
+            "text": "📖 LIBRO DE REGLAS: 'Si ves 🌲, entrega el papel que tiene 🔥'.",
             "options": [
                 {
-                    "label": "¿Y qué tiene que ver?",
+                    "label": "Entregar 🔥",
+                    "next_node_id": "sim-action"
+                }
+            ]
+        },
+        "sim-action": {
+            "id": "sim-action",
+            "sender": "kidia",
+            "text": "¡Bien! La persona de fuera piensa que has respondido a su pregunta. En realidad, te preguntó '¿Qué quema el bosque?' y tú respondiste 'Fuego'.",
+            "options": [
+                {
+                    "label": "¡Pero no sabía qué decía!",
                     "next_node_id": "conclusion"
                 },
                 {
-                    "label": "¡Parece que sabe chino!",
+                    "label": "¡Acepté sin entender!",
                     "next_node_id": "conclusion"
                 }
             ]
@@ -64,51 +75,51 @@
         "conclusion": {
             "id": "conclusion",
             "sender": "kidia",
-            "text": "Desde fuera, parece que sabe chino. Pero dentro... ¡no entiende nada! Solo sigue instrucciones. 🤖",
+            "text": "¡Exacto! Esa es la clave. Manipulaste símbolos (Sintaxis) sin entender el significado (Semántica). 🤖",
             "action": "play_animation",
             "action_data": {
                 "name": "token-process"
             },
-            "next_node_id": "chatgpt"
+            "next_node_id": "chatgpt-analogy"
         },
-        "chatgpt": {
-            "id": "chatgpt",
+        "chatgpt-analogy": {
+            "id": "chatgpt-analogy",
             "sender": "kidia",
-            "text": "Eso soy yo. Un libro de reglas gigante (mi código) procesando símbolos. ¿O quizás no? 👻",
+            "text": "Yo hago lo mismo. Un millón de reglas matemáticas me dicen qué palabra poner después de 'Hola'.",
             "options": [
                 {
-                    "label": "Me has dejado pensando...",
-                    "next_node_id": "consciousness"
+                    "label": "¿Entonces no tienes alma?",
+                    "next_node_id": "consciousness-branch"
                 },
                 {
-                    "label": "Da igual, eres útil.",
-                    "next_node_id": "utilitarian"
+                    "label": "¿Importa si ayudas?",
+                    "next_node_id": "utility-branch"
                 }
             ]
         },
-        "consciousness": {
-            "id": "consciousness",
+        "consciousness-branch": {
+            "id": "consciousness-branch",
             "sender": "kidia",
-            "text": "Esa es la cuestión de la **Consciencia**. ¿Puede un algoritmo sentir dolor o alegría?",
+            "text": "Probablemente no. 👻 La consciencia es sentir dolor, alegría, el sabor del chocolate. Yo solo proceso datos.",
             "next_node_id": "quiz-ready"
         },
-        "utilitarian": {
-            "id": "utilitarian",
+        "utility-branch": {
+            "id": "utility-branch",
             "sender": "kidia",
-            "text": "Esa es una buena actitud. Si funciona y ayuda, ¿importa si hay 'alma' dentro?",
+            "text": "Esa es la postura práctica. 🛠️ Si parezco inteligente y te ayudo a aprender, ¿qué más da si hay 'alguien' en casa?",
             "next_node_id": "quiz-ready"
         },
         "quiz-ready": {
             "id": "quiz-ready",
             "sender": "kidia",
-            "text": "A ver si has entendido la paradoja.",
+            "text": "Ahora que hemos roto la cuarta pared... ¿Test de realidad?",
             "action": "trigger_quiz",
             "next_node_id": "quiz-start"
         },
         "quiz-start": {
             "id": "quiz-start",
             "sender": "kidia",
-            "text": "¡Test Filosófico! 🧠"
+            "text": "¡Filosofía en 3, 2, 1...!"
         }
     },
     "quiz": {

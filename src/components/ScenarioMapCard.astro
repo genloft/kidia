@@ -1,5 +1,14 @@
 ---
 const { scenario, index } = Astro.props;
+
+// Complexity Logic
+const difficulty = scenario.difficulty || 'beginner';
+const difficultyLevels = {
+    'beginner': 1,
+    'intermediate': 2,
+    'advanced': 3
+};
+const level = difficultyLevels[difficulty];
 ---
 
 <a href={`/scenario/${scenario.id}`} class="mission-card-v3" data-id={scenario.id} data-req={scenario.required_badge_id}>
@@ -11,6 +20,11 @@ const { scenario, index } = Astro.props;
             </div>
 
             <div class="card-info">
+                <div class="difficulty-pulse">
+                    {[1, 2, 3].map((i) => (
+                        <div class={`diff-bar ${i <= level ? 'active' : ''} ${difficulty}`}></div>
+                    ))}
+                </div>
                 <span class="mission-number">Misión {index + 1}</span>
                 <h3>{scenario.title.replace(/^\d+\.\s*/, '')}</h3>
                 <p>{scenario.description}</p>
@@ -29,6 +43,8 @@ const { scenario, index } = Astro.props;
         </div>
     </div>
 </a>
+
+
 
 <style>
     .mission-card-v3 {
@@ -106,6 +122,27 @@ const { scenario, index } = Astro.props;
         text-align: center;
         gap: 0.8rem;
     }
+    
+    .difficulty-pulse {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 0.5rem;
+    }
+    
+    .diff-bar {
+        width: 20px;
+        height: 4px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 2px;
+    }
+    
+    .diff-bar.active {
+        box-shadow: 0 0 10px currentColor;
+    }
+    
+    .diff-bar.active.beginner { background: #4ade80; color: #4ade80; }
+    .diff-bar.active.intermediate { background: #fbbf24; color: #fbbf24; }
+    .diff-bar.active.advanced { background: #ef4444; color: #ef4444; }
 
     .mission-card-v3 .mission-number {
         font-size: 0.75rem;
@@ -262,8 +299,8 @@ const { scenario, index } = Astro.props;
     }
 
     @keyframes pulse-float {
-        0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 30px rgba(34, 211, 238, 0.3)); }
-        50% { transform: translateY(-15px); filter: drop-shadow(0 0 60px rgba(34, 211, 238, 0.5)); }
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
     }
     
     /* New Completion Badge */

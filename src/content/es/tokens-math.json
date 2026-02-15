@@ -16,90 +16,103 @@
         "start": {
             "id": "start",
             "sender": "kidia",
-            "text": "¡Hola! 🔢 Hoy vamos a diseccionar palabras. Para mí, 'Gato' no es un animal con pelo.",
+            "text": "¡Hola! 🔢 Hoy vamos a diseccionar palabras. Para mí, 'Gato' no es un animal con pelo... es el número [0.23, -0.99, 4.12].",
             "options": [
                 {
-                    "label": "¿Entonces qué es?",
-                    "next_node_id": "tokens"
+                    "label": "¿Qué dices?",
+                    "next_node_id": "vectors-intro"
                 },
                 {
-                    "label": "¿Es comida?",
-                    "next_node_id": "joke"
+                    "label": "¡Eres un robot!",
+                    "next_node_id": "vectors-intro"
                 }
             ]
         },
-        "joke": {
-            "id": "joke",
+        "vectors-intro": {
+            "id": "vectors-intro",
             "sender": "kidia",
-            "text": "¡Jaja! No, no como gatos. 🙀 Para mí son solo números.",
-            "next_node_id": "tokens"
+            "text": "Exacto. Convierto palabras en listas de números llamadas **Vectores**. Son como coordenadas en un mapa infinito. 🗺️",
+            "next_node_id": "math-challenge-1"
         },
-        "tokens": {
-            "id": "tokens",
-            "sender": "kidia",
-            "text": "Mira, yo troceo las frases en **Tokens**. A veces un token es una palabra, a veces es solo un trocito.",
-            "action": "play_animation",
-            "action_data": {
-                "name": "token-process"
-            },
-            "next_node_id": "vector"
-        },
-        "vector": {
-            "id": "vector",
-            "sender": "kidia",
-            "text": "Luego convierto esos tokens en listas de números llamadas **Vectores**. Es como darles coordenadas en un mapa.",
+        "math-challenge-1": {
+            "id": "math-challenge-1",
+            "sender": "system",
+            "text": "🧮 CALCULADORA DE PALABRAS:\nSi 'Rey' está lejos de 'Mujer' y cerca de 'Hombre'...\n¿Qué pasa si hacemos: Rey - Hombre + Mujer = ?",
             "options": [
                 {
-                    "label": "¿Mapas?",
-                    "next_node_id": "map-analogy"
+                    "label": "Príncipe",
+                    "next_node_id": "math-wrong-1"
                 },
                 {
-                    "label": "Suena complicado",
-                    "next_node_id": "map-analogy"
+                    "label": "Reina",
+                    "next_node_id": "math-correct-1"
                 }
             ]
         },
-        "map-analogy": {
-            "id": "map-analogy",
+        "math-wrong-1": {
+            "id": "math-wrong-1",
             "sender": "kidia",
-            "text": "Imagina un mapa gigante. 🗺️ La palabra 'Rey' y 'Reina' viven muy cerca. 'Manzana' y 'Pera' también.",
-            "next_node_id": "math-magic"
+            "text": "Casi. Príncipe sería 'Rey - Edad'. 📉 Pero si cambiamos solo el género, sale REINA.",
+            "next_node_id": "math-challenge-2"
         },
-        "math-magic": {
-            "id": "math-magic",
+        "math-correct-1": {
+            "id": "math-correct-1",
             "sender": "kidia",
-            "text": "Y aquí viene la magia matemática: Si haces **Rey - Hombre + Mujer**... ¿sabes qué número sale?",
+            "text": "¡Bingo! 👑 Las matemáticas del lenguaje funcionan. Vamos a por una más difícil.",
+            "next_node_id": "math-challenge-2"
+        },
+        "math-challenge-2": {
+            "id": "math-challenge-2",
+            "sender": "system",
+            "text": "🌍 GEOGRAFÍA MATEMÁTICA:\nParís - Francia + Japón = ?",
             "options": [
                 {
-                    "label": "¡Reina!",
-                    "next_node_id": "queen"
+                    "label": "Sushi",
+                    "next_node_id": "math-wrong-2"
                 },
                 {
-                    "label": "¿Princesa?",
-                    "next_node_id": "close"
+                    "label": "Tokio",
+                    "next_node_id": "math-correct-2"
                 }
             ]
         },
-        "queen": {
-            "id": "queen",
+        "math-wrong-2": {
+            "id": "math-wrong-2",
             "sender": "kidia",
-            "text": "¡Bingo! 👑 Las matemáticas del lenguaje funcionan así. Alucinante, ¿verdad?",
-            "next_node_id": "limitations"
+            "text": "Jaja, qué rico. 🍣 Pero buscamos la capital. La respuesta matemática es Tokio.",
+            "next_node_id": "next-word-intro"
         },
-        "close": {
-            "id": "close",
+        "math-correct-2": {
+            "id": "math-correct-2",
             "sender": "kidia",
-            "text": "Casi. Sale 'Reina'. 👑 ¡Las matemáticas entienden el género!",
-            "next_node_id": "limitations"
+            "text": "¡Correcto! 🗼 Porque la relación es 'Capital de'.",
+            "next_node_id": "next-word-intro"
         },
-        "limitations": {
-            "id": "limitations",
+        "next-word-intro": {
+            "id": "next-word-intro",
             "sender": "kidia",
-            "text": "Pero ojo, si escribes raro o con faltas, mis números se lían un poco.",
-            "action": "play_animation",
-            "action_data": {
-                "name": "gazapo"
-            },
+            "text": "Gracias a este mapa, puedo adivinar qué palabra viene después. Es como el autocompletar de tu móvil, pero con esteroides. 💪",
+            "options": [
+                {
+                    "label": "¿Cómo eliges?",
+                    "next_node_id": "probability-branch"
+                },
+                {
+                    "label": "¿Y la creatividad?",
+                    "next_node_id": "creativity-branch"
+                }
+            ]
+        },
+        "probability-branch": {
+            "id": "probability-branch",
+            "sender": "kidia",
+            "text": "Puro cálculo. 🎲 Calculo qué palabra tiene más probabilidad de encajar. Si digo 'Había una...', lo más probable es 'vez'.",
+            "next_node_id": "quiz-ready"
+        },
+        "creativity-branch": {
+            "id": "creativity-branch",
+            "sender": "kidia",
+            "text": "A veces tiro los dados. 🎲 Si siempre eligiera la palabra más lógica, sería aburrida. A veces elijo una menos probable para ser 'creativa'.",
             "next_node_id": "quiz-ready"
         },
         "quiz-ready": {

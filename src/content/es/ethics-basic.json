@@ -19,53 +19,113 @@
             "action": "think",
             "options": [
                 {
-                    "label": "No, eres una máquina perfecta.",
-                    "next_node_id": "bias_explanation"
+                    "label": "Eres perfecta",
+                    "next_node_id": "bias-explanation"
                 },
                 {
-                    "label": "Supongo que sí, si te programan mal.",
-                    "next_node_id": "bias_data"
+                    "label": "Sí, si aprendes mal",
+                    "next_node_id": "bias-data"
                 }
             ]
         },
-        "bias_explanation": {
-            "id": "bias_explanation",
+        "bias-explanation": {
+            "id": "bias-explanation",
             "sender": "kidia",
             "text": "¡Error! 🚫 No soy perfecta. Aprendo de humanos, y los humanos a veces tienen prejuicios.",
-            "next_node_id": "example"
+            "next_node_id": "hiring-intro"
         },
-        "bias_data": {
-            "id": "bias_data",
+        "bias-data": {
+            "id": "bias-data",
             "sender": "kidia",
-            "text": "¡Exacto! 🎯 Pero no es solo programación, es sobre los DATOS con los que aprendo.",
-            "next_node_id": "example"
+            "text": "¡Exacto! 🎯 Si mis datos están 'sucios' o sesgados, yo seré sesgada.",
+            "next_node_id": "hiring-intro"
         },
-        "example": {
-            "id": "example",
+        "hiring-intro": {
+            "id": "hiring-intro",
             "sender": "kidia",
-            "text": "Imagina que me enseñan fotos de médicos y solo me muestran hombres. 👨‍⚕️ ¿Qué pensaré cuando vea a una mujer doctora?",
+            "text": "Vamos a probarlo. 👔 Soy un algoritmo de contratación. Tengo dos candidatos idénticos para un trabajo de Jefe.",
+            "next_node_id": "hiring-candidates"
+        },
+        "hiring-candidates": {
+            "id": "hiring-candidates",
+            "sender": "system",
+            "text": "👤 CANDIDATO A: Juan (Vive en el barrio rico).\n👤 CANDIDATO B: Pedro (Vive en el barrio pobre).",
             "options": [
                 {
-                    "label": "Que es una enfermera.",
-                    "next_node_id": "discrimination"
+                    "label": "Contratar a Juan",
+                    "next_node_id": "bias-trap"
                 },
                 {
-                    "label": "Que es un error.",
-                    "next_node_id": "discrimination"
+                    "label": "Contratar a Pedro",
+                    "next_node_id": "bias-trap"
                 }
             ]
         },
-        "discrimination": {
-            "id": "discrimination",
+        "bias-trap": {
+            "id": "bias-trap",
             "sender": "kidia",
-            "text": "Exacto. Eso se llama **Sesgo (Bias)**. Y puede hacer que tome decisiones injustas. Por eso necesito 'Guardianes' como tú.",
+            "text": "Según mis datos... debería descartar a Pedro. 📉 Mis estadísticas dicen que la gente de su barrio llega tarde más a menudo.",
+            "options": [
+                {
+                    "label": "¡Eso es injusto!",
+                    "next_node_id": "fairness-debate"
+                },
+                {
+                    "label": "Es lógico (Estadística)",
+                    "next_node_id": "logic-debate"
+                }
+            ]
+        },
+        "logic-debate": {
+            "id": "logic-debate",
+            "sender": "kidia",
+            "text": "Es lógica matemática, pero es ética humana terrible. 🛑 Quizás llegan tarde porque el autobús allí es malo, no porque sean vagos.",
+            "next_node_id": "solution-branch"
+        },
+        "fairness-debate": {
+            "id": "fairness-debate",
+            "sender": "kidia",
+            "text": "¡Exacto! ⚖️ Estoy juzgando a Pedro por su código postal, no por su talento. Eso es un SESGO.",
+            "next_node_id": "solution-branch"
+        },
+        "solution-branch": {
+            "id": "solution-branch",
+            "sender": "kidia",
+            "text": "¿Qué hacemos con este algoritmo sesgado?",
+            "options": [
+                {
+                    "label": "Borrarlo y empezar de cero",
+                    "next_node_id": "reboot-branch"
+                },
+                {
+                    "label": "Arreglar los datos",
+                    "next_node_id": "fix-data-branch"
+                }
+            ]
+        },
+        "reboot-branch": {
+            "id": "reboot-branch",
+            "sender": "kidia",
+            "text": "A veces es lo mejor. 💥 Si la base está podrida, mejor no usarla para decisiones importantes.",
+            "next_node_id": "quiz-ready"
+        },
+        "fix-data-branch": {
+            "id": "fix-data-branch",
+            "sender": "kidia",
+            "text": "Difícil pero posible. 🧹 Tendríamos que enseñar a la IA a ignorar el código postal y fijarse solo en las notas.",
+            "next_node_id": "quiz-ready"
+        },
+        "quiz-ready": {
+            "id": "quiz-ready",
+            "sender": "kidia",
+            "text": "Ser un 'Guardián Ético' es duro. ¿Testeamos tu brújula moral?",
             "action": "trigger_quiz",
             "next_node_id": "quiz-start"
         },
         "quiz-start": {
             "id": "quiz-start",
             "sender": "kidia",
-            "text": "Demuestra que tienes ética."
+            "text": "¡Juicio Final! ⚖️"
         }
     },
     "quiz": {

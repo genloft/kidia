@@ -16,11 +16,11 @@
         "start": {
             "id": "start",
             "sender": "kidia",
-            "text": "¡Bienvenido a mi cerebro! 🧠 O bueno, a mi 'Red Neuronal'. ¿Te atreves a entrar?",
+            "text": "¡Bienvenido a mi cerebro! 🧠 O bueno, a mi 'Red Neuronal'. ¿Listo para ver cómo proceso la información?",
             "options": [
                 {
                     "label": "¡Adelante!",
-                    "next_node_id": "layers"
+                    "next_node_id": "layers-intro"
                 },
                 {
                     "label": "Me da cosita...",
@@ -31,99 +31,111 @@
         "dont-worry": {
             "id": "dont-worry",
             "sender": "kidia",
-            "text": "Tranqui, no muerde. Solo son números conectados. 🔗",
-            "next_node_id": "layers"
+            "text": "Tranqui, no muerde. Solo son matemáticas disfrazadas de biología. 🧬",
+            "next_node_id": "layers-intro"
         },
-        "layers": {
-            "id": "layers",
+        "layers-intro": {
+            "id": "layers-intro",
             "sender": "kidia",
-            "text": "Imagina una lasaña. 🥘 Mis neuronas están en capas. La capa de abajo ve píxeles, la del medio ve formas, la de arriba ve objetos.",
+            "text": "Imagina que usas varios filtros para ver una foto. 🕶️ Mis neuronas están en 'Capas'.",
+            "next_node_id": "layers-detail"
+        },
+        "layers-detail": {
+            "id": "layers-detail",
+            "sender": "kidia",
+            "text": "1. Capa de Entrada: Veo píxeles sueltos.\n2. Capas Ocultas: Detectan bordes y formas.\n3. Capa de Salida: ¡Te digo qué es!",
             "options": [
                 {
-                    "label": "¡Qué hambre!",
-                    "next_node_id": "lasagna-analogy"
+                    "label": "¿Cómo pasan los datos?",
+                    "next_node_id": "synapse-intro"
                 },
                 {
-                    "label": "¿Y cómo se conectan?",
-                    "next_node_id": "weights"
+                    "label": "¿Por qué 'Ocultas'?",
+                    "next_node_id": "hidden-explain"
                 }
             ]
         },
-        "lasagna-analogy": {
-            "id": "lasagna-analogy",
+        "hidden-explain": {
+            "id": "hidden-explain",
             "sender": "kidia",
-            "text": "Jaja. 😋 La llamamos 'Deep Learning' (Aprendizaje Profundo) porque la lasaña tiene muchas capas.",
-            "next_node_id": "weights"
+            "text": "Porque tú solo ves la entrada (foto) y la salida (mi respuesta). Lo que pasa en medio es mi secreto... o mi 'Caja Negra'. 📦",
+            "next_node_id": "synapse-intro"
         },
-        "weights": {
-            "id": "weights",
+        "synapse-intro": {
+            "id": "synapse-intro",
             "sender": "kidia",
-            "text": "Las conexiones tienen 'pesos'. Si una conexión es fuerte, la señal pasa rápido. Si es débil, se frena.",
+            "text": "Los datos viajan por conexiones llamadas 'Sinapsis'. Cada una tiene un PESO. 💪",
             "action": "play_animation",
             "action_data": {
                 "name": "growth"
             },
-            "next_node_id": "training"
+            "next_node_id": "weight-challenge"
         },
-        "training": {
-            "id": "training",
+        "weight-challenge": {
+            "id": "weight-challenge",
             "sender": "kidia",
-            "text": "Cuando aprendo, ajusto esos pesos. Es como afinar una guitarra 🎸 hasta que suena bien.",
+            "text": "🛑 ¡Problema! La conexión 'Orejitas -> Gato' está muy débil. ¿Qué hacemos?",
             "options": [
                 {
-                    "label": "¿Tardas mucho?",
-                    "next_node_id": "time"
+                    "label": "Bajar el Peso (-)",
+                    "next_node_id": "weight-wrong"
                 },
                 {
-                    "label": "¿Cuántas neuronas tienes?",
-                    "next_node_id": "billions"
+                    "label": "Subir el Peso (+)",
+                    "next_node_id": "weight-correct"
                 }
             ]
         },
-        "time": {
-            "id": "time",
+        "weight-wrong": {
+            "id": "weight-wrong",
             "sender": "kidia",
-            "text": "¡Uf, sí! A veces semanas. Y gasto mucha electricidad. ⚡",
-            "next_node_id": "black-box"
+            "text": "¡No! 📉 Si bajamos el peso, ignoraré las orejas y pensaré que el gato es una piedra.",
+            "next_node_id": "learning-process"
         },
-        "billions": {
-            "id": "billions",
+        "weight-correct": {
+            "id": "weight-correct",
             "sender": "kidia",
-            "text": "¡Miles de millones! Casi tantos como estrellas en la galaxia (bueno, un poco menos). ✨",
-            "next_node_id": "black-box"
+            "text": "¡Eso es! 📈 Subimos el peso. Ahora, cuando vea orejitas, mi señal de 'Gato' se disparará.",
+            "next_node_id": "learning-process"
         },
-        "black-box": {
-            "id": "black-box",
+        "learning-process": {
+            "id": "learning-process",
             "sender": "kidia",
-            "text": "Lo gracioso es que a veces ni mis creadores saben exactamente qué pasa en mis capas profundas. Soy una 'Caja Negra'. 📦",
+            "text": "Eso es APRENDER: Ajustar millones de pesos hasta que acierto siempre. 🎯",
             "options": [
                 {
-                    "label": "¡Qué misterio!",
-                    "next_node_id": "mystery"
+                    "label": "¿Cómo sabes qué ajustar?",
+                    "next_node_id": "backprop-branch"
                 },
                 {
-                    "label": "¿Es peligroso?",
-                    "next_node_id": "mystery"
+                    "label": "¿Es rápido?",
+                    "next_node_id": "hardware-branch"
                 }
             ]
         },
-        "mystery": {
-            "id": "mystery",
+        "backprop-branch": {
+            "id": "backprop-branch",
             "sender": "kidia",
-            "text": "Un poco. Por eso es importante la 'IA Explicable'. Queremos saber por qué decido lo que decido.",
+            "text": "Uso algo llamado 'Backpropagation'. 🔙 Si me equivoco, voy hacia atrás por la red culpando a las neuronas que fallaron y corrigiéndolas.",
+            "next_node_id": "quiz-ready"
+        },
+        "hardware-branch": {
+            "id": "hardware-branch",
+            "sender": "kidia",
+            "text": "¡Necesito superordenadores! 💻 Uso GPUs (las de los videojuegos) porque pueden calcular miles de pesos a la vez.",
             "next_node_id": "quiz-ready"
         },
         "quiz-ready": {
             "id": "quiz-ready",
             "sender": "kidia",
-            "text": "Hora de bucear en las profundidades con un test. 🤿",
+            "text": "Ahora ya conoces mis secretos más profundos. 🤿 ¿Test rápido?",
             "action": "trigger_quiz",
             "next_node_id": "quiz-start"
         },
         "quiz-start": {
             "id": "quiz-start",
             "sender": "kidia",
-            "text": "¡Red Neuronal Activada!"
+            "text": "¡Red Neuronal al máximo! ⚡"
         }
     },
     "quiz": {
