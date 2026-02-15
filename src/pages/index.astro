@@ -94,15 +94,15 @@ import Friend from '../components/Friend.astro';
     
     <section class="features">
         <div class="feature-card">
-            <h3>🤖 Tu propia IA</h3>
+            <h3><span>🤖</span> Tu propia IA</h3>
             <p>Kidia no es una profesora. Es una compañera curiosa que aprende contigo paso a paso.</p>
         </div>
         <div class="feature-card">
-            <h3>🎮 Juega y Aprende</h3>
+            <h3><span>🎮</span> Juega y Aprende</h3>
             <p>Sin vídeos aburridos. Chatea, toma decisiones y desbloquea insignias reales.</p>
         </div>
         <div class="feature-card">
-            <h3>🧠 Ética Primero</h3>
+            <h3><span>🧠</span> Ética Primero</h3>
             <p>Descubre no solo cómo funciona la tecnología, sino cómo usarla bien.</p>
         </div>
     </section>
@@ -120,9 +120,11 @@ import Friend from '../components/Friend.astro';
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
-    gap: 3rem;
-    margin: 4rem 0;
+    gap: 2rem; /* Reduced from 3rem */
+    margin: 2rem 0; /* Reduced from 4rem 0 */
     text-align: center;
+    min-height: 60vh; /* Ensure content is visible above the fold */
+    justify-content: center;
   }
   
   @media (min-width: 768px) {
@@ -130,6 +132,7 @@ import Friend from '../components/Friend.astro';
       flex-direction: row;
       text-align: left;
       justify-content: space-between;
+      margin-top: 3rem; /* Add some top margin on desktop */
     }
     
     .hero-content {
@@ -168,31 +171,64 @@ import Friend from '../components/Friend.astro';
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 2rem;
-      margin-top: 6rem;
+      margin-top: 2rem; /* Reduced from 6rem */
+      padding-bottom: 4rem;
   }
   
   .feature-card {
-      background: rgba(255,255,255,0.03);
-      padding: 2rem;
-      border-radius: 1rem;
-      border: 1px solid rgba(255,255,255,0.05);
-      transition: transform 0.2s;
+      background: rgba(30, 41, 59, 0.4); /* Darker, more glass-like */
+      backdrop-filter: blur(12px);
+      padding: 2.5rem; /* More breathing room */
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   }
   
+  .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+  }
+
   .feature-card:hover {
-      transform: translateY(-5px);
-      background: rgba(255,255,255,0.05);
+      transform: translateY(-8px) scale(1.02);
+      border-color: rgba(34, 211, 238, 0.5); /* Cyan glow */
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1), 0 0 20px rgba(34, 211, 238, 0.2);
+  }
+  
+  .feature-card:hover::before {
+      opacity: 1;
   }
   
   .feature-card h3 {
-      color: var(--color-primary);
-      margin-bottom: 1rem;
+      color: #fff; /* Brighter white */
+      margin-bottom: 0.75rem;
       font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+  }
+  
+  /* Make icons bigger */
+  .feature-card h3 span { 
+    font-size: 2rem; 
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
   }
   
   .feature-card p {
-      color: #d4d4d8;
-      line-height: 1.6;
+      color: #94a3b8;
+      line-height: 1.7;
+      font-size: 1.05rem;
   }
 
   .hero-visual {
