@@ -1,132 +1,164 @@
 {
     "id": "learning-patterns",
     "title": "2. Cazadores de Patrones",
-    "description": "Enséñale a la IA a distinguir entre un perro y un muffin.",
-    "difficulty": "intermediate",
+    "description": "Entrena tu ojo para ver patrones como una IA.",
+    "difficulty": "beginner",
     "language": "es",
-    "required_badge_id": "badge-explorer",
-    "unlocks_scenario_id": "ethics-basic",
+    "unlocks_scenario_id": "history-turing",
     "badge": {
-        "id": "badge-detective",
-        "name": "Detective Visual",
-        "icon": "loupe",
-        "description": "Otorgada por entender la Visión por Computador."
+        "id": "int-bin",
+        "name": "Binario",
+        "icon": "0️⃣",
+        "description": "Entendiste que todo son números."
     },
     "initial_node_id": "start",
     "nodes": {
         "start": {
             "id": "start",
             "sender": "kidia",
-            "text": "¡Hola de nuevo! 🕵️‍♀️ ¿Listo para entrenar mis ojos digitales?",
-            "action": "smile",
+            "text": "¡Hola de nuevo! 🕵️‍♀️ Hoy vamos a jugar a ser detectives. ¿Listo para buscar patrones?",
             "options": [
                 {
-                    "label": "¡Claro! ¿Qué tienes que ver?",
-                    "next_node_id": "pixels"
+                    "label": "¡Lista!",
+                    "next_node_id": "pattern-1"
                 },
                 {
-                    "label": "¿Tienes ojos de verdad?",
-                    "next_node_id": "cameras"
+                    "label": "¿Qué es un patrón?",
+                    "next_node_id": "explain-pattern"
                 }
             ]
         },
-        "cameras": {
-            "id": "cameras",
+        "explain-pattern": {
+            "id": "explain-pattern",
             "sender": "kidia",
-            "text": "No tengo ojos biológicos, ¡tengo cámaras y sensores! 📷 Pero lo importante es cómo proceso esas imágenes.",
-            "next_node_id": "pixels"
-        },
-        "pixels": {
-            "id": "pixels",
-            "sender": "kidia",
-            "text": "Para mí, una foto es solo un montón de números. Los llamamos **píxeles**. 🔢",
+            "text": "Un patrón es algo que se repite. Como 'Día, Noche, Día, Noche...' ¿Qué viene después?",
             "options": [
                 {
-                    "label": "¿Como en Minecraft?",
-                    "next_node_id": "minecraft"
-                }
-            ]
-        },
-        "minecraft": {
-            "id": "minecraft",
-            "sender": "kidia",
-            "text": "¡Exacto! 🧱 Cuadrados de colores. Si veo muchos píxeles marrones y verdes juntos...",
-            "options": [
-                {
-                    "label": "¡Es un árbol!",
-                    "next_node_id": "tree"
+                    "label": "¡Día!",
+                    "next_node_id": "correct-pattern"
                 },
                 {
-                    "label": "¡Es un perro!",
-                    "next_node_id": "dog_mistake"
+                    "label": "Pizza",
+                    "next_node_id": "wrong-pattern"
                 }
             ]
         },
-        "tree": {
-            "id": "tree",
+        "correct-pattern": {
+            "id": "correct-pattern",
             "sender": "kidia",
-            "text": "¡Correcto! 🌳 Busco formas y colores. Pero a veces me confundo.",
-            "next_node_id": "muffin"
+            "text": "¡Exacto! 🎉 Has detectado el patrón. La IA hace esto todo el rato, pero con millones de datos.",
+            "next_node_id": "pattern-1"
         },
-        "dog_mistake": {
-            "id": "dog_mistake",
+        "wrong-pattern": {
+            "id": "wrong-pattern",
             "sender": "kidia",
-            "text": "Mmm... podría ser un perro marrón en la hierba. 🐕 ¡Es difícil saberlo solo con colores!",
-            "next_node_id": "muffin"
+            "text": "Jaja, ojalá fuera pizza. 🍕 Pero el patrón era 'Día'. La IA busca lo lógico.",
+            "next_node_id": "pattern-1"
         },
-        "muffin": {
-            "id": "muffin",
+        "pattern-1": {
+            "id": "pattern-1",
             "sender": "kidia",
-            "text": "¿Sabes que a veces confundo a los chihuahuas con muffins de arándanos? 🧁🐶 Se parecen mucho.",
-            "action": "think",
+            "text": "Mira esta serie: 🔴 🔵 🔴 🔵 ... ¿Cuál es la siguiente?",
             "options": [
                 {
-                    "label": "¡Jajaja! ¿En serio?",
-                    "next_node_id": "training"
+                    "label": "🔴 Rojo",
+                    "next_node_id": "p1-correct"
+                },
+                {
+                    "label": "🔵 Azul",
+                    "next_node_id": "p1-wrong"
                 }
             ]
         },
-        "training": {
-            "id": "training",
+        "p1-correct": {
+            "id": "p1-correct",
             "sender": "kidia",
-            "text": "Sí. Necesito ver miles de fotos de perros y miles de muffins para aprender la diferencia. ¿Me ayudas con un test?",
+            "text": "¡Muy bien! 🧠 Tu cerebro ya funciona como una red neuronal.",
+            "action": "play_animation",
+            "action_data": {
+                "name": "probabilities"
+            },
+            "next_node_id": "images"
+        },
+        "p1-wrong": {
+            "id": "p1-wrong",
+            "sender": "kidia",
+            "text": "Casi... era Rojo. ¡Fíjate bien en la repetición!",
+            "next_node_id": "images"
+        },
+        "images": {
+            "id": "images",
+            "sender": "kidia",
+            "text": "Con las fotos pasa igual. Si ves 100 fotos de gatos con bigotes, aprendes que 'bigotes = gato'. 🐱",
+            "options": [
+                {
+                    "label": "¿Y si el gato no tiene bigotes?",
+                    "next_node_id": "edge-case"
+                },
+                {
+                    "label": "¡Entendido!",
+                    "next_node_id": "quiz-ready"
+                }
+            ]
+        },
+        "edge-case": {
+            "id": "edge-case",
+            "sender": "kidia",
+            "text": "¡Buena pregunta! Ahí es donde la IA puede fallar. Si nunca vio un gato sin bigotes, podría pensar que es otra cosa.",
+            "next_node_id": "quiz-ready"
+        },
+        "quiz-ready": {
+            "id": "quiz-ready",
+            "sender": "kidia",
+            "text": "Vamos a ver si tienes ojo de halcón con este test.",
             "action": "trigger_quiz",
             "next_node_id": "quiz-start"
         },
         "quiz-start": {
             "id": "quiz-start",
             "sender": "kidia",
-            "text": "¡A ver si tú tienes mejor vista que yo!"
+            "text": "¡A detectar patrones! 🚀"
         }
     },
     "quiz": {
         "questions": [
             {
                 "id": "q1",
-                "text": "¿Qué ve realmente una IA cuando mira una foto?",
+                "text": "Si ves: Sol, Lluvia, Sol, Lluvia... ¿Qué toca?",
                 "options": [
-                    "La foto completa como nosotros",
-                    "Una cuadrícula de números (píxeles)",
-                    "El alma de la persona"
+                    "Nieve",
+                    "Sol",
+                    "Lluvia"
                 ],
                 "correct_index": 1,
-                "explanation": "¡Los ordenadores solo entienden números! Transforman los colores en valores numéricos."
+                "explanation": "Correcto. El patrón se repite uno a uno."
             },
             {
                 "id": "q2",
-                "text": "¿Por qué es difícil distinguir un chihuaha de un muffin?",
+                "text": "¿Cómo sabe la IA que una foto es un perro?",
                 "options": [
-                    "Porque los dos son deliciosos",
-                    "Porque comparten formas y colores similares (patrones)",
-                    "Porque la IA necesita gafas"
+                    "Porque ladra",
+                    "Porque ha visto muchos patrones de perros antes",
+                    "Por magia"
                 ],
                 "correct_index": 1,
-                "explanation": "¡Exacto! Los patrones visuales (puntos negros, color tostado) son muy parecidos."
+                "explanation": "Analiza formas y colores comunes en todos los perros."
+            },
+            {
+                "id": "q3",
+                "text": "¿Qué pasa si le enseñas algo que nunca ha visto?",
+                "options": [
+                    "Puede equivocarse",
+                    "Lo sabe todo",
+                    "Se apaga"
+                ],
+                "correct_index": 0,
+                "explanation": "Si no hay patrón previo, la IA puede confundirse."
             }
         ]
     },
     "deep_mode": {
         "enabled": true,
-        "content_markdown": "## Visión Artificial (Computer Vision)\n\nLas redes neuronales convolucionales (CNN) son las que mejor ven.\n\n1.  **Bordes**: Primero detectan líneas.\n2.  **Formas**: Luego unen líneas para hacer círculos o cuadrados.\n3.  **Objetos**: Finalmente reconocen \"ojo\", \"oreja\", \"hocico\".\n\n¡Es como un puzzle por capas!"
+        "content_markdown": "## Entrenando el Ojo\n\nEl **Reconocimiento de Patrones** es clave.\n\n- **Píxeles**: Para la IA, una foto es solo una lista enorme de números (colores).\n- **Bordes**: Primero detecta bordes, luego formas (círculos), luego objetos (ojos).\n\n¡Es como armar un puzzle gigante!"
     }
 }

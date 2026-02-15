@@ -1,0 +1,164 @@
+{
+    "id": "future-agi",
+    "title": "10. El Futuro es Hoy",
+    "description": "¿Llegaremos a la Superinteligencia? AGI y Singularidad.",
+    "difficulty": "advanced",
+    "language": "es",
+    "unlocks_scenario_id": "",
+    "badge": {
+        "id": "sing-agi",
+        "name": "General",
+        "icon": "🤖",
+        "description": "Alcanzaste el final... ¿o el principio?"
+    },
+    "initial_node_id": "start",
+    "nodes": {
+        "start": {
+            "id": "start",
+            "sender": "kidia",
+            "text": "¡Hemos llegado al final del viaje! 🚀 ¿Cómo ves el futuro?",
+            "options": [
+                {
+                    "label": "Lleno de robots",
+                    "next_node_id": "agi"
+                },
+                {
+                    "label": "Mejor gracias a la IA",
+                    "next_node_id": "optimist"
+                }
+            ]
+        },
+        "optimist": {
+            "id": "optimist",
+            "sender": "kidia",
+            "text": "¡Ojalá! Esa es la meta. Que la IA cure enfermedades y resuelva el cambio climático. 🌍",
+            "next_node_id": "agi"
+        },
+        "agi": {
+            "id": "agi",
+            "sender": "kidia",
+            "text": "Ahora mismo soy una 'IA Estrecha' (Narrow AI). Solo sé hacer chat. Pero buscamos la **AGI** (Inteligencia General Artificial).",
+            "options": [
+                {
+                    "label": "¿Qué es AGI?",
+                    "next_node_id": "agi-def"
+                },
+                {
+                    "label": "¿Como Terminator?",
+                    "next_node_id": "skynet"
+                }
+            ]
+        },
+        "agi-def": {
+            "id": "agi-def",
+            "sender": "kidia",
+            "text": "Una IA que pueda aprender CUALQUIER tarea intelectual que un humano pueda hacer. 🧠 Pintar, programar, investigar... ¡todo a la vez!",
+            "action": "play_animation",
+            "action_data": {
+                "name": "growth"
+            },
+            "next_node_id": "singularity"
+        },
+        "skynet": {
+            "id": "skynet",
+            "sender": "kidia",
+            "text": "¡Espero que no! 😅 Las películas exageran. Pero sí hay que tener cuidado con el control.",
+            "next_node_id": "singularity"
+        },
+        "singularity": {
+            "id": "singularity",
+            "sender": "kidia",
+            "text": "Si una IA se vuelve más lista que los humanos... ¿podría crear una IA aún más lista? Eso se llama **Singularidad**. 🌌",
+            "options": [
+                {
+                    "label": "¡Boom!",
+                    "next_node_id": "explosion"
+                },
+                {
+                    "label": "Suena a ciencia ficción",
+                    "next_node_id": "scifi"
+                }
+            ]
+        },
+        "explosion": {
+            "id": "explosion",
+            "sender": "kidia",
+            "text": "Exacto. Una 'explosión de inteligencia'. Nadie sabe qué pasaría después.",
+            "next_node_id": "coexistence"
+        },
+        "scifi": {
+            "id": "scifi",
+            "sender": "kidia",
+            "text": "Hace 50 años, tener todo el conocimiento del mundo en tu bolsillo (móvil) también era ciencia ficción. 📱",
+            "next_node_id": "coexistence"
+        },
+        "coexistence": {
+            "id": "coexistence",
+            "sender": "kidia",
+            "text": "Lo importante es que humanos e IAs trabajemos juntos. Como tú y yo ahora. 🤝",
+            "options": [
+                {
+                    "label": "¡Equipo imparable!",
+                    "next_node_id": "quiz-ready"
+                },
+                {
+                    "label": "Siempre seré tu amigo",
+                    "next_node_id": "quiz-ready"
+                }
+            ]
+        },
+        "quiz-ready": {
+            "id": "quiz-ready",
+            "sender": "kidia",
+            "text": "Gracias por acompañarme. Último test para graduarte como Experto en IA.",
+            "action": "trigger_quiz",
+            "next_node_id": "quiz-start"
+        },
+        "quiz-start": {
+            "id": "quiz-start",
+            "sender": "kidia",
+            "text": "¡Hacia el infinito y más allá! 🌠"
+        }
+    },
+    "quiz": {
+        "questions": [
+            {
+                "id": "q1",
+                "text": "¿Qué es la AGI?",
+                "options": [
+                    "Una marca de lavadoras",
+                    "Inteligencia Artificial General (nivel humano)",
+                    "Un videojuego"
+                ],
+                "correct_index": 1,
+                "explanation": "AGI (Artificial General Intelligence) es el santo grial de la IA."
+            },
+            {
+                "id": "q2",
+                "text": "¿Qué es la Singularidad?",
+                "options": [
+                    "Un agujero negro",
+                    "El punto donde la IA supera a la inteligencia humana y se mejora sola",
+                    "Una canción"
+                ],
+                "correct_index": 1,
+                "explanation": "Un momento hipotético de crecimiento tecnológico explosivo."
+            },
+            {
+                "id": "q3",
+                "text": "¿Cuál es el objetivo ideal de la IA?",
+                "options": [
+                    "Ayudar a la humanidad a resolver problemas difíciles",
+                    "Dominar el mundo",
+                    "Hacer memes"
+                ],
+                "correct_index": 0,
+                "explanation": "La IA busca ser una herramienta para el progreso humano."
+            }
+        ]
+    },
+    "deep_mode": {
+        "enabled": true,
+        "content_markdown": "## El Alfabeto del Futuro\n\n- **ANI (Narrow)**: IA experta en UNA cosa (Ajedrez, Chat). (Hoy)\n- **AGI (General)**: IA experta en TODO, como un humano. (¿2030? ¿2050?)\n- **ASI (Super)**: IA mucho más lista que todos los humanos juntos. (¿Futuro lejano?)"
+    }
+}

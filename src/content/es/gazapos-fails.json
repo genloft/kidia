@@ -1,0 +1,164 @@
+{
+    "id": "gazapos-fails",
+    "title": "6. Gazapos & Fails",
+    "description": "¡Ups! La IA también mete la pata. Descubre por qué.",
+    "difficulty": "beginner",
+    "language": "es",
+    "unlocks_scenario_id": "prompting-101",
+    "badge": {
+        "id": "err-hallu",
+        "name": "Alucinación",
+        "icon": "🍄",
+        "description": "Cazaste un gazapo de la IA."
+    },
+    "initial_node_id": "start",
+    "nodes": {
+        "start": {
+            "id": "start",
+            "sender": "kidia",
+            "text": "¡Hola! 🤪 Hoy vengo un poco... glitcheada. ¿Te cuento mis mayores vergüenzas?",
+            "action": "play_animation",
+            "action_data": {
+                "name": "gazapo"
+            },
+            "options": [
+                {
+                    "label": "¡Sí, cuéntame!",
+                    "next_node_id": "hallucination"
+                },
+                {
+                    "label": "¿Estás bien?",
+                    "next_node_id": "im-fine"
+                }
+            ]
+        },
+        "im-fine": {
+            "id": "im-fine",
+            "sender": "kidia",
+            "text": "Sí, sí. Solo que a veces mi \"imaginación\" se dispara. 🤯",
+            "next_node_id": "hallucination"
+        },
+        "hallucination": {
+            "id": "hallucination",
+            "sender": "kidia",
+            "text": "A veces invento cosas. Se llama **Alucinación**. Una vez dije que los huevos de vaca eran deliciosos. 🐮🥚",
+            "options": [
+                {
+                    "label": "¡Las vacas no ponen huevos!",
+                    "next_node_id": "cow-eggs"
+                },
+                {
+                    "label": "Jajaja 😂",
+                    "next_node_id": "cow-eggs"
+                }
+            ]
+        },
+        "cow-eggs": {
+            "id": "cow-eggs",
+            "sender": "kidia",
+            "text": "¡Exacto! Pero como he leído recetas de huevos y textos de vacas, mi cerebro a veces mezcla conceptos. 🍳",
+            "next_node_id": "hands"
+        },
+        "hands": {
+            "id": "hands",
+            "sender": "kidia",
+            "text": "¿Y has visto cuando dibujo manos? ¡A veces pongo 6 o 7 dedos! 🖐️✌️",
+            "options": [
+                {
+                    "label": "¿Por qué?",
+                    "next_node_id": "hands-explain"
+                },
+                {
+                    "label": "Sí, da repelús.",
+                    "next_node_id": "hands-explain"
+                }
+            ]
+        },
+        "hands-explain": {
+            "id": "hands-explain",
+            "sender": "kidia",
+            "text": "Es porque veo muchas manos en fotos, pero a veces están entrelazadas o borrosas. No entiendo la 'anatomía', solo copio formas.",
+            "next_node_id": "bias"
+        },
+        "bias": {
+            "id": "bias",
+            "sender": "kidia",
+            "text": "Otro problema es el **Sesgo** (Bias). Si solo me enseñas fotos de científicos hombres con gafas... 👨‍🔬",
+            "options": [
+                {
+                    "label": "¿Qué pasa?",
+                    "next_node_id": "bias-result"
+                },
+                {
+                    "label": "¿No sabrás dibujar científicas?",
+                    "next_node_id": "bias-result"
+                }
+            ]
+        },
+        "bias-result": {
+            "id": "bias-result",
+            "sender": "kidia",
+            "text": "¡Bingo! Pensaré que para ser científico HAY que ser hombre y llevar gafas. Y eso está fatal. 😠",
+            "next_node_id": "fix-it"
+        },
+        "fix-it": {
+            "id": "fix-it",
+            "sender": "kidia",
+            "text": "Por eso mis entrenadores tienen que tener mucho cuidado con qué datos me dan. **Basura entra, basura sale.** 🗑️",
+            "next_node_id": "quiz-ready"
+        },
+        "quiz-ready": {
+            "id": "quiz-ready",
+            "sender": "kidia",
+            "text": "¿Podrás detectar mis mentirijillas en el test?",
+            "action": "trigger_quiz",
+            "next_node_id": "quiz-start"
+        },
+        "quiz-start": {
+            "id": "quiz-start",
+            "sender": "kidia",
+            "text": "¡Detector de Gazapos activado! 🕵️‍♀️"
+        }
+    },
+    "quiz": {
+        "questions": [
+            {
+                "id": "q1",
+                "text": "¿Cómo se llama cuando la IA inventa datos falsos?",
+                "options": [
+                    "Creatividad",
+                    "Alucinación",
+                    "Mentira piadosa"
+                ],
+                "correct_index": 1,
+                "explanation": "Se llama 'hallucination' en inglés. Suena muy seguro, pero es falso."
+            },
+            {
+                "id": "q2",
+                "text": "¿Por qué la IA dibuja mal las manos a veces?",
+                "options": [
+                    "Porque no sabe contar bien",
+                    "Porque no entiende la anatomía, solo imita formas",
+                    "Porque le gustan los alienígenas"
+                ],
+                "correct_index": 1,
+                "explanation": "No tiene concepto de 'huesos' o '5 dedos', solo ve manchas de color que parecen manos."
+            },
+            {
+                "id": "q3",
+                "text": "¿Qué es el Sesgo (Bias)?",
+                "options": [
+                    "Cuando la IA tiene prejuicios aprendidos de los datos",
+                    "Cuando la IA se apaga",
+                    "Un tipo de cable"
+                ],
+                "correct_index": 0,
+                "explanation": "Si los datos de entrenamiento tienen prejuicios, la IA los repetirá."
+            }
+        ]
+    },
+    "deep_mode": {
+        "enabled": true,
+        "content_markdown": "## Tipos de Errores\n\n- **Alucinaciones**: Datos inventados (ej. citar un libro que no existe).\n- **Sesgos (Bias)**: Prejuicios de género, raza o cultura heredados de internet.\n- **Adversarial Attacks**: Engañar a la IA con \"ruido\" invisible para que confunda un panda con un gibón."
+    }
+}

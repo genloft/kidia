@@ -6,7 +6,7 @@ interface Props {
 const { scenario } = Astro.props;
 ---
 
-<div id="quiz-container" class="quiz-container hidden">
+<div id="quiz-container" class="quiz-container hidden" data-scenario={JSON.stringify(scenario)}>
   <div class="quiz-content">
       <h2 class="quiz-title">Test de Conocimiento <span id="q-counter" class="text-sm opacity-50"></span></h2>
       
@@ -14,6 +14,10 @@ const { scenario } = Astro.props;
       <div id="quiz-intro">
           <p>¡Has terminado la misión! Ahora demuestra lo que sabes.</p>
           <button id="btn-start" class="btn-primary">Empezar Quiz</button>
+          <div class="secondary-actions">
+              <button id="btn-restart" class="btn-secondary">Reiniciar Misión</button>
+              <button id="btn-close" class="btn-secondary">Hacer más tarde</button>
+          </div>
       </div>
 
       <!-- Question State -->
@@ -21,7 +25,7 @@ const { scenario } = Astro.props;
           <div id="quiz-question" class="question-text"></div>
           <div id="quiz-options" class="options-grid"></div>
           <div id="quiz-feedback" class="feedback hidden"></div>
-          <button id="quiz-next" class="btn hidden">Siguiente</button>
+          <button id="quiz-next" class="btn-primary hidden">Siguiente</button>
       </div>
 
       <!-- Results State -->
@@ -30,19 +34,31 @@ const { scenario } = Astro.props;
               <span id="final-score">0</span>%
           </div>
           <p id="kidia-reaction" class="reaction-text"></p>
+          
+          <div id="badge-notification" class="hidden">
+              <div class="badge-icon-animate">🏆</div>
+              <p>¡Has ganado la insignia <strong id="badge-name"></strong>!</p>
+          </div>
+
           <button id="btn-finish" class="btn-primary">Volver al Mapa</button>
       </div>
   </div>
 </div>
 
-<script define:vars={{ scenario }}>
-    import { ProgressService } from '../lib/progress-service';
-
+<script>
     // Elements
     const container = document.getElementById('quiz-container');
     const introEl = document.getElementById('quiz-intro');
     const playEl = document.getElementById('quiz-play');
     const resultsEl = document.getElementById('quiz-results');
+    
+    // Parse scenario from data attribute
+    let scenario;
+    try {
+        scenario = JSON.parse(container.dataset.scenario);
+    } catch (e) {
+        console.error('[Quiz] Failed to parse scenario data', e);
+    }
     
     // Play Elements
     const qCounter = document.getElementById('q-counter');
@@ -56,20 +72,57 @@ const { scenario } = Astro.props;
     const reactionEl = document.getElementById('kidia-reaction');
     
     const questions = scenario?.quiz?.questions || [];
+    
     let currentIdx = 0;
     let correctCount = 0;
 
     // Listeners
     window.addEventListener('startQuiz', (e) => {
-        if (e.detail.scenarioId === scenario.id) {
+        // console.log('[Quiz] Event received for:', e.detail.scenarioId);
+        if (scenario && e.detail.scenarioId === scenario.id) {
             container.classList.remove('hidden');
             showIntro();
         }
     });
 
     document.getElementById('btn-start').onclick = startQuiz;
+    
+    // Close / Do Later button
+    const closeBtn = document.getElementById('btn-close');
+    if (closeBtn) {
+        closeBtn.onclick = () => {
+            container.classList.add('hidden');
+        };
+    }
+
+    // Restart Button Logic
+    const restartBtn = document.getElementById('btn-restart');
+    if (restartBtn) {
+        restartBtn.onclick = () => {
+            const KEY = 'kidia-progress';
+            try {
+                const raw = localStorage.getItem(KEY);
+                if (raw) {
+                    const state = JSON.parse(raw);
+                    // Clear progress for this scenario
+                    if (state.scenarioProgress) {
+                        delete state.scenarioProgress[scenario.id];
+                    }
+                    // Optional: Remove from completed list if we want to force re-completion? 
+                    // User just wants to restart, usually implies re-watching.
+                    // But if they already completed it, maybe keep it as completed?
+                    // Let's just clear the *current node* progress so it starts from beginning.
+                    localStorage.setItem(KEY, JSON.stringify(state));
+                }
+            } catch (e) {
+                console.error('Error clearing progress', e);
+            }
+            window.location.reload();
+        };
+    }
+
     document.getElementById('btn-finish').onclick = () => window.location.href = '/mapa';
-    nextBtn.onclick = nextQuestion;
+    if(nextBtn) nextBtn.onclick = nextQuestion;
 
     function showIntro() {
         introEl.classList.remove('hidden');
@@ -87,12 +140,12 @@ const { scenario } = Astro.props;
 
     function renderQuestion() {
         const q = questions[currentIdx];
-        if(!q) return finishQuiz(); // Safety check
+        if(!q) return finishQuiz(); 
 
         qCounter.innerText = `(${currentIdx + 1}/${questions.length})`;
         questionEl.textContent = q.text;
         optionsEl.innerHTML = '';
-        feedbackEl.className = 'feedback hidden'; // Reset feedback
+        feedbackEl.className = 'feedback hidden'; 
         nextBtn.classList.add('hidden');
 
         q.options.forEach((text, index) => {
@@ -105,7 +158,6 @@ const { scenario } = Astro.props;
     }
 
     function checkAnswer(index, btn, question) {
-        // Disable all
         optionsEl.querySelectorAll('button').forEach(b => b.disabled = true);
 
         const isCorrect = index === question.correct_index;
@@ -120,7 +172,6 @@ const { scenario } = Astro.props;
             feedbackEl.textContent = `❌ ${question.explanation}`;
             feedbackEl.classList.add('wrong');
             
-            // Highlight correct one
             const correctBtn = optionsEl.children[question.correct_index];
             if(correctBtn) correctBtn.classList.add('correct');
         }
@@ -144,6 +195,7 @@ const { scenario } = Astro.props;
         qCounter.innerText = '';
         
         const score = Math.round((correctCount / questions.length) * 100);
+        
         finalScoreEl.innerText = score.toString();
         
         // Kidia Reaction
@@ -154,27 +206,50 @@ const { scenario } = Astro.props;
         
         reactionEl.innerText = reaction;
 
-        // Save Progress
-        ProgressService.finishScenario(scenario.id, score);
-        if (score >= 70 && scenario.badge) {
-            ProgressService.awardBadge(scenario.badge.id);
+        // Save Logic
+        const KEY = 'kidia-progress';
+        try {
+            const raw = localStorage.getItem(KEY);
+            const state = raw ? JSON.parse(raw) : { 
+                completedScenarios: [], 
+                badges: [], 
+                scores: {} 
+            };
+            
+            state.completedScenarios = [...new Set([...state.completedScenarios || [], scenario.id])];
+            state.scores = { ...(state.scores || {}), [scenario.id]: score };
+            
+             const badgeNotif = document.getElementById('badge-notification');
+             const badgeNameEl = document.getElementById('badge-name');
+             
+            if (score >= 70 && scenario.badge) {
+                 state.badges = [...new Set([...state.badges || [], scenario.badge.id])];
+                 
+                 badgeNameEl.innerText = scenario.badge.name;
+                 badgeNotif.classList.remove('hidden');
+                 badgeNotif.classList.add('animate-pop');
+            }
+            
+            localStorage.setItem(KEY, JSON.stringify(state));
+            
+        } catch(e) {
+            console.error('[Quiz] Save error', e);
         }
     }
-
 </script>
 
 <style>
     .quiz-container {
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.9);
-        backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 1000;
         opacity: 1;
-        transition: opacity 0.3s;
+        transition: opacity 0.4s ease;
     }
 
     .quiz-container.hidden {
@@ -183,83 +258,202 @@ const { scenario } = Astro.props;
     }
 
     .quiz-content {
-        background: var(--color-surface);
+        background: rgba(24, 24, 27, 0.95);
+        border: 1px solid rgba(34, 211, 238, 0.3);
+        box-shadow: 0 0 50px rgba(34, 211, 238, 0.15);
         padding: 2.5rem;
-        border-radius: 1.5rem;
-        border: 1px solid var(--color-primary);
-        max-width: 500px;
+        border-radius: 2rem;
+        max-width: 550px;
         width: 90%;
         text-align: center;
-        box-shadow: 0 0 50px rgba(34, 211, 238, 0.2);
+        position: relative;
+        overflow: hidden;
     }
     
-    h2 { margin-top: 0; color: white; }
+    /* Decorative Gradient Blob */
+    .quiz-content::before {
+        content: '';
+        position: absolute;
+        top: -50px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 200px;
+        height: 100px;
+        background: var(--color-primary);
+        filter: blur(80px);
+        opacity: 0.2;
+        pointer-events: none;
+    }
+    
+    .quiz-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #fff, #a5f3fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .question-text {
+        font-size: 1.3rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        color: #e4e4e7;
+    }
+    
+    /* Modern Button Base */
+    .btn-primary, .btn-secondary {
+        font-family: 'Outfit', sans-serif;
+        padding: 1rem 2rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: none;
+        display: inline-block;
+        margin-top: 1rem;
+    }
     
     .btn-primary {
         background: var(--color-primary);
-        color: black;
-        border: none;
-        padding: 0.8rem 2rem;
-        border-radius: 2rem;
-        font-weight: bold;
-        cursor: pointer;
-        font-size: 1.1rem;
-        margin-top: 1rem;
-        transition: transform 0.2s;
+        color: #09090b;
+        box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
     }
     
     .btn-primary:hover {
-        transform: scale(1.05);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 0 30px rgba(34, 211, 238, 0.6);
+    }
+
+    .btn-secondary {
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.2);
+        color: rgba(255,255,255,0.8);
+        margin-left: 1rem;
+    }
+    
+    .btn-secondary:hover {
+        border-color: #fff;
+        background: rgba(255,255,255,0.05);
+        color: #fff;
+    }
+
+    .secondary-actions {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .secondary-actions .btn-secondary {
+        margin: 0; /* Override default margin */
+        font-size: 0.9rem;
+        padding: 0.6rem 1.2rem;
     }
 
     .options-grid {
-        display: grid;
-        gap: 0.8rem;
-        margin: 1.5rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin: 2rem 0;
     }
 
     .quiz-option {
-        padding: 1rem;
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        color: var(--color-text);
-        border-radius: 0.5rem;
+        width: 100%;
+        padding: 1rem 1.5rem;
+        background: #2a3942; /* Chat button bg */
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #e9edef;
+        border-radius: 999px; /* Pill shape */
         cursor: pointer;
-        transition: all 0.2s;
-        text-align: left;
+        transition: all 0.2s ease;
+        text-align: center; /* Center text like buttons */
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.1rem;
+        position: relative;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
     .quiz-option:hover:not(:disabled) {
-        background: rgba(34, 211, 238, 0.1);
-        border-color: var(--color-primary);
+        background: #3c5260;
+        transform: scale(1.02);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        border-color: rgba(255,255,255,0.2);
     }
 
     .quiz-option.correct {
-        background: rgba(34, 220, 100, 0.2) !important;
-        border-color: #22c55e !important;
+        background: #00a884 !important; /* WhatsApp Green */
+        border-color: #00a884 !important;
+        color: #fff;
     }
 
     .quiz-option.wrong {
-        background: rgba(239, 68, 68, 0.2) !important;
+        background: #ef4444 !important;
         border-color: #ef4444 !important;
-        opacity: 0.7;
+        color: #fff;
+        opacity: 0.9;
+    }
+    
+    .quiz-option:disabled {
+        cursor: default;
     }
     
     .feedback {
-        margin: 1rem 0;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        font-weight: bold;
+        margin: 1.5rem 0;
+        padding: 1.2rem;
+        border-radius: 1rem;
+        font-weight: 600;
+        animation: fadeIn 0.3s ease;
     }
-    .feedback.correct { background: rgba(34, 220, 100, 0.1); color: #22c55e; }
-    .feedback.wrong { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+    
+    .feedback.correct { 
+        background: rgba(34, 197, 94, 0.1); 
+        color: #4ade80; 
+        border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+    
+    .feedback.wrong { 
+        background: rgba(239, 68, 68, 0.1); 
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
 
     .score-circle {
-        font-size: 4rem;
-        font-weight: bold;
-        color: var(--color-primary);
+        font-size: 5rem;
+        font-weight: 800;
+        background: linear-gradient(to bottom, var(--color-primary), var(--color-secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         margin: 1rem 0;
+        filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.3));
     }
     
     .hidden { display: none !important; }
+    
+    #badge-notification {
+        background: linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(234, 179, 8, 0.05));
+        border: 1px solid rgba(234, 179, 8, 0.5);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .badge-icon-animate {
+        font-size: 4rem;
+        margin-bottom: 0.5rem;
+        filter: drop-shadow(0 0 10px gold);
+    }
+    
+    @keyframes popIn {
+        0% { transform: scale(0.8); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 </style>

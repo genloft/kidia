@@ -26,7 +26,14 @@ export async function loadScenarios(lang: 'es' | 'en' = 'es'): Promise<ScenarioS
     }
 
     // Filter by lang
-    return Object.values(scenarioCache).filter(s => s.language === lang);
+    const filtered = Object.values(scenarioCache).filter(s => s.language === lang);
+
+    // Sort by Number in Title (e.g. "1. Intro" -> 1)
+    return filtered.sort((a, b) => {
+        const numA = parseInt(a.title.split('.')[0]) || 999;
+        const numB = parseInt(b.title.split('.')[0]) || 999;
+        return numA - numB;
+    });
 }
 
 export async function getScenarioById(id: string, lang: 'es' | 'en' = 'es'): Promise<ScenarioSchema | undefined> {

@@ -1,0 +1,119 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import BadgeGrid from '../components/BadgeGrid.astro';
+import { ProgressService } from '../lib/progress-service';
+
+// We can get static data here, but user progress is client-side in our current architecture
+// (unless we used cookies/session for SSR, but we used localStorage for simplicity).
+---
+
+<Layout title="Kidia - Colección de Insignias">
+  <Header />
+
+  <main class="badges-page">
+      <div class="page-header">
+          <h1>🏆 Salón de la Fama</h1>
+          <p>Colecciona hitos históricos, conceptos clave y secretos del universo.</p>
+          
+          <div class="stats-overview">
+              <div class="stat-box">
+                  <span class="stat-value" id="total-badges">0</span>
+                  <span class="stat-label">Desbloqueadas</span>
+              </div>
+              <div class="stat-box">
+                  <span class="stat-value" id="global-rank">Novato</span>
+                  <span class="stat-label">Rango Actual</span>
+              </div>
+          </div>
+      </div>
+
+      <BadgeGrid />
+  </main>
+</Layout>
+
+<script>
+    import { ProgressService } from '../lib/progress-service';
+    import { storage } from '../lib/storage-simple';
+    import badgesData from '../data/badges.json';
+
+    const state = ProgressService.getState();
+    const earnedCount = state.badges.length;
+    // ... existing stats logic ...
+    const totalCount = badgesData.length;
+
+    // Update Stats
+    document.getElementById('total-badges').innerText = `${earnedCount} / ${totalCount}`;
+
+    // Calculate Rank
+    const ranks = [
+        { limit: 0, title: "Novato" },
+        { limit: 5, title: "Explorador" },
+        { limit: 10, title: "Promtpadawan" },
+        { limit: 20, title: "Arquitecto" },
+        { limit: 30, title: "Superinteligencia" }
+    ];
+    
+    const currentRank = ranks.reverse().find(r => earnedCount >= r.limit) || ranks[ranks.length-1];
+    document.getElementById('global-rank').innerText = currentRank.title;
+    document.getElementById('global-rank').style.color = 'var(--color-primary)';
+</script>
+
+<style>
+    /* ... existing styles ... */
+    
+
+    .badges-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    h1 {
+        font-size: 3rem;
+        background: linear-gradient(to right, #fbbf24, #f59e0b); /* Gold gradient */
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+    }
+
+    .page-header p {
+        color: #a1a1aa;
+        font-size: 1.1rem;
+    }
+
+    .stats-overview {
+        display: flex;
+        justify-content: center;
+        gap: 3rem;
+        margin-top: 2rem;
+    }
+
+    .stat-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: rgba(255,255,255,0.05);
+        padding: 1rem 2rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: white;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #888;
+    }
+</style>

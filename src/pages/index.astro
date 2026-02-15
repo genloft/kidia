@@ -24,8 +24,72 @@ import Friend from '../components/Friend.astro';
       </div>
       
       <div class="hero-visual">
-          <Friend state="talking" />
+          <div class="kidia-presentation">
+              <img src="/kidia-standing.png" alt="Kidia" class="kidia-character" />
+              <div class="speech-bubble" id="kidia-bubble">
+                  <p id="bubble-text">¡Hola! Soy Kidia 👋</p>
+              </div>
+          </div>
       </div>
+     
+      <script>
+        const messages = [
+          "¡Hola! Soy Kidia 👋",
+          "¿Empezamos la aventura? 🚀",
+          "¿Cómo estás hoy? 😊",
+          "¿Sabes qué es una IA? 🤖",
+          "¡Vamos a aprender juntos! ✨",
+          "¿Listo para explorar? 🌟"
+        ];
+        
+        let currentIndex = 0;
+        const bubbleText = document.getElementById('bubble-text');
+        const kidiaImg = document.querySelector('.kidia-character');
+        let typingInterval;
+        
+        // Occasionally change Kidia's pose for variety
+        const kidiaVariations = [
+          '/kidia-standing.png',
+          '/kidia_thinking.png',
+          '/kidia_surprised.png'
+        ];
+        
+        function typeMessage(message) {
+          if (!bubbleText) return;
+          
+          let charIndex = 0;
+          bubbleText.textContent = '';
+          
+          // Clear any existing typing interval
+          if (typingInterval) clearInterval(typingInterval);
+          
+          typingInterval = setInterval(() => {
+            if (charIndex < message.length) {
+              bubbleText.textContent += message[charIndex];
+              charIndex++;
+            } else {
+              clearInterval(typingInterval);
+            }
+          }, 50); // 50ms per character
+        }
+        
+        function rotateMessage() {
+          currentIndex = (currentIndex + 1) % messages.length;
+          typeMessage(messages[currentIndex]);
+          
+          // Occasionally change Kidia's expression (20% chance)
+          if (kidiaImg && Math.random() < 0.2) {
+            const randomPose = kidiaVariations[Math.floor(Math.random() * kidiaVariations.length)];
+            kidiaImg.src = randomPose;
+          }
+        }
+        
+        // Type the first message on load
+        typeMessage(messages[0]);
+        
+        // Rotate every 4 seconds (increased to give time for typing)
+        setInterval(rotateMessage, 4000);
+      </script>
     </section>
     
     <section class="features">
@@ -129,5 +193,109 @@ import Friend from '../components/Friend.astro';
   .feature-card p {
       color: #d4d4d8;
       line-height: 1.6;
+  }
+
+  .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 500px;
+  }
+
+  .kidia-presentation {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+  }
+
+  .kidia-character {
+      width: 500px; /* Increased from 400px */
+      height: auto;
+      filter: drop-shadow(0 10px 30px rgba(34, 211, 238, 0.3));
+      animation: float-character 3s ease-in-out infinite;
+  }
+
+  @keyframes float-character {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+  }
+
+  .speech-bubble {
+      position: absolute;
+      top: 60px; /* Position near her face */
+      right: 420px; /* Adjusted for larger character */
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.98));
+      color: #1e293b;
+      padding: 1.25rem 1.5rem; /* Increased padding for more breathing room */
+      border-radius: 1rem;
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2), 0 10px 20px -8px rgba(0, 0, 0, 0.15);
+      max-width: 420px; /* Increased from 350px */
+      min-width: 280px; /* Ensure minimum width */
+      font-size: 1.05rem; /* Slightly larger font */
+      line-height: 1.5; /* More line spacing */
+      letter-spacing: 0.3px; /* Add letter spacing for less cramped text */
+      border: 2px solid rgba(34, 211, 238, 0.2);
+      animation: float-bubble 3s ease-in-out infinite;
+  }
+
+  @keyframes float-bubble {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+  }
+  
+  .speech-bubble p {
+      margin: 0;
+      color: #334155;
+      font-weight: 500;
+      transition: opacity 0.3s ease;
+  }
+
+  /* Tail pointing RIGHT towards Kidia's mouth */
+  .speech-bubble::before {
+      content: '';
+      position: absolute;
+      right: -15px;
+      top: 30px;
+      width: 0;
+      height: 0;
+      border-left: 18px solid rgba(255, 255, 255, 0.95);
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+  }
+
+  @media (max-width: 968px) {
+      .hero-visual {
+          min-height: auto;
+      }
+
+      .kidia-presentation {
+          flex-direction: column;
+          align-items: center;
+      }
+
+      .kidia-character {
+          width: 280px;
+      }
+
+      .speech-bubble {
+          position: relative;
+          top: auto;
+          left: auto;
+          margin-top: -40px;
+          max-width: 90%;
+      }
+
+      /* Tail pointing UP towards Kidia's face on mobile */
+      .speech-bubble::before {
+          left: 50%;
+          top: -12px;
+          transform: translateX(-50%);
+          border-right: 12px solid transparent;
+          border-left: 12px solid transparent;
+          border-bottom: 12px solid rgba(255, 255, 255, 0.95);
+          border-top: none;
+      }
   }
 </style>

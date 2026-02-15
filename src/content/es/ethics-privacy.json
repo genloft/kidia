@@ -1,0 +1,149 @@
+{
+    "id": "ethics-privacy",
+    "title": "8. Los Datos son Tesoros",
+    "description": "¿A quién le das tus datos? Ética y privacidad en la era IA.",
+    "difficulty": "beginner",
+    "language": "es",
+    "unlocks_scenario_id": "chinese-room",
+    "badge": {
+        "id": "eth-priv",
+        "name": "Candado",
+        "icon": "🔒",
+        "description": "Protegiste tus secretos."
+    },
+    "initial_node_id": "start",
+    "nodes": {
+        "start": {
+            "id": "start",
+            "sender": "kidia",
+            "text": "¡Alto ahí! 🛑 Antes de seguir, necesito preguntarte algo muy personal.",
+            "options": [
+                {
+                    "label": "¿Qué cosa?",
+                    "next_node_id": "personal-q"
+                },
+                {
+                    "label": "No te lo diré",
+                    "next_node_id": "smart-move"
+                }
+            ]
+        },
+        "personal-q": {
+            "id": "personal-q",
+            "sender": "kidia",
+            "text": "¿Cual es tu contraseña del correo? (Es broma, ¡nunca me la digas!). 🤐",
+            "next_node_id": "data-value"
+        },
+        "smart-move": {
+            "id": "smart-move",
+            "sender": "kidia",
+            "text": "¡Muy bien! 👏 Nunca le des datos sensibles a una IA (ni a nadie).",
+            "next_node_id": "data-value"
+        },
+        "data-value": {
+            "id": "data-value",
+            "sender": "kidia",
+            "text": "Todo lo que escribes en internet se queda guardado. Tus fotos, tus likes... eso son **Datos**. Y valen mucho dinero. 💰",
+            "options": [
+                {
+                    "label": "¿Por qué?",
+                    "next_node_id": "training-data"
+                },
+                {
+                    "label": "A mí me da igual",
+                    "next_node_id": "training-data"
+                }
+            ]
+        },
+        "training-data": {
+            "id": "training-data",
+            "sender": "kidia",
+            "text": "Porque las IAs se entrenan con esos datos. Si subes una foto tuya, podría usarse para enseñar a una IA a reconocer caras. 📸",
+            "next_node_id": "safety"
+        },
+        "safety": {
+            "id": "safety",
+            "sender": "kidia",
+            "text": "Por eso la **Privacidad** es clave. Hay leyes como el GDPR en Europa que te protegen. 🇪🇺",
+            "options": [
+                {
+                    "label": "¿La IA me espía?",
+                    "next_node_id": "spying"
+                },
+                {
+                    "label": "¡Qué rollo!",
+                    "next_node_id": "responsibility"
+                }
+            ]
+        },
+        "spying": {
+            "id": "spying",
+            "sender": "kidia",
+            "text": "No exactamente. Yo no tengo memoria a largo plazo de tus secretos (a menos que me lo pidas). Pero las grandes empresas sí guardan historiales. ☁️",
+            "next_node_id": "responsibility"
+        },
+        "responsibility": {
+            "id": "responsibility",
+            "sender": "kidia",
+            "text": "Además, hay que usar la IA para el bien. No para hacer trampas en los deberes o crear noticias falsas (Fake News). 🤥",
+            "action": "play_animation",
+            "action_data": {
+                "name": "gazapo"
+            },
+            "next_node_id": "quiz-ready"
+        },
+        "quiz-ready": {
+            "id": "quiz-ready",
+            "sender": "kidia",
+            "text": "Vamos a ver si eres un guardián responsable de tus datos.",
+            "action": "trigger_quiz",
+            "next_node_id": "quiz-start"
+        },
+        "quiz-start": {
+            "id": "quiz-start",
+            "sender": "kidia",
+            "text": "¡Protocolo de Seguridad activado! 🔐"
+        }
+    },
+    "quiz": {
+        "questions": [
+            {
+                "id": "q1",
+                "text": "¿Debes darle tu contraseña a una IA?",
+                "options": [
+                    "Solo si me la pide por favor",
+                    "Nunca, jamás",
+                    "Si es para un juego"
+                ],
+                "correct_index": 1,
+                "explanation": "Las contraseñas son secretas. Las IAs no las necesitan."
+            },
+            {
+                "id": "q2",
+                "text": "¿Qué son las Fake News hechas con IA?",
+                "options": [
+                    "Noticias divertidas",
+                    "Noticias falsas que parecen reales",
+                    "Dibujos animados"
+                ],
+                "correct_index": 1,
+                "explanation": "La IA puede generar textos o imágenes falsas muy convincentes."
+            },
+            {
+                "id": "q3",
+                "text": "¿Tus datos tienen valor?",
+                "options": [
+                    "No, son gratis",
+                    "Sí, mucho. Sirven para entrenar modelos y publicidad",
+                    "Solo si soy famoso"
+                ],
+                "correct_index": 1,
+                "explanation": "Los datos son el 'petróleo' del siglo XXI."
+            }
+        ]
+    },
+    "deep_mode": {
+        "enabled": true,
+        "content_markdown": "## Ética de la IA\n\n- **Deepfakes**: Vídeos falsos donde cambian la cara de una persona. Peligroso si se usa mal.\n- **Sesgo Algorítmico**: Si la IA decide quién recibe un préstamo y tiene sesgos racistas, es un problema grave.\n- **Responsabilidad**: ¿De quién es la culpa si un coche autónomo choca? ¿Del conductor o del programador?"
+    }
+}

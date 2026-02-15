@@ -6,10 +6,10 @@
     "language": "es",
     "unlocks_scenario_id": "learning-patterns",
     "badge": {
-        "id": "badge-explorer",
-        "name": "Explorador de Datos",
-        "icon": "🧭",
-        "description": "Otorgada por entender qué es la IA."
+        "id": "hist-ada",
+        "name": "Ada",
+        "icon": "📜",
+        "description": "La primera programadora de la historia."
     },
     "initial_node_id": "start",
     "nodes": {
@@ -32,15 +32,21 @@
         "magic": {
             "id": "magic",
             "sender": "kidia",
-            "text": "¡Parece magia, pero son matemáticas! 🎩✨ Se llama Inteligencia Artificial.",
-            "action": "dance",
+            "text": "¡Parece magia, pero son matemáticas! 🎩✨ Mira cómo convierto tus palabras en números.",
+            "action": "play_animation",
+            "action_data": {
+                "name": "token-process"
+            },
             "next_node_id": "explanation"
         },
         "analysis": {
             "id": "analysis",
             "sender": "kidia",
             "text": "¡Exacto! 🧠 Es muy lista observando patrones. Eso es básicamente la Inteligencia Artificial.",
-            "action": "think",
+            "action": "play_animation",
+            "action_data": {
+                "name": "probabilities"
+            },
             "next_node_id": "explanation"
         },
         "explanation": {
@@ -61,13 +67,48 @@
         "fear": {
             "id": "fear",
             "sender": "kidia",
-            "text": "¡No te asustes! 🛡️ Es solo una herramienta, como un martillo o una calculadora. Depende de cómo la usemos.",
+            "text": "¡No te asustes! 🛡️ Es solo una herramienta. A veces se equivoca, ¡mira esto!",
+            "action": "play_animation",
+            "action_data": {
+                "name": "gazapo"
+            },
             "next_node_id": "learning"
         },
         "learning": {
             "id": "learning",
             "sender": "kidia",
-            "text": "Más o menos. Necesita que le demos muchos datos. Cuantos más datos, mejor aprende. Se llama \"Entrenamiento\".",
+            "text": "Más o menos. Necesita que le demos muchos datos. Cuantos más datos, más 'neuronas' conecta.",
+            "action": "play_animation",
+            "action_data": {
+                "name": "growth"
+            },
+            "next_node_id": "history-ada"
+        },
+        "history-ada": {
+            "id": "history-ada",
+            "sender": "kidia",
+            "text": "¿Sabías que la primera persona que imaginó esto fue una mujer? Se llamaba Ada Lovelace, ¡hace casi 200 años!",
+            "options": [
+                {
+                    "label": "¿200 años? ¡No había ordenadores!",
+                    "next_node_id": "ada-explain"
+                },
+                {
+                    "label": "¡Qué lista Ada!",
+                    "next_node_id": "ada-explain"
+                }
+            ]
+        },
+        "ada-explain": {
+            "id": "ada-explain",
+            "sender": "kidia",
+            "text": "Exacto. Ella escribió el primer algoritmo para una máquina mecánica que aún no existía. ¡Era una visionaria! 📜",
+            "next_node_id": "quiz-ready"
+        },
+        "quiz-ready": {
+            "id": "quiz-ready",
+            "sender": "kidia",
+            "text": "¡Es hora de poner a prueba lo aprendido!",
             "action": "trigger_quiz",
             "next_node_id": "quiz-start"
         },
@@ -83,28 +124,39 @@
                 "id": "q1",
                 "text": "¿Cómo aprende la IA?",
                 "options": [
-                    "Leyendo libros sola en la biblioteca",
-                    "Viendo muchos ejemplos y buscando patrones",
-                    "Comiendo chips de silicio"
+                    "Leyendo sola",
+                    "Viendo ejemplos y buscando patrones",
+                    "Comiendo chips"
                 ],
                 "correct_index": 1,
-                "explanation": "¡Eso es! Necesita ver muchos ejemplos para encontrar patrones."
+                "explanation": "¡Eso es! Necesita ver muchos ejemplos (datos) para aprender."
             },
             {
                 "id": "q2",
-                "text": "¿Qué pasa si la IA no sabe la respuesta?",
+                "text": "¿Quién fue la primera programadora?",
                 "options": [
-                    "Se inventa algo (alucina)",
+                    "Bill Gates",
+                    "Ada Lovelace",
+                    "Un robot"
+                ],
+                "correct_index": 1,
+                "explanation": "Ada Lovelace escribió el primer algoritmo en el siglo XIX."
+            },
+            {
+                "id": "q3",
+                "text": "¿Qué hace una IA si no sabe la respuesta?",
+                "options": [
+                    "Se la inventa (alucina)",
                     "Explota",
                     "Llama a su mamá"
                 ],
                 "correct_index": 0,
-                "explanation": "A veces, si no sabe, intenta adivinar y se equivoca. ¡Hay que vigilarla!"
+                "explanation": "A veces intenta adivinar y falla. Se llaman 'alucinaciones'."
             }
         ]
     },
     "deep_mode": {
         "enabled": true,
-        "content_markdown": "## ¿Sabías qué?\n\nEl aprendizaje automático (Machine Learning) es una rama de la IA.\n\n- **Supervisado**: Le decimos qué es cada foto (Esto es un gato).\n- **No Supervisado**: Ella sola agrupa cosas parecidas.\n\n¡Es como ordenar tu habitación pero con millones de juguetes!"
+        "content_markdown": "## ¿Sabías qué?\n\n- **Supervisado**: Le decimos qué es cada foto (Esto es un gato).\n- **No Supervisado**: Ella sola agrupa cosas parecidas.\n\n¡Es como ordenar tu habitación pero con millones de juguetes!"
     }
 }

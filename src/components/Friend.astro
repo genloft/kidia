@@ -1,54 +1,281 @@
 ---
 interface Props {
-  state?: 'idle' | 'talking' | 'thinking';
+  state?: 'idle' | 'talking' | 'thinking' | 'happy' | 'surprised' | 'glitch' | 'proud' | 'celebrating';
+  mode?: 'avatar' | 'portrait' | 'full';
 }
 
-const { state = 'idle' } = Astro.props;
+const { state = 'idle', mode = 'avatar' } = Astro.props;
 ---
 
-<div class={`friend-container ${state}`}>
+<div class={`friend-container ${state} mode-${mode}`}>
   <div class="friend-glow"></div>
-  <div class="friend-face">
-    <div class="eye left"></div>
-    <div class="eye right"></div>
-    <div class="mouth"></div>
-  </div>
+  <!-- Sprite Sheet Implementation -->
+  <div class="friend-sprite"></div>
+  <slot />
 </div>
 
 <script>
-  const container = document.querySelector('.friend-container');
+  // Handle state changes via events
+  const containers = document.querySelectorAll('.friend-container');
   
-  window.addEventListener('kidia:action', (e) => {
-      const { action } = e.detail;
-      if (!container) return;
-      
-      // Reset classes
-      container.classList.remove('idle', 'talking', 'thinking', 'happy', 'dance');
-      
-      switch(action) {
-          case 'smile':
-          case 'happy':
-              container.classList.add('talking'); // simplified mapping
-              break;
-          case 'think': 
-              container.classList.add('thinking');
-              break;
-          case 'dance':
-              container.classList.add('talking');
-              // Add dance animation class if we define it later
-              break;
-          default:
-              container.classList.add('idle');
-      }
-  });
+  if(containers.length > 0) {
+      window.addEventListener('kidia:action', (e) => {
+          const { action } = e.detail;
+          
+          containers.forEach(container => {
+              // Reset state classes but keep mode class
+              const currentMode = Array.from(container.classList).find(c => c.startsWith('mode-'));
+              container.className = `friend-container ${currentMode || ''}`;
+              
+              switch(action) {
+                  case 'smile':
+                  case 'happy':
+                      container.classList.add('happy');
+                      break;
+                  case 'think': 
+                      container.classList.add('thinking');
+                      break;
+                  case 'dance':
+                  case 'celebrate':
+                      container.classList.add('celebrating');
+                      break;
+                  case 'surprise':
+                      container.classList.add('surprised');
+                      break;
+                  case 'glitch':
+                  case 'gazapo':
+                      container.classList.add('glitch');
+                      break;
+                  case 'proud':
+                      container.classList.add('proud');
+                      break;
+                  case 'talk':
+                  case 'talking':
+                      container.classList.add('talking');
+                      break;
+                  default:
+                      container.classList.add('idle');
+              }
+          });
+      });
+  }
 </script>
 
 <style>
   .friend-container {
     position: relative;
-    width: 120px;
-    height: 120px;
     margin: 0 auto;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Debug helper (temporary) */
+    /* outline: 1px solid red; */
+  }
+
+  /* MODES */
+  
+  /* Mode: Avatar (Circle, Head) */
+  /* User requested removal of avatar circle, but we keep it for fallback if needed. 
+     If user wants full transparency, they likely mean Portrait/Full modes */
+
+  .friend-container.mode-avatar {
+      width: 120px;
+      height: 120px;
+  }
+  .friend-container.mode-avatar .friend-sprite {
+      border-radius: 50%;
+      background-position: 50% 35%; /* Center Head */
+      background-size: 350%;
+      border: 3px solid var(--color-primary);
+      background-color: #0f172a; /* Keep dark bg for avatar circle */
+  }
+
+  /* Mode: Portrait (Half Body, NO Radius/Circle as per request) */
+  .friend-container.mode-portrait {
+      width: 200px;
+      height: 200px;
+  }
+  .friend-container.mode-portrait .friend-sprite {
+      border-radius: 0;
+      /* Target the portrait head/shoulders from top right of sheet */
+      background-position: 80% 25%; 
+      background-size: 280%; 
+      border: none;
+      box-shadow: none;
+      background-color: transparent;
+      filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.2));
+  }
+
+  /* Mode: Full (Full Body) */
+  .friend-container.mode-full {
+      width: 300px;
+      height: 500px;
+  }
+  .friend-container.mode-full .friend-sprite {
+      border-radius: 0;
+      /* Target the standing pose on the left */
+      background-position: 5% 50%; 
+      background-size: 320%; 
+      background-color: transparent; 
+      border: none;
+      box-shadow: none; 
+      filter: drop-shadow(0 0 15px rgba(34, 211, 238, 0.3));
+  }
+  
+  /* Hide glow in transparent modes to avoid "box" effect behind */
+  .friend-container.mode-full .friend-glow,
+  .friend-container.mode-portrait .friend-glow {
+      display: none;
+  }
+
+  /* COMMON */
+  .friend-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(34, 211, 238, 0.4) 0%, transparent 70%);
+    animation: pulse-glow 3s infinite;
+    z-index: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+  }
+
+  .friend-sprite {
+    width: 100%;
+    height: 100%;
+    background-image: url('/kidia-sheet.png');
+    background-repeat: no-repeat;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* STATES (Overrides) */
+  /* Adjusting sprites for states in Portrait mode (using the expressions grid) */
+  /* Grid usually is bottom right area. 
+     Rough estimate:
+     Thinking: 65% 95%
+     Surprised: 35% 65%
+     Glitch: 85% 65%
+     Happy: 15% 95%
+     Celebrate: 90% 95%
+  */
+  
+  /* Only switch faces for non-full mode (portrait/avatar) */
+  .friend-container:not(.mode-full).talking .friend-sprite {
+      animation: talk-bounce 0.3s infinite alternate;
+  }
+  .friend-container:not(.mode-full).thinking .friend-sprite {
+      background-position: 65% 95%; 
+      background-size: 400%; /* Resize for small head sprites */
+  }
+  .friend-container:not(.mode-full).surprised .friend-sprite {
+      background-position: 35% 65%;
+      background-size: 400%;
+      animation: shake 0.5s;
+  }
+  .friend-container:not(.mode-full).glitch .friend-sprite {
+      background-position: 85% 65%;
+      background-size: 400%;
+      filter: hue-rotate(90deg) contrast(1.5);
+      animation: glitch-anim 0.2s infinite;
+  }
+  .friend-container:not(.mode-full).happy .friend-sprite,
+  .friend-container:not(.mode-full).proud .friend-sprite {
+      background-position: 15% 95%;
+      background-size: 400%;
+  }
+  .friend-container:not(.mode-full).celebrating .friend-sprite {
+      background-position: 90% 95%;
+      background-size: 400%;
+      animation: jump 0.5s infinite alternate;
+  }
+
+  /* ANIMATIONS */
+  @keyframes talk-bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-3px); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.5; transform: scale(0.8); }
+    50% { opacity: 0.8; transform: scale(1.1); }
+  }
+  
+  @keyframes shake {
+      0%, 100% { transform: rotate(0); }
+      25% { transform: rotate(-10deg); }
+      75% { transform: rotate(10deg); }
+  }
+  
+  @keyframes jump {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+  }
+  
+  @keyframes glitch-anim {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(2px, -2px); }
+      60% { transform: translate(-2px, -2px); }
+      80% { transform: translate(2px, 2px); }
+      100% { transform: translate(0); }
+  }
+</style>
+
+<div class={`friend-container ${state}`}>
+  <div class="friend-glow"></div>
+  <!-- Sprite Sheet Implementation -->
+  <div class="friend-sprite"></div>
+</div>
+
+<script>
+  const container = document.querySelector('.friend-container');
+  const sprite = document.querySelector('.friend-sprite');
+  
+  if(container && sprite) {
+      window.addEventListener('kidia:action', (e) => {
+          const { action } = e.detail;
+          
+          // Reset classes
+          container.className = 'friend-container';
+          
+          switch(action) {
+              case 'smile':
+              case 'happy':
+                  container.classList.add('happy');
+                  break;
+              case 'think': 
+                  container.classList.add('thinking');
+                  break;
+              case 'dance':
+              case 'celebrate':
+                  container.classList.add('celebrating');
+                  break;
+              case 'surprise':
+                  container.classList.add('surprised');
+                  break;
+              case 'glitch':
+              case 'gazapo':
+                  container.classList.add('glitch');
+                  break;
+              case 'proud':
+                  container.classList.add('proud');
+                  break;
+              case 'talk':
+              case 'talking':
+                  container.classList.add('talking');
+                  break;
+              default:
+                  container.classList.add('idle');
+          }
+      });
+  }
+</script>
+
+<style>
+  .friend-container {
+    position: relative;
+    width: 140px; /* Slightly larger for the new art */
+    height: 140px;
+    margin: 0 auto;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .friend-glow {
@@ -57,92 +284,107 @@ const { state = 'idle' } = Astro.props;
     background: radial-gradient(circle, rgba(34, 211, 238, 0.4) 0%, transparent 70%);
     animation: pulse-glow 3s infinite;
     z-index: 0;
+    transform: scale(0.8);
   }
 
-  .friend-face {
-    position: relative;
+  .friend-sprite {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #1e293b, #0f172a);
-    border: 2px solid var(--color-primary);
+    background-image: url('/kidia-sheet.png');
+    background-size: 400%; /* Check this value based on grid layout */
+    background-position: center top; /* Default: Portrait/Avatar */
+    background-repeat: no-repeat;
     border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    border: 3px solid var(--color-primary);
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+    position: relative;
     z-index: 1;
-    box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
-    overflow: hidden;
+    background-color: #0f172a;
+    transition: background-position 0.2s steps(1); /* Instant switch */
   }
 
-  .friend-face::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-    animation: shine 4s infinite;
+  /* 
+     MAPPING GUESS BASED ON GENERATED IMAGE GRID:
+     Assuming roughly:
+     [FullBody] [Portrait]
+     [Avatar]   [Explain]
+     [Surprise] [Glitch]
+     [Proud]    [Thinking] [Celeb]
+     
+     Since I cannot see the grid perfectly, I will use approximate % positions.
+     User might need to tweet exact % or crop images later.
+     For now, I'll focus on the "Avatar" (Head) and attempt to crop to expressions.
+  */
+
+  /* Default / Idle (Avatar Head) */
+  .friend-sprite {
+      background-position: 50% 35%; /* Center top-ish */
+      background-size: 350%;
   }
 
-  @keyframes shine {
-    0% { transform: rotate(0deg) translateY(0); }
-    100% { transform: rotate(360deg) translateY(0); }
+  /* Talking - Slight movement/bounce */
+  .friend-container.talking .friend-sprite {
+      animation: talk-bounce 0.3s infinite alternate;
   }
 
-  .eye {
-    width: 12px;
-    height: 12px;
-    background: var(--color-primary);
-    border-radius: 50%;
-    position: absolute;
-    top: 40%;
-    animation: blink 4s infinite;
-    box-shadow: 0 0 10px var(--color-primary);
+  /* Thinking */
+  .friend-container.thinking .friend-sprite {
+      background-position: 65% 95%; /* Bottom Right-ish */
   }
 
-  .eye.left { left: 30%; }
-  .eye.right { right: 30%; }
-
-  .mouth {
-    width: 20px;
-    height: 8px;
-    border-bottom: 3px solid var(--color-primary);
-    border-radius: 50%;
-    position: absolute;
-    top: 60%;
-    transition: all 0.3s;
+  /* Surprised */
+  .friend-container.surprised .friend-sprite {
+      background-position: 35% 65%; /* Middle Left-ish */
+      animation: shake 0.5s;
   }
 
-  /* States */
-  .friend-container.talking .mouth {
-    height: 12px;
-    width: 24px;
-    border-radius: 12px;
-    background: var(--color-primary);
-    border: none;
-    animation: talk 0.3s infinite alternate;
-  }
-
-  .friend-container.thinking .eye {
-    animation: none;
-    height: 4px;
-    top: 42%;
-    opacity: 0.7;
+  /* Glitch */
+  .friend-container.glitch .friend-sprite {
+      background-position: 85% 65%; /* Middle Right-ish */
+      filter: hue-rotate(90deg) contrast(1.5);
+      animation: glitch-anim 0.2s infinite;
+      border-color: #ef4444;
   }
   
-  .friend-container.thinking .friend-face {
-     animation: float 2s ease-in-out infinite;
+  /* Happy / Proud */
+  .friend-container.happy .friend-sprite,
+  .friend-container.proud .friend-sprite {
+      background-position: 15% 95%; /* Bottom Left-ish */
+  }
+  
+  /* Celebrating */
+  .friend-container.celebrating .friend-sprite {
+      background-position: 90% 95%; /* Bottom Far Right */
+      animation: jump 0.5s infinite alternate;
   }
 
-  @keyframes blink {
-    0%, 96%, 100% { transform: scaleY(1); }
-    98% { transform: scaleY(0.1); }
+  @keyframes talk-bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-3px); }
   }
 
-  @keyframes talk {
-    0% { height: 8px; width: 20px; }
-    100% { height: 16px; width: 24px; }
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.5; transform: scale(0.8); }
+    50% { opacity: 0.8; transform: scale(1.1); }
+  }
+  
+  @keyframes shake {
+      0%, 100% { transform: rotate(0); }
+      25% { transform: rotate(-10deg); }
+      75% { transform: rotate(10deg); }
+  }
+  
+  @keyframes jump {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+  }
+  
+  @keyframes glitch-anim {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(2px, -2px); }
+      60% { transform: translate(-2px, -2px); }
+      80% { transform: translate(2px, 2px); }
+      100% { transform: translate(0); }
   }
 </style>

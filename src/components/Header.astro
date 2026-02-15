@@ -14,7 +14,7 @@ const isParent = currentPath === '/parents';
   
   <nav class="main-nav">
     <a href="/mapa" class={`nav-link ${isActive('/mapa')}`}>Mapa</a>
-    <a href="/profile" class={`nav-link ${isActive('/profile')}`}>Insignias</a>
+    <a href="/insignias" class={`nav-link ${isActive('/insignias')}`}>Insignias</a>
     <a href="/about" class={`nav-link ${isActive('/about')}`}>Info</a>
   </nav>
 
@@ -31,27 +31,46 @@ const isParent = currentPath === '/parents';
 
 <script>
     import { supabase } from '../lib/supabase';
+    import { SyncService } from '../lib/sync-service';
     
     const authUi = document.getElementById('auth-ui');
     
     async function updateAuth() {
         const { data: { session } } = await supabase.auth.getSession();
         
-        if (session) {
+        if (session?.user) {
+            const email = session.user.email || '';
+            const displayEmail = email.length > 20 ? email.substring(0, 17) + '...' : email;
+            
             authUi.innerHTML = `
-                <button id="logout-btn" class="btn-logout">Salir</button>
+                <div class="user-info">
+                    <span class="user-email">${displayEmail}</span>
+                    <button id="logout-btn" class="btn-logout">Salir</button>
+                </div>
             `;
-            document.getElementById('logout-btn').addEventListener('click', async () => {
+            
+            const logoutBtn = document.getElementById('logout-btn');
+            logoutBtn?.addEventListener('click', async () => {
                 await supabase.auth.signOut();
                 window.location.href = '/';
+            });
+            
+            // Sync progress on session detection
+            SyncService.onLogin().catch(err => {
+                console.error('[Header] Sync failed:', err);
             });
         }
     }
     
     updateAuth();
+    
     // Listen for auth changes
     supabase.auth.onAuthStateChange((event, session) => {
-        updateAuth();
+        if (event === 'SIGNED_IN') {
+            updateAuth();
+        } else if (event === 'SIGNED_OUT') {
+            window.location.reload();
+        }
     });
 </script>
 
@@ -104,6 +123,21 @@ const isParent = currentPath === '/parents';
   
   .btn-logout:hover {
       color: #ef4444;
+  }
+  
+  .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+  }
+  
+  .user-email {
+      font-size: 0.85rem;
+      color: #a1a1aa;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
   }
 
 <style>

@@ -1,0 +1,159 @@
+{
+    "id": "tokens-math",
+    "title": "4. El Lenguaje de los Números",
+    "description": "Aprende cómo la IA lee tu mente (bueno, tus textos).",
+    "difficulty": "intermediate",
+    "language": "es",
+    "unlocks_scenario_id": "neural-networks",
+    "badge": {
+        "id": "int-token",
+        "name": "Tokenizador",
+        "icon": "🔢",
+        "description": "Ves el mundo como una matriz."
+    },
+    "initial_node_id": "start",
+    "nodes": {
+        "start": {
+            "id": "start",
+            "sender": "kidia",
+            "text": "¡Hola! 🔢 Hoy vamos a diseccionar palabras. Para mí, 'Gato' no es un animal con pelo.",
+            "options": [
+                {
+                    "label": "¿Entonces qué es?",
+                    "next_node_id": "tokens"
+                },
+                {
+                    "label": "¿Es comida?",
+                    "next_node_id": "joke"
+                }
+            ]
+        },
+        "joke": {
+            "id": "joke",
+            "sender": "kidia",
+            "text": "¡Jaja! No, no como gatos. 🙀 Para mí son solo números.",
+            "next_node_id": "tokens"
+        },
+        "tokens": {
+            "id": "tokens",
+            "sender": "kidia",
+            "text": "Mira, yo troceo las frases en **Tokens**. A veces un token es una palabra, a veces es solo un trocito.",
+            "action": "play_animation",
+            "action_data": {
+                "name": "token-process"
+            },
+            "next_node_id": "vector"
+        },
+        "vector": {
+            "id": "vector",
+            "sender": "kidia",
+            "text": "Luego convierto esos tokens en listas de números llamadas **Vectores**. Es como darles coordenadas en un mapa.",
+            "options": [
+                {
+                    "label": "¿Mapas?",
+                    "next_node_id": "map-analogy"
+                },
+                {
+                    "label": "Suena complicado",
+                    "next_node_id": "map-analogy"
+                }
+            ]
+        },
+        "map-analogy": {
+            "id": "map-analogy",
+            "sender": "kidia",
+            "text": "Imagina un mapa gigante. 🗺️ La palabra 'Rey' y 'Reina' viven muy cerca. 'Manzana' y 'Pera' también.",
+            "next_node_id": "math-magic"
+        },
+        "math-magic": {
+            "id": "math-magic",
+            "sender": "kidia",
+            "text": "Y aquí viene la magia matemática: Si haces **Rey - Hombre + Mujer**... ¿sabes qué número sale?",
+            "options": [
+                {
+                    "label": "¡Reina!",
+                    "next_node_id": "queen"
+                },
+                {
+                    "label": "¿Princesa?",
+                    "next_node_id": "close"
+                }
+            ]
+        },
+        "queen": {
+            "id": "queen",
+            "sender": "kidia",
+            "text": "¡Bingo! 👑 Las matemáticas del lenguaje funcionan así. Alucinante, ¿verdad?",
+            "next_node_id": "limitations"
+        },
+        "close": {
+            "id": "close",
+            "sender": "kidia",
+            "text": "Casi. Sale 'Reina'. 👑 ¡Las matemáticas entienden el género!",
+            "next_node_id": "limitations"
+        },
+        "limitations": {
+            "id": "limitations",
+            "sender": "kidia",
+            "text": "Pero ojo, si escribes raro o con faltas, mis números se lían un poco.",
+            "action": "play_animation",
+            "action_data": {
+                "name": "gazapo"
+            },
+            "next_node_id": "quiz-ready"
+        },
+        "quiz-ready": {
+            "id": "quiz-ready",
+            "sender": "kidia",
+            "text": "¿Listo para demostrar que hablas mi idioma numérico?",
+            "action": "trigger_quiz",
+            "next_node_id": "quiz-start"
+        },
+        "quiz-start": {
+            "id": "quiz-start",
+            "sender": "kidia",
+            "text": "Calculando preguntas... 📟"
+        }
+    },
+    "quiz": {
+        "questions": [
+            {
+                "id": "q1",
+                "text": "¿Qué es un Token?",
+                "options": [
+                    "Una moneda de oro",
+                    "Un trozo de texto (palabra o sílaba)",
+                    "Un virus"
+                ],
+                "correct_index": 1,
+                "explanation": "Los modelos de lenguaje dividen el texto en piezas llamadas tokens."
+            },
+            {
+                "id": "q2",
+                "text": "¿Qué son los Vectores?",
+                "options": [
+                    "Listas de números que representan palabras",
+                    "Flechas para disparar",
+                    "Coches voladores"
+                ],
+                "correct_index": 0,
+                "explanation": "Los vectores sitúan las palabras en un espacio matemático."
+            },
+            {
+                "id": "q3",
+                "text": "Rey - Hombre + Mujer = ...",
+                "options": [
+                    "Príncipe",
+                    "Reina",
+                    "Castillo"
+                ],
+                "correct_index": 1,
+                "explanation": "Es el ejemplo clásico de 'aritmética semántica'."
+            }
+        ]
+    },
+    "deep_mode": {
+        "enabled": true,
+        "content_markdown": "## Embeddings\n\nEsos \"mapas\" se llaman **Embeddings**.\n\n- Son espacios multidimensionales (¡cientos de dimensiones!).\n- Las palabras con significados similares están cerca geométricamente.\n- Gracias a esto, la IA entiende sinónimos y contextos."
+    }
+}

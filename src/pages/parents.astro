@@ -57,12 +57,17 @@ import Header from '../components/Header.astro';
 
 <script>
     import { ProgressService } from '../lib/progress-service';
+    import { loadScenarios } from '../lib/scenario-loader';
     
     // Simulate loading delay for effect
-    setTimeout(() => {
+    setTimeout(async () => {
         const report = ProgressService.computeParentReport();
         const state = ProgressService.getState();
-        const globalProgress = ProgressService.getGlobalProgress(4); // Assuming 4 scenarios total for now
+        
+        // Load actual scenarios to get correct count
+        const scenarios = await loadScenarios('es');
+        const totalScenarios = scenarios.length;
+        const globalProgress = ProgressService.getGlobalProgress(totalScenarios);
         
         const reportEl = document.getElementById('parent-report');
         if (reportEl) {

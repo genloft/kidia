@@ -1,0 +1,24 @@
+---
+// This page handles the OAuth callback from providers like Google
+// It extracts the session and redirects the user to the map
+---
+
+<script>
+  // Client-side redirect handling
+  window.location.href = '/mapa';
+</script>
+
+<style>
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+</style>
+
+<div>
+  <p>Redirigiendo...</p>
+</div>

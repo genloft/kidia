@@ -1,0 +1,174 @@
+{
+    "id": "history-turing",
+    "title": "3. El Código Secreto",
+    "description": "Viaja a la Segunda Guerra Mundial y conoce a Alan Turing.",
+    "difficulty": "intermediate",
+    "language": "es",
+    "unlocks_scenario_id": "tokens-math",
+    "badge": {
+        "id": "hist-turing",
+        "name": "Enigma",
+        "icon": "🧩",
+        "description": "Descifraste el código secreto."
+    },
+    "initial_node_id": "start",
+    "nodes": {
+        "start": {
+            "id": "start",
+            "sender": "kidia",
+            "text": "¡Shh! 🤫 Estamos en una misión secreta. Año 1940. ¿Sabes quién es Alan Turing?",
+            "options": [
+                {
+                    "label": "No, ¿quién es?",
+                    "next_node_id": "intro-alan"
+                },
+                {
+                    "label": "El padre de la informática",
+                    "next_node_id": "expert-alan"
+                }
+            ]
+        },
+        "intro-alan": {
+            "id": "intro-alan",
+            "sender": "kidia",
+            "text": "Es un matemático genial. 🧠 Dicen que puede hablar con las máquinas.",
+            "next_node_id": "enigma"
+        },
+        "expert-alan": {
+            "id": "expert-alan",
+            "sender": "kidia",
+            "text": "¡Exacto! 🎩 Sin él, hoy no tendrías móvil ni internet.",
+            "next_node_id": "enigma"
+        },
+        "enigma": {
+            "id": "enigma",
+            "sender": "kidia",
+            "text": "Tenemos un problema: Los enemigos usan una máquina llamada 'Enigma' para enviar mensajes secretos. 🔒",
+            "options": [
+                {
+                    "label": "¿Podemos romper el código?",
+                    "next_node_id": "crack-it"
+                },
+                {
+                    "label": "¡Es imposible!",
+                    "next_node_id": "try-harder"
+                }
+            ]
+        },
+        "crack-it": {
+            "id": "crack-it",
+            "sender": "kidia",
+            "text": "Alan cree que sí. Pero no con lápiz y papel... ¡Necesitamos una máquina para vencer a otra máquina! ⚙️",
+            "action": "play_animation",
+            "action_data": {
+                "name": "token-process"
+            },
+            "next_node_id": "bombe"
+        },
+        "try-harder": {
+            "id": "try-harder",
+            "sender": "kidia",
+            "text": "Nunca digas imposible. Alan ha construido algo increíble.",
+            "next_node_id": "bombe"
+        },
+        "bombe": {
+            "id": "bombe",
+            "sender": "kidia",
+            "text": "La llamó 'The Bombe'. 💣 Giraba y giraba buscando la configuración correcta. ¡Y lo logró!",
+            "options": [
+                {
+                    "label": "¿Salvó vidas?",
+                    "next_node_id": "impact"
+                },
+                {
+                    "label": "¿Ganó la guerra?",
+                    "next_node_id": "impact"
+                }
+            ]
+        },
+        "impact": {
+            "id": "impact",
+            "sender": "kidia",
+            "text": "Se dice que acortó la guerra en dos años y salvó millones de vidas. 🌍 Y todo gracias a las matemáticas.",
+            "action": "play_animation",
+            "action_data": {
+                "name": "probabilities"
+            },
+            "next_node_id": "test-turing"
+        },
+        "test-turing": {
+            "id": "test-turing",
+            "sender": "kidia",
+            "text": "Años después, propuso el 'Test de Turing'. Si hablas con una máquina y no sabes que es una máquina... ¿entonces piensa?",
+            "options": [
+                {
+                    "label": "Sí, piensa",
+                    "next_node_id": "philo"
+                },
+                {
+                    "label": "No, solo imita",
+                    "next_node_id": "philo"
+                }
+            ]
+        },
+        "philo": {
+            "id": "philo",
+            "sender": "kidia",
+            "text": "Esa es la gran pregunta. 🤔 ¿Tú crees que yo pienso?",
+            "next_node_id": "quiz-ready"
+        },
+        "quiz-ready": {
+            "id": "quiz-ready",
+            "sender": "kidia",
+            "text": "Alan te ha dejado un reto. ¿Podrás descifrarlo?",
+            "action": "trigger_quiz",
+            "next_node_id": "quiz-start"
+        },
+        "quiz-start": {
+            "id": "quiz-start",
+            "sender": "kidia",
+            "text": "¡Código Rojo! Iniciando test. 🚨"
+        }
+    },
+    "quiz": {
+        "questions": [
+            {
+                "id": "q1",
+                "text": "¿Cómo se llamaba la máquina enemiga?",
+                "options": [
+                    "Misterio",
+                    "Enigma",
+                    "Puzzle"
+                ],
+                "correct_index": 1,
+                "explanation": "Era la máquina Enigma, famosa por ser indescifrable."
+            },
+            {
+                "id": "q2",
+                "text": "¿Qué usó Turing para romper el código?",
+                "options": [
+                    "Magia",
+                    "Otra máquina (The Bombe)",
+                    "Un diccionario"
+                ],
+                "correct_index": 1,
+                "explanation": "Creó una máquina electromecánica para probar configuraciones."
+            },
+            {
+                "id": "q3",
+                "text": "¿Qué mide el Test de Turing?",
+                "options": [
+                    "La velocidad de internet",
+                    "Si una máquina puede imitar a un humano",
+                    "La temperatura"
+                ],
+                "correct_index": 1,
+                "explanation": "Evalúa si una IA puede hacerse pasar por humana."
+            }
+        ]
+    },
+    "deep_mode": {
+        "enabled": true,
+        "content_markdown": "## El Test de Turing\n\nAlan Turing (1912-1954) propuso el **\"Juego de Imitación\"**.\n\n- Un juez humano chatea con un humano y una máquina.\n- Si el juez no distingue cuál es la máquina, ¡la IA ha pasado el test!\n\nHoy en día, bots como ChatGPT lo ponen muy difícil."
+    }
+}

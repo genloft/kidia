@@ -1,0 +1,170 @@
+{
+    "id": "neural-networks",
+    "title": "5. El Cerebro Digital",
+    "description": "Explora las capas y neuronas de una red profunda.",
+    "difficulty": "advanced",
+    "language": "es",
+    "unlocks_scenario_id": "gazapos-fails",
+    "badge": {
+        "id": "int-net",
+        "name": "Red Profunda",
+        "icon": "🕸️",
+        "description": "Navegaste por la red neuronal."
+    },
+    "initial_node_id": "start",
+    "nodes": {
+        "start": {
+            "id": "start",
+            "sender": "kidia",
+            "text": "¡Bienvenido a mi cerebro! 🧠 O bueno, a mi 'Red Neuronal'. ¿Te atreves a entrar?",
+            "options": [
+                {
+                    "label": "¡Adelante!",
+                    "next_node_id": "layers"
+                },
+                {
+                    "label": "Me da cosita...",
+                    "next_node_id": "dont-worry"
+                }
+            ]
+        },
+        "dont-worry": {
+            "id": "dont-worry",
+            "sender": "kidia",
+            "text": "Tranqui, no muerde. Solo son números conectados. 🔗",
+            "next_node_id": "layers"
+        },
+        "layers": {
+            "id": "layers",
+            "sender": "kidia",
+            "text": "Imagina una lasaña. 🥘 Mis neuronas están en capas. La capa de abajo ve píxeles, la del medio ve formas, la de arriba ve objetos.",
+            "options": [
+                {
+                    "label": "¡Qué hambre!",
+                    "next_node_id": "lasagna-analogy"
+                },
+                {
+                    "label": "¿Y cómo se conectan?",
+                    "next_node_id": "weights"
+                }
+            ]
+        },
+        "lasagna-analogy": {
+            "id": "lasagna-analogy",
+            "sender": "kidia",
+            "text": "Jaja. 😋 La llamamos 'Deep Learning' (Aprendizaje Profundo) porque la lasaña tiene muchas capas.",
+            "next_node_id": "weights"
+        },
+        "weights": {
+            "id": "weights",
+            "sender": "kidia",
+            "text": "Las conexiones tienen 'pesos'. Si una conexión es fuerte, la señal pasa rápido. Si es débil, se frena.",
+            "action": "play_animation",
+            "action_data": {
+                "name": "growth"
+            },
+            "next_node_id": "training"
+        },
+        "training": {
+            "id": "training",
+            "sender": "kidia",
+            "text": "Cuando aprendo, ajusto esos pesos. Es como afinar una guitarra 🎸 hasta que suena bien.",
+            "options": [
+                {
+                    "label": "¿Tardas mucho?",
+                    "next_node_id": "time"
+                },
+                {
+                    "label": "¿Cuántas neuronas tienes?",
+                    "next_node_id": "billions"
+                }
+            ]
+        },
+        "time": {
+            "id": "time",
+            "sender": "kidia",
+            "text": "¡Uf, sí! A veces semanas. Y gasto mucha electricidad. ⚡",
+            "next_node_id": "black-box"
+        },
+        "billions": {
+            "id": "billions",
+            "sender": "kidia",
+            "text": "¡Miles de millones! Casi tantos como estrellas en la galaxia (bueno, un poco menos). ✨",
+            "next_node_id": "black-box"
+        },
+        "black-box": {
+            "id": "black-box",
+            "sender": "kidia",
+            "text": "Lo gracioso es que a veces ni mis creadores saben exactamente qué pasa en mis capas profundas. Soy una 'Caja Negra'. 📦",
+            "options": [
+                {
+                    "label": "¡Qué misterio!",
+                    "next_node_id": "mystery"
+                },
+                {
+                    "label": "¿Es peligroso?",
+                    "next_node_id": "mystery"
+                }
+            ]
+        },
+        "mystery": {
+            "id": "mystery",
+            "sender": "kidia",
+            "text": "Un poco. Por eso es importante la 'IA Explicable'. Queremos saber por qué decido lo que decido.",
+            "next_node_id": "quiz-ready"
+        },
+        "quiz-ready": {
+            "id": "quiz-ready",
+            "sender": "kidia",
+            "text": "Hora de bucear en las profundidades con un test. 🤿",
+            "action": "trigger_quiz",
+            "next_node_id": "quiz-start"
+        },
+        "quiz-start": {
+            "id": "quiz-start",
+            "sender": "kidia",
+            "text": "¡Red Neuronal Activada!"
+        }
+    },
+    "quiz": {
+        "questions": [
+            {
+                "id": "q1",
+                "text": "¿Qué es el Deep Learning?",
+                "options": [
+                    "Aprender a bucear",
+                    "Redes neuronales con muchas capas",
+                    "Dormir mucho"
+                ],
+                "correct_index": 1,
+                "explanation": "Se llama 'profundo' por la cantidad de capas ocultas en la red."
+            },
+            {
+                "id": "q2",
+                "text": "¿Qué son los 'pesos'?",
+                "options": [
+                    "Lo que pesa el ordenador",
+                    "La fuerza de la conexión entre neuronas",
+                    "Gimnasio para IAs"
+                ],
+                "correct_index": 1,
+                "explanation": "Los pesos determinan cuánta importancia tiene una señal."
+            },
+            {
+                "id": "q3",
+                "text": "¿Por qué llamamos a la IA 'Caja Negra'?",
+                "options": [
+                    "Porque es de color negro",
+                    "Porque es difícil ver cómo toma decisiones dentro",
+                    "Porque guarda secretos"
+                ],
+                "correct_index": 1,
+                "explanation": "Sus procesos internos son tan complejos que a veces no sabemos por qué responde lo que responde."
+            }
+        ]
+    },
+    "deep_mode": {
+        "enabled": true,
+        "content_markdown": "## Redes Neuronales Artificiales (ANN)\n\nInspiradas en el cerebro biológico:\n\n1.  **Input Layer**: Recibe los datos (ej. píxeles de una foto).\n2.  **Hidden Layers**: Hacen la magia matemática y extraen características.\n3.  **Output Layer**: Da la respuesta (ej. \"Es un Gato: 98%\")."
+    }
+}

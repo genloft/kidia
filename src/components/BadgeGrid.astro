@@ -1,0 +1,243 @@
+---
+import badgesData from '../data/badges.json';
+import { ProgressService } from '../lib/progress-service';
+
+// Server-side: Get definition
+// Client-side: We will need to hydrate the "earned" status from localStorage
+// Since badges are in localStorage, we must check them on client.
+// We can use a script to toggle classes.
+
+const categories = [...new Set(badgesData.map(b => b.category))];
+---
+
+<div class="badges-interface">
+    <div class="filters">
+        <button class="filter-btn active" data-cat="all">Todos</button>
+        {categories.map(cat => (
+            <button class="filter-btn" data-cat={cat}>{cat}</button>
+        ))}
+    </div>
+
+    <div class="badges-grid">
+        {badgesData.map(badge => (
+            <div class="badge-card" data-cat={badge.category} data-id={badge.id}>
+                <div class="hologram-effect"></div>
+                <div class="badge-icon">{badge.icon}</div>
+                <div class="badge-info">
+                    <h4>{badge.name}</h4>
+                    <span class="badge-cat">{badge.category}</span>
+                    <p class="badge-desc">{badge.desc}</p>
+                </div>
+                <div class="lock-overlay">
+                    <span>❓</span>
+                </div>
+            </div>
+        ))}
+    </div>
+</div>
+
+<script>
+    import { ProgressService } from '../lib/progress-service';
+
+    // 1. Mark earned badges - logic wrapped to ensure DOM is ready
+    function initBadges() {
+        const state = ProgressService.getState();
+        const userBadges = state.badges || [];
+        console.log('[BadgeGrid] Checking badges:', userBadges);
+        
+        const cards = document.querySelectorAll('.badge-card');
+        console.log('[BadgeGrid] Found cards:', cards.length);
+
+        cards.forEach(card => {
+            const id = card.getAttribute('data-id');
+            if (userBadges.includes(id)) {
+                console.log('[BadgeGrid] Unlocking:', id);
+                card.classList.add('earned');
+            }
+        });
+    }
+
+    // Run immediately if ready, or wait
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initBadges);
+    } else {
+        initBadges();
+    }
+    
+    // Also re-run on astro page swaps if using ViewTransitions (optional safety)
+    document.addEventListener('astro:page-load', initBadges);
+
+    // 2. Filter Logic
+    const filters = document.querySelectorAll('.filter-btn');
+    const badgeCards = document.querySelectorAll('.badge-card'); // Scope fix
+
+    filters.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Active class
+            filters.forEach(f => f.classList.remove('active'));
+            btn.classList.add('active');
+
+            const cat = btn.getAttribute('data-cat');
+            
+            badgeCards.forEach(card => {
+                const cardCat = card.getAttribute('data-cat');
+                // Check if hidden by filter (not by lock status)
+                // Note: .hidden class is used for filtering. 
+                // .badge-card default display is flex. .hidden makes it none.
+                
+                if (cat === 'all' || cardCat === cat) {
+                    card.classList.remove('hidden-filter');
+                    card.style.display = 'flex';
+                } else {
+                    card.classList.add('hidden-filter');
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    .badges-interface {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .filters {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .filter-btn {
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #888;
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.9rem;
+    }
+
+    .filter-btn:hover {
+        border-color: var(--color-primary);
+        color: white;
+    }
+
+    .filter-btn.active {
+        background: var(--color-primary);
+        color: black;
+        border-color: var(--color-primary);
+        font-weight: bold;
+    }
+
+    .badges-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .badge-card {
+        background: rgba(0,0,0,0.5);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 1rem;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s;
+        min-height: 200px;
+    }
+
+    .badge-card.hidden {
+        display: none;
+    }
+
+    /* Locked State */
+    .lock-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        z-index: 10;
+        backdrop-filter: blur(1px);
+        color: rgba(255,255,255,0.3);
+    }
+
+    /* Earned State */
+    .badge-card.earned .lock-overlay {
+        display: none;
+    }
+
+    .badge-card.earned {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
+        background: rgba(34, 211, 238, 0.05);
+    }
+
+    /* Hologram Effect */
+    .hologram-effect {
+        /* Placeholder for scanlines/glow */
+        position: absolute;
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%;
+        background: linear-gradient(
+            to bottom,
+            transparent 50%,
+            rgba(34, 211, 238, 0.05) 50%
+        );
+        background-size: 100% 4px;
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.5;
+    }
+
+    .badge-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        z-index: 2;
+        filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.5));
+    }
+
+    .badge-info {
+        z-index: 2;
+    }
+
+    .badge-info h4 {
+        margin: 0;
+        font-size: 1rem;
+        color: white;
+    }
+
+    .badge-cat {
+        font-size: 0.7rem;
+        color: var(--color-secondary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .badge-desc {
+        font-size: 0.8rem;
+        color: #a1a1aa;
+        margin: 0;
+        line-height: 1.4;
+    }
+</style>

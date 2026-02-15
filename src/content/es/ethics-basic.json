@@ -4,8 +4,6 @@
     "description": "¿Puede una máquina decidir qué es justo? Un dilema ético.",
     "difficulty": "advanced",
     "language": "es",
-    "required_badge_id": "badge-detective",
-    "isPremium": true,
     "badge": {
         "id": "badge-guardian",
         "name": "Guardián Ético",

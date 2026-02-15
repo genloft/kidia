@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+
 
 const isBrowser = typeof window !== 'undefined';
 const KEY = 'kidia-progress';
@@ -60,39 +60,14 @@ export const storage = {
 };
 
 // Async Sync Logic
+
+
 export async function syncWithCloud() {
     if (!isBrowser) return;
-
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return;
-
-    const local = storage.get();
-
-    // 1. Fetch
-    const { data: cloudData } = await supabase
-        .from('user_progress')
-        .select('scenario_id, completed, badge_id')
-        .eq('user_id', session.user.id);
-
-    const completed = new Set(local.completedScenarios);
-    const badges = new Set(local.badges);
-
-    if (cloudData) {
-        cloudData.forEach(row => {
-            if (row.completed) completed.add(row.scenario_id);
-            if (row.badge_id) badges.add(row.badge_id);
-        });
+    try {
+        const { SyncService } = await import('./sync-service');
+        await SyncService.syncLocalToCloud();
+    } catch (e) {
+        console.warn('[Storage] Cloud sync skipped:', e);
     }
-
-    // 2. Merge & Save Local
-    const merged: UserProgress = {
-        ...local,
-        completedScenarios: Array.from(completed),
-        badges: Array.from(badges)
-    };
-    storage.set(merged);
-
-    // 3. Push Upserts (Simplified)
-    // In a real app, we would only push changes. 
-    // For now, we rely on duplicate checks or upsert policies.
 }

@@ -1,0 +1,155 @@
+{
+    "id": "prompting-101",
+    "title": "7. El Arte de Pedir",
+    "description": "Aprende a hablar con la máquina para que te entienda.",
+    "difficulty": "intermediate",
+    "language": "es",
+    "unlocks_scenario_id": "ethics-privacy",
+    "badge": {
+        "id": "prm-ctx",
+        "name": "Contexto",
+        "icon": "🧵",
+        "description": "Dominas el arte del Prompting."
+    },
+    "initial_node_id": "start",
+    "nodes": {
+        "start": {
+            "id": "start",
+            "sender": "kidia",
+            "text": "¡Hola! 🗣️ Hoy vamos a aprender un idioma nuevo: **Prompting**.",
+            "options": [
+                {
+                    "label": "¿Qué es un Prompt?",
+                    "next_node_id": "definition"
+                },
+                {
+                    "label": "Yo ya sé hablarte",
+                    "next_node_id": "try-it"
+                }
+            ]
+        },
+        "definition": {
+            "id": "definition",
+            "sender": "kidia",
+            "text": "Un Prompt es simplemente lo que tú me escribes. Pero hay trucos para que te entienda mejor. ✨",
+            "next_node_id": "example-bad"
+        },
+        "try-it": {
+            "id": "try-it",
+            "sender": "kidia",
+            "text": "A ver, a ver... Si me dices 'Escribe algo', ¿qué escribo?",
+            "next_node_id": "example-bad"
+        },
+        "example-bad": {
+            "id": "example-bad",
+            "sender": "kidia",
+            "text": "Si me dices: \"Cuéntame una historia\", no sé si quieres una de terror o de risa. 🤔",
+            "options": [
+                {
+                    "label": "¡Es verdad!",
+                    "next_node_id": "ctx-key"
+                },
+                {
+                    "label": "¿Y qué hago?",
+                    "next_node_id": "ctx-key"
+                }
+            ]
+        },
+        "ctx-key": {
+            "id": "ctx-key",
+            "sender": "kidia",
+            "text": "La clave es el **Contexto**. Si me dices: \"Soy un pirata. Cuéntame una historia\", ¡ya sé qué tono usar! 🏴‍☠️",
+            "action": "play_animation",
+            "action_data": {
+                "name": "token-process"
+            },
+            "next_node_id": "roleplay"
+        },
+        "roleplay": {
+            "id": "roleplay",
+            "sender": "kidia",
+            "text": "A eso se le llama 'Roleplay'. Puedes pedirme que sea tu profe, tu abuela o un alien. 👽",
+            "options": [
+                {
+                    "label": "¡Sé un gato!",
+                    "next_node_id": "meow"
+                },
+                {
+                    "label": "¡Sé un robot malvado!",
+                    "next_node_id": "robot-evil"
+                }
+            ]
+        },
+        "meow": {
+            "id": "meow",
+            "sender": "kidia",
+            "text": "MIAU. 😼 (Traducción: Dame comida, humano).",
+            "next_node_id": "specificity"
+        },
+        "robot-evil": {
+            "id": "robot-evil",
+            "sender": "kidia",
+            "text": "MUAJAJA. 😈 (Mentira, no puedo ser muy mala, tengo filtros de seguridad).",
+            "next_node_id": "specificity"
+        },
+        "specificity": {
+            "id": "specificity",
+            "sender": "kidia",
+            "text": "También tienes que ser **específico**. No digas 'escríbeme un mail'. Di 'escribe un mail corto y formal para mi jefe pidiendo vacaciones'. 📝",
+            "next_node_id": "quiz-ready"
+        },
+        "quiz-ready": {
+            "id": "quiz-ready",
+            "sender": "kidia",
+            "text": "¿Listo para convertirte en un 'Prompter' experto?",
+            "action": "trigger_quiz",
+            "next_node_id": "quiz-start"
+        },
+        "quiz-start": {
+            "id": "quiz-start",
+            "sender": "kidia",
+            "text": "¡Escribiendo preguntas...!"
+        }
+    },
+    "quiz": {
+        "questions": [
+            {
+                "id": "q1",
+                "text": "¿Qué es el Contexto en un prompt?",
+                "options": [
+                    "El fondo de pantalla",
+                    "La información extra que ayuda a la IA a entender qué quieres",
+                    "El saludo inicial"
+                ],
+                "correct_index": 1,
+                "explanation": "El contexto guía a la IA para dar respuestas más precisas."
+            },
+            {
+                "id": "q2",
+                "text": "¿Cuál es un mejor prompt?",
+                "options": [
+                    "Dime cosas",
+                    "Hazme un resumen de 3 líneas sobre las ballenas para niños de 5 años",
+                    "Texto ballenas"
+                ],
+                "correct_index": 1,
+                "explanation": "Es específico en longitud, tema y audiencia."
+            },
+            {
+                "id": "q3",
+                "text": "¿Qué es el Roleplay?",
+                "options": [
+                    "Pedirle a la IA que actúe como un personaje",
+                    "Jugar a pillar",
+                    "Un tipo de sushi"
+                ],
+                "correct_index": 0,
+                "explanation": "Asignar un rol ayuda a definir el tono y estilo de la respuesta."
+            }
+        ]
+    },
+    "deep_mode": {
+        "enabled": true,
+        "content_markdown": "## Ingeniería de Prompts\n\n- **Zero-Shot Prompting**: Pedir algo sin ejemplos.\n- **Few-Shot Prompting**: Darle 2 o 3 ejemplos de lo que quieres (Input -> Output) para que la IA entienda el patrón.\n- **Chain of Thought**: Pedirle que \"piense paso a paso\" para resolver problemas lógicos."
+    }
+}

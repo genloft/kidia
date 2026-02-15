@@ -11,7 +11,7 @@ export const ProgressService = {
     },
 
     // 2. Complete Scenario & Scoring
-    finishScenario: (scenarioId: string, score: number = 100) => {
+    finishScenario: async (scenarioId: string, score: number = 100) => {
         storage.update(state => ({
             ...state,
             completedScenarios: Array.from(new Set([...state.completedScenarios, scenarioId])),
@@ -20,6 +20,22 @@ export const ProgressService = {
 
         // Trigger Cloud Sync
         syncWithCloud();
+
+        // Check if we should show registration reminder
+        try {
+            const { ReminderService } = await import('./reminder-service');
+            ReminderService.onScenarioCompleted();
+
+            const shouldShow = await ReminderService.shouldShowReminder();
+            if (shouldShow) {
+                // Delay to avoid interrupting the quiz completion flow
+                setTimeout(() => {
+                    ReminderService.showReminderModal();
+                }, 1500);
+            }
+        } catch (e) {
+            console.warn('[ProgressService] Reminder service unavailable:', e);
+        }
     },
 
     awardBadge: (badgeId: string) => {
@@ -39,7 +55,8 @@ export const ProgressService = {
     getGlobalProgress: (totalScenariosCount: number) => {
         const completed = storage.get().completedScenarios.length;
         if (totalScenariosCount === 0) return 0;
-        return Math.round((completed / totalScenariosCount) * 100);
+        const percentage = Math.round((completed / totalScenariosCount) * 100);
+        return Math.min(percentage, 100); // Cap at 100%
     },
 
     // 5. Parent Report

@@ -9,11 +9,11 @@ const { scenario, index } = Astro.props;
 
 <a 
   href={`/scenario/${scenario.id}`} 
-  class="mission-node" 
+  class={`mission-node ${scenario.id === 'intro-ia' ? 'available' : ''}`}
   data-id={scenario.id} 
   data-req={scenario.required_badge_id || ''}
 >
-  <div class="node-icon">🔒</div> <!-- Default icon, updated by JS -->
+  <div class="node-icon">{scenario.id === 'intro-ia' ? '🚀' : '🔒'}</div> <!-- Default icon, updated by JS -->
   <div class="node-content">
       <span class="node-number">{String(index + 1).padStart(2, '0')}</span>
       <h3>{scenario.title}</h3>

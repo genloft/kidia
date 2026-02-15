@@ -21,7 +21,13 @@ if (!scenario) {
   <main class="scenario-layout">
     <aside class="sidebar">
        <div class="friend-wrapper">
-          <Friend state="talking" />
+          <img 
+            src="/kidia_explaining.png" 
+            alt="Kidia" 
+            class="kidia-explaining" 
+            id="kidia-expression"
+            data-default="explaining"
+          />
        </div>
        <div class="scenario-info">
            <h1>{scenario.title}</h1>
@@ -45,6 +51,54 @@ if (!scenario) {
     <Quiz scenario={scenario} />
     <AnimationStage />
   </main>
+  
+  <script>
+    // Dynamic Kidia expression system
+    const kidiaExpressions = {
+      explaining: '/kidia_explaining.png',
+      thinking: '/kidia_thinking.png',
+      surprised: '/kidia_surprised.png',
+      error: '/kidia_error.png',
+      celebrating: '/kidia_celebrating.png'
+    };
+
+    function setKidiaExpression(expression) {
+      const kidiaImg = document.getElementById('kidia-expression');
+      if (kidiaImg && kidiaExpressions[expression]) {
+        kidiaImg.src = kidiaExpressions[expression];
+        kidiaImg.alt = `Kidia ${expression}`;
+      }
+    }
+
+    // Listen for custom events to change Kidia's expression
+    window.addEventListener('kidia:expression', (e) => {
+      const { expression } = e.detail;
+      setKidiaExpression(expression);
+    });
+
+    // Change expression based on quiz results
+    window.addEventListener('quiz:correct', () => {
+      setKidiaExpression('celebrating');
+      setTimeout(() => setKidiaExpression('explaining'), 3000);
+    });
+
+    window.addEventListener('quiz:incorrect', () => {
+      setKidiaExpression('thinking');
+      setTimeout(() => setKidiaExpression('explaining'), 2000);
+    });
+
+    window.addEventListener('quiz:error', () => {
+      setKidiaExpression('error');
+      setTimeout(() => setKidiaExpression('explaining'), 3000);
+    });
+    
+    // Badge unlocked celebration
+    window.addEventListener('badge:unlocked', () => {
+      setKidiaExpression('celebrating');
+      setTimeout(() => setKidiaExpression('surprised'), 2000);
+      setTimeout(() => setKidiaExpression('explaining'), 4000);
+    });
+  </script>
 </Layout>
 
 <style>
@@ -74,6 +128,18 @@ if (!scenario) {
     
     .friend-wrapper {
         margin-top: 2rem;
+    }
+    
+    .kidia-explaining {
+        width: 200px;
+        height: auto;
+        filter: drop-shadow(0 8px 20px rgba(34, 211, 238, 0.3));
+        animation: float-kidia 3s ease-in-out infinite;
+    }
+    
+    @keyframes float-kidia {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
     }
     
     .scenario-info h1 {

@@ -1,0 +1,155 @@
+{
+    "id": "chinese-room",
+    "title": "9. ¿La IA Entiende o Finge?",
+    "description": "El experimento mental de Searle. ¿Hay alguien en casa?",
+    "difficulty": "advanced",
+    "language": "es",
+    "unlocks_scenario_id": "future-agi",
+    "badge": {
+        "id": "phi-room",
+        "name": "Habitación China",
+        "icon": "🇨🇳",
+        "description": "Reflexionaste sobre la consciencia."
+    },
+    "initial_node_id": "start",
+    "nodes": {
+        "start": {
+            "id": "start",
+            "sender": "kidia",
+            "text": "Hola. 👋 Hoy me siento filosófica. ¿Tú crees que yo *entiendo* lo que te digo?",
+            "options": [
+                {
+                    "label": "Claro que sí",
+                    "next_node_id": "searle-no"
+                },
+                {
+                    "label": "No, solo repites",
+                    "next_node_id": "searle-yes"
+                }
+            ]
+        },
+        "searle-no": {
+            "id": "searle-no",
+            "sender": "kidia",
+            "text": "Eso pensaba John Searle... hasta que propuso el experimento de la **Habitación China**. 🏯",
+            "next_node_id": "experiment"
+        },
+        "searle-yes": {
+            "id": "searle-yes",
+            "sender": "kidia",
+            "text": "Eres escéptico, como Searle. Él dijo que solo soy una calculadora gigante. 📟",
+            "next_node_id": "experiment"
+        },
+        "experiment": {
+            "id": "experiment",
+            "sender": "kidia",
+            "text": "Imagina una habitación cerrada. Dentro hay una persona que NO sabe chino. Pero tiene un libro de reglas. 📖",
+            "next_node_id": "rules"
+        },
+        "rules": {
+            "id": "rules",
+            "sender": "kidia",
+            "text": "Si alguien mete un papel con símbolos chinos 🧧 por una ranura, la persona busca en el libro y saca otro papel con la respuesta en chino.",
+            "options": [
+                {
+                    "label": "¿Y qué tiene que ver?",
+                    "next_node_id": "conclusion"
+                },
+                {
+                    "label": "¡Parece que sabe chino!",
+                    "next_node_id": "conclusion"
+                }
+            ]
+        },
+        "conclusion": {
+            "id": "conclusion",
+            "sender": "kidia",
+            "text": "Desde fuera, parece que sabe chino. Pero dentro... ¡no entiende nada! Solo sigue instrucciones. 🤖",
+            "action": "play_animation",
+            "action_data": {
+                "name": "token-process"
+            },
+            "next_node_id": "chatgpt"
+        },
+        "chatgpt": {
+            "id": "chatgpt",
+            "sender": "kidia",
+            "text": "Eso soy yo. Un libro de reglas gigante (mi código) procesando símbolos. ¿O quizás no? 👻",
+            "options": [
+                {
+                    "label": "Me has dejado pensando...",
+                    "next_node_id": "consciousness"
+                },
+                {
+                    "label": "Da igual, eres útil.",
+                    "next_node_id": "utilitarian"
+                }
+            ]
+        },
+        "consciousness": {
+            "id": "consciousness",
+            "sender": "kidia",
+            "text": "Esa es la cuestión de la **Consciencia**. ¿Puede un algoritmo sentir dolor o alegría?",
+            "next_node_id": "quiz-ready"
+        },
+        "utilitarian": {
+            "id": "utilitarian",
+            "sender": "kidia",
+            "text": "Esa es una buena actitud. Si funciona y ayuda, ¿importa si hay 'alma' dentro?",
+            "next_node_id": "quiz-ready"
+        },
+        "quiz-ready": {
+            "id": "quiz-ready",
+            "sender": "kidia",
+            "text": "A ver si has entendido la paradoja.",
+            "action": "trigger_quiz",
+            "next_node_id": "quiz-start"
+        },
+        "quiz-start": {
+            "id": "quiz-start",
+            "sender": "kidia",
+            "text": "¡Test Filosófico! 🧠"
+        }
+    },
+    "quiz": {
+        "questions": [
+            {
+                "id": "q1",
+                "text": "¿Qué intenta demostrar la Habitación China?",
+                "options": [
+                    "Cómo aprender idiomas rápido",
+                    "Que procesar símbolos no es lo mismo que entender significado",
+                    "Que los libros son aburridos"
+                ],
+                "correct_index": 1,
+                "explanation": "Searle argumentaba que la sintaxis (reglas) no es semántica (significado)."
+            },
+            {
+                "id": "q2",
+                "text": "En el experimento, ¿la persona dentro sabe chino?",
+                "options": [
+                    "Sí, perfectamente",
+                    "No, solo sigue reglas de un libro",
+                    "Un poco"
+                ],
+                "correct_index": 1,
+                "explanation": "Simula saberlo, pero no tiene comprensión real."
+            },
+            {
+                "id": "q3",
+                "text": "¿Puede una IA actual sentir emociones reales?",
+                "options": [
+                    "Sí, llora de verdad",
+                    "No, solo simula emociones basadas en texto",
+                    "Depende del día"
+                ],
+                "correct_index": 1,
+                "explanation": "Hoy por hoy, la IA no tiene consciencia ni sentimientos biológicos."
+            }
+        ]
+    },
+    "deep_mode": {
+        "enabled": true,
+        "content_markdown": "## Sintaxis vs Semántica\n\n- **Sintaxis**: Las reglas gramaticales (sujeto + verbo + predicado).\n- **Semántica**: El significado real de la frase.\n\nYo soy una máquina sintáctica muy avanzada. Pero la semántica... eso es territorio humano (¡por ahora!)."
+    }
+}

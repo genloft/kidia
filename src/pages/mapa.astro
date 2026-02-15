@@ -46,34 +46,42 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
     
     // 2. Hydrate Cards
     const cards = document.querySelectorAll('.mission-node');
+    console.log('[Map] Found cards:', cards.length);
+
     cards.forEach(card => {
         const id = card.getAttribute('data-id');
         const reqBadge = card.getAttribute('data-req');
         const iconEl = card.querySelector('.node-icon');
+        
+        console.log(`[Map] Checking ${id} (req: ${reqBadge})`);
         
         let isLocked = false;
         
         // Basic Lock Logic
         if (reqBadge && !state.badges.includes(reqBadge)) {
              isLocked = true;
+             console.log(`[Map] ${id} LOCKED due to missing badge: ${reqBadge}`);
         }
         
         // "Intro" is always free if it's the first one or logic dictates
-        if (id === 'intro-ia') isLocked = false;
+        if (id === 'intro-ia') {
+            isLocked = false;
+            console.log(`[Map] ${id} FORCE UNLOCKED (Intro)`);
+        }
         
         const isCompleted = state.completedScenarios.includes(id);
-        const score = state.scores[id] || 0;
         
         // Apply classes
         if (isLocked) {
             card.classList.add('locked');
+            card.classList.remove('available');
             iconEl.innerText = '🔒';
         } else {
+            card.classList.remove('locked');
             card.classList.add('available');
             if (isCompleted) {
                 card.classList.add('completed');
                 iconEl.innerText = '✅';
-                // Show score potentially?
             } else {
                 iconEl.innerText = '🚀';
             }

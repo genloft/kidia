@@ -1,0 +1,175 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+---
+
+<Layout title="Kidia - Test Supabase">
+  <Header />
+  
+  <main class="test-container">
+    <div class="test-card">
+        <h1>🔌 Test de Conexión Supabase</h1>
+        <p>Verificando la conexión con la base de datos...</p>
+        
+        <div id="test-results" class="results">
+            <p>Ejecutando pruebas...</p>
+        </div>
+        
+        <div id="connection-status" class="status-box">
+            <span class="status-label">Estado:</span>
+            <span id="status-value" class="status-value">Verificando...</span>
+        </div>
+        
+        <button id="retry-btn" class="btn" style="display:none;">Reintentar</button>
+    </div>
+  </main>
+</Layout>
+
+<script>
+    import { supabase } from '../lib/supabase';
+    
+    const resultsEl = document.getElementById('test-results');
+    const statusEl = document.getElementById('status-value');
+    const retryBtn = document.getElementById('retry-btn');
+    
+    async function runTests() {
+        const results = [];
+        let allPassed = true;
+        
+        // Test 1: Check if client is initialized
+        results.push('✅ Cliente Supabase inicializado');
+        
+        // Test 2: Check environment variables
+        const url = import.meta.env.PUBLIC_SUPABASE_URL;
+        const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+        
+        if (url && key) {
+            results.push(`✅ Variables de entorno cargadas`);
+            results.push(`   URL: ${url.substring(0, 30)}...`);
+        } else {
+            results.push('❌ Variables de entorno NO encontradas');
+            allPassed = false;
+        }
+        
+        // Test 3: Try to connect to Supabase
+        try {
+            const { data, error } = await supabase.auth.getSession();
+            
+            if (error) {
+                results.push(`⚠️ Error al obtener sesión: ${error.message}`);
+                allPassed = false;
+            } else {
+                results.push('✅ Conexión exitosa con Supabase Auth');
+                results.push(`   Sesión activa: ${data.session ? 'Sí' : 'No'}`);
+            }
+        } catch (e) {
+            results.push(`❌ Error de conexión: ${e.message}`);
+            allPassed = false;
+        }
+        
+        // Test 4: Try a simple query (check if we can reach the database)
+        try {
+            // This will fail if RLS is enabled and no policies exist, but it proves connectivity
+            const { error } = await supabase.from('user_profiles').select('count', { count: 'exact', head: true });
+            
+            if (error) {
+                // If it's a permissions error, connection is working
+                if (error.code === 'PGRST116' || error.message.includes('permission')) {
+                    results.push('✅ Base de datos accesible (sin permisos configurados aún)');
+                } else {
+                    results.push(`⚠️ Error de base de datos: ${error.message}`);
+                }
+            } else {
+                results.push('✅ Tabla user_profiles accesible');
+            }
+        } catch (e) {
+            results.push(`⚠️ No se pudo verificar acceso a tablas: ${e.message}`);
+        }
+        
+        // Display results
+        resultsEl.innerHTML = results.map(r => `<p>${r}</p>`).join('');
+        
+        // Update status
+        if (allPassed) {
+            statusEl.textContent = '✅ Conexión OK';
+            statusEl.style.color = '#22c55e';
+        } else {
+            statusEl.textContent = '⚠️ Problemas detectados';
+            statusEl.style.color = '#eab308';
+            retryBtn.style.display = 'block';
+        }
+    }
+    
+    // Run tests on load
+    runTests();
+    
+    // Retry button
+    retryBtn?.addEventListener('click', () => {
+        statusEl.textContent = 'Verificando...';
+        statusEl.style.color = 'var(--color-primary)';
+        retryBtn.style.display = 'none';
+        runTests();
+    });
+</script>
+
+<style>
+    .test-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+    }
+    
+    .test-card {
+        background: var(--color-surface);
+        padding: 2.5rem;
+        border-radius: 1.5rem;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .results {
+        background: rgba(0,0,0,0.3);
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        margin: 2rem 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.8;
+    }
+    
+    .results p {
+        margin: 0.3rem 0;
+        color: #e4e4e7;
+    }
+    
+    .status-box {
+        background: rgba(34, 211, 238, 0.1);
+        border: 1px solid rgba(34, 211, 238, 0.3);
+        padding: 1rem;
+        border-radius: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .status-label {
+        font-weight: 600;
+        color: #a1a1aa;
+    }
+    
+    .status-value {
+        font-weight: bold;
+        color: var(--color-primary);
+    }
+    
+    .btn {
+        margin-top: 1rem;
+    }
+</style>

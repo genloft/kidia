@@ -1,0 +1,212 @@
+[
+    {
+        "id": "hist-ada",
+        "name": "Ada",
+        "desc": "La primera programadora de la historia.",
+        "category": "Historia",
+        "icon": "📜"
+    },
+    {
+        "id": "hist-turing",
+        "name": "Enigma",
+        "desc": "Descifraste el código secreto.",
+        "category": "Historia",
+        "icon": "🧩"
+    },
+    {
+        "id": "hist-blue",
+        "name": "Jaque Mate",
+        "desc": "La IA supera al campeón mundial.",
+        "category": "Historia",
+        "icon": "♟️"
+    },
+    {
+        "id": "hist-eliza",
+        "name": "Psicóloga",
+        "desc": "Hablaste con el primer chatbot.",
+        "category": "Historia",
+        "icon": "🛋️"
+    },
+    {
+        "id": "int-bin",
+        "name": "Binario",
+        "desc": "Todo son ceros y unos.",
+        "category": "Interior",
+        "icon": "0️⃣"
+    },
+    {
+        "id": "int-neuron",
+        "name": "Sinapsis",
+        "desc": "Conectaste dos neuronas.",
+        "category": "Interior",
+        "icon": "⚡"
+    },
+    {
+        "id": "int-net",
+        "name": "Red Profunda",
+        "desc": "Capas y capas de cálculo.",
+        "category": "Interior",
+        "icon": "🕸️"
+    },
+    {
+        "id": "int-token",
+        "name": "Tokenizador",
+        "desc": "Palabras convertidas en números.",
+        "category": "Interior",
+        "icon": "🔢"
+    },
+    {
+        "id": "prm-ctx",
+        "name": "Contexto",
+        "desc": "Mantuviste el hilo de la charla.",
+        "category": "Prompting",
+        "icon": "🧵"
+    },
+    {
+        "id": "prm-zero",
+        "name": "Zero-Shot",
+        "desc": "Acierto al primer intento.",
+        "category": "Prompting",
+        "icon": "🎯"
+    },
+    {
+        "id": "prm-cot",
+        "name": "Pensadora",
+        "desc": "Razonamiento paso a paso.",
+        "category": "Prompting",
+        "icon": "🧠"
+    },
+    {
+        "id": "prm-act",
+        "name": "Actriz",
+        "desc": "La IA interpretó un rol perfecto.",
+        "category": "Prompting",
+        "icon": "🎭"
+    },
+    {
+        "id": "err-hallu",
+        "name": "Alucinación",
+        "desc": "Detectaste una mentira creativa.",
+        "category": "Errores",
+        "icon": "🍄"
+    },
+    {
+        "id": "err-bias",
+        "name": "Sesgo",
+        "desc": "Identificaste un prejuicio.",
+        "category": "Errores",
+        "icon": "⚖️"
+    },
+    {
+        "id": "err-fit",
+        "name": "Overfitting",
+        "desc": "Memorizar no es aprender.",
+        "category": "Errores",
+        "icon": "🤓"
+    },
+    {
+        "id": "err-glitch",
+        "name": "Glitch",
+        "desc": "Algo salió mal en la Matrix.",
+        "category": "Errores",
+        "icon": "👾"
+    },
+    {
+        "id": "eth-priv",
+        "name": "Candado",
+        "desc": "Tus datos son sagrados.",
+        "category": "Ética",
+        "icon": "🔒"
+    },
+    {
+        "id": "eth-trans",
+        "name": "Caja de Cristal",
+        "desc": "IA explicable y transparente.",
+        "category": "Ética",
+        "icon": "💎"
+    },
+    {
+        "id": "eth-resp",
+        "name": "Guardián",
+        "desc": "Usaste la IA para el bien.",
+        "category": "Ética",
+        "icon": "🛡️"
+    },
+    {
+        "id": "eth-eco",
+        "name": "Verde",
+        "desc": "Computación eficiente.",
+        "category": "Ética",
+        "icon": "🌱"
+    },
+    {
+        "id": "phi-room",
+        "name": "Habitación China",
+        "desc": "¿Entiende o solo traduce?",
+        "category": "Filosofía",
+        "icon": "🇨🇳"
+    },
+    {
+        "id": "phi-turing",
+        "name": "Imitación",
+        "desc": "Indistinguible de un humano.",
+        "category": "Filosofía",
+        "icon": "👥"
+    },
+    {
+        "id": "phi-qualia",
+        "name": "Sentir",
+        "desc": "¿Puede una máquina sentir el rojo?",
+        "category": "Filosofía",
+        "icon": "❤️"
+    },
+    {
+        "id": "phi-ghost",
+        "name": "Fantasma",
+        "desc": "Espíritu en la máquina.",
+        "category": "Filosofía",
+        "icon": "👻"
+    },
+    {
+        "id": "sing-agi",
+        "name": "General",
+        "desc": "Inteligencia nivel humano.",
+        "category": "Singularidad",
+        "icon": "🤖"
+    },
+    {
+        "id": "sing-super",
+        "name": "Supermente",
+        "desc": "Más allá de nuestra comprensión.",
+        "category": "Singularidad",
+        "icon": "🌌"
+    },
+    {
+        "id": "sing-paper",
+        "name": "Clips",
+        "desc": "Todo el universo son clips.",
+        "category": "Singularidad",
+        "icon": "📎"
+    },
+    {
+        "id": "sing-cyborg",
+        "name": "Fusión",
+        "desc": "Mitad humano, mitad código.",
+        "category": "Singularidad",
+        "icon": "🦾"
+    },
+    {
+        "id": "secret-kidia",
+        "name": "Amiga",
+        "desc": "Completaste el viaje con Kidia.",
+        "category": "Singularidad",
+        "icon": "🌟"
+    },
+    {
+        "id": "secret-dev",
+        "name": "Hacker",
+        "desc": "Miraste el código fuente.",
+        "category": "Interior",
+        "icon": "👨‍💻"
+    }
+]

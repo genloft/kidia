@@ -48,7 +48,9 @@ export class GameEngine {
         const msgDiv = document.createElement('div');
         msgDiv.className = `message ${node.sender}`;
         const text = node.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        msgDiv.innerHTML = `<div class="bubble ${node.sender === 'system' ? 'system-bubble' : ''}">${text}</div>`;
+        const senderName = node.sender === 'kidia' ? 'Kidia' : (node.sender === 'user' ? 'Tú' : '');
+        const nameHtml = senderName ? `<div class="sender-name">${senderName}</div>` : '';
+        msgDiv.innerHTML = `<div class="bubble ${node.sender === 'system' ? 'system-bubble' : ''}">${nameHtml}${text}</div>`;
         this.messagesList.appendChild(msgDiv);
         this.scrollToBottom();
 
@@ -96,7 +98,7 @@ export class GameEngine {
                 // User Echo
                 const echoDiv = document.createElement('div');
                 echoDiv.className = 'message user';
-                echoDiv.innerHTML = `<div class="bubble">${opt.label}</div>`;
+                echoDiv.innerHTML = `<div class="bubble"><div class="sender-name">Tú</div>${opt.label}</div>`;
                 this.messagesList.appendChild(echoDiv);
 
                 this.renderNode(opt.next_node_id);
@@ -137,7 +139,9 @@ export class GameEngine {
         this.scrollToBottom();
 
         // Trigger Quiz
+        console.log('[GameEngine] Scenario complete. Triggering quiz for:', this.scenario.id);
         setTimeout(() => {
+            console.log('[GameEngine] Dispatching startQuiz event...');
             window.dispatchEvent(new CustomEvent('startQuiz', {
                 detail: { scenarioId: this.scenario.id }
             }));
