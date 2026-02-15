@@ -45,9 +45,6 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
        </div>
     </div>
     
-       </div>
-    </div>
-    
     <!-- Navigation Arrows -->
     <button id="scroll-left" class="nav-arrow prev" aria-label="Anterior">‹</button>
     <button id="scroll-right" class="nav-arrow next" aria-label="Siguiente">›</button>
@@ -210,14 +207,6 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
 
     // Prevent clicks if we were dragging
     const cardsForDrag = document.querySelectorAll('.mission-card-v3');
-    cardsForDrag.forEach(card => {
-        card.addEventListener('click', (e) => {
-            if (isDragging) {
-                e.preventDefault();
-                e.stopPropagation(); // Stop navigation
-                console.log('[Map] Click blocked due to drag');
-            }
-        }, true); // Capture phase to intercept early
     cardsForDrag.forEach(card => {
         card.addEventListener('click', (e) => {
             if (isDragging) {
