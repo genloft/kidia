@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { stripe } from '../../lib/stripe';
 import { supabase } from '../../lib/supabase';
 
+
 export const POST: APIRoute = async ({ request, redirect }) => {
     try {
         const { priceId, successUrl, cancelUrl } = await request.json();

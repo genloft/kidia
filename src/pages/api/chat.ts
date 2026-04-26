@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { openai } from '../../lib/openai';
 
+
 export const POST: APIRoute = async ({ request }) => {
     try {
         const body = await request.json();
