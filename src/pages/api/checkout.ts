@@ -2,6 +2,9 @@ import type { APIRoute } from 'astro';
 import { stripe } from '../../lib/stripe';
 import { supabase } from '../../lib/supabase';
 
+export const GET: APIRoute = async () => {
+    return new Response(JSON.stringify({ status: 'ok' }), { status: 200 });
+};
 
 export const POST: APIRoute = async ({ request, redirect }) => {
     try {
