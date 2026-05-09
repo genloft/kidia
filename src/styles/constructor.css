@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+	/* Dark EdTech / AI Theme (Kidia.es Inspired) */
+	--bg-main: #09090b;
+	/* Pitch dark canvas */
+	--bg-panel: #18181b;
+	/* Dark slate for panels */
+	--bg-deep: #0f0f13;
+	/* Deepest inset */
+
+	/* Primary and Neutral Colors */
+	--primary: #9297fe;
+	/* Periwinkle from logo */
+	--primary-hover: #c975fc;
+	/* Lavender from logo */
+
+	/* Text Colors for Dark Theme */
+	--text-main: #f8fafc;
+	/* Near white for main text */
+	--text-muted: #a1a1aa;
+	/* Zinc 400 for secondary */
+	--border-stone: #27272a;
+	/* Zinc 800 for borders */
+	--border-highlight: #3f3f46;
+	/* Zinc 700 for subtle highlight */
+
+	/* Logical Modules / Category Colors (Vibrant on dark) */
+	--color-1: #30e4f5;
+	/* Datos (Cyan) */
+	--color-2: #ed5bf7;
+	/* Cerebro (Magenta) */
+	--color-3: #f59e0b;
+	/* Entrenamiento (Amber) */
+	--color-4: #10b981;
+	/* Examen (Emerald) */
+	--color-5: #6366f1;
+	/* Salida (Indigo) */
+
+	/* Modern Soft Dark Shadows */
+	--shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+	--shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.4), 0 2px 6px -1px rgba(0, 0, 0, 0.2);
+	--shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.5), 0 4px 10px -2px rgba(0, 0, 0, 0.3);
+
+	/* Typography & Radius */
+	--font-heading: 'Outfit', system-ui, sans-serif;
+	--font-body: 'Outfit', system-ui, sans-serif;
+
+	/* Rounded corners */
+	--radius-sm: 8px;
+	--radius-md: 16px;
+	--radius-lg: 24px;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: var(--font-body);
+	background-color: var(--bg-main);
+	background-image:
+		radial-gradient(circle at 10% 20%, rgba(48, 228, 245, 0.05) 0%, transparent 40%),
+		radial-gradient(circle at 90% 80%, rgba(237, 91, 247, 0.05) 0%, transparent 40%),
+		radial-gradient(circle at 50% 50%, rgba(146, 151, 254, 0.03) 0%, transparent 60%);
+	color: var(--text-main);
+	min-height: 100vh;
+	overflow-y: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+	font-family: var(--font-heading);
+	font-weight: 700;
+	margin: 0;
+}
+
+*:focus-visible {
+	outline: 3px solid var(--primary);
+	outline-offset: 2px;
+	border-radius: 4px;
+}
+
+button {
+	font-family: var(--font-body);
+	border: none;
+	cursor: pointer;
+}
+
+/* Scrollbars modernas */
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background: clear;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--border-stone);
+	border-radius: var(--radius-sm);
+	border: 2px solid var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--border-highlight);
+}

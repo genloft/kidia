@@ -1,0 +1,10 @@
+﻿---
+import Layout from '../layouts/Layout.astro';
+import ConstructorApp from '../components/ConstructorApp.svelte';
+import '../styles/constructor.css';
+---
+
+<Layout title="Constructor - Kidia">
+  <!-- El componente Svelte debe renderizarse en el cliente para su interactividad -->
+  <ConstructorApp client:only="svelte" />
+</Layout>
