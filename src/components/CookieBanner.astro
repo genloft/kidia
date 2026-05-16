@@ -1,0 +1,123 @@
+---
+// CookieBanner.astro
+---
+
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-content">
+    <p>
+      Utilizamos cookies para mejorar tu experiencia en Kidia. Al continuar navegando, aceptas nuestra 
+      <a href="/privacidad">Política de Privacidad</a> y el uso de cookies.
+    </p>
+    <div class="cookie-buttons">
+      <button id="accept-cookies" class="btn btn-primary">Aceptar</button>
+      <button id="decline-cookies" class="btn btn-secondary">Rechazar</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cookie-banner {
+    position: fixed;
+    bottom: -100%;
+    left: 0;
+    width: 100%;
+    background: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    z-index: 9999;
+    transition: bottom 0.5s ease-in-out;
+    padding: 1.5rem;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .cookie-banner.show {
+    bottom: 0;
+  }
+
+  .cookie-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .cookie-content {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #cbd5e1;
+  }
+
+  a {
+    color: #22d3ee;
+    text-decoration: underline;
+  }
+
+  .cookie-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  .btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary {
+    background: #22d3ee;
+    color: #0f172a;
+  }
+
+  .btn-primary:hover {
+    background: #06b6d4;
+  }
+
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const banner = document.getElementById('cookie-banner');
+    const acceptBtn = document.getElementById('accept-cookies');
+    const declineBtn = document.getElementById('decline-cookies');
+
+    if (!localStorage.getItem('cookiesAccepted')) {
+      setTimeout(() => {
+        banner?.classList.add('show');
+      }, 1000);
+    }
+
+    acceptBtn?.addEventListener('click', () => {
+      localStorage.setItem('cookiesAccepted', 'true');
+      banner?.classList.remove('show');
+    });
+
+    declineBtn?.addEventListener('click', () => {
+      localStorage.setItem('cookiesAccepted', 'false');
+      banner?.classList.remove('show');
+    });
+  });
+</script>

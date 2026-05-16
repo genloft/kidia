@@ -1,0 +1,304 @@
+---
+import Header from '../components/Header.astro';
+import { createSupabaseClient } from '../lib/supabase';
+import '../styles/global.css';
+
+const supabase = createSupabaseClient(Astro.cookies);
+const { data: { session } } = await supabase.auth.getSession();
+
+if (!session) {
+  return Astro.redirect('/login');
+}
+
+let errorMessage = '';
+let successMessage = '';
+
+// Handle form submission
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const child_name = formData.get('child_name')?.toString() || '';
+  const child_dob = formData.get('child_dob')?.toString() || '';
+  const parent_name = formData.get('parent_name')?.toString() || '';
+  const parent_dob = formData.get('parent_dob')?.toString() || '';
+  const email = formData.get('email')?.toString() || '';
+  const password = formData.get('password')?.toString() || '';
+
+  let authUpdated = false;
+
+  // Actualizar contraseña si se ha rellenado
+  if (password) {
+    const { error: pwdError } = await supabase.auth.updateUser({ password });
+    if (pwdError) errorMessage += `Error en contraseña: ${pwdError.message}. `;
+    else authUpdated = true;
+  }
+
+  // Actualizar email si ha cambiado
+  if (email && email !== session.user.email) {
+    const { error: emailError } = await supabase.auth.updateUser({ email });
+    if (emailError) errorMessage += `Error en email: ${emailError.message}. `;
+    else authUpdated = true;
+  }
+
+  const { error } = await supabase
+    .from('user_profiles')
+    .update({ 
+      child_name: child_name || null, 
+      child_dob: child_dob || null, 
+      parent_name: parent_name || null, 
+      parent_dob: parent_dob || null 
+    })
+    .eq('id', session.user.id);
+
+  if (error) {
+    errorMessage += 'Error al guardar el perfil. Asegúrate de ejecutar el código SQL en Supabase.';
+    console.error(error);
+  } else if (!errorMessage) {
+    successMessage = 'Perfil actualizado correctamente.';
+    if (authUpdated) {
+      successMessage += ' Si cambiaste tu correo, revisa la bandeja de entrada para confirmar el cambio.';
+    }
+  }
+}
+
+// Load current data
+const { data: profile } = await supabase
+  .from('user_profiles')
+  .select('child_name, child_dob, parent_name, parent_dob')
+  .eq('id', session.user.id)
+  .single();
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Perfil - Kidia</title>
+  <style>
+    :root {
+      --color-bg: #09090b;
+      --color-text: #f8fafc;
+      --color-primary: #38bdf8;
+      --color-secondary: #818cf8;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .profile-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 1rem;
+    }
+
+    .profile-card {
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1.5rem;
+      padding: 3rem;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin: 0 0 0.5rem 0;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      font-size: 1.05rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.5;
+    }
+
+    .alert {
+      padding: 1rem;
+      border-radius: 0.75rem;
+      margin-bottom: 2rem;
+      font-weight: 500;
+    }
+
+    .alert.success {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      color: #4ade80;
+    }
+
+    .alert.error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: #f87171;
+    }
+
+    .form-section {
+      margin-bottom: 2rem;
+    }
+
+    .form-section h3 {
+      font-size: 1.25rem;
+      margin: 0 0 1.25rem 0;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .input-group label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
+    .input-group input {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.9rem 1rem;
+      border-radius: 0.75rem;
+      color: white;
+      font-size: 1rem;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.08);
+      margin: 2.5rem 0;
+    }
+
+    .btn-save {
+      width: 100%;
+      padding: 1.15rem;
+      background: linear-gradient(135deg, #0ea5e9, #6366f1);
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
+      font-family: inherit;
+      margin-top: 1rem;
+    }
+
+    .btn-save:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 25px -5px rgba(99, 102, 241, 0.5);
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+    }
+
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .profile-card {
+        padding: 2rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <Header />
+  
+  <main class="profile-container">
+    <div class="profile-card">
+      <h1>Mi Perfil</h1>
+      <p class="subtitle">Actualiza la información de tu cuenta para personalizar la experiencia en Kidia.</p>
+      
+      {successMessage && <div class="alert success">{successMessage}</div>}
+      {errorMessage && <div class="alert error">{errorMessage}</div>}
+
+      <form method="POST" class="profile-form">
+        
+        <!-- Cuenta -->
+        <div class="form-section">
+          <h3>⚙️ Datos de la Cuenta</h3>
+          <div class="form-grid">
+            <div class="input-group">
+              <label>Correo Electrónico</label>
+              <input type="email" name="email" value={session.user.email} required />
+            </div>
+            <div class="input-group">
+              <label>Nueva Contraseña (opcional)</label>
+              <input type="password" name="password" placeholder="Dejar en blanco para no cambiar" minlength="6" />
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Niño -->
+        <div class="form-section">
+          <h3>👦 Datos del Alumno/a</h3>
+          <div class="form-grid">
+            <div class="input-group">
+              <label>Nombre o Nickname</label>
+              <input type="text" name="child_name" value={profile?.child_name || ''} placeholder="Ej. Leo" />
+            </div>
+            <div class="input-group">
+              <label>Fecha de Nacimiento</label>
+              <input type="date" name="child_dob" value={profile?.child_dob || ''} />
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Tutor -->
+        <div class="form-section">
+          <h3>🧑 Datos del Padre / Tutor</h3>
+          <div class="form-grid">
+            <div class="input-group">
+              <label>Nombre del Tutor/a</label>
+              <input type="text" name="parent_name" value={profile?.parent_name || ''} placeholder="Ej. María" />
+            </div>
+            <div class="input-group">
+              <label>Fecha de Nacimiento</label>
+              <input type="date" name="parent_dob" value={profile?.parent_dob || ''} />
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-save">Guardar Cambios</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

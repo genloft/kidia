@@ -1,7 +1,6 @@
 ---
 const currentPath = Astro.url.pathname;
 const isActive = (path: string) => currentPath === path ? 'active' : '';
-const isParent = currentPath === '/parents';
 ---
 
 <header class="header">
@@ -11,7 +10,7 @@ const isParent = currentPath === '/parents';
       <span class="logo-beta">beta</span>
     </a>
   </div>
-  
+
   <nav class="main-nav">
     <a href="/mapa" class={`nav-link ${isActive('/mapa')}`}>Mapa</a>
     <a href="/insignias" class={`nav-link ${isActive('/insignias')}`}>Insignias</a>
@@ -20,7 +19,7 @@ const isParent = currentPath === '/parents';
   </nav>
 
   <div class="right-cluster">
-      <div class="parent-zone">
+      <div id="parent-zone-guest" class="parent-zone">
           <a href="/parents" class={`nav-link parent-link ${isActive('/parents')}`}>Zona Padres 🔒</a>
       </div>
       
@@ -43,13 +42,45 @@ const isParent = currentPath === '/parents';
             const email = session.user.email || '';
             const displayEmail = email.length > 20 ? email.substring(0, 17) + '...' : email;
             
-            authUi.innerHTML = `
-                <div class="user-info">
-                    <span class="user-email">${displayEmail}</span>
-                    <button id="logout-btn" class="btn-logout">Salir</button>
+            // Ocultamos el botón general de "Zona Padres" porque lo pondremos en su caja personal
+            const guestParentZone = document.getElementById('parent-zone-guest');
+            if(guestParentZone) guestParentZone.style.display = 'none';
+            
+            authUi!.innerHTML = `
+                <div class="user-menu-container">
+                    <button id="user-menu-btn" class="user-text-btn">
+                        Hola, <strong>${displayEmail}</strong>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    
+                    <div id="user-dropdown" class="user-dropdown hidden">
+                        <div class="dropdown-body">
+                            <a href="/perfil" class="dropdown-item">Mi Perfil</a>
+                            <a href="/parents" class="dropdown-item">Zona de Padres 🔒</a>
+                        </div>
+                        <div class="dropdown-footer">
+                            <button id="logout-btn" class="dropdown-item btn-logout">Cerrar Sesión</button>
+                        </div>
+                    </div>
                 </div>
             `;
             
+            const menuBtn = document.getElementById('user-menu-btn');
+            const dropdown = document.getElementById('user-dropdown');
+            
+            menuBtn?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdown?.classList.toggle('hidden');
+                menuBtn.classList.toggle('open');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (authUi && !authUi.contains(e.target as Node)) {
+                    dropdown?.classList.add('hidden');
+                    menuBtn?.classList.remove('open');
+                }
+            });
+
             const logoutBtn = document.getElementById('logout-btn');
             logoutBtn?.addEventListener('click', async () => {
                 await supabase.auth.signOut();
@@ -66,7 +97,7 @@ const isParent = currentPath === '/parents';
     updateAuth();
     
     // Listen for auth changes
-    supabase.auth.onAuthStateChange((event, session) => {
+    supabase.auth.onAuthStateChange((event) => {
         if (event === 'SIGNED_IN') {
             updateAuth();
         } else if (event === 'SIGNED_OUT') {
@@ -75,154 +106,235 @@ const isParent = currentPath === '/parents';
     });
 </script>
 
-<style>
-  /* Existing Styles */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center; /* Ensure vertical center */
-    padding: 1rem 2rem;
-    background: rgba(9, 9, 11, 0.9);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  
-  /* ... existing styles ... */
-  
-  .right-cluster {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-  }
-  
-  .btn-login {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--color-primary);
-      text-decoration: none;
-      padding: 0.4rem 0.8rem;
-      border: 1px solid var(--color-primary);
-      border-radius: 0.5rem;
-      transition: all 0.2s;
-  }
-  
-  .btn-login:hover {
-      background: rgba(34, 211, 238, 0.1);
-  }
-  
-  .btn-logout {
-      background: none;
-      border: none;
-      color: #71717a;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.9rem;
-  }
-  
-  .btn-logout:hover {
-      color: #ef4444;
-  }
-  
-  .user-info {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-  }
-  
-  .user-email {
-      font-size: 0.85rem;
-      color: #a1a1aa;
-      max-width: 150px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-  }
-
+<style is:global>
+  /* ===== MAIN HEADER ===== */
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
-    background: rgba(9, 9, 11, 0.9);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.75rem 2rem;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     position: sticky;
     top: 0;
     z-index: 100;
   }
 
-  .logo {
-    font-weight: 800;
-    font-size: 1.5rem;
-    letter-spacing: -0.05em;
+  /* ===== LOGO ===== */
+  .logo a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
   }
 
   .logo-text {
-    background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+    font-weight: 800;
+    font-size: 1.8rem;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .logo-beta {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     background: rgba(255, 255, 255, 0.1);
-    padding: 0.1rem 0.4rem;
+    color: #94a3b8;
+    padding: 0.15rem 0.4rem;
     border-radius: 4px;
     margin-left: 0.5rem;
-    vertical-align: middle;
-    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
   }
 
+  /* ===== NAV ===== */
   .main-nav {
     display: flex;
-    gap: 1.5rem;
+    align-items: center;
+    gap: 2rem;
   }
 
   .nav-link {
     font-weight: 600;
-    font-size: 0.9rem;
-    opacity: 0.7;
-    transition: all 0.2s;
+    font-size: 0.95rem;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: all 0.2s ease;
     position: relative;
     padding: 0.5rem 0;
   }
 
   .nav-link:hover, .nav-link.active {
-    opacity: 1;
-    color: var(--color-text);
+    color: #f8fafc;
   }
   
   .nav-link.active::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: var(--color-primary);
-      box-shadow: 0 0 10px var(--color-primary);
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #38bdf8;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
   }
-  
+
+  /* ===== RIGHT CLUSTER ===== */
+  .right-cluster {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  /* ===== PARENT ZONE GUEST ===== */
   .parent-link {
-      color: #94a3b8;
-      font-size: 0.8rem;
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 0.4rem 0.8rem;
-      border-radius: 99px;
+    color: #94a3b8;
+    font-size: 0.85rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 0.4rem 0.8rem;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.03);
   }
   
   .parent-link:hover, .parent-link.active {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  /* ===== LOGIN BTN GUEST ===== */
+  .btn-login {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    text-decoration: none;
+    padding: 0.45rem 1.2rem;
+    border-radius: 99px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
   }
   
-  @media (max-width: 600px) {
-      .header { padding: 1rem; }
-      .main-nav { gap: 1rem; }
-      .logo-beta { display: none; }
-      .parent-zone { display: none; } /* Hide parent zone on mobile for cleaner look */
+  .btn-login:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(56, 189, 248, 0.4);
+    filter: brightness(1.1);
+  }
+
+  /* ===== USER MENU (EBAY STYLE) ===== */
+  .user-menu-container {
+    position: relative;
+  }
+  
+  .user-text-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: transparent;
+    border: none;
+    color: #f8fafc;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.2s ease;
+    font-family: inherit;
+  }
+  
+  .user-text-btn:hover, .user-text-btn.open {
+    color: #38bdf8;
+  }
+  
+  .user-text-btn strong {
+    font-weight: 600;
+  }
+  
+  .chevron {
+    transition: transform 0.2s ease;
+  }
+  
+  .user-text-btn.open .chevron {
+    transform: rotate(180deg);
+  }
+  
+  /* ===== USER DROPDOWN ===== */
+  .user-dropdown {
+    position: absolute;
+    top: calc(100% + 5px);
+    right: 0;
+    width: 200px;
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+    overflow: hidden;
+    z-index: 200;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transform-origin: top right;
+  }
+  
+  .user-dropdown.hidden {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+    pointer-events: none;
+  }
+  
+  /* Open dropdown on hover for desktop */
+  .user-menu-container:hover .user-dropdown {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  
+  .dropdown-body {
+    padding: 0.5rem;
+  }
+
+  .dropdown-item {
+    display: block;
+    padding: 0.65rem 1rem;
+    color: #cbd5e1;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  
+  .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #f8fafc;
+  }
+  
+  .dropdown-footer {
+    padding: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .btn-logout {
+    color: #fca5a5;
+  }
+  
+  .btn-logout:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .header { padding: 1rem 5%; }
+    .main-nav { display: none; } /* Hide on mobile to save space */
+    .parent-zone { display: none; }
   }
 </style>

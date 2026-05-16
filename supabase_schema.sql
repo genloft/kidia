@@ -6,6 +6,10 @@ create extension if not exists "uuid-ossp";
 create table if not exists public.user_profiles (
   id uuid references auth.users on delete cascade not null primary key,
   email text,
+  child_name text,
+  child_dob date,
+  parent_name text,
+  parent_dob date,
   completed_scenarios text[] default '{}',
   badges text[] default '{}',
   scores jsonb default '{}',

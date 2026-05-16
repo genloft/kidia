@@ -1,337 +1,620 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import Friend from '../components/Friend.astro';
+
+import { createSupabaseClient } from '../lib/supabase';
+let error = '';
+let success = false;
+
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const email = formData.get('email')?.toString();
+  const password = formData.get('password')?.toString();
+
+  if (email && password) {
+    const supabase = createSupabaseClient(Astro.cookies);
+    const { error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${new URL(Astro.request.url).origin}/auth/callback`,
+      },
+    });
+
+    if (authError) {
+      error = authError.message;
+    } else {
+      success = true;
+    }
+  }
+}
 ---
 
-<Layout title="Kidia - Tu amiga de IA">
+<Layout title="Kidia - Aprende Inteligencia Artificial">
   <Header />
-  
+
   <main>
-    <section class="hero">
-      <div class="hero-content">
-        <h1>Tu viaje a la <span class="text-gradient">Inteligencia Artificial</span> empieza aquí.</h1>
-        <p class="subtitle">Una aventura interactiva para entender el futuro, sin aulas ni exámenes. Solo tú, Kidia y muchas misiones.</p>
-        
-        <div class="cta-container">
-           <a href="/mapa" class="btn pulse">
-             Comenzar Aventura 🚀
-           </a>
-           <a href="/parents" class="btn btn-secondary">
-             Zona de Padres 🛡️
-           </a>
-        </div>
-      </div>
-      
-      <div class="hero-visual">
-          <div class="kidia-presentation">
-              <img src="/kidia-standing.png" alt="Kidia" class="kidia-character" />
-              <div class="speech-bubble" id="kidia-bubble">
-                  <p id="bubble-text">¡Hola! Soy Kidia 👋</p>
+    <div class="hero-container">
+      <section class="hero">
+
+        <!-- Left: Text + Form -->
+        <div class="hero-left">
+
+          <h1>
+            Aprende <span class="text-gradient">Inteligencia Artificial</span> jugando.
+          </h1>
+
+          <p class="subtitle">
+            Descubre el futuro de la tecnología con Kidia. Una aventura interactiva
+            donde los niños aprenden IA, la usan con respeto y construyen sus sueños.
+          </p>
+
+          <!-- Form card -->
+          <div class="join-card">
+            <h3 class="form-title">Si no tienes usuario, <a href="/login">regístrate aquí</a></h3>
+            {success ? (
+              <div class="success-message">
+                <div class="success-icon-wrap">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div class="success-text">
+                  <h4>¡Registro completado!</h4>
+                  <p>Revisa tu correo para confirmar la cuenta.</p>
+                </div>
               </div>
+            ) : (
+              <form method="POST" class="quick-join-form">
+                {error && <div class="error-message">{error}</div>}
+                
+                <div class="form-grid">
+                  <div class="input-group">
+                    <input type="email" name="email" required placeholder="Tu correo electrónico" />
+                  </div>
+                  <div class="input-group">
+                    <input type="password" name="password" required placeholder="Contraseña (mín. 6)" minlength="6" />
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn-cta">
+                    <span>Comenzar Aventura</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </button>
+                </div>
+              </form>
+            )}
+
+            <div class="card-footer">
+              <div class="social-proof">
+                <div class="avatars">
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4" alt="user" class="avatar" />
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka&backgroundColor=c0aede" alt="user" class="avatar" />
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jude&backgroundColor=ffdfbf" alt="user" class="avatar" />
+                </div>
+                <span>+100 alumnos ya están aprendiendo</span>
+              </div>
+              <div class="divider-vertical"></div>
+              <p class="auth-hint">¿Ya tienes cuenta? <a href="/login">Inicia Sesión</a></p>
+            </div>
           </div>
+        </div>
+
+        <!-- Right: Mascot -->
+        <div class="hero-right">
+          <div class="mascot-glow"></div>
+          <img
+            src="/back_shirt.png"
+            alt="Personaje Kidia"
+            class="kidia-character"
+            onerror="this.src='/kidia-standing.png'"
+          />
+          <div class="floating-tag tag-1">
+            <span class="tag-icon">🤖</span> IA Explicada
+          </div>
+          <div class="floating-tag tag-2">
+            <span class="tag-icon">🛡️</span> Uso Seguro
+          </div>
+          <div class="floating-tag tag-3">
+            <span class="tag-icon">🌟</span> Crea Proyectos
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- ====== VALUES ====== -->
+    <section class="values-section">
+      <div class="values-container">
+        <div class="values-header">
+          <h2>Tres pilares, un objetivo</h2>
+          <p>Todo lo que los niños necesitan para entender y usar la IA con propósito.</p>
+        </div>
+
+        <div class="features">
+          <div class="feature-card">
+            <div class="icon-wrapper bg-blue-500/10 text-blue-400">🤖</div>
+            <h3>Enseñar IA</h3>
+            <p>Desmitificamos la Inteligencia Artificial enseñando cómo funciona, sin código complejo y de forma totalmente interactiva.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon-wrapper bg-purple-500/10 text-purple-400">🛡️</div>
+            <h3>Uso Ético y Seguro</h3>
+            <p>Inculcamos el respeto y las buenas prácticas desde el primer día. Aprenden a usar la tecnología de forma responsable.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon-wrapper bg-amber-500/10 text-amber-400">🌟</div>
+            <h3>Potenciar Sueños</h3>
+            <p>No solo aprenden herramientas, adquieren superpoderes para construir sus propios proyectos y hacer realidad sus ideas.</p>
+          </div>
+        </div>
       </div>
-     
-      <script>
-        const messages = [
-          "¡Hola! Soy Kidia 👋",
-          "¿Empezamos la aventura? 🚀",
-          "¿Cómo estás hoy? 😊",
-          "¿Sabes qué es una IA? 🤖",
-          "¡Vamos a aprender juntos! ✨",
-          "¿Listo para explorar? 🌟"
-        ];
-        
-        let currentIndex = 0;
-        const bubbleText = document.getElementById('bubble-text');
-        const kidiaImg = document.querySelector('.kidia-character');
-        let typingInterval;
-        
-        // Occasionally change Kidia's pose for variety
-        const kidiaVariations = [
-          '/kidia-standing.png',
-          '/kidia_thinking.png',
-          '/kidia_surprised.png'
-        ];
-        
-        function typeMessage(message) {
-          if (!bubbleText) return;
-          
-          let charIndex = 0;
-          bubbleText.textContent = '';
-          
-          // Clear any existing typing interval
-          if (typingInterval) clearInterval(typingInterval);
-          
-          typingInterval = setInterval(() => {
-            if (charIndex < message.length) {
-              bubbleText.textContent += message[charIndex];
-              charIndex++;
-            } else {
-              clearInterval(typingInterval);
-            }
-          }, 50); // 50ms per character
-        }
-        
-        function rotateMessage() {
-          currentIndex = (currentIndex + 1) % messages.length;
-          typeMessage(messages[currentIndex]);
-          
-          // Occasionally change Kidia's expression (20% chance)
-          if (kidiaImg && Math.random() < 0.2) {
-            const randomPose = kidiaVariations[Math.floor(Math.random() * kidiaVariations.length)];
-            kidiaImg.src = randomPose;
-          }
-        }
-        
-        // Type the first message on load
-        typeMessage(messages[0]);
-        
-        // Rotate every 4 seconds (increased to give time for typing)
-        setInterval(rotateMessage, 4000);
-      </script>
     </section>
-    
-    <section class="features">
-        <div class="feature-card">
-            <h3><span>🤖</span> Tu propia IA</h3>
-            <p>Kidia no es una profesora. Es una compañera curiosa que aprende contigo paso a paso.</p>
-        </div>
-        <div class="feature-card">
-            <h3><span>🎮</span> Juega y Aprende</h3>
-            <p>Sin vídeos aburridos. Chatea, toma decisiones y desbloquea insignias reales.</p>
-        </div>
-        <div class="feature-card">
-            <h3><span>🧠</span> Ética Primero</h3>
-            <p>Descubre no solo cómo funciona la tecnología, sino cómo usarla bien.</p>
-        </div>
-    </section>
+
   </main>
 </Layout>
 
 <style>
+  /* ===== RESET & BASE ===== */
   main {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .hero-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 6%;
+  }
+
+  .values-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 0 5%;
   }
-  
+
+  /* ===== HERO ===== */
   .hero {
-    display: flex;
-    flex-direction: column-reverse;
+    display: grid;
+    grid-template-columns: 6fr 4fr;
     align-items: center;
-    gap: 2rem; /* Reduced from 3rem */
-    margin: 2rem 0; /* Reduced from 4rem 0 */
-    text-align: center;
-    min-height: 60vh; /* Ensure content is visible above the fold */
+    min-height: calc(100vh - 80px);
+    gap: 4rem;
+    padding: 2rem 0 4rem;
+  }
+
+  /* ===== HERO LEFT ===== */
+  .hero-left {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
   }
-  
-  @media (min-width: 768px) {
-    .hero {
-      flex-direction: row;
-      text-align: left;
-      justify-content: space-between;
-      margin-top: 3rem; /* Add some top margin on desktop */
-    }
-    
-    .hero-content {
-      max-width: 50%;
-    }
-  }
-  
+
   h1 {
-    font-size: 3.5rem;
+    font-size: clamp(3rem, 5vw, 5.5rem);
     line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.02em;
     margin-bottom: 1.5rem;
+    color: #f8fafc;
   }
-  
+
+  .text-gradient {
+    background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
   .subtitle {
-    font-size: 1.25rem;
-    color: #a1a1aa;
+    font-size: clamp(1.1rem, 1.4vw, 1.35rem);
+    color: #94a3b8;
+    line-height: 1.6;
     margin-bottom: 2.5rem;
-  }
-  
-  .cta-container {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
-  }
-  
-  @media (min-width: 768px) {
-      .cta-container { justify-content: flex-start; }
+    max-width: 90%;
   }
 
-  .pulse {
-    animation: pulse-glow 2s infinite;
-  }
-  
-  .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem; /* Reduced from 6rem */
-      padding-bottom: 4rem;
-  }
-  
-  .feature-card {
-      background: rgba(30, 41, 59, 0.4); /* Darker, more glass-like */
-      backdrop-filter: blur(12px);
-      padding: 2.5rem; /* More breathing room */
-      border-radius: 1.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  }
-  
-  .feature-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
-      opacity: 0;
-      transition: opacity 0.3s;
+  /* ===== JOIN CARD ===== */
+  .join-card {
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.25rem;
+    padding: 2.25rem;
+    max-width: 540px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   }
 
-  .feature-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      border-color: rgba(34, 211, 238, 0.5); /* Cyan glow */
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1), 0 0 20px rgba(34, 211, 238, 0.2);
-  }
-  
-  .feature-card:hover::before {
-      opacity: 1;
-  }
-  
-  .feature-card h3 {
-      color: #fff; /* Brighter white */
-      margin-bottom: 0.75rem;
-      font-size: 1.5rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-  }
-  
-  /* Make icons bigger */
-  .feature-card h3 span { 
-    font-size: 2rem; 
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-  }
-  
-  .feature-card p {
-      color: #94a3b8;
-      line-height: 1.7;
-      font-size: 1.05rem;
+  .form-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    text-align: left;
   }
 
-  .hero-visual {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 500px;
+  .form-title a {
+    color: #38bdf8;
+    text-decoration: none;
+    transition: all 0.2s ease;
   }
 
-  .kidia-presentation {
-      position: relative;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
+  .form-title a:hover {
+    text-decoration: underline;
+  }
+
+  .quick-join-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .input-group {
+    position: relative;
+  }
+
+  .quick-join-form input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f8fafc;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    font-family: inherit;
+  }
+
+  .quick-join-form input::placeholder {
+    color: #64748b;
+  }
+
+  .quick-join-form input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.06);
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+  }
+
+  /* BOTONES */
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-top: 0.5rem;
+  }
+
+  .btn-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1.1rem;
+    background: linear-gradient(135deg, #0ea5e9, #6366f1);
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
+    font-family: inherit;
+  }
+
+  .btn-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px -5px rgba(99, 102, 241, 0.5);
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+  }
+
+  .btn-cta:active {
+    transform: translateY(1px);
+    box-shadow: 0 5px 10px -5px rgba(99, 102, 241, 0.4);
+  }
+
+  .btn-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1.1rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: #e2e8f0;
+    font-weight: 700;
+    font-size: 1.05rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+  }
+
+  /* FOOTER DEL FORMULARIO */
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .social-proof {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .avatars {
+    display: flex;
+  }
+
+  .avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #0f172a;
+    margin-left: -10px;
+    background: #fff;
+  }
+
+  .avatar:first-child { margin-left: 0; }
+
+  .social-proof span {
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
+
+  .social-proof strong {
+    color: #e2e8f0;
+  }
+
+  .divider-vertical {
+    width: 1px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 1rem;
+  }
+
+  .auth-hint {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .auth-hint a {
+    color: #38bdf8;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .auth-hint a:hover { text-decoration: underline; }
+
+  /* ===== MESSAGES ===== */
+  .error-message {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 0.85rem;
+    border-radius: 0.5rem;
+    color: #fca5a5;
+    font-size: 0.85rem;
+  }
+
+  .success-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: rgba(34, 197, 94, 0.05);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .success-icon-wrap {
+    color: #4ade80;
+    background: rgba(74, 222, 128, 0.1);
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: flex;
+  }
+
+  .success-text h4 {
+    color: #4ade80;
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+  }
+
+  .success-text p {
+    color: #94a3b8;
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  /* ===== HERO RIGHT ===== */
+  .hero-right {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mascot-glow {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
+    border-radius: 50%;
+    z-index: 0;
   }
 
   .kidia-character {
-      width: 500px; /* Increased from 400px */
-      height: auto;
-      filter: drop-shadow(0 10px 30px rgba(34, 211, 238, 0.3));
-      animation: float-character 3s ease-in-out infinite;
+    width: 100%;
+    max-width: 440px;
+    height: auto;
+    position: relative;
+    z-index: 1;
+    animation: float 6s ease-in-out infinite;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
   }
 
-  @keyframes float-character {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
   }
 
-  .speech-bubble {
-      position: absolute;
-      top: 60px; /* Position near her face */
-      right: 420px; /* Adjusted for larger character */
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.98));
-      color: #1e293b;
-      padding: 1.25rem 1.5rem; /* Increased padding for more breathing room */
-      border-radius: 1rem;
-      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2), 0 10px 20px -8px rgba(0, 0, 0, 0.15);
-      max-width: 420px; /* Increased from 350px */
-      min-width: 280px; /* Ensure minimum width */
-      font-size: 1.05rem; /* Slightly larger font */
-      line-height: 1.5; /* More line spacing */
-      letter-spacing: 0.3px; /* Add letter spacing for less cramped text */
-      border: 2px solid rgba(34, 211, 238, 0.2);
-      animation: float-bubble 3s ease-in-out infinite;
+  /* ===== TAGS ===== */
+  .floating-tag {
+    position: absolute;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 99px;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    z-index: 2;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+    animation: float 4s ease-in-out infinite;
   }
 
-  @keyframes float-bubble {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-  }
-  
-  .speech-bubble p {
-      margin: 0;
-      color: #334155;
-      font-weight: 500;
-      transition: opacity 0.3s ease;
-  }
+  .tag-1 { top: 10%; right: 10%; animation-delay: 0.5s; }
+  .tag-2 { top: 50%; left: -5%; animation-delay: 1.2s; }
+  .tag-3 { bottom: 15%; right: 5%; animation-delay: 0.8s; }
 
-  /* Tail pointing RIGHT towards Kidia's mouth */
-  .speech-bubble::before {
-      content: '';
-      position: absolute;
-      right: -15px;
-      top: 30px;
-      width: 0;
-      height: 0;
-      border-left: 18px solid rgba(255, 255, 255, 0.95);
-      border-top: 12px solid transparent;
-      border-bottom: 12px solid transparent;
+  /* ===== VALUES ===== */
+  .values-section {
+    padding: 5rem 0 8rem;
+    border-top: 1px solid rgba(255,255,255,0.03);
+    background: linear-gradient(to bottom, rgba(15, 23, 42, 0), rgba(15, 23, 42, 0.4));
   }
 
-  @media (max-width: 968px) {
-      .hero-visual {
-          min-height: auto;
-      }
+  .values-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
 
-      .kidia-presentation {
-          flex-direction: column;
-          align-items: center;
-      }
+  .values-header h2 {
+    font-size: clamp(2rem, 3vw, 2.5rem);
+    font-weight: 800;
+    color: #f8fafc;
+    margin-bottom: 1rem;
+  }
 
-      .kidia-character {
-          width: 280px;
-      }
+  .values-header p {
+    font-size: 1.1rem;
+    color: #94a3b8;
+    max-width: 600px;
+    margin: 0 auto;
+  }
 
-      .speech-bubble {
-          position: relative;
-          top: auto;
-          left: auto;
-          margin-top: -40px;
-          max-width: 90%;
-      }
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
 
-      /* Tail pointing UP towards Kidia's face on mobile */
-      .speech-bubble::before {
-          left: 50%;
-          top: -12px;
-          transform: translateX(-50%);
-          border-right: 12px solid transparent;
-          border-left: 12px solid transparent;
-          border-bottom: 12px solid rgba(255, 255, 255, 0.95);
-          border-top: none;
-      }
+  .feature-card {
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.25rem;
+    padding: 2.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .feature-card:hover {
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3);
+  }
+
+  .icon-wrapper {
+    font-size: 2rem;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+    margin-bottom: 1.5rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .feature-card h3 {
+    font-size: 1.25rem;
+    color: #f8fafc;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  .feature-card p {
+    color: #94a3b8;
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .hero {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 3rem;
+      padding-top: 3rem;
+    }
+    .hero-left {
+      align-items: center;
+    }
+    .subtitle {
+      max-width: 600px;
+    }
+    .join-card {
+      width: 100%;
+    }
+    .hero-right {
+      order: -1;
+    }
+    .features {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .card-footer {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .divider-vertical {
+      display: none;
+    }
+    .floating-tag {
+      display: none;
+    }
   }
 </style>

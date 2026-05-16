@@ -1,0 +1,77 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+---
+
+<Layout title="Privacidad - Kidia">
+  <Header />
+  <main class="legal-container">
+    <h1>Política de Privacidad</h1>
+    <div class="legal-content">
+      <p>Última actualización: {new Date().toLocaleDateString('es-ES')}</p>
+      
+      <h2>1. Información que recopilamos</h2>
+      <p>En Kidia, nos tomamos muy en serio la privacidad de los menores. Solo recopilamos la información estrictamente necesaria para que la plataforma funcione, como una dirección de correo electrónico (preferiblemente de los padres o tutores) para crear la cuenta de usuario.</p>
+      
+      <h2>2. Uso de la información</h2>
+      <p>La información recopilamos se utiliza exclusivamente para:</p>
+      <ul>
+        <li>Proporcionar acceso a la plataforma.</li>
+        <li>Guardar el progreso en las misiones de Inteligencia Artificial.</li>
+        <li>Enviar correos electrónicos de confirmación o recuperación de contraseña.</li>
+      </ul>
+      
+      <h2>3. Protección a Menores</h2>
+      <p>Kidia está diseñada como una plataforma educativa. No vendemos datos a terceros, no mostramos anuncios publicitarios dirigidos ni utilizamos sistemas de rastreo invasivos. Todas las interacciones con nuestra IA están supervisadas y filtradas para garantizar un entorno seguro.</p>
+
+      <h2>4. Uso de Cookies</h2>
+      <p>Utilizamos cookies esenciales para mantener tu sesión activa y guardar tus preferencias. No usamos cookies de marketing de terceros.</p>
+      
+      <h2>5. Derechos del Usuario</h2>
+      <p>Los padres o tutores legales pueden solicitar en cualquier momento la revisión, modificación o eliminación total de la cuenta y los datos asociados escribiendo a nuestro soporte.</p>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .legal-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    color: #22d3ee;
+  }
+
+  .legal-content {
+    background: rgba(30, 41, 59, 0.4);
+    padding: 3rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    color: white;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  p, li {
+    color: #cbd5e1;
+    line-height: 1.7;
+    font-size: 1.05rem;
+  }
+
+  ul {
+    margin-top: 1rem;
+    margin-left: 1.5rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+</style>

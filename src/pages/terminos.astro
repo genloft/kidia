@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+---
+
+<Layout title="Términos de Uso - Kidia">
+  <Header />
+  <main class="legal-container">
+    <h1>Términos de Uso</h1>
+    <div class="legal-content">
+      <p>Última actualización: {new Date().toLocaleDateString('es-ES')}</p>
+      
+      <h2>1. Aceptación de los Términos</h2>
+      <p>Al acceder y utilizar la plataforma Kidia, aceptas estar sujeto a estos términos y condiciones de uso. Si no estás de acuerdo con alguna parte de los términos, te rogamos que no utilices la plataforma.</p>
+      
+      <h2>2. Descripción del Servicio</h2>
+      <p>Kidia es una plataforma educativa diseñada para enseñar conceptos de Inteligencia Artificial a menores a través de misiones e interacciones guiadas. La herramienta está destinada a un uso lúdico y formativo.</p>
+      
+      <h2>3. Cuentas de Usuario</h2>
+      <p>Para acceder a ciertas funciones, es necesario crear una cuenta. Recomendamos que las cuentas de los menores sean creadas y supervisadas por un padre, madre o tutor legal. Eres responsable de mantener la confidencialidad de tu contraseña.</p>
+
+      <h2>4. Uso Aceptable</h2>
+      <p>Te comprometes a utilizar Kidia de manera ética y respetuosa. Está prohibido utilizar la plataforma para generar contenido inapropiado, ofensivo o que vulnere los derechos de otras personas.</p>
+      
+      <h2>5. Modificaciones</h2>
+      <p>Nos reservamos el derecho a modificar estos términos en cualquier momento. Los cambios significativos serán notificados a los usuarios a través del correo electrónico proporcionado en su cuenta.</p>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .legal-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    color: #22d3ee;
+  }
+
+  .legal-content {
+    background: rgba(30, 41, 59, 0.4);
+    padding: 3rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    color: white;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: #cbd5e1;
+    line-height: 1.7;
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+  }
+</style>
