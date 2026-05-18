@@ -1,71 +1,6 @@
 ---
 import Header from '../components/Header.astro';
-import { createSupabaseClient } from '../lib/supabase';
 import '../styles/global.css';
-
-const supabase = createSupabaseClient(Astro.cookies);
-const { data: { session } } = await supabase.auth.getSession();
-
-if (!session) {
-  return Astro.redirect('/login');
-}
-
-let errorMessage = '';
-let successMessage = '';
-
-// Handle form submission
-if (Astro.request.method === 'POST') {
-  const formData = await Astro.request.formData();
-  const child_name = formData.get('child_name')?.toString() || '';
-  const child_dob = formData.get('child_dob')?.toString() || '';
-  const parent_name = formData.get('parent_name')?.toString() || '';
-  const parent_dob = formData.get('parent_dob')?.toString() || '';
-  const email = formData.get('email')?.toString() || '';
-  const password = formData.get('password')?.toString() || '';
-
-  let authUpdated = false;
-
-  // Actualizar contraseña si se ha rellenado
-  if (password) {
-    const { error: pwdError } = await supabase.auth.updateUser({ password });
-    if (pwdError) errorMessage += `Error en contraseña: ${pwdError.message}. `;
-    else authUpdated = true;
-  }
-
-  // Actualizar email si ha cambiado
-  if (email && email !== session.user.email) {
-    const { error: emailError } = await supabase.auth.updateUser({ email });
-    if (emailError) errorMessage += `Error en email: ${emailError.message}. `;
-    else authUpdated = true;
-  }
-
-  const { error } = await supabase
-    .from('user_profiles')
-    .update({ 
-      child_name: child_name || null, 
-      child_dob: child_dob || null, 
-      parent_name: parent_name || null, 
-      parent_dob: parent_dob || null 
-    })
-    .eq('id', session.user.id);
-
-  if (error) {
-    errorMessage += 'Error al guardar el perfil. Asegúrate de ejecutar el código SQL en Supabase.';
-    console.error(error);
-  } else if (!errorMessage) {
-    successMessage = 'Perfil actualizado correctamente.';
-    if (authUpdated) {
-      successMessage += ' Si cambiaste tu correo, revisa la bandeja de entrada para confirmar el cambio.';
-    }
-  }
-}
-
-// Load current data
-const { data: profile } = await supabase
-  .from('user_profiles')
-  .select('child_name, child_dob, parent_name, parent_dob')
-  .eq('id', session.user.id)
-  .single();
 ---
 
 <!DOCTYPE html>
@@ -242,10 +177,10 @@ const { data: profile } = await supabase
       <h1>Mi Perfil</h1>
       <p class="subtitle">Actualiza la información de tu cuenta para personalizar la experiencia en Kidia.</p>
       
-      {successMessage && <div class="alert success">{successMessage}</div>}
-      {errorMessage && <div class="alert error">{errorMessage}</div>}
+      <div id="success-msg" class="alert success hidden"></div>
+      <div id="error-msg" class="alert error hidden"></div>
 
-      <form method="POST" class="profile-form">
+      <form id="profile-form" class="profile-form">
         
         <!-- Cuenta -->
         <div class="form-section">
@@ -253,11 +188,11 @@ const { data: profile } = await supabase
           <div class="form-grid">
             <div class="input-group">
               <label>Correo Electrónico</label>
-              <input type="email" name="email" value={session.user.email} required />
+              <input type="email" id="email" name="email" required />
             </div>
             <div class="input-group">
               <label>Nueva Contraseña (opcional)</label>
-              <input type="password" name="password" placeholder="Dejar en blanco para no cambiar" minlength="6" />
+              <input type="password" id="password" name="password" placeholder="Dejar en blanco para no cambiar" minlength="6" />
             </div>
           </div>
         </div>
@@ -270,11 +205,11 @@ const { data: profile } = await supabase
           <div class="form-grid">
             <div class="input-group">
               <label>Nombre o Nickname</label>
-              <input type="text" name="child_name" value={profile?.child_name || ''} placeholder="Ej. Leo" />
+              <input type="text" id="child_name" name="child_name" placeholder="Ej. Leo" />
             </div>
             <div class="input-group">
               <label>Fecha de Nacimiento</label>
-              <input type="date" name="child_dob" value={profile?.child_dob || ''} />
+              <input type="date" id="child_dob" name="child_dob" />
             </div>
           </div>
         </div>
@@ -287,11 +222,11 @@ const { data: profile } = await supabase
           <div class="form-grid">
             <div class="input-group">
               <label>Nombre del Tutor/a</label>
-              <input type="text" name="parent_name" value={profile?.parent_name || ''} placeholder="Ej. María" />
+              <input type="text" id="parent_name" name="parent_name" placeholder="Ej. María" />
             </div>
             <div class="input-group">
               <label>Fecha de Nacimiento</label>
-              <input type="date" name="parent_dob" value={profile?.parent_dob || ''} />
+              <input type="date" id="parent_dob" name="parent_dob" />
             </div>
           </div>
         </div>
@@ -302,3 +237,106 @@ const { data: profile } = await supabase
   </main>
 </body>
 </html>
+
+<script>
+  import { supabase } from '../lib/supabase';
+
+  let currentUserId = '';
+  let currentUserEmail = '';
+
+  const form = document.getElementById('profile-form') as HTMLFormElement;
+  const successMsg = document.getElementById('success-msg') as HTMLElement;
+  const errorMsg = document.getElementById('error-msg') as HTMLElement;
+  const submitBtn = form.querySelector('.btn-save') as HTMLButtonElement;
+
+  async function loadProfile() {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      window.location.href = '/login';
+      return;
+    }
+
+    currentUserId = session.user.id;
+    currentUserEmail = session.user.email || '';
+
+    (document.getElementById('email') as HTMLInputElement).value = currentUserEmail;
+
+    const { data: profile } = await supabase
+      .from('user_profiles')
+      .select('child_name, child_dob, parent_name, parent_dob')
+      .eq('id', currentUserId)
+      .single();
+
+    if (profile) {
+      if (profile.child_name) (document.getElementById('child_name') as HTMLInputElement).value = profile.child_name;
+      if (profile.child_dob) (document.getElementById('child_dob') as HTMLInputElement).value = profile.child_dob;
+      if (profile.parent_name) (document.getElementById('parent_name') as HTMLInputElement).value = profile.parent_name;
+      if (profile.parent_dob) (document.getElementById('parent_dob') as HTMLInputElement).value = profile.parent_dob;
+    }
+  }
+
+  loadProfile();
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Guardando...';
+    successMsg.classList.add('hidden');
+    errorMsg.classList.add('hidden');
+
+    const formData = new FormData(form);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    const child_name = formData.get('child_name') as string;
+    const child_dob = formData.get('child_dob') as string;
+    const parent_name = formData.get('parent_name') as string;
+    const parent_dob = formData.get('parent_dob') as string;
+
+    let errorText = '';
+    let successText = '';
+    let authUpdated = false;
+
+    // Actualizar Auth
+    if (password) {
+      const { error } = await supabase.auth.updateUser({ password });
+      if (error) errorText += `Error en contraseña: ${error.message}. `;
+      else authUpdated = true;
+    }
+
+    if (email && email !== currentUserEmail) {
+      const { error } = await supabase.auth.updateUser({ email });
+      if (error) errorText += `Error en email: ${error.message}. `;
+      else authUpdated = true;
+    }
+
+    // Actualizar Perfil
+    const { error: dbError } = await supabase
+      .from('user_profiles')
+      .update({
+        child_name: child_name || null,
+        child_dob: child_dob || null,
+        parent_name: parent_name || null,
+        parent_dob: parent_dob || null
+      })
+      .eq('id', currentUserId);
+
+    if (dbError) {
+      errorText += 'Error al guardar el perfil. Asegúrate de ejecutar el código SQL en Supabase.';
+      console.error(dbError);
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Guardar Cambios';
+
+    if (errorText) {
+      errorMsg.textContent = errorText;
+      errorMsg.classList.remove('hidden');
+    } else {
+      successText = 'Perfil actualizado correctamente.';
+      if (authUpdated) successText += ' Si cambiaste tu correo, revisa tu bandeja de entrada.';
+      successMsg.textContent = successText;
+      successMsg.classList.remove('hidden');
+    }
+  });
+</script>

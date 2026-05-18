@@ -1,33 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-
-import { createSupabaseClient } from '../lib/supabase';
-let error = '';
-let success = false;
-
-if (Astro.request.method === 'POST') {
-  const formData = await Astro.request.formData();
-  const email = formData.get('email')?.toString();
-  const password = formData.get('password')?.toString();
-
-  if (email && password) {
-    const supabase = createSupabaseClient(Astro.cookies);
-    const { error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${new URL(Astro.request.url).origin}/auth/callback`,
-      },
-    });
-
-    if (authError) {
-      error = authError.message;
-    } else {
-      success = true;
-    }
-  }
-}
 ---
 
 <Layout title="Kidia - Aprende Inteligencia Artificial">
@@ -52,41 +25,40 @@ if (Astro.request.method === 'POST') {
           <!-- Form card -->
           <div class="join-card">
             <h3 class="form-title">Si no tienes usuario, <a href="/login">regístrate aquí</a></h3>
-            {success ? (
-              <div class="success-message">
-                <div class="success-icon-wrap">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
+            
+            <div id="home-success-msg" class="success-message" style="display: none;">
+              <div class="success-icon-wrap">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div class="success-text">
+                <h4>¡Registro completado!</h4>
+                <p>Revisa tu correo para confirmar la cuenta.</p>
+              </div>
+            </div>
+
+            <form id="home-register-form" class="quick-join-form">
+              <div id="home-error-msg" class="error-message" style="display: none;"></div>
+              
+              <div class="form-grid">
+                <div class="input-group">
+                  <input type="email" id="home-email" name="email" required placeholder="Tu correo electrónico" />
                 </div>
-                <div class="success-text">
-                  <h4>¡Registro completado!</h4>
-                  <p>Revisa tu correo para confirmar la cuenta.</p>
+                <div class="input-group">
+                  <input type="password" id="home-password" name="password" required placeholder="Contraseña (mín. 6)" minlength="6" />
                 </div>
               </div>
-            ) : (
-              <form method="POST" class="quick-join-form">
-                {error && <div class="error-message">{error}</div>}
-                
-                <div class="form-grid">
-                  <div class="input-group">
-                    <input type="email" name="email" required placeholder="Tu correo electrónico" />
-                  </div>
-                  <div class="input-group">
-                    <input type="password" name="password" required placeholder="Contraseña (mín. 6)" minlength="6" />
-                  </div>
-                </div>
 
-                <div class="form-actions">
-                  <button type="submit" class="btn-cta">
-                    <span>Comenzar Aventura</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                  </button>
-                </div>
-              </form>
-            )}
+              <div class="form-actions">
+                <button type="submit" class="btn-cta">
+                  <span>Comenzar Aventura</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </button>
+              </div>
+            </form>
 
             <div class="card-footer">
               <div class="social-proof">
@@ -618,3 +590,46 @@ if (Astro.request.method === 'POST') {
     }
   }
 </style>
+
+<script>
+  import { supabase } from '../lib/supabase';
+  
+  const form = document.getElementById('home-register-form') as HTMLFormElement;
+  const successMsg = document.getElementById('home-success-msg') as HTMLElement;
+  const errorMsg = document.getElementById('home-error-msg') as HTMLElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = form.querySelector('button') as HTMLButtonElement;
+    btn.disabled = true;
+    btn.textContent = 'Procesando...';
+    errorMsg.style.display = 'none';
+
+    const formData = new FormData(form);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+
+    if (error) {
+      errorMsg.textContent = error.message;
+      errorMsg.style.display = 'block';
+      btn.disabled = false;
+      btn.innerHTML = `
+        <span>Comenzar Aventura</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      `;
+    } else {
+      form.style.display = 'none';
+      successMsg.style.display = 'flex';
+    }
+  });
+</script>
