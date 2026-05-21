@@ -53,9 +53,9 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
                         <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
                     </button>
                     
-                    <div id="user-dropdown" class="user-dropdown hidden">
+                    <div id="user-dropdown" class="user-dropdown" style="display: none;">
                         <div class="dropdown-body">
-                            <a href="/perfil" class="dropdown-item">Mi Perfil</a>
+                            <a href="/perfil" class="dropdown-item">Mi Perfil (Cambiar Datos)</a>
                             <a href="/parents" class="dropdown-item">Zona de Padres 🔒</a>
                         </div>
                         <div class="dropdown-footer">
@@ -70,13 +70,18 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
             
             menuBtn?.addEventListener('click', (e) => {
                 e.stopPropagation();
-                dropdown?.classList.toggle('hidden');
-                menuBtn.classList.toggle('open');
+                if (dropdown?.style.display === 'none') {
+                    dropdown.style.display = 'block';
+                    menuBtn.classList.add('open');
+                } else {
+                    dropdown!.style.display = 'none';
+                    menuBtn.classList.remove('open');
+                }
             });
 
             document.addEventListener('click', (e) => {
                 if (authUi && !authUi.contains(e.target as Node)) {
-                    dropdown?.classList.add('hidden');
+                    dropdown!.style.display = 'none';
                     menuBtn?.classList.remove('open');
                 }
             });
@@ -264,7 +269,7 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
     position: absolute;
     top: calc(100% + 5px);
     right: 0;
-    width: 200px;
+    width: 220px;
     background: rgba(15, 23, 42, 0.98);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -272,23 +277,11 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
     box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
     overflow: hidden;
     z-index: 200;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    transform-origin: top right;
-  }
-  
-  .user-dropdown.hidden {
-    opacity: 0;
-    transform: translateY(-10px) scale(0.95);
-    pointer-events: none;
   }
   
   /* Open dropdown on hover for desktop */
   .user-menu-container:hover .user-dropdown {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: auto;
+    display: block !important;
   }
   
   .dropdown-body {
