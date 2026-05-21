@@ -1,4 +1,5 @@
-import { createServerClient, createBrowserClient } from '@supabase/ssr';
+import { createServerClient } from '@supabase/ssr';
+import { createClient } from '@supabase/supabase-js';
 import type { AstroCookies } from 'astro';
 
 export const createSupabaseClient = (cookies: AstroCookies) => {
@@ -29,7 +30,8 @@ export const createSupabaseClient = (cookies: AstroCookies) => {
   );
 };
 
-export const supabase = createBrowserClient(
+// Para sitios estáticos y el navegador, usamos el cliente estándar que gestiona la sesión con localStorage
+export const supabase = createClient(
   import.meta.env.PUBLIC_SUPABASE_URL,
   import.meta.env.PUBLIC_SUPABASE_ANON_KEY
 );
