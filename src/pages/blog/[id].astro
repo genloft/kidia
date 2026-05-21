@@ -1,0 +1,150 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout title={`${post.data.title} - Blog Kidia`}>
+  <Header />
+  
+  <main class="article-container">
+    <article class="post-content">
+      <header class="post-header">
+        <div class="category-badge">{post.data.category}</div>
+        <h1>{post.data.title}</h1>
+        <div class="post-meta">
+          <time datetime={post.data.date.toISOString()}>
+            {post.data.date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </time>
+        </div>
+      </header>
+
+      <div class="markdown-body">
+        <Content />
+      </div>
+      
+      <footer class="post-footer">
+        <a href="/blog" class="back-link">← Volver al blog</a>
+      </footer>
+    </article>
+  </main>
+</Layout>
+
+<style is:global>
+  .article-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+  
+  .post-header {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+  
+  .category-badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border-radius: 99px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: rgba(56, 189, 248, 0.1);
+    color: #38bdf8;
+    margin-bottom: 1.5rem;
+  }
+  
+  .post-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    color: #f8fafc;
+  }
+  
+  .post-meta {
+    font-size: 1rem;
+    color: #94a3b8;
+  }
+  
+  /* Estilos para el contenido Markdown */
+  .markdown-body {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #cbd5e1;
+  }
+  
+  .markdown-body h2 {
+    font-size: 1.8rem;
+    color: #f8fafc;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .markdown-body h3 {
+    font-size: 1.4rem;
+    color: #e2e8f0;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .markdown-body p {
+    margin-bottom: 1.5rem;
+  }
+  
+  .markdown-body ul {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+  
+  .markdown-body li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .markdown-body strong {
+    color: #f8fafc;
+  }
+  
+  .markdown-body em {
+    color: #a5b4fc;
+    font-style: italic;
+  }
+  
+  .markdown-body hr {
+    border: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 3rem 0;
+  }
+  
+  .post-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .back-link {
+    color: #38bdf8;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.2s;
+  }
+  
+  .back-link:hover {
+    color: #818cf8;
+  }
+</style>

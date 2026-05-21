@@ -1,0 +1,138 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Layout title="Kidia - Blog Escuela del Futuro">
+  <Header />
+  
+  <main class="blog-container">
+    <header class="blog-header">
+      <h1>Blog Escuela del Futuro</h1>
+      <p>Noticias, reflexiones y herramientas para familias sobre Inteligencia Artificial, Sostenibilidad y Propósito.</p>
+    </header>
+
+    <div class="posts-grid">
+      {posts.map((post) => (
+        <article class="post-card">
+          <div class="category-badge">{post.data.category}</div>
+          <h2><a href={`/blog/${post.id}`}>{post.data.title}</a></h2>
+          <div class="post-meta">
+            <time datetime={post.data.date.toISOString()}>
+              {post.data.date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+          </div>
+          <p class="excerpt">{post.data.excerpt}</p>
+          <a href={`/blog/${post.id}`} class="read-more">Leer artículo completo →</a>
+        </article>
+      ))}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .blog-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+  
+  .blog-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  
+  .blog-header h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .blog-header p {
+    font-size: 1.2rem;
+    color: #94a3b8;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .post-card {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    padding: 2rem;
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .post-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(56, 189, 248, 0.5);
+  }
+  
+  .category-badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 99px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: rgba(56, 189, 248, 0.1);
+    color: #38bdf8;
+    margin-bottom: 1rem;
+    align-self: flex-start;
+  }
+  
+  .post-card h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+  
+  .post-card h2 a {
+    color: #f8fafc;
+    text-decoration: none;
+  }
+  
+  .post-card h2 a:hover {
+    color: #38bdf8;
+  }
+  
+  .post-meta {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 1.5rem;
+  }
+  
+  .excerpt {
+    color: #94a3b8;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    flex-grow: 1;
+  }
+  
+  .read-more {
+    color: #818cf8;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+  }
+  
+  .read-more:hover {
+    color: #a5b4fc;
+  }
+</style>
