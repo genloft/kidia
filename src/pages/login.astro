@@ -112,6 +112,12 @@ import Header from '../components/Header.astro';
 <script>
   import { supabase } from '../lib/supabase';
 
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (session) {
+      window.location.href = '/dashboard';
+    }
+  });
+
   const loginForm = document.getElementById('login-form') as HTMLFormElement;
   const registerForm = document.getElementById('register-form') as HTMLFormElement;
   const googleBtn = document.getElementById('google-login');

@@ -26,54 +26,71 @@ import backShirt from '../assets/back_shirt.png';
 
           <!-- Form card -->
           <div class="join-card">
-            <h3 class="form-title">Si no tienes usuario, <a href="/login">regístrate aquí</a></h3>
             
-            <div id="home-success-msg" class="success-message" style="display: none;">
-              <div class="success-icon-wrap">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div class="success-text">
-                <h4>¡Registro completado!</h4>
-                <p>Revisa tu correo para confirmar la cuenta.</p>
-              </div>
-            </div>
-
-            <form id="home-register-form" class="quick-join-form">
-              <div id="home-error-msg" class="error-message" style="display: none;"></div>
+            <div id="guest-view">
+              <h3 class="form-title">Si no tienes usuario, <a href="/login">regístrate aquí</a></h3>
               
-              <div class="form-grid">
-                <div class="input-group">
-                  <input type="email" id="home-email" name="email" required placeholder="Tu correo electrónico" />
-                </div>
-                <div class="input-group">
-                  <input type="password" id="home-password" name="password" required placeholder="Contraseña (mín. 6)" minlength="6" />
-                </div>
-              </div>
-
-              <div class="form-actions">
-                <button type="submit" class="btn-cta">
-                  <span>Comenzar Aventura</span>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
+              <div id="home-success-msg" class="success-message" style="display: none;">
+                <div class="success-icon-wrap">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
-                </button>
-              </div>
-            </form>
-
-            <div class="card-footer">
-              <div class="social-proof">
-                <div class="avatars">
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4" alt="user" class="avatar" />
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka&backgroundColor=c0aede" alt="user" class="avatar" />
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jude&backgroundColor=ffdfbf" alt="user" class="avatar" />
                 </div>
-                <span>+100 alumnos ya están aprendiendo</span>
+                <div class="success-text">
+                  <h4>¡Registro completado!</h4>
+                  <p>Revisa tu correo para confirmar la cuenta.</p>
+                </div>
               </div>
-              <div class="divider-vertical"></div>
-              <p class="auth-hint">¿Ya tienes cuenta? <a href="/login">Inicia Sesión</a></p>
+
+              <form id="home-register-form" class="quick-join-form">
+                <div id="home-error-msg" class="error-message" style="display: none;"></div>
+                
+                <div class="form-grid">
+                  <div class="input-group">
+                    <input type="email" id="home-email" name="email" required placeholder="Tu correo electrónico" />
+                  </div>
+                  <div class="input-group">
+                    <input type="password" id="home-password" name="password" required placeholder="Contraseña (mín. 6)" minlength="6" />
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn-cta">
+                    <span>Comenzar Aventura</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </button>
+                </div>
+              </form>
+
+              <div class="card-footer">
+                <div class="social-proof">
+                  <div class="avatars">
+                    <span class="avatar">👨‍💻</span>
+                    <span class="avatar">👩‍🔬</span>
+                    <span class="avatar">🦸‍♂️</span>
+                  </div>
+                  <span>+100 alumnos ya están aprendiendo</span>
+                </div>
+                <div class="divider-vertical"></div>
+                <p class="auth-hint">¿Ya tienes cuenta? <a href="/login">Inicia Sesión</a></p>
+              </div>
             </div>
+
+            <div id="logged-in-view" style="display: none; text-align: center; padding: 1rem 0;">
+              <h3 style="font-size: 1.8rem; margin-bottom: 1rem; color: #f8fafc;">¡Hola de nuevo!</h3>
+              <p style="color: #94a3b8; margin-bottom: 2rem;">¿Qué aventura quieres continuar hoy?</p>
+              <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="/mapa" class="btn-cta" style="width: 100%; justify-content: center; margin-bottom: 0;">
+                  <span>Explorar el Mapa</span>
+                </a>
+                <a href="/constructor" class="btn-cta" style="width: 100%; justify-content: center; margin-bottom: 0; background: linear-gradient(135deg, #8b5cf6, #ec4899); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);">
+                  <span>Entrar al Constructor IA</span>
+                </a>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -599,6 +616,15 @@ import backShirt from '../assets/back_shirt.png';
   const form = document.getElementById('home-register-form') as HTMLFormElement;
   const successMsg = document.getElementById('home-success-msg') as HTMLElement;
   const errorMsg = document.getElementById('home-error-msg') as HTMLElement;
+  const guestView = document.getElementById('guest-view') as HTMLElement;
+  const loggedInView = document.getElementById('logged-in-view') as HTMLElement;
+
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (session) {
+      if (guestView) guestView.style.display = 'none';
+      if (loggedInView) loggedInView.style.display = 'block';
+    }
+  });
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
