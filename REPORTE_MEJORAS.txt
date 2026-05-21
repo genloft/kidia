@@ -1,0 +1,339 @@
+================================================================
+        KIDIA - REPORTE DE MEJORAS Y RECOMENDACIONES
+                    Fecha: Mayo 2026
+================================================================
+
+Este documento recoge un análisis técnico y de producto del
+estado actual de la plataforma Kidia, con propuestas ordenadas
+por prioridad y área de impacto.
+
+================================================================
+SECCIÓN 1: ERRORES Y PROBLEMAS CRÍTICOS (Prioridad ALTA)
+================================================================
+
+[CRÍTICO-01] El callback de autenticación redirige a /mapa, no a /dashboard
+---------------------------------------------------------------------------
+Archivo: src/pages/auth/callback.ts, línea 15
+Problema: Cuando un usuario confirma su email o inicia sesión con Google,
+          es redirigido a /mapa directamente, saltándose la nueva pantalla
+          de /dashboard donde puede elegir entre el Mapa o el Constructor.
+Solución: Cambiar la variable `next` por defecto de "/mapa" a "/dashboard".
+
+
+[CRÍTICO-02] La Zona de Padres muestra información incorrecta y desactualizada
+------------------------------------------------------------------------------
+Archivo: src/pages/parents.astro, líneas 26-31
+Problema: El texto del bloque "Privacidad y Datos" afirma que "no pedimos
+          email ni registro", "el progreso se guarda en el navegador" y
+          "no enviamos datos a servidores externos". Esto es FALSO.
+          La plataforma ya tiene autenticación con Supabase, guardado de
+          datos en la nube y seguimiento de progreso remoto.
+Solución: Reescribir completamente la sección de privacidad con la
+          información real y veraz del sistema actual.
+
+
+[CRÍTICO-03] Imágenes de la mascota sin optimizar (tamaño excesivo)
+-------------------------------------------------------------------
+Carpeta: public/
+Problema: Las imágenes PNG de la mascota Kidia ocupan entre 2.3 MB y
+          2.4 MB cada una. Con 8 variantes, son ~19 MB de assets solo
+          de imágenes. Esto provoca tiempos de carga muy altos,
+          especialmente en móvil o con conexiones lentas.
+Solución: Convertir las imágenes a formato WebP (reducción del 70-80%
+          sin pérdida visible de calidad). También hay que usar el
+          atributo `loading="lazy"` en las que no son LCP (hero).
+          back_shirt.png pesa 3.4 MB y es la imagen principal del hero,
+          debe optimizarse con máxima prioridad.
+
+
+[CRÍTICO-04] Archivo test-supabase.astro expuesto en producción
+--------------------------------------------------------------
+Archivo: src/pages/test-supabase.astro
+Problema: Existe una página de diagnóstico/test accesible públicamente
+          en /test-supabase que puede revelar información del stack y
+          configuración de la base de datos.
+Solución: Eliminar este archivo antes del despliegue a producción o
+          protegerlo con autenticación de administrador.
+
+
+[CRÍTICO-05] Stripe configurado con "dummy-key" como fallback
+-------------------------------------------------------------
+Archivo: src/lib/stripe.ts, línea 7
+Problema: El cliente de Stripe se inicializa con 'dummy-key' si la
+          variable de entorno no está definida. Si se activa cualquier
+          ruta de pago, esto no generará un error claro, sino un
+          comportamiento imprevisible.
+Solución: Lanzar un error explícito si STRIPE_SECRET_KEY no existe:
+          if (!stripeSecretKey) throw new Error('STRIPE_SECRET_KEY not set');
+
+
+================================================================
+SECCIÓN 2: EXPERIENCIA DE USUARIO (Prioridad MEDIA-ALTA)
+================================================================
+
+[UX-01] El menú de usuario en el header carga con retraso visible
+-----------------------------------------------------------------
+Archivo: src/components/Header.astro
+Problema: El botón de usuario ("Hola, email@...") aparece solo después
+          de que JavaScript carga y ejecuta la llamada a Supabase
+          para obtener la sesión. Esto provoca un "flash" donde el
+          usuario ve el botón "Acceder" brevemente antes de que se
+          sustituya por su menú personalizado.
+Solución: Mostrar un estado de "cargando" neutral en el header mientras
+          se resuelve la sesión, evitando el parpadeo.
+
+
+[UX-02] No hay feedback visual de carga en ningún formulario de perfil
+----------------------------------------------------------------------
+Archivo: src/pages/perfil.astro
+Problema: Al hacer clic en "Guardar Cambios", el botón se desactiva y
+          cambia texto, pero no hay ningún spinner o indicador visual
+          claro de que la operación está en curso.
+Solución: Añadir un spinner SVG animado dentro del botón durante el
+          proceso de guardado para mejorar la percepción de respuesta.
+
+
+[UX-03] La página de Dashboard post-login no redirige a usuarios ya logueados
+-----------------------------------------------------------------------------
+Archivo: src/pages/dashboard.astro
+Problema: Si un usuario ya logueado visita /dashboard, tiene que hacer
+          clic manualmente para entrar al Mapa o al Constructor. Si el
+          usuario tiene preferencia guardada, podría redirigirse
+          automáticamente a su sección favorita.
+Sugerencia: Guardar en localStorage la última sección visitada y redirigir
+            automáticamente si el usuario ya ha entrado antes.
+
+
+[UX-04] La página de Insignias no está conectada a Supabase
+-----------------------------------------------------------
+Archivo: src/pages/insignias.astro
+Problema: Las insignias y el progreso se leen exclusivamente de
+          localStorage. Si el usuario cambia de dispositivo o borra
+          el navegador, pierde todas sus insignias aunque estén guardadas
+          en Supabase.
+Solución: Conectar la carga de insignias al SyncService para que lea
+          primero de la nube y sincronice con localStorage.
+
+
+[UX-05] No existe página de "Onboarding" para usuarios nuevos
+------------------------------------------------------------
+Problema: Un usuario que se registra por primera vez es enviado al
+          dashboard directamente sin ninguna introducción a la plataforma.
+          No sabe qué es el mapa, qué es el constructor, ni cómo funciona
+          el sistema de insignias.
+Sugerencia: Crear una página /bienvenida o un modal de bienvenida que
+            se muestre solo la primera vez que el usuario inicia sesión,
+            explicando brevemente las 3 secciones principales.
+
+
+[UX-06] No hay página de error personalizada (404)
+-------------------------------------------------
+Problema: Si el usuario navega a una URL inexistente, verá la página de
+          error genérica del servidor/hosting, rompiendo la experiencia
+          visual de la aplicación.
+Solución: Crear src/pages/404.astro con el diseño de Kidia y un botón
+          para volver al inicio o al dashboard.
+
+
+================================================================
+SECCIÓN 3: ARQUITECTURA Y CÓDIGO (Prioridad MEDIA)
+================================================================
+
+[ARCH-01] Doble sistema de almacenamiento de progreso (localStorage + Supabase)
+-------------------------------------------------------------------------------
+Archivos: src/lib/storage-simple.ts, src/lib/sync-service.ts
+Problema: La plataforma mantiene dos fuentes de verdad para el progreso
+          del usuario. La lógica de merge en SyncService es simplista:
+          "gana el que tiene más escenarios completados". Esto puede
+          causar pérdida de datos si, por ejemplo, el usuario completa
+          escenarios nuevos en un dispositivo donde no está logueado.
+Sugerencia: A largo plazo, consolidar el progreso en Supabase como única
+            fuente de verdad y eliminar la dependencia de localStorage.
+
+
+[ARCH-02] register.astro es redundante con login.astro
+-----------------------------------------------------
+Archivos: src/pages/register.astro, src/pages/login.astro
+Problema: login.astro ya tiene dos pestañas (Iniciar Sesión / Registrarse)
+          con la funcionalidad completa de registro. register.astro es una
+          página separada con un formulario más simple que hace lo mismo.
+          Genera confusión y duplicación de código.
+Solución: Eliminar register.astro y redirigir cualquier enlace a
+          /register hacia /login#register.
+
+
+[ARCH-03] El archivo package.json tiene un script "start" obsoleto
+-----------------------------------------------------------------
+Archivo: package.json, línea 7
+Problema: El script "start": "node ./dist/server/entry.mjs" es para el
+          modo SSR (server-side rendering) con el adaptador de Node.
+          Pero el proyecto ahora es estático (output: 'static'). Este
+          script genera confusión y fallará si se ejecuta.
+Solución: Eliminar o cambiar el script "start" por
+          "start": "astro preview" para previsualizar el build estático.
+
+
+[ARCH-04] Archivos residuales de configuraciones anteriores
+----------------------------------------------------------
+Archivos raíz: .vercel/, merge_constructor.ps1, .env copy.example
+Problema: Hay carpeta .vercel/ (de cuando se usaba el adaptador de Vercel),
+          un script PowerShell de fusión de proyectos y un archivo .env
+          duplicado. Son residuos de fases anteriores del proyecto.
+Solución: Añadir .vercel/ al .gitignore y eliminar los archivos
+          obsoletos para mantener el repositorio limpio.
+
+
+[ARCH-05] src/app/page.tsx es un archivo de Next.js dentro de un proyecto Astro
+-------------------------------------------------------------------------------
+Archivo: src/app/page.tsx
+Problema: Existe un archivo con la estructura típica de Next.js App Router
+          dentro del proyecto Astro. No tiene ningún efecto en Astro pero
+          genera confusión.
+Solución: Eliminar src/app/ completamente.
+
+
+================================================================
+SECCIÓN 4: SEGURIDAD (Prioridad MEDIA-ALTA)
+================================================================
+
+[SEG-01] Variables de entorno públicas expuestas innecesariamente
+----------------------------------------------------------------
+Archivo: src/lib/supabase.ts
+Problema: La ANON KEY de Supabase es pública por diseño, pero es
+          importante verificar que las políticas RLS (Row Level Security)
+          en Supabase estén correctamente configuradas para que nadie
+          pueda leer o modificar datos de otros usuarios usando
+          directamente la API.
+Acción recomendada: Revisar en el panel de Supabase que todas las tablas
+                    tienen RLS habilitado (ya está en el schema para
+                    user_profiles, pero verificar el resto de tablas si las hay).
+
+
+[SEG-02] No hay validación de edad mínima en el registro
+-------------------------------------------------------
+Archivo: src/pages/login.astro (formulario de registro)
+Problema: La plataforma está destinada a menores de edad, pero no hay
+          ninguna verificación de edad en el registro. Según el RGPD
+          y la LOPD españoles, para menores de 14 años se requiere
+          consentimiento parental verificable.
+Sugerencia: Añadir un checkbox de "Soy mayor de 14 años o tengo
+            consentimiento de mis padres" en el formulario de registro,
+            o un selector de rango de edad.
+
+
+[SEG-03] No hay protección CSRF en los formularios client-side
+-------------------------------------------------------------
+Problema: Al ser una SPA estática que se comunica con Supabase vía
+          su SDK, la protección CSRF la gestiona el propio SDK de
+          Supabase a través de los tokens JWT. Aun así, sería bueno
+          verificar que se usa `supabase.auth.getUser()` (que valida
+          en servidor) en lugar de `getSession()` en contextos donde
+          la seguridad es crítica. 
+Nota: getSession() solo lee el token local, getUser() lo verifica
+      contra el servidor de Supabase. Para datos sensibles, usar getUser().
+
+
+================================================================
+SECCIÓN 5: SEO Y RENDIMIENTO (Prioridad BAJA-MEDIA)
+================================================================
+
+[SEO-01] Meta descriptions genéricas o ausentes
+-----------------------------------------------
+Archivo: src/layouts/Layout.astro
+Problema: Todas las páginas usan la misma meta description genérica.
+          No hay meta descriptions únicas por página, ni Open Graph tags
+          para compartir en redes sociales.
+Solución: Añadir props `description` y `ogImage` al Layout y
+          personalizar las metas en cada página.
+
+
+[SEO-02] Imágenes sin atributo alt
+----------------------------------
+Problema: Las imágenes de la mascota Kidia en el hero y en los escenarios
+          no tienen atributos `alt` descriptivos, lo que perjudica la
+          accesibilidad y el SEO.
+Solución: Añadir alt descriptivo a todas las imágenes, por ejemplo:
+          alt="Kidia, la mascota de IA de la plataforma, explicando un concepto"
+
+
+[SEO-03] No hay sitemap.xml
+---------------------------
+Problema: No existe un sitemap.xml que ayude a los motores de búsqueda
+          a indexar correctamente las páginas de la plataforma.
+Solución: Usar la integración oficial @astrojs/sitemap:
+          npx astro add sitemap
+
+
+================================================================
+SECCIÓN 6: FUNCIONALIDADES FUTURAS RECOMENDADAS
+================================================================
+
+[FEAT-01] Panel de Control para Padres conectado a Supabase
+----------------------------------------------------------
+La Zona de Padres actualmente muestra datos de localStorage y texto
+desactualizado. Debería mostrar:
+- Progreso real del hijo/a leído desde Supabase
+- Tiempo de uso semanal
+- Escenarios completados con fechas
+- Insignias desbloqueadas
+- Configuración de límites de tiempo y contenido
+
+
+[FEAT-02] Sistema de Suscripción / Premium (Stripe ya instalado)
+---------------------------------------------------------------
+El proyecto ya tiene instalada la librería de Stripe pero no está
+conectada a ninguna funcionalidad. Se podría implementar:
+- Plan gratuito: primeros 3 escenarios
+- Plan premium: todos los escenarios + Constructor IA ilimitado
+- Página de precios clara con toggle mensual/anual
+
+
+[FEAT-03] Modo Multijugador / Comparación entre amigos
+-----------------------------------------------------
+Los niños aprenden mejor en entornos sociales. Se podría añadir:
+- Código de "aula" para profesores
+- Tabla de clasificación por clase o grupo
+- Retos semanales compartidos
+
+
+[FEAT-04] Personalización del Avatar / Mascota
+--------------------------------------------
+Permitir al usuario elegir el color o la "skin" de Kidia usando los
+assets ya existentes (kidia-sheet.png parece ser un sprite sheet).
+Esto aumentaría el engagement y el sentido de pertenencia.
+
+
+[FEAT-05] Soporte Multiidioma (i18n)
+------------------------------------
+La carpeta src/content/es/ sugiere que se contempló el multiidioma.
+Añadir soporte para inglés (en) y catalán (ca) abriría la plataforma
+a un público mucho más amplio, especialmente en colegios bilingues.
+
+
+[FEAT-06] Notificaciones de Progreso por Email
+--------------------------------------------
+Usando el reminder-service.ts ya existente y combinándolo con
+Supabase Edge Functions, se podrían enviar emails automáticos
+semanales a los padres con el resumen del progreso del hijo/a.
+
+
+================================================================
+RESUMEN EJECUTIVO - TOP 10 ACCIONES INMEDIATAS
+================================================================
+
+1.  [CRÍTICO-01] Corregir redirección del auth callback a /dashboard
+2.  [CRÍTICO-02] Actualizar texto falso en Zona de Padres
+3.  [CRÍTICO-03] Optimizar imágenes PNG a WebP (prioridad: back_shirt.png)
+4.  [CRÍTICO-04] Eliminar test-supabase.astro antes de producción
+5.  [CRÍTICO-05] Añadir validación de STRIPE_SECRET_KEY
+6.  [UX-01]     Eliminar el "flash" del header al cargar la sesión
+7.  [UX-06]     Crear página 404 personalizada
+8.  [ARCH-02]   Eliminar register.astro redundante
+9.  [ARCH-03]   Corregir el script "start" en package.json
+10. [ARCH-04]   Limpiar archivos obsoletos del repositorio
+
+================================================================
+Generado por: Antigravity (Asistente de Desarrollo)
+Proyecto: Kidia - Plataforma de Aprendizaje de IA para Niños
+Estado del proyecto: Beta activa
+================================================================

@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
+import { Image } from 'astro:assets';
+import backShirt from '../assets/back_shirt.png';
 ---
 
 <Layout title="Kidia - Aprende Inteligencia Artificial">
@@ -78,11 +80,11 @@ import Header from '../components/Header.astro';
         <!-- Right: Mascot -->
         <div class="hero-right">
           <div class="mascot-glow"></div>
-          <img
-            src="/back_shirt.png"
+          <Image
+            src={backShirt}
             alt="Personaje Kidia"
             class="kidia-character"
-            onerror="this.src='/kidia-standing.png'"
+            loading="eager"
           />
           <div class="floating-tag tag-1">
             <span class="tag-icon">🤖</span> IA Explicada

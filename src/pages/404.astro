@@ -1,0 +1,55 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+---
+<Layout title="404 - Página no encontrada">
+  <Header />
+  <main class="error-page">
+    <h1>404</h1>
+    <h2>¡Ups! Te has perdido.</h2>
+    <p>Esta zona de Kidia todavía no existe o ha sido movida.</p>
+    <a href="/dashboard" class="btn-home">Volver al inicio</a>
+  </main>
+</Layout>
+
+<style>
+  .error-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 80px);
+    text-align: center;
+    padding: 2rem;
+  }
+  .error-page h1 {
+    font-size: 6rem;
+    color: #f87171;
+    margin: 0;
+    line-height: 1;
+    text-shadow: 0 10px 20px rgba(248, 113, 113, 0.3);
+  }
+  .error-page h2 {
+    font-size: 2rem;
+    color: #f8fafc;
+    margin: 1rem 0;
+  }
+  .error-page p {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+  .btn-home {
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    color: #0f172a;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 1rem 2rem;
+    border-radius: 99px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-home:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(56, 189, 248, 0.4);
+  }
+</style>

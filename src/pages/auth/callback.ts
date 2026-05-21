@@ -12,7 +12,7 @@ export const GET: APIRoute = async ({ request, cookies, redirect }) => {
   // Para OAuth (Login con Google)
   const code = url.searchParams.get("code");
   
-  const next = url.searchParams.get("next") || "/mapa";
+  const next = url.searchParams.get("next") || "/dashboard";
 
   const supabase = createSupabaseClient(cookies);
 

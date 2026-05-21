@@ -23,7 +23,7 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
           <a href="/parents" class={`nav-link parent-link ${isActive('/parents')}`}>Zona Padres 🔒</a>
       </div>
       
-      <div id="auth-ui">
+      <div id="auth-ui" style="visibility: hidden; opacity: 0; transition: opacity 0.3s ease;">
           <a href="/login" class="btn-login">Acceder</a>
       </div>
   </div>
@@ -97,6 +97,10 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
                 console.error('[Header] Sync failed:', err);
             });
         }
+        
+        // Show the UI after processing
+        authUi!.style.visibility = 'visible';
+        authUi!.style.opacity = '1';
     }
     
     updateAuth();
