@@ -23,8 +23,10 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
       <div id="parent-zone-guest" class="parent-zone">
           <a href="/parents" class={`nav-link parent-link ${isActive('/parents')}`}>Zona Padres 🔒</a>
       </div>
-      
-      <div id="auth-ui" style="visibility: hidden; opacity: 0; transition: opacity 0.3s ease;">
+      <div id="auth-loading" class="auth-loading">
+          <div class="skeleton-btn"></div>
+      </div>
+      <div id="auth-ui" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
           <a href="/login" class="btn-login">Acceder</a>
       </div>
   </div>
@@ -100,8 +102,13 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
         }
         
         // Show the UI after processing
-        authUi!.style.visibility = 'visible';
-        authUi!.style.opacity = '1';
+        const authLoading = document.getElementById('auth-loading');
+        if (authLoading) authLoading.style.display = 'none';
+        authUi!.style.display = 'block';
+        // peq delay to allow DOM update before opacity transition
+        setTimeout(() => {
+            authUi!.style.opacity = '1';
+        }, 10);
     }
     
     updateAuth();
@@ -327,6 +334,28 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
   .btn-logout:hover {
     background: rgba(239, 68, 68, 0.1);
     color: #ef4444;
+  }
+
+  /* ===== SKELETON LOADER ===== */
+  .auth-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+  }
+  
+  .skeleton-btn {
+    width: 80px;
+    height: 34px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 99px;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes skeleton-pulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.5; }
   }
 
   /* ===== RESPONSIVE ===== */

@@ -47,6 +47,7 @@ export const storage = {
         if (!isBrowser) return;
         try {
             localStorage.setItem(KEY, JSON.stringify(state));
+            window.dispatchEvent(new CustomEvent('progress:updated', { detail: state }));
             // Sincronizar con Supabase en segundo plano sin bloquear la UI
             syncWithCloud();
         } catch (e) {

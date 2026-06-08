@@ -125,29 +125,20 @@ export const SyncService = {
                 currentScenario: null
             };
 
-            // Compare progress (use the one with more completed scenarios)
-            const localCount = localProgress.completedScenarios.length;
-            const cloudCount = cloudProgress.completedScenarios.length;
+            // ALWAYS Merge progress instead of overwriting based on length
+            const mergedProgress: UserProgress = {
+                completedScenarios: Array.from(new Set([...localProgress.completedScenarios, ...cloudProgress.completedScenarios])),
+                badges: Array.from(new Set([...localProgress.badges, ...cloudProgress.badges])),
+                scores: { ...cloudProgress.scores, ...localProgress.scores },
+                scenarioProgress: { ...cloudProgress.scenarioProgress, ...localProgress.scenarioProgress },
+                currentScenario: localProgress.currentScenario || cloudProgress.currentScenario
+            };
 
-            if (localCount > cloudCount) {
-                console.log('[SyncService] Local progress is ahead, uploading...');
-                return await this.syncLocalToCloud();
-            } else if (cloudCount > localCount) {
-                console.log('[SyncService] Cloud progress is ahead, downloading...');
-                return await this.syncCloudToLocal();
-            } else {
-                // Same progress, merge badges and scores
-                const mergedProgress: UserProgress = {
-                    completedScenarios: Array.from(new Set([...localProgress.completedScenarios, ...cloudProgress.completedScenarios])),
-                    badges: Array.from(new Set([...localProgress.badges, ...cloudProgress.badges])),
-                    scores: { ...cloudProgress.scores, ...localProgress.scores },
-                    scenarioProgress: { ...cloudProgress.scenarioProgress, ...localProgress.scenarioProgress },
-                    currentScenario: localProgress.currentScenario
-                };
+            // Update local storage with the merged result
+            storage.set(mergedProgress);
 
-                storage.set(mergedProgress);
-                return await this.syncLocalToCloud();
-            }
+            // Upload the merged result to cloud
+            return await this.syncLocalToCloud();
         } catch (e) {
             console.error('[SyncService] Merge error:', e);
             return { success: false, error: e.message };

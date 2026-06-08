@@ -3,6 +3,7 @@ title: "5 hábitos sostenibles que podéis empezar en familia esta semana"
 date: 2025-01-15
 category: "Sostenibilidad"
 excerpt: "No hace falta esperar al próximo año escolar ni a una gran decisión familiar. El cuidado del planeta empieza con gestos pequeños, repetidos cada día."
+image: "/blog/habitos.png"
 ---
 
 No hace falta esperar al próximo año escolar ni a una gran decisión familiar. El cuidado del planeta empieza con gestos pequeños, repetidos cada día, que se convierten en parte de quiénes somos.

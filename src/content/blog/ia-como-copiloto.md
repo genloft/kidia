@@ -3,6 +3,7 @@ title: "La IA como copiloto: por qué no debe pensar en lugar de vuestros hijos"
 date: 2025-01-20
 category: "IA con Propósito"
 excerpt: "¿Debería mi hijo usar IA para los deberes? Es la pregunta que más nos llega de las familias. Y la respuesta no es sí ni no. Es: depende de cómo."
+image: "/blog/copiloto.png"
 ---
 
 ¿Debería mi hijo usar IA para los deberes? Es la pregunta que más nos llega de las familias. Y la respuesta no es sí ni no. Es: depende de cómo.

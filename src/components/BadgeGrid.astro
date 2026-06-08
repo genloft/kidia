@@ -66,6 +66,8 @@ const categories = [...new Set(badgesData.map(b => b.category))];
     
     // Also re-run on astro page swaps if using ViewTransitions (optional safety)
     document.addEventListener('astro:page-load', initBadges);
+    // Listen for progress sync
+    window.addEventListener('progress:updated', initBadges);
 
     // 2. Filter Logic
     const filters = document.querySelectorAll('.filter-btn');

@@ -37,26 +37,30 @@ import { ProgressService } from '../lib/progress-service';
     import { storage } from '../lib/storage-simple';
     import badgesData from '../data/badges.json';
 
-    const state = ProgressService.getState();
-    const earnedCount = state.badges.length;
-    // ... existing stats logic ...
-    const totalCount = badgesData.length;
+    function updateStats() {
+        const state = ProgressService.getState();
+        const earnedCount = state.badges.length;
+        const totalCount = badgesData.length;
 
-    // Update Stats
-    document.getElementById('total-badges').innerText = `${earnedCount} / ${totalCount}`;
+        // Update Stats
+        document.getElementById('total-badges').innerText = `${earnedCount} / ${totalCount}`;
 
-    // Calculate Rank
-    const ranks = [
-        { limit: 0, title: "Novato" },
-        { limit: 5, title: "Explorador" },
-        { limit: 10, title: "Promtpadawan" },
-        { limit: 20, title: "Arquitecto" },
-        { limit: 30, title: "Superinteligencia" }
-    ];
-    
-    const currentRank = ranks.reverse().find(r => earnedCount >= r.limit) || ranks[ranks.length-1];
-    document.getElementById('global-rank').innerText = currentRank.title;
-    document.getElementById('global-rank').style.color = 'var(--color-primary)';
+        // Calculate Rank
+        const ranks = [
+            { limit: 0, title: "Novato" },
+            { limit: 5, title: "Explorador" },
+            { limit: 10, title: "Promtpadawan" },
+            { limit: 20, title: "Arquitecto" },
+            { limit: 30, title: "Superinteligencia" }
+        ];
+        
+        const currentRank = ranks.reverse().find(r => earnedCount >= r.limit) || ranks[ranks.length-1];
+        document.getElementById('global-rank').innerText = currentRank.title;
+        document.getElementById('global-rank').style.color = 'var(--color-primary)';
+    }
+
+    updateStats();
+    window.addEventListener('progress:updated', updateStats);
 </script>
 
 <style>
