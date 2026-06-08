@@ -1,7 +1,7 @@
 ---
 title: "¿Qué es la Inteligencia Artificial? Una explicación para toda la familia"
 date: 2025-01-10
-category: "Qué es la IA"
+category: "Novedades"
 excerpt: "Tu hijo lleva semanas hablando de IA en el colegio. La tele no para de mencionarla. Y tú piensas: ¿debería entender esto mejor? La respuesta es sí, y es más fácil de lo que parece."
 image: "/blog/que_es_ia.png"
 ---

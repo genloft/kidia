@@ -1,6 +1,6 @@
 ---
 title: "Aprender a aprender: la habilidad del siglo XXI"
-date: 2026-06-11
+date: 2026-06-06
 category: "Propósito"
 excerpt: "En un mundo que cambia tan rápido, la capacidad de adaptarse y aprender nuevas cosas es el mayor superpoder."
 image: "/kidia_surprised.webp"

@@ -1,7 +1,7 @@
 ---
 title: "El futuro del aprendizaje: más humano que nunca"
-date: 2026-06-09
-category: "Innovación"
+date: 2026-06-08
+category: "Novedades"
 excerpt: "A medida que la tecnología avanza, las habilidades humanas fundamentales cobran más importancia. Descubre por qué."
 image: "/kidia-full.webp"
 ---

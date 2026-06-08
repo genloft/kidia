@@ -18,9 +18,18 @@ posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
       <p>Noticias, reflexiones y herramientas para familias sobre Inteligencia Artificial, Sostenibilidad y Propósito.</p>
     </header>
 
+    <div class="category-filters">
+      <button class="filter-btn active" data-category="all">Todos</button>
+      <button class="filter-btn" data-category="Novedades">Novedades</button>
+      <button class="filter-btn" data-category="Sostenibilidad">Sostenibilidad</button>
+      <button class="filter-btn" data-category="Regulación">Regulación</button>
+      <button class="filter-btn" data-category="Guías para Familias">Guías para Familias</button>
+      <button class="filter-btn" data-category="Propósito">Propósito</button>
+    </div>
+
     <div class="posts-grid">
       {posts.map((post) => (
-        <article class="post-card">
+        <article class="post-card" data-category={post.data.category}>
           {post.data.image && <img src={post.data.image} alt={post.data.title} class="post-image" />}
           <div class="category-badge">{post.data.category}</div>
           <h2><a href={`/blog/${post.id}`}>{post.data.title}</a></h2>
@@ -37,7 +46,65 @@ posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
   </main>
 </Layout>
 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const posts = document.querySelectorAll('.post-card');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remover clase activa de todos
+        buttons.forEach(b => b.classList.remove('active'));
+        // Añadir a este
+        btn.classList.add('active');
+
+        const category = btn.getAttribute('data-category');
+
+        posts.forEach(post => {
+          if (category === 'all' || post.getAttribute('data-category') === category) {
+            (post as HTMLElement).style.display = 'flex';
+          } else {
+            (post as HTMLElement).style.display = 'none';
+          }
+        });
+      });
+    });
+  });
+</script>
+
 <style>
+  .category-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+
+  .filter-btn {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    padding: 0.5rem 1.2rem;
+    border-radius: 99px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover {
+    background: rgba(56, 189, 248, 0.1);
+    color: #38bdf8;
+    border-color: rgba(56, 189, 248, 0.3);
+  }
+
+  .filter-btn.active {
+    background: #38bdf8;
+    color: #0f172a;
+    border-color: #38bdf8;
+  }
+
   .blog-container {
     max-width: 1000px;
     margin: 0 auto;
