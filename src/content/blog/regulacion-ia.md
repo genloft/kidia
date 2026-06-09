@@ -3,7 +3,7 @@ title: "La regulación de la IA: Qué significa para el futuro escolar"
 date: 2026-06-05
 category: "Regulación"
 excerpt: "Las nuevas normativas europeas sobre IA impactarán cómo las escuelas y los estudiantes usan la tecnología. Descubre las claves."
-image: "/kidia-sheet.webp"
+image: "/blog/regulacion_ia.png"
 ---
 
 Con el avance vertiginoso de la Inteligencia Artificial, los gobiernos de todo el mundo están implementando marcos legales para asegurar su uso ético y seguro. En Europa, la **Ley de Inteligencia Artificial (AI Act)** marca un precedente global. ¿Pero cómo afecta esto al entorno educativo y a nuestros hijos?

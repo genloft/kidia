@@ -3,7 +3,7 @@ title: "Aprender a aprender: la habilidad del siglo XXI"
 date: 2026-06-06
 category: "Propósito"
 excerpt: "En un mundo que cambia tan rápido, la capacidad de adaptarse y aprender nuevas cosas es el mayor superpoder."
-image: "/kidia_surprised.webp"
+image: "/blog/aprender_aprender.png"
 ---
 
 Si hay algo seguro sobre el futuro, es que será diferente del presente. Los conocimientos técnicos que son de vanguardia hoy pueden volverse obsoletos en cinco años. Por eso, la habilidad más valiosa que podemos enseñar a nuestros hijos no es un tema específico, sino la capacidad de aprender de forma continua.

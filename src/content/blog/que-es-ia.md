@@ -3,7 +3,7 @@ title: "¿Qué es la Inteligencia Artificial? Una explicación para toda la fami
 date: 2025-01-10
 category: "Novedades"
 excerpt: "Tu hijo lleva semanas hablando de IA en el colegio. La tele no para de mencionarla. Y tú piensas: ¿debería entender esto mejor? La respuesta es sí, y es más fácil de lo que parece."
-image: "/blog/que_es_ia.png"
+image: "/blog/que_es_ia_v2.png"
 ---
 
 Tu hijo lleva semanas hablando de IA en el colegio. La tele no para de mencionarla. Y tú piensas: ¿debería entender esto mejor? La respuesta es sí, y es más fácil de lo que parece.

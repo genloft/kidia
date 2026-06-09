@@ -3,7 +3,7 @@ title: "El futuro del aprendizaje: más humano que nunca"
 date: 2026-06-08
 category: "Novedades"
 excerpt: "A medida que la tecnología avanza, las habilidades humanas fundamentales cobran más importancia. Descubre por qué."
-image: "/kidia-full.webp"
+image: "/blog/futuro_aprendizaje.png"
 ---
 
 Vivimos en una época de rápidos avances tecnológicos. La IA puede generar texto, resolver problemas complejos y procesar datos a una velocidad increíble. Sin embargo, esto no significa que la educación deba volverse más mecánica. De hecho, ocurre exactamente lo contrario: el futuro del aprendizaje es más humano que nunca.
