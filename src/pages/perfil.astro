@@ -344,6 +344,7 @@ import '../styles/global.css';
 <script>
   import { supabase } from '../lib/supabase';
   import { ChildrenService, type Child } from '../lib/children-service';
+  import { calcAge, tramoForAge } from '../lib/tramos';
 
   let currentUserId = '';
   let currentUserEmail = '';
@@ -450,11 +451,11 @@ import '../styles/global.css';
   const childrenError = document.getElementById('children-error') as HTMLElement;
   const addChildForm = document.getElementById('add-child-form') as HTMLFormElement;
 
-  function calcAge(birthDate: string | null): string {
+  function childMeta(birthDate: string | null): string {
     if (!birthDate) return '';
-    const diff = Date.now() - new Date(birthDate).getTime();
-    const age = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
-    return `${age} años`;
+    const age = calcAge(birthDate);
+    const tramo = tramoForAge(age);
+    return `${age} años${tramo ? ' · Tramo ' + tramo.id : ''}`;
   }
 
   function renderChildren(children: Child[]) {
@@ -467,7 +468,7 @@ import '../styles/global.css';
       <li class="child-row" data-id="${c.id}">
         <div class="child-info">
           <strong>${escapeHtml(c.name)}</strong>
-          <span>${calcAge(c.birth_date)}</span>
+          <span>${childMeta(c.birth_date)}</span>
         </div>
         <div class="child-actions">
           <button type="button" class="btn-delete-child" data-id="${c.id}">Eliminar</button>

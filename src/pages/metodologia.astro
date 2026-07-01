@@ -2,63 +2,123 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 
-const pilares = [
+const principios = [
   {
-    icon: '🎮',
-    title: 'Aprender jugando',
-    text: 'Cada concepto de IA se presenta como una misión narrativa, no como una clase. El niño o niña avanza tomando decisiones, no memorizando definiciones.'
+    icon: '🛠️',
+    title: 'Crear, no consumir',
+    text: 'Cada nivel termina en un proyecto propio y publicable. La IA es la herramienta; el niño o niña es siempre el autor.'
   },
   {
-    icon: '🧩',
-    title: 'Progresión por niveles',
-    text: 'El contenido está organizado en caminos por edad, de conceptos básicos a preguntas más profundas sobre ética y el futuro de la tecnología, siempre a un ritmo adecuado para cada etapa.'
-  },
-  {
-    icon: '🦊',
-    title: 'Una amiga, no una profesora',
-    text: 'Kidia acompaña como un personaje cercano que hace preguntas y celebra los aciertos, en vez de dar lecciones largas o corregir con tono académico.'
+    icon: '🤔',
+    title: 'Criterio antes que respuesta',
+    text: 'La Dra. Vael guía con preguntas (método socrático) en vez de resolver. Se entrena el pensamiento crítico, no la dependencia.'
   },
   {
     icon: '🔒',
-    title: 'Seguro por diseño',
-    text: 'Sin publicidad dirigida a menores, sin chats abiertos con desconocidos. Los padres pueden ver el progreso desde la Zona de Padres en todo momento.'
+    title: 'Seguridad estructural',
+    text: 'IA mediada: el niño nunca habla con un chatbot abierto. Sin mensajería privada, con moderación previa de todo lo publicado.'
   },
   {
-    icon: '🛠️',
-    title: 'De la teoría a la práctica',
-    text: 'El Constructor de IA deja que los niños apliquen lo aprendido montando su propio modelo pieza a pieza: datos, entrenamiento, examen y salida.'
+    icon: '📈',
+    title: 'Adecuación al desarrollo',
+    text: 'Tres tramos de edad (8-9, 10-11, 12-14) adaptan lenguaje, duración y autonomía según cómo piensa un niño a cada edad.'
   },
   {
-    icon: '👪',
-    title: 'Pensado para familias',
-    text: 'Un mismo padre o madre puede inscribir a varios hijos, cada uno con su propio progreso, insignias y camino de aprendizaje.'
+    icon: '🎯',
+    title: 'Motivación sana',
+    text: 'La diversión nace de crear cosas de las que sentirse orgulloso, no de rachas, recompensas aleatorias o notificaciones.'
+  },
+  {
+    icon: '🌈',
+    title: 'Inclusivo y medible',
+    text: 'Diseño accesible para que participen todos los niños, con competencias observables en vez de impresiones.'
   }
+];
+
+const momentos = [
+  { n: 1, title: 'Chispa', text: 'Un reto o pregunta que engancha y fija una meta clara.' },
+  { n: 2, title: 'Explora', text: 'La idea mínima de IA que necesita el reto, explicada con lenguaje adaptado.' },
+  { n: 3, title: 'Crea', text: 'El niño produce su proyecto; la Dra. Vael andamia sin resolver por él.' },
+  { n: 4, title: 'Reflexiona', text: 'Preguntas socráticas en vez de respuestas: "¿cómo sabes que es correcto?"' },
+  { n: 5, title: 'Comparte', text: 'El proyecto se publica, con moderación previa, en la comunidad.' }
+];
+
+const niveles = [
+  { n: 1, title: 'Entender', text: 'Qué es la IA, cómo funciona y sus límites.' },
+  { n: 2, title: 'Usar bien', text: 'Instruir, verificar y detectar errores.' },
+  { n: 3, title: 'Crear', text: 'Convertir una idea en un proyecto propio.' },
+  { n: 4, title: 'Construir', text: 'Proyectos completos: un juego, una web, un libro.' }
 ];
 ---
 
-<Layout title="Kidia - Metodología" description="Cómo enseña Kidia Inteligencia Artificial a niños de 9 a 14 años: aprendizaje basado en juego, progresión por niveles y acompañamiento seguro.">
+<Layout title="Kidia - Metodología" description="El Método Kidia: cómo enseñamos Inteligencia Artificial a niños de 8 a 14 años con un ciclo de cinco momentos, cuatro niveles y acompañamiento seguro.">
   <Header />
 
   <main class="methodology-container">
     <div class="methodology-header">
-      <h1 class="text-gradient">Nuestra Metodología</h1>
-      <p>No enseñamos a programar. Enseñamos a pensar con y sobre la Inteligencia Artificial.</p>
+      <h1 class="text-gradient">El Método Kidia</h1>
+      <p>No enseñamos a obtener respuestas fáciles. Enseñamos a pensar mejor y a crear con Inteligencia Artificial, de forma segura, de los 8 a los 14 años.</p>
     </div>
 
-    <div class="pilares-grid">
-      {pilares.map(p => (
-        <div class="card pilar-card">
-          <div class="pilar-icon">{p.icon}</div>
-          <h2>{p.title}</h2>
-          <p>{p.text}</p>
+    <section class="section-block">
+      <h2>El ciclo de cada misión</h2>
+      <p class="section-intro">Toda actividad de Kidia, larga o corta, sigue los mismos cinco momentos.</p>
+      <div class="momentos-row">
+        {momentos.map(m => (
+          <div class="card momento-card">
+            <div class="momento-n">{m.n}</div>
+            <h3>{m.title}</h3>
+            <p>{m.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section-block">
+      <h2>Cuatro niveles de progresión</h2>
+      <p class="section-intro">Se avanza demostrando lo aprendido, nunca por tiempo de pantalla.</p>
+      <div class="niveles-row">
+        {niveles.map(n => (
+          <div class="card nivel-card">
+            <div class="nivel-n">Nivel {n.n}</div>
+            <h3>{n.title}</h3>
+            <p>{n.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section-block">
+      <h2>Los principios que no negociamos</h2>
+      <div class="pilares-grid">
+        {principios.map(p => (
+          <div class="card pilar-card">
+            <div class="pilar-icon">{p.icon}</div>
+            <h3>{p.title}</h3>
+            <p>{p.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section-block">
+      <h2>Dra. Vael y Morti</h2>
+      <div class="personajes-row">
+        <div class="card personaje-card">
+          <h3>🧑‍🔬 Dra. Vael</h3>
+          <p>La voz del asistente en todos los tramos. Pregunta antes de responder, reconoce cuando se equivoca y nunca resuelve el reto por el niño.</p>
         </div>
-      ))}
-    </div>
+        <div class="card personaje-card">
+          <h3>🌌 Mortífero ("Morti")</h3>
+          <p>Aparece solo a partir de los 12 años, como detonante para hablar de ética y sesgos con más profundidad.</p>
+        </div>
+      </div>
+    </section>
 
     <div class="cta-block card">
-      <h2>¿Quieres ver los caminos por edad?</h2>
-      <p>Descubre qué camino encaja mejor con la edad de tu hijo/a.</p>
-      <a href="/caminos" class="btn">Ver los caminos</a>
+      <h2>¿Quieres ver cómo se adapta a cada edad?</h2>
+      <p>Descubre los tramos de edad y los planes de suscripción familiar.</p>
+      <a href="/caminos" class="btn">Ver caminos y planes</a>
     </div>
   </main>
 </Layout>
@@ -83,15 +143,80 @@ const pilares = [
   .methodology-header p {
     color: var(--text-muted, #94a3b8);
     font-size: 1.15rem;
-    max-width: 600px;
+    max-width: 650px;
     margin: 0 auto;
+  }
+
+  .section-block {
+    margin-bottom: 4rem;
+  }
+
+  .section-block h2 {
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-intro {
+    text-align: center;
+    color: var(--text-muted, #94a3b8);
+    margin: 0 0 2rem 0;
+  }
+
+  .momentos-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+
+  .momento-card,
+  .nivel-card {
+    text-align: center;
+  }
+
+  .momento-n {
+    width: 2.5rem;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    margin: 0 auto 0.75rem;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-bg);
+    font-weight: 800;
+  }
+
+  .momento-card h3,
+  .nivel-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .momento-card p,
+  .nivel-card p {
+    color: var(--text-muted, #94a3b8);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .niveles-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .nivel-n {
+    display: inline-block;
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
   }
 
   .pilares-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
-    margin-bottom: 3.5rem;
   }
 
   .pilar-card {
@@ -104,11 +229,28 @@ const pilares = [
     font-size: 2.25rem;
   }
 
-  .pilar-card h2 {
-    font-size: 1.2rem;
+  .pilar-card h3 {
+    font-size: 1.15rem;
+    margin: 0;
   }
 
   .pilar-card p {
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .personajes-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .personaje-card h3 {
+    margin-bottom: 0.5rem;
+  }
+
+  .personaje-card p {
     color: var(--text-muted, #94a3b8);
     line-height: 1.6;
     margin: 0;
@@ -121,6 +263,7 @@ const pilares = [
 
   .cta-block h2 {
     margin-bottom: 0.5rem;
+    font-size: 1.5rem;
   }
 
   .cta-block p {

@@ -1,135 +1,107 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import { loadScenarios } from '../lib/scenario-loader';
-
-const scenarios = await loadScenarios('es');
-const countByDifficulty: Record<string, number> = {};
-for (const s of scenarios) {
-  countByDifficulty[s.difficulty] = (countByDifficulty[s.difficulty] || 0) + 1;
-}
+import { TRAMOS } from '../lib/tramos';
+import { PLANS } from '../lib/subscription-service';
 ---
 
-<Layout title="Kidia - Caminos por Edad" description="Elige el camino de aprendizaje de IA adecuado para la edad de tu hijo/a e inscríbelo en Kidia.">
+<Layout title="Kidia - Caminos y Planes" description="Descubre cómo Kidia adapta el aprendizaje de IA a la edad de tu hijo/a y elige el plan de suscripción familiar que mejor os encaje.">
   <Header />
 
   <main class="caminos-container">
     <div class="caminos-header">
-      <h1 class="text-gradient">Caminos por Edad</h1>
-      <p>Cada camino agrupa las misiones de Kidia según la edad y el nivel de tu hijo/a. Puedes inscribir a cada hijo/a en el camino que le corresponda desde su perfil.</p>
+      <h1 class="text-gradient">Cómo aprende tu hijo/a según su edad</h1>
+      <p>Kidia adapta automáticamente el lenguaje, la duración y el nivel de autonomía a la edad de cada hijo/a — no hace falta elegir nada, se ajusta solo a partir de su fecha de nacimiento.</p>
     </div>
 
-    <div id="caminos-grid" class="caminos-grid" data-counts={JSON.stringify(countByDifficulty)}>
-      <p class="loading-msg">Cargando caminos...</p>
-    </div>
-
-    <div id="enroll-modal" class="enroll-modal hidden">
-      <div class="enroll-modal-content card">
-        <button type="button" id="enroll-modal-close" class="modal-close">✕</button>
-        <h2 id="enroll-modal-title">Inscribir</h2>
-        <p id="enroll-modal-error" class="enroll-error hidden"></p>
-        <div class="input-group">
-          <label for="enroll-child-select">¿Para qué hijo/a?</label>
-          <select id="enroll-child-select"></select>
+    <div class="tramos-grid">
+      {TRAMOS.map(t => (
+        <div class="card tramo-card">
+          <div class="tramo-age">{t.label}</div>
+          <p class="tramo-desc">{t.descripcion}</p>
+          <ul class="tramo-meta">
+            <li><strong>Sesión:</strong> {t.sesion}</li>
+            <li><strong>Autonomía:</strong> {t.autonomia}</li>
+            <li><strong>Personajes:</strong> {t.personajes}</li>
+          </ul>
         </div>
-        <button type="button" id="enroll-confirm-btn" class="btn">Confirmar inscripción</button>
-      </div>
+      ))}
+    </div>
+
+    <div class="planes-header">
+      <h2 class="text-gradient">Planes de suscripción</h2>
+      <p>Una única suscripción familiar da acceso a todos tus hijos/as, cada uno en su propio tramo.</p>
+    </div>
+
+    <div id="planes-status" class="planes-status hidden"></div>
+
+    <div class="planes-grid">
+      {PLANS.map((p, i) => (
+        <div class={`card plan-card ${i === 1 ? 'plan-featured' : ''}`}>
+          <h3>{p.name}</h3>
+          <p class="plan-price">{(p.priceCents / 100).toFixed(2).replace('.', ',')} € <span>/ mes</span></p>
+          <ul class="plan-features">
+            {p.features.map(f => <li>{f}</li>)}
+          </ul>
+          <button type="button" class="btn btn-subscribe" data-plan={p.id}>Suscribirse</button>
+        </div>
+      ))}
     </div>
   </main>
 </Layout>
 
 <script>
   import { supabase } from '../lib/supabase';
-  import { PathsService } from '../lib/paths-service';
-  import { ChildrenService } from '../lib/children-service';
-  import { EnrollmentService } from '../lib/enrollment-service';
+  import { SubscriptionService, PLANS } from '../lib/subscription-service';
 
-  const grid = document.getElementById('caminos-grid');
-  const countByDifficulty = JSON.parse(grid.dataset.counts || '{}');
-  const modal = document.getElementById('enroll-modal');
-  const modalTitle = document.getElementById('enroll-modal-title');
-  const modalError = document.getElementById('enroll-modal-error');
-  const modalSelect = document.getElementById('enroll-child-select');
-  const modalConfirm = document.getElementById('enroll-confirm-btn');
-  const modalClose = document.getElementById('enroll-modal-close');
+  const statusBox = document.getElementById('planes-status');
 
-  let activePathId = null;
-  let activePathName = '';
-
-  function priceLabel(cents) {
-    if (!cents) return 'Precio: próximamente';
-    return `${(cents / 100).toFixed(2).replace('.', ',')} € / mes`;
-  }
-
-  async function render() {
-    const paths = await PathsService.listActivePaths();
-
-    if (paths.length === 0) {
-      grid.innerHTML = '<p class="loading-msg">Todavía no hay caminos publicados.</p>';
-      return;
-    }
-
-    grid.innerHTML = paths.map(p => `
-      <div class="card camino-card">
-        <div class="camino-age">${p.age_min}-${p.age_max} años</div>
-        <h2>${p.name}</h2>
-        <p class="camino-desc">${p.description || ''}</p>
-        <p class="camino-meta">${countByDifficulty[p.difficulty] || 0} misiones incluidas</p>
-        <p class="camino-price">${priceLabel(p.price_cents)}</p>
-        <button type="button" class="btn btn-enroll" data-id="${p.id}" data-name="${p.name}">Inscribir</button>
-      </div>
-    `).join('');
-
-    grid.querySelectorAll('.btn-enroll').forEach(btn => {
-      btn.addEventListener('click', () => onEnrollClick(btn.dataset.id, btn.dataset.name));
-    });
-  }
-
-  async function onEnrollClick(pathId, pathName) {
+  async function refreshStatus() {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
-      window.location.href = '/login';
+      statusBox.classList.add('hidden');
       return;
     }
 
-    const children = await ChildrenService.listChildren();
-    if (children.length === 0) {
-      window.location.href = '/perfil#hijos';
-      return;
+    const sub = await SubscriptionService.getSubscription();
+    if (sub?.plan_status === 'active') {
+      const plan = PLANS.find(p => p.id === sub.plan);
+      statusBox.textContent = `Tu familia ya tiene el plan "${plan?.name}" activo.`;
+      statusBox.classList.remove('hidden');
+    } else {
+      statusBox.classList.add('hidden');
     }
-
-    activePathId = pathId;
-    activePathName = pathName;
-    modalTitle.textContent = `Inscribir en "${pathName}"`;
-    modalError.classList.add('hidden');
-    modalSelect.innerHTML = children.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-    modal.classList.remove('hidden');
   }
 
-  modalClose.addEventListener('click', () => modal.classList.add('hidden'));
+  document.querySelectorAll('.btn-subscribe').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        window.location.href = '/login';
+        return;
+      }
 
-  modalConfirm.addEventListener('click', async () => {
-    if (!activePathId) return;
-    modalError.classList.add('hidden');
-    modalConfirm.disabled = true;
-    modalConfirm.textContent = 'Inscribiendo...';
+      const planId = btn.dataset.plan;
+      btn.disabled = true;
+      const original = btn.textContent;
+      btn.textContent = 'Activando...';
 
-    const { error } = await EnrollmentService.enroll(modalSelect.value, activePathId);
+      const { error } = await SubscriptionService.activatePlan(planId);
 
-    modalConfirm.disabled = false;
-    modalConfirm.textContent = 'Confirmar inscripción';
+      btn.disabled = false;
+      btn.textContent = original;
 
-    if (error) {
-      modalError.textContent = error;
-      modalError.classList.remove('hidden');
-      return;
-    }
+      if (error) {
+        alert('No se pudo activar el plan: ' + error);
+        return;
+      }
 
-    modal.classList.add('hidden');
-    alert(`¡Inscripción confirmada en "${activePathName}"! Ya puede jugar las misiones de este camino desde el Mapa.`);
+      await refreshStatus();
+      alert(`¡Plan activado! Ya puedes añadir hijos/as desde tu perfil y jugar las misiones de Kidia.`);
+    });
   });
 
-  render();
+  refreshStatus();
 </script>
 
 <style>
@@ -139,136 +111,135 @@ for (const s of scenarios) {
     padding: 4rem 2rem;
   }
 
-  .caminos-header {
+  .caminos-header,
+  .planes-header {
     text-align: center;
     margin-bottom: 3rem;
   }
 
-  .caminos-header h1 {
-    font-size: 2.75rem;
+  .planes-header {
+    margin-top: 5rem;
+  }
+
+  .caminos-header h1,
+  .planes-header h2 {
+    font-size: 2.5rem;
     margin-bottom: 0.75rem;
   }
 
-  .caminos-header p {
+  .caminos-header p,
+  .planes-header p {
     color: var(--text-muted, #94a3b8);
     max-width: 650px;
     margin: 0 auto;
     line-height: 1.6;
   }
 
-  .caminos-grid {
+  .tramos-grid,
+  .planes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
   }
 
-  .loading-msg {
-    grid-column: 1 / -1;
-    text-align: center;
-    color: var(--text-muted, #94a3b8);
-    padding: 2rem 0;
-  }
-
-  .camino-card {
+  .tramo-card {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
 
-  .camino-age {
+  .tramo-age {
     display: inline-block;
     align-self: flex-start;
     background: rgba(34, 211, 238, 0.15);
     color: var(--color-primary);
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: 700;
     padding: 0.25rem 0.75rem;
     border-radius: 99px;
-    margin-bottom: 0.5rem;
   }
 
-  .camino-card h2 {
-    font-size: 1.4rem;
-  }
-
-  .camino-desc {
+  .tramo-desc {
     color: var(--text-muted, #94a3b8);
     line-height: 1.6;
-    flex-grow: 1;
-  }
-
-  .camino-meta {
-    font-size: 0.85rem;
-    color: var(--text-muted, #94a3b8);
     margin: 0;
   }
 
-  .camino-price {
-    font-weight: 700;
-    margin: 0 0 0.5rem 0;
+  .tramo-meta {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
   }
 
-  .btn-enroll {
-    width: 100%;
+  .tramo-meta strong {
+    color: var(--color-text, #e4e4e7);
+  }
+
+  .planes-status {
+    text-align: center;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    color: var(--color-primary);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 2rem;
   }
 
   .hidden { display: none; }
 
-  .enroll-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(9, 9, 11, 0.85);
-    backdrop-filter: blur(6px);
+  .plan-card {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
   }
 
-  .enroll-modal.hidden {
-    display: none;
+  .plan-featured {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.15);
   }
 
-  .enroll-modal-content {
-    position: relative;
-    max-width: 420px;
-    width: 100%;
+  .plan-card h3 {
+    font-size: 1.3rem;
   }
 
-  .modal-close {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: transparent;
-    border: none;
+  .plan-price {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+  }
+
+  .plan-price span {
+    font-size: 1rem;
+    font-weight: 500;
     color: var(--text-muted, #94a3b8);
-    font-size: 1.1rem;
-    cursor: pointer;
   }
 
-  .enroll-error {
-    color: #f87171;
-    font-size: 0.9rem;
-  }
-
-  .input-group {
+  .plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    margin: 1rem 0 1.5rem 0;
+    text-align: left;
+    color: var(--text-muted, #94a3b8);
+    font-size: 0.9rem;
   }
 
-  .input-group select {
-    background: rgba(15, 23, 42, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: white;
-    padding: 0.6rem 1rem;
-    border-radius: 0.6rem;
-    font-family: inherit;
+  .plan-features li::before {
+    content: '✓ ';
+    color: var(--color-primary);
+    font-weight: 700;
   }
 
-  #enroll-confirm-btn {
+  .btn-subscribe {
     width: 100%;
   }
 </style>

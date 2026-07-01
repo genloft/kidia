@@ -59,9 +59,9 @@ if (!scenario) {
     <AnimationStage />
   </main>
   
-  <script define:vars={{ scenarioId: scenario.id, difficulty: scenario.difficulty }}>
-    // Comprobar que el hijo/a activo tiene acceso a este nivel (salvo la
-    // misión de prueba gratuita intro-ia). Si no, lo mandamos a /caminos.
+  <script define:vars={{ scenarioId: scenario.id }}>
+    // Comprobar que la familia tiene una suscripción activa (salvo la misión
+    // de prueba gratuita intro-ia). Si no, la mandamos a /caminos.
     (async () => {
       if (scenarioId === 'intro-ia') return;
 
@@ -69,10 +69,10 @@ if (!scenario) {
       const childId = activeChild.get();
       if (!childId) return; // sin sistema de hijos activo todavía (compatibilidad)
 
-      const { EnrollmentService } = await import('../../lib/enrollment-service');
-      const unlocked = await EnrollmentService.isDifficultyUnlocked(childId, difficulty);
+      const { SubscriptionService } = await import('../../lib/subscription-service');
+      const hasPlan = await SubscriptionService.hasActivePlan();
 
-      if (!unlocked) {
+      if (!hasPlan) {
         window.location.href = '/caminos';
       }
     })();

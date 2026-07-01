@@ -61,7 +61,7 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
 <script>
     import { ProgressService } from '../lib/progress-service';
     import { activeChild } from '../lib/active-child';
-    import { EnrollmentService } from '../lib/enrollment-service';
+    import { SubscriptionService } from '../lib/subscription-service';
 
     const state = ProgressService.getState();
     // Correct selector: .mission-card-v3
@@ -80,34 +80,33 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
 
     async function hydrateCards() {
         const childId = activeChild.get();
-        const unlockedDifficulties = childId
-            ? await EnrollmentService.getUnlockedDifficulties(childId)
-            : null; // sin sistema de hijos activo todavía: no se aplica el gating por camino
+        // Sin hijo activo todavía (sistema de hijos no usado en esta sesión): no se
+        // aplica el gating por suscripción, solo el de insignias de siempre.
+        const hasPlan = childId ? await SubscriptionService.hasActivePlan() : true;
 
         cards.forEach(card => {
             const id = card.getAttribute('data-id');
             const reqBadge = card.getAttribute('data-req');
-            const difficulty = card.getAttribute('data-difficulty');
             const statusText = card.querySelector('.status-locked');
 
             let isLocked = false;
-            let requiresEnrollment = false;
+            let requiresSubscription = false;
 
             // Bloqueo por insignia previa
             if (reqBadge && !state.badges.includes(reqBadge)) {
                 isLocked = true;
             }
 
-            // Bloqueo por no estar inscrito en el camino de este nivel
-            if (unlockedDifficulties && !unlockedDifficulties.has(difficulty)) {
+            // Bloqueo por no tener suscripción familiar activa
+            if (!hasPlan) {
                 isLocked = true;
-                requiresEnrollment = true;
+                requiresSubscription = true;
             }
 
-            // "Intro" is always free
+            // "Intro" is always free (misión de prueba)
             if (id === 'intro-ia') {
                 isLocked = false;
-                requiresEnrollment = false;
+                requiresSubscription = false;
             }
 
             const isCompleted = state.completedScenarios.includes(id);
@@ -115,10 +114,10 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
             if (isLocked) {
                 card.classList.add('locked');
                 card.classList.remove('available');
-                if (requiresEnrollment) {
+                if (requiresSubscription) {
                     card.classList.add('needs-enrollment');
                     card.setAttribute('href', '/caminos');
-                    if (statusText) statusText.innerText = '🔒 Requiere inscripción';
+                    if (statusText) statusText.innerText = '🔒 Requiere suscripción';
                 } else if (statusText) {
                     statusText.innerText = '🔒 Bloqueado';
                 }
