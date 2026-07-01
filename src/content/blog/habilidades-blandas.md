@@ -3,7 +3,7 @@ title: "Por qué las habilidades blandas son las nuevas habilidades duras"
 date: 2026-06-07
 category: "Propósito"
 excerpt: "La empatía, la comunicación y el pensamiento crítico son ahora los diferenciadores clave en cualquier disciplina."
-image: "/blog/habilidades_blandas.png"
+image: "/blog/habilidades_blandas.webp"
 ---
 
 Durante décadas, la educación se ha centrado en gran medida en las 'habilidades duras': matemáticas, ciencias, programación. Aunque estas siguen siendo fundamentales, estamos viendo un cambio de paradigma donde las llamadas 'habilidades blandas' están tomando el protagonismo.
