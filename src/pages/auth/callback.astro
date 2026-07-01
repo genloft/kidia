@@ -1,0 +1,73 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Kidia - Confirmando acceso" description="Confirmando tu acceso a Kidia.">
+  <main class="callback-container">
+    <div class="spinner" aria-hidden="true"></div>
+    <p>Confirmando tu acceso...</p>
+  </main>
+</Layout>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+  import type { EmailOtpType } from '@supabase/supabase-js';
+
+  // Este sitio es estático (sin servidor Node en producción), así que la
+  // confirmación de email y el intercambio de código OAuth se resuelven
+  // aquí en el navegador con el mismo cliente de Supabase que usa el resto
+  // del sitio (src/lib/supabase.ts), en vez de en una ruta de servidor.
+  async function handleCallback() {
+    const params = new URLSearchParams(window.location.search);
+    const next = params.get('next') || '/dashboard';
+    const tokenHash = params.get('token_hash');
+    const type = params.get('type') as EmailOtpType | null;
+    const code = params.get('code');
+
+    let error = null;
+
+    if (tokenHash && type) {
+      const res = await supabase.auth.verifyOtp({ token_hash: tokenHash, type });
+      error = res.error;
+    } else if (code) {
+      const res = await supabase.auth.exchangeCodeForSession(code);
+      error = res.error;
+    } else {
+      error = { message: 'Faltan parámetros de confirmación.' };
+    }
+
+    if (error) {
+      console.error('[auth/callback]', error.message);
+      window.location.href = '/login?error=auth-callback-failed';
+    } else {
+      window.location.href = next;
+    }
+  }
+
+  handleCallback();
+</script>
+
+<style>
+  .callback-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: calc(100vh - 72px);
+    color: var(--text-muted, #94a3b8);
+  }
+
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--color-primary, #22d3ee);
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>

@@ -16,7 +16,7 @@ import Header from '../components/Header.astro';
       </div>
 
       <h1 class="auth-title">Bienvenido de nuevo</h1>
-      <p class="auth-subtitle">Guarda tu progreso y accede a misiones premium.</p>
+      <p class="auth-subtitle">Gestiona el aprendizaje de IA de tus hijos e hijas y guarda su progreso.</p>
 
       <!-- Tabs -->
       <div class="tabs">
@@ -52,12 +52,6 @@ import Header from '../components/Header.astro';
           <label>Contraseña</label>
           <input type="password" name="password" placeholder="Mínimo 6 caracteres" minlength="6" required />
         </div>
-        <div class="field-checkbox">
-          <label>
-            <input type="checkbox" name="age_consent" required />
-            Soy mayor de 14 años o tengo el consentimiento de mis padres.
-          </label>
-        </div>
         <button type="submit" class="btn-submit">
           Crear Cuenta
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -65,6 +59,17 @@ import Header from '../components/Header.astro';
           </svg>
         </button>
       </form>
+
+      <!-- Declaración legal: la cuenta la crea siempre el adulto responsable -->
+      <div id="consent-block" class="field-checkbox hidden">
+        <label>
+          <input type="checkbox" id="legal-consent" />
+          Soy mayor de edad y soy el padre, madre o tutor/a legal de los niños y niñas que voy a registrar en Kidia.
+        </label>
+        <p class="consent-legal">
+          Al crear la cuenta aceptas nuestros <a href="/terminos">Términos de Uso</a> y nuestra <a href="/privacidad">Política de Privacidad</a>.
+        </p>
+      </div>
 
       <!-- Mensaje -->
       <div id="auth-message" class="message hidden"></div>
@@ -93,6 +98,7 @@ import Header from '../components/Header.astro';
   function switchTab(tab) {
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
+    const consentBlock = document.getElementById('consent-block');
     const tabs = document.querySelectorAll('.tab-btn');
     const msg = document.getElementById('auth-message');
     const title = document.querySelector('.auth-title');
@@ -102,12 +108,14 @@ import Header from '../components/Header.astro';
     if (tab === 'login') {
       loginForm.classList.remove('hidden');
       registerForm.classList.add('hidden');
+      consentBlock.classList.add('hidden');
       tabs[0].classList.add('active');
       tabs[1].classList.remove('active');
       title.textContent = 'Bienvenido de nuevo';
     } else {
       loginForm.classList.add('hidden');
       registerForm.classList.remove('hidden');
+      consentBlock.classList.remove('hidden');
       tabs[0].classList.remove('active');
       tabs[1].classList.add('active');
       title.textContent = 'Crea tu cuenta';
@@ -154,8 +162,14 @@ import Header from '../components/Header.astro';
     }
   });
 
+  const legalConsent = document.getElementById('legal-consent') as HTMLInputElement;
+
   registerForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!legalConsent.checked) {
+      showMessage('Confirma que eres el padre, madre o tutor/a legal antes de crear la cuenta.');
+      return;
+    }
     const btn = registerForm.querySelector('button[type="submit"]') as HTMLButtonElement;
     btn.textContent = 'Creando cuenta...';
     btn.disabled = true;
@@ -175,6 +189,11 @@ import Header from '../components/Header.astro';
   });
 
   googleBtn?.addEventListener('click', async () => {
+    const registering = !registerForm.classList.contains('hidden');
+    if (registering && !legalConsent.checked) {
+      showMessage('Confirma que eres el padre, madre o tutor/a legal antes de continuar.');
+      return;
+    }
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo: `${window.location.origin}/auth/callback` }
@@ -333,6 +352,18 @@ import Header from '../components/Header.astro';
     color: #94a3b8;
     cursor: pointer;
     line-height: 1.4;
+  }
+
+  .consent-legal {
+    margin: 0.5rem 0 0;
+    font-size: 0.75rem;
+    color: #64748b;
+    line-height: 1.5;
+  }
+
+  .consent-legal a {
+    color: var(--color-primary);
+    text-decoration: underline;
   }
 
   .field-checkbox input[type="checkbox"] {
