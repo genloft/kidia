@@ -9,11 +9,11 @@
 	--bg-deep: #0f0f13;
 	/* Deepest inset */
 
-	/* Primary and Neutral Colors */
-	--primary: #9297fe;
-	/* Periwinkle from logo */
-	--primary-hover: #c975fc;
-	/* Lavender from logo */
+	/* Primary and Neutral Colors (alineado con la paleta del sitio, ver src/styles/global.css) */
+	--primary: #22d3ee;
+	/* Cian, igual que --color-primary del sitio */
+	--primary-hover: #8b5cf6;
+	/* Morado, igual que --color-accent del sitio */
 
 	/* Text Colors for Dark Theme */
 	--text-main: #f8fafc;
@@ -63,7 +63,6 @@ body {
 		radial-gradient(circle at 50% 50%, rgba(146, 151, 254, 0.03) 0%, transparent 60%);
 	color: var(--text-main);
 	min-height: 100vh;
-	overflow-y: hidden;
 }
 
 h1,

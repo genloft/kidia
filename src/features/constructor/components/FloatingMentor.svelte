@@ -126,7 +126,7 @@
         aria-expanded={expanded}
     >
         <div class="avatar-icon">
-            🤖
+            <img src="/kidia_thinking.webp" alt="Kidia" class="avatar-img" />
             {#if !expanded && activeHint.type !== "info"}
                 <span
                     class="notification-dot"
@@ -249,8 +249,16 @@
     }
 
     .avatar-icon {
-        font-size: 1.75rem;
         position: relative;
+        width: 44px;
+        height: 44px;
+    }
+
+    .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 50%;
     }
 
     .notification-dot {

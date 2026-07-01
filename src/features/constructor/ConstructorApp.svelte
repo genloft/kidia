@@ -25,8 +25,10 @@
 	.layout {
 		display: flex;
 		flex-direction: column;
-		height: 100vh;
-		width: 100vw;
+		position: relative;
+		flex: 1;
+		min-height: 0;
+		width: 100%;
 		overflow: hidden;
 		box-sizing: border-box;
 	}
@@ -43,9 +45,9 @@
 
 	@media (max-width: 1024px) {
 		.layout {
-			height: auto;
-			min-height: 100vh;
-			overflow-y: auto;
+			flex: none;
+			min-height: 0;
+			overflow-y: visible;
 			overflow-x: hidden;
 		}
 		main {

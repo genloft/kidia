@@ -30,7 +30,7 @@
             class="modal-content"
             transition:scale={{ start: 0.8, duration: 600, opacity: 0 }}
         >
-            <div class="cosmic-avatar">🌌</div>
+            <img class="cosmic-avatar" src="/kidia_celebrating.webp" alt="Kidia" />
             <h2>{$t.game?.victoryTitle || "¡Victoria!"}</h2>
             <div class="text-body">
                 <p>
@@ -81,7 +81,9 @@
     }
 
     .cosmic-avatar {
-        font-size: 5rem;
+        width: 9rem;
+        height: 9rem;
+        object-fit: contain;
         margin-bottom: 0.5rem;
         animation: pulse 4s infinite alternate;
         filter: drop-shadow(0 0 20px rgba(176, 38, 255, 0.8));
@@ -102,7 +104,7 @@
         font-size: 2.2rem;
         margin: 0 0 1.5rem 0;
         font-weight: 900;
-        background: linear-gradient(90deg, #00f0ff, #b026ff, #ff1b6b);
+        background: linear-gradient(90deg, var(--color-primary), var(--color-accent), var(--color-secondary));
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -150,7 +152,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(90deg, #5271ff, #b026ff);
+        background: linear-gradient(90deg, var(--color-accent), var(--color-secondary));
         z-index: -1;
         transform: scaleX(0);
         transform-origin: left;

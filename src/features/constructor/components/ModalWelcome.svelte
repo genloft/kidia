@@ -15,7 +15,7 @@
             class="modal-content"
             transition:scale={{ start: 0.95, duration: 300 }}
         >
-            <div class="robot-avatar">🤖</div>
+            <img class="robot-avatar" src="/kidia_explaining.webp" alt="Kidia" />
             <h2>{$t.game?.welcomeTitle || "¡Bienvenido a Kidia!"}</h2>
             <div class="text-body">
                 <p>
@@ -60,7 +60,9 @@
     }
 
     .robot-avatar {
-        font-size: 4rem;
+        width: 8rem;
+        height: 8rem;
+        object-fit: contain;
         margin-bottom: 1rem;
         animation: float 3s ease-in-out infinite;
         filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.3));
@@ -103,7 +105,7 @@
     .highlight {
         font-weight: 700;
         color: var(--color-4);
-        background: rgba(146, 151, 254, 0.1);
+        background: rgba(34, 211, 238, 0.1);
         padding: 1rem;
         border-radius: var(--radius-sm);
         border-left: 4px solid var(--color-4);

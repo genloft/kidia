@@ -13,84 +13,30 @@
     }
 </script>
 
-<header class="top-bar">
-    <div class="left-section">
-        <div class="logo-container">
-            <h1>Kidia</h1>
-        </div>
+<div class="lang-float">
+    <label for="lang-select" class="sr-only">Seleccionar Idioma</label>
+    <div class="lang-wrapper">
+        <select
+            id="lang-select"
+            class="lang-select"
+            value={$currentLanguage}
+            on:change={changeLang}
+            aria-label={$t.language}
+        >
+            {#each languages as lang}
+                <option value={lang.code}>{lang.label}</option>
+            {/each}
+        </select>
+        <span class="select-icon">▼</span>
     </div>
-
-    <div class="right-section">
-        <label for="lang-select" class="sr-only">Seleccionar Idioma</label>
-        <div class="lang-wrapper">
-            <select
-                id="lang-select"
-                class="lang-select"
-                value={$currentLanguage}
-                on:change={changeLang}
-                aria-label={$t.language}
-            >
-                {#each languages as lang}
-                    <option value={lang.code}>{lang.label}</option>
-                {/each}
-            </select>
-            <span class="select-icon">▼</span>
-        </div>
-
-        <button class="btn-login" disabled>
-            {$t.login}
-        </button>
-    </div>
-</header>
+</div>
 
 <style>
-    .top-bar {
-        width: 100vw;
-        height: 60px;
-        background: var(--bg-main);
-        border-bottom: 1px solid var(--border-stone);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 1.5rem;
-        box-sizing: border-box;
-        flex-shrink: 0;
-        z-index: 1000000;
-    }
-
-    .left-section,
-    .right-section {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .logo-container {
-        display: flex;
-        align-items: center;
-    }
-
-    h1 {
-        margin: 0;
-        font-size: 1.8rem;
-        font-weight: 800;
-        font-family:
-            "Outfit",
-            system-ui,
-            -apple-system,
-            sans-serif;
-        background: linear-gradient(
-            90deg,
-            #00f0ff 0%,
-            #5271ff 35%,
-            #b026ff 70%,
-            #ff1b6b 100%
-        );
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        letter-spacing: -1px;
-        line-height: 1;
+    .lang-float {
+        position: absolute;
+        top: 0.75rem;
+        right: 1.5rem;
+        z-index: 100;
     }
 
     .sr-only {
@@ -130,7 +76,7 @@
 
     .lang-select:focus {
         border-color: var(--primary);
-        box-shadow: 0 0 0 2px rgba(146, 151, 254, 0.3);
+        box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.3);
     }
 
     .lang-select option {
@@ -146,18 +92,5 @@
         pointer-events: none;
         color: var(--text-muted);
         font-size: 0.6rem;
-    }
-
-    .btn-login {
-        background: transparent;
-        border: 1px solid var(--border-highlight);
-        color: var(--text-muted);
-        border-radius: var(--radius-sm);
-        padding: 0.4rem 1rem;
-        font-size: 0.9rem;
-        font-weight: 600;
-        cursor: not-allowed;
-        opacity: 0.6;
-        transition: all 0.2s;
     }
 </style>

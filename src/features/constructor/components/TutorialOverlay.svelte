@@ -294,7 +294,7 @@
             : targetX}px; top: {targetY === -1000 ? -2000 : targetY}px;"
     >
         <div class="tutorial-box arrow-{arrowDir}">
-            <div class="avatar">🤖</div>
+            <img class="avatar" src="/kidia_explaining.webp" alt="Kidia" />
             <div class="content">
                 <h3 id="tut-title">{currentStep.title}</h3>
                 <p id="tut-desc">{currentStep.message}</p>
@@ -331,7 +331,10 @@
     }
 
     .avatar {
-        font-size: 3rem;
+        width: 4.5rem;
+        height: 4.5rem;
+        object-fit: contain;
+        flex-shrink: 0;
         filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.2));
         animation: bounceAvatar 2s infinite;
     }
