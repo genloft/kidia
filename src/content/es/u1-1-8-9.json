@@ -1,0 +1,83 @@
+{
+  "id": "u1-1-8-9",
+  "title": "1.1 ¡Detective de máquinas listas!",
+  "description": "Descubre qué cosas de tu casa tienen un cerebro de IA escondido... y cuáles no.",
+  "difficulty": "beginner",
+  "language": "es",
+  "tramo": "8-9",
+  "nivel": 1,
+  "unidad": "1.1",
+  "competencia_foco": "pensamiento_critico",
+  "accesibilidad": ["Icono grande + audio en cada tarjeta", "Se puede completar solo con voz, sin leer"],
+  "nota_familia": "Buscad juntos en casa tres cosas que creáis que usan IA y una que no.",
+  "duracion_min": [15, 20],
+  "unlocks_scenario_id": "u1-2-8-9",
+  "badge": {
+    "id": "detective-maquinas",
+    "name": "Detective de Máquinas",
+    "icon": "🔍",
+    "description": "Distingue qué cosas usan Inteligencia Artificial y cuáles no."
+  },
+  "initial_node_id": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "sender": "kidia",
+      "text": "¡Detective de máquinas listas!\n\n¡Hola, explorador! Algunas cosas de tu casa tienen un cerebro de IA escondido… y otras no. ¿Las descubres conmigo?",
+      "next_node_id": "explora"
+    },
+    "explora": {
+      "id": "explora",
+      "sender": "kidia",
+      "text": "Una IA es un programa que ha mirado MUCHOS ejemplos para aprender a hacer algo (reconocer una cara, responder, dibujar). No es magia ni está viva.\n\nPor ejemplo: el filtro de la cámara que te pone orejas de gato usa IA; una linterna que se enciende con un botón, no.",
+      "next_node_id": "crea"
+    },
+    "crea": {
+      "id": "crea",
+      "sender": "kidia",
+      "text": "Mira cada tarjeta y piensa: ¿esta cosa APRENDE o siempre hace lo mismo? Si dudas, ¡esa es tu pista!",
+      "action": "activity",
+      "action_data": {
+        "type": "clasificar",
+        "instruction": "Toca la caja correcta para cada tarjeta: «Usa IA» o «No usa IA».",
+        "categories": ["Usa IA", "No usa IA"],
+        "items": [
+          { "id": "altavoz", "label": "Altavoz que responde preguntas", "icon": "🔊", "correctCategory": 0 },
+          { "id": "peluche", "label": "Peluche que dice una frase al apretar un botón", "icon": "🧸", "correctCategory": 1 },
+          { "id": "buscador-fotos", "label": "Buscador de fotos por la cara", "icon": "📷", "correctCategory": 0 },
+          { "id": "bici", "label": "Bicicleta", "icon": "🚲", "correctCategory": 1 },
+          { "id": "traductor", "label": "Traductor automático", "icon": "🌐", "correctCategory": 0 },
+          { "id": "lampara", "label": "Lámpara con interruptor", "icon": "💡", "correctCategory": 1 }
+        ]
+      },
+      "next_node_id": "reflexiona"
+    },
+    "reflexiona": {
+      "id": "reflexiona",
+      "sender": "kidia",
+      "text": "¿Cómo supiste que el altavoz usa IA? ¿Y un muñeco que dice una frase al apretar un botón, usa IA o es solo un sonido grabado?\n\nPista: piensa si la cosa **aprende** o si **siempre hace lo mismo**.",
+      "next_node_id": "comparte"
+    },
+    "comparte": {
+      "id": "comparte",
+      "sender": "kidia",
+      "text": "¡Genial! Ya sabes mirar el mundo como un detective de la IA. 🔍",
+      "action": "trigger_quiz"
+    }
+  },
+  "quiz": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "¿Qué es lo que hace que una cosa \"tenga IA\" de verdad?",
+        "options": [
+          "Que aprende de muchos ejemplos para hacer una tarea",
+          "Que tiene botones",
+          "Que es de color azul"
+        ],
+        "correct_index": 0,
+        "explanation": "Una IA aprende de ejemplos; un objeto que siempre hace lo mismo (como una linterna) no usa IA."
+      }
+    ]
+  }
+}

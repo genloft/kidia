@@ -1,0 +1,83 @@
+{
+  "id": "u1-3-12-14",
+  "title": "1.3 Conviértete en ingeniero de prompts",
+  "description": "Hablar bien con la IA es una habilidad real, muy valorada. Hoy aprendes a pedir como un profesional.",
+  "difficulty": "advanced",
+  "language": "es",
+  "tramo": "12-14",
+  "nivel": 1,
+  "unidad": "1.3",
+  "competencia_foco": "calidad_preguntas",
+  "accesibilidad": ["Plantilla de elementos con apoyo visual", "Dictado por voz", "Sin presión de tiempo"],
+  "nota_familia": "Probad en casa a pedirle algo a una IA con y sin contexto y comparad.",
+  "duracion_min": [35, 45],
+  "required_badge_id": "detector-sesgos",
+  "unlocks_scenario_id": "u1-4-12-14",
+  "badge": {
+    "id": "ingeniero-prompts",
+    "name": "Ingeniero de Prompts",
+    "icon": "⚙️",
+    "description": "Diseña prompts avanzados con rol, contexto, formato y restricciones."
+  },
+  "initial_node_id": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "sender": "kidia",
+      "text": "Conviértete en ingeniero de prompts\n\nLos que sacan lo mejor de la IA no tienen suerte: saben pedir. Vamos a que tú también.",
+      "next_node_id": "explora"
+    },
+    "explora": {
+      "id": "explora",
+      "sender": "kidia",
+      "text": "Un prompt profesional puede incluir un **ROL** («actúa como…»), el **OBJETIVO**, el **CONTEXTO**, el **FORMATO** de salida, **EJEMPLOS** y **RESTRICCIONES**.\n\nY casi nunca sale perfecto a la primera: se itera, evaluando cada resultado.",
+      "next_node_id": "crea"
+    },
+    "crea": {
+      "id": "crea",
+      "sender": "kidia",
+      "text": "Elige una tarea real (estudiar un tema, planear un proyecto) y diseña tu prompt con rol + objetivo + contexto + formato + restricciones.",
+      "action": "activity",
+      "action_data": {
+        "type": "escribir",
+        "instruction": "Escribe tu prompt avanzado (rol, objetivo, contexto, formato, restricciones).",
+        "placeholder": "Actúa como... Quiero que... El contexto es... El formato debe ser... No incluyas...",
+        "minLength": 30
+      },
+      "next_node_id": "refina"
+    },
+    "refina": {
+      "id": "refina",
+      "sender": "kidia",
+      "text": "Pruébalo, evalúa el resultado y refínalo. Guarda tu kit de prompts para reutilizarlo.",
+      "next_node_id": "reflexiona"
+    },
+    "reflexiona": {
+      "id": "reflexiona",
+      "sender": "kidia",
+      "text": "¿Qué elemento mejoró más el resultado? ¿Cuándo conviene darle un ejemplo a la IA en vez de solo describir lo que quieres?",
+      "next_node_id": "comparte"
+    },
+    "comparte": {
+      "id": "comparte",
+      "sender": "kidia",
+      "text": "¡Ingeniería de prompts desbloqueada! Esta habilidad te servirá toda la vida. ⚙️",
+      "action": "trigger_quiz"
+    }
+  },
+  "quiz": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "¿Qué elementos puede tener un prompt profesional avanzado?",
+        "options": [
+          "Rol, objetivo, contexto, formato, ejemplos y restricciones",
+          "Solo una palabra clave",
+          "Únicamente signos de exclamación"
+        ],
+        "correct_index": 0,
+        "explanation": "Un prompt avanzado combina varios elementos (rol, objetivo, contexto, formato, ejemplos, restricciones) y se refina con la práctica."
+      }
+    ]
+  }
+}

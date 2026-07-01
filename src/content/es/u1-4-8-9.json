@@ -1,0 +1,80 @@
+{
+  "id": "u1-4-8-9",
+  "title": "1.4 ¡Conviértete en Cazaerrores!",
+  "description": "La IA ha soltado unas frases muy raras. Tu misión: cazar las que están mal.",
+  "difficulty": "beginner",
+  "language": "es",
+  "tramo": "8-9",
+  "nivel": 1,
+  "unidad": "1.4",
+  "competencia_foco": "pensamiento_critico",
+  "accesibilidad": ["Frases con audio e icono", "Respuesta por toque o por voz"],
+  "nota_familia": "Pide a un adulto que te cuente una vez que un aparato o una app se equivocó.",
+  "duracion_min": [15, 15],
+  "required_badge_id": "mago-palabras",
+  "badge": {
+    "id": "cazaerrores-1",
+    "name": "Cazaerrores",
+    "icon": "🏅",
+    "description": "Descubrió que la IA a veces se equivoca, y aprendió a no creérselo todo."
+  },
+  "initial_node_id": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "sender": "kidia",
+      "text": "¡Conviértete en Cazaerrores!\n\n¡Atención, detective! La IA ha soltado unas frases muy raras. Tu misión: cazar las que están mal. 🕵️",
+      "next_node_id": "explora"
+    },
+    "explora": {
+      "id": "explora",
+      "sender": "kidia",
+      "text": "Yo sé mucho, pero a veces me equivoco o me invento cosas. Por eso somos detectives y no nos lo creemos todo.",
+      "next_node_id": "crea"
+    },
+    "crea": {
+      "id": "crea",
+      "sender": "kidia",
+      "text": "Lee (o escucha) cada frase. ¡Cuidado! Una de ellas es verdad: no la caces.",
+      "action": "activity",
+      "action_data": {
+        "type": "eleccion",
+        "instruction": "Toca las frases que crees que están MAL.",
+        "options": [
+          { "id": "sol", "label": "El sol es azul", "correct": true },
+          { "id": "peces", "label": "Los peces vuelan", "correct": true },
+          { "id": "vacas", "label": "Las vacas dan zumo de naranja", "correct": true },
+          { "id": "agua", "label": "El agua moja", "correct": false }
+        ]
+      },
+      "next_node_id": "reflexiona"
+    },
+    "reflexiona": {
+      "id": "reflexiona",
+      "sender": "kidia",
+      "text": "¿Cómo supiste que esas frases estaban mal? ¿Te creerías TODO lo que dice una pantalla?",
+      "next_node_id": "comparte"
+    },
+    "comparte": {
+      "id": "comparte",
+      "sender": "kidia",
+      "text": "¡Misión cumplida, Cazaerrores! Recuerda: la IA mola, pero a veces se equivoca. 🏅",
+      "action": "trigger_quiz"
+    }
+  },
+  "quiz": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "Si la IA te dice algo que suena raro, ¿qué deberías hacer?",
+        "options": [
+          "Pensarlo y comprobarlo, porque la IA a veces se equivoca",
+          "Creérmelo siempre, porque la IA nunca falla",
+          "Ignorarlo sin pensar"
+        ],
+        "correct_index": 0,
+        "explanation": "La IA es lista, pero a veces se equivoca o se inventa cosas. Por eso conviene comprobar."
+      }
+    ]
+  }
+}

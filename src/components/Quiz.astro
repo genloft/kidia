@@ -46,6 +46,8 @@ const { scenario } = Astro.props;
 </div>
 
 <script>
+    import { storage } from '../lib/storage-simple';
+
     // Elements
     const container = document.getElementById('quiz-container');
     const introEl = document.getElementById('quiz-intro');
@@ -206,32 +208,26 @@ const { scenario } = Astro.props;
         
         reactionEl.innerText = reaction;
 
-        // Save Logic
-        const KEY = 'kidia-progress';
+        // Save Logic (a través de storage-simple.ts para que quede por hijo activo, no global)
         try {
-            const raw = localStorage.getItem(KEY);
-            const state = raw ? JSON.parse(raw) : { 
-                completedScenarios: [], 
-                badges: [], 
-                scores: {} 
-            };
-            
-            state.completedScenarios = [...new Set([...state.completedScenarios || [], scenario.id])];
-            state.scores = { ...(state.scores || {}), [scenario.id]: score };
-            
-             const badgeNotif = document.getElementById('badge-notification');
-             const badgeNameEl = document.getElementById('badge-name');
-             
-            if (score >= 70 && scenario.badge) {
-                 state.badges = [...new Set([...state.badges || [], scenario.badge.id])];
-                 
-                 badgeNameEl.innerText = scenario.badge.name;
-                 badgeNotif.classList.remove('hidden');
-                 badgeNotif.classList.add('animate-pop');
+            const badgeNotif = document.getElementById('badge-notification');
+            const badgeNameEl = document.getElementById('badge-name');
+            const earnedBadge = score >= 70 && scenario.badge;
+
+            storage.update(s => ({
+                ...s,
+                completedScenarios: [...new Set([...(s.completedScenarios || []), scenario.id])],
+                scores: { ...(s.scores || {}), [scenario.id]: score },
+                badges: earnedBadge
+                    ? [...new Set([...(s.badges || []), scenario.badge.id])]
+                    : (s.badges || [])
+            }));
+
+            if (earnedBadge) {
+                badgeNameEl.innerText = scenario.badge.name;
+                badgeNotif.classList.remove('hidden');
+                badgeNotif.classList.add('animate-pop');
             }
-            
-            localStorage.setItem(KEY, JSON.stringify(state));
-            
         } catch(e) {
             console.error('[Quiz] Save error', e);
         }

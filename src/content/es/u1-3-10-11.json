@@ -1,0 +1,77 @@
+{
+  "id": "u1-3-10-11",
+  "title": "1.3 La receta del prompt perfecto",
+  "description": "Te voy a dar mi receta secreta para hablarle a la IA. Tres ingredientes… ¡y casi nunca falla!",
+  "difficulty": "intermediate",
+  "language": "es",
+  "tramo": "10-11",
+  "nivel": 1,
+  "unidad": "1.3",
+  "competencia_foco": "calidad_preguntas",
+  "accesibilidad": ["Plantilla de ingredientes con iconos", "Dictado por voz", "Lectura del prompt en voz alta"],
+  "nota_familia": "En casa, describid un plato con todos sus «ingredientes», como un prompt completo.",
+  "duracion_min": [25, 30],
+  "required_badge_id": "reparador-ia",
+  "unlocks_scenario_id": "u1-4-10-11",
+  "badge": {
+    "id": "chef-prompts",
+    "name": "Chef de Prompts",
+    "icon": "👨‍🍳",
+    "description": "Escribe prompts con los tres ingredientes: qué, cómo y contexto."
+  },
+  "initial_node_id": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "sender": "kidia",
+      "text": "La receta del prompt perfecto\n\nTe voy a dar mi receta secreta para hablarle a la IA. Tres ingredientes… ¡y casi nunca falla!",
+      "next_node_id": "explora"
+    },
+    "explora": {
+      "id": "explora",
+      "sender": "kidia",
+      "text": "Un buen prompt tiene tres ingredientes: **QUÉ** quieres, **CÓMO** lo quieres (estilo, tono) y un poco de **CONTEXTO** (para qué o para quién).\n\nNo es lo mismo «un cartel» que «un cartel divertido para anunciar la feria de ciencias de mi clase, con colores alegres».",
+      "next_node_id": "crea"
+    },
+    "crea": {
+      "id": "crea",
+      "sender": "kidia",
+      "text": "Elige un encargo (un cartel, una idea, una explicación) y escribe tu prompt cuidando los tres ingredientes: qué quieres, cómo lo quieres, y para qué o quién es.",
+      "action": "activity",
+      "action_data": {
+        "type": "escribir",
+        "instruction": "Escribe tu prompt completo con los tres ingredientes.",
+        "placeholder": "Ej: Un cartel divertido para anunciar la feria de ciencias de mi clase, con colores alegres...",
+        "minLength": 20
+      },
+      "next_node_id": "reflexiona"
+    },
+    "reflexiona": {
+      "id": "reflexiona",
+      "sender": "kidia",
+      "text": "Genera el resultado y revisa: ¿qué ingrediente le faltaba a tu primer intento? ¿El contexto cambió mucho el resultado?",
+      "next_node_id": "comparte"
+    },
+    "comparte": {
+      "id": "comparte",
+      "sender": "kidia",
+      "text": "¡Receta lista, chef de prompts! Cuantos más ingredientes buenos, mejor sale. 👨‍🍳",
+      "action": "trigger_quiz"
+    }
+  },
+  "quiz": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "¿Cuáles son los tres ingredientes de un buen prompt?",
+        "options": [
+          "Qué quiero, cómo lo quiero, y contexto",
+          "Mayúsculas, signos de exclamación y emojis",
+          "Solo escribir muchas palabras"
+        ],
+        "correct_index": 0,
+        "explanation": "Un prompt completo dice qué quieres, cómo lo quieres (estilo/tono) y da contexto (para qué o para quién)."
+      }
+    ]
+  }
+}

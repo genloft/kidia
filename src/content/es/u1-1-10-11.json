@@ -1,0 +1,83 @@
+{
+  "id": "u1-1-10-11",
+  "title": "1.1 El mapa secreto de la IA en tu día",
+  "description": "La IA es como un agente secreto: está metida en tu día y casi no la ves. ¿La localizamos juntos?",
+  "difficulty": "intermediate",
+  "language": "es",
+  "tramo": "10-11",
+  "nivel": 1,
+  "unidad": "1.1",
+  "competencia_foco": "pensamiento_critico",
+  "accesibilidad": ["Momentos con icono y audio", "Se puede completar hablando, sin escribir"],
+  "nota_familia": "Contad en la cena tres IA que habéis usado hoy y para qué.",
+  "duracion_min": [25, 30],
+  "unlocks_scenario_id": "u1-2-10-11",
+  "badge": {
+    "id": "agente-secreto-ia",
+    "name": "Agente Secreto de la IA",
+    "icon": "🗺️",
+    "description": "Localiza dónde aparece la IA en su día a día, aunque esté escondida."
+  },
+  "initial_node_id": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "sender": "kidia",
+      "text": "El mapa secreto de la IA en tu día\n\nLa IA es como un agente secreto: está metida en tu día y casi no la ves. ¿La localizamos juntos en el mapa?",
+      "next_node_id": "explora"
+    },
+    "explora": {
+      "id": "explora",
+      "sender": "kidia",
+      "text": "La IA está escondida en apps que usas a diario: las recomendaciones de vídeos, los filtros de fotos, los mapas que evitan atascos, el corrector del móvil.\n\nCuando una app te sugiere el siguiente vídeo, una IA decidió mostrártelo a ti.",
+      "next_node_id": "crea"
+    },
+    "crea": {
+      "id": "crea",
+      "sender": "kidia",
+      "text": "Recorre tu día: mañana, cole, recreo, tarde. En cada momento, marca si hay una IA escondida. ¡Cuidado! Un momento NO tiene IA: no lo marques.",
+      "action": "activity",
+      "action_data": {
+        "type": "clasificar",
+        "instruction": "Toca la caja correcta para cada momento del día.",
+        "categories": ["Hay IA", "No hay IA"],
+        "items": [
+          { "id": "recomendaciones", "label": "Ver vídeos recomendados", "icon": "📱", "correctCategory": 0 },
+          { "id": "mapa", "label": "Ir al cole con el mapa que evita atascos", "icon": "🗺️", "correctCategory": 0 },
+          { "id": "abrir-puerta", "label": "Abrir la puerta de casa con llave", "icon": "🔑", "correctCategory": 1 },
+          { "id": "corrector", "label": "Escribir un mensaje con corrector automático", "icon": "💬", "correctCategory": 0 },
+          { "id": "filtro-foto", "label": "Ponerte un filtro divertido en una foto", "icon": "📸", "correctCategory": 0 },
+          { "id": "leer-libro", "label": "Leer un libro de papel", "icon": "📖", "correctCategory": 1 }
+        ]
+      },
+      "next_node_id": "reflexiona"
+    },
+    "reflexiona": {
+      "id": "reflexiona",
+      "sender": "kidia",
+      "text": "¿Qué IA te ayuda de verdad y cuál solo quiere que pases más tiempo en la app? ¿Quién decide lo que ves en tu pantalla?",
+      "next_node_id": "comparte"
+    },
+    "comparte": {
+      "id": "comparte",
+      "sender": "kidia",
+      "text": "¡Mapa completado! Ya ves la IA que antes era invisible. 🗺️",
+      "action": "trigger_quiz"
+    }
+  },
+  "quiz": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "¿Cuál de estas situaciones NO usa IA?",
+        "options": [
+          "Abrir una puerta con una llave normal",
+          "Que una app te recomiende el siguiente vídeo",
+          "Que un mapa evite un atasco por ti"
+        ],
+        "correct_index": 0,
+        "explanation": "Una llave normal siempre hace lo mismo: no aprende ni decide nada, así que no usa IA."
+      }
+    ]
+  }
+}

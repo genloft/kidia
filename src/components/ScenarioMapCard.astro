@@ -11,7 +11,7 @@ const difficultyLevels = {
 const level = difficultyLevels[difficulty];
 ---
 
-<a href={`/scenario/${scenario.id}`} class="mission-card-v3" data-id={scenario.id} data-req={scenario.required_badge_id} data-difficulty={difficulty}>
+<a href={`/scenario/${scenario.id}`} class="mission-card-v3" data-id={scenario.id} data-req={scenario.required_badge_id} data-difficulty={difficulty} data-unidad={scenario.unidad} data-tramo={scenario.tramo}>
     <div class="card-inner">
         <div class="card-background"></div>
         <div class="card-content-wrapper">
@@ -47,6 +47,10 @@ const level = difficultyLevels[difficulty];
 
 
 <style>
+    .mission-card-v3.hidden {
+        display: none;
+    }
+
     .mission-card-v3 {
         display: block;
         text-decoration: none;

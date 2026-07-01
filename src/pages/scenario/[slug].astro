@@ -59,11 +59,11 @@ if (!scenario) {
     <AnimationStage />
   </main>
   
-  <script define:vars={{ scenarioId: scenario.id }}>
-    // Comprobar que la familia tiene una suscripción activa (salvo la misión
-    // de prueba gratuita intro-ia). Si no, la mandamos a /caminos.
+  <script define:vars={{ unidad: scenario.unidad }}>
+    // Comprobar que la familia tiene una suscripción activa (salvo la Unidad
+    // 1.1, la misión de prueba gratuita). Si no, la mandamos a /caminos.
     (async () => {
-      if (scenarioId === 'intro-ia') return;
+      if (unidad === '1.1') return;
 
       const { activeChild } = await import('../../lib/active-child');
       const childId = activeChild.get();

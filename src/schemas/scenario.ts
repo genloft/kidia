@@ -1,9 +1,21 @@
+export type Tramo = '8-9' | '10-11' | '12-14';
+export type Competencia = 'pensamiento_critico' | 'calidad_preguntas' | 'autonomia_creativa' | 'verificacion';
+
 export interface ScenarioSchema {
     id: string;
     title: string;
     description: string;
     difficulty: 'beginner' | 'intermediate' | 'advanced';
     language: 'es' | 'en';
+
+    // Método Kidia: metadatos del reto real (ver Kidia_Metodologia_Aprendizaje.docx)
+    tramo?: Tramo;
+    nivel?: 1 | 2 | 3 | 4;
+    unidad?: string; // "1.1" — agrupa las variantes de tramo del mismo reto
+    competencia_foco?: Competencia;
+    accesibilidad?: string[];
+    nota_familia?: string;
+    duracion_min?: [number, number];
 
     // Logic & Progression
     required_badge_id?: string;
@@ -34,7 +46,7 @@ export interface ScenarioSchema {
 
 export interface DialogueNode {
     id: string;
-    sender: 'kidia' | 'user' | 'system';
+    sender: 'kidia' | 'morti' | 'user' | 'system';
     text: string; // Supports markdown/html?
 
     // Flow
@@ -42,8 +54,38 @@ export interface DialogueNode {
     options?: Choice[];
 
     // Interactive
-    action?: 'smile' | 'think' | 'dance' | 'show_image' | 'trigger_quiz';
-    action_data?: any; // e.g. image URL
+    action?: 'smile' | 'think' | 'dance' | 'show_image' | 'trigger_quiz' | 'activity';
+    action_data?: any; // e.g. image URL, or an Activity when action === 'activity'
+}
+
+// Tipos de actividad reutilizables para el paso "Crea" de cada reto real.
+export type Activity = ClasificarActivity | CompararActivity | EscribirActivity | EleccionActivity;
+
+export interface ClasificarActivity {
+    type: 'clasificar';
+    instruction: string;
+    categories: [string, string];
+    items: { id: string; label: string; icon?: string; correctCategory: 0 | 1 }[];
+}
+
+export interface CompararActivity {
+    type: 'comparar';
+    instruction: string;
+    options: { id: string; label: string; content: string }[];
+    askWhy?: boolean;
+}
+
+export interface EscribirActivity {
+    type: 'escribir';
+    instruction: string;
+    placeholder: string;
+    minLength?: number;
+}
+
+export interface EleccionActivity {
+    type: 'eleccion';
+    instruction: string;
+    options: { id: string; label: string; correct?: boolean }[];
 }
 
 export interface Choice {

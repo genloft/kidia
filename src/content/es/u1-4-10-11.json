@@ -1,0 +1,92 @@
+{
+  "id": "u1-4-10-11",
+  "title": "1.4 Cazaerrores: misión difícil",
+  "description": "Subimos de nivel, detective. Ahora los errores se disfrazan de verdad. Necesito tu mejor lupa.",
+  "difficulty": "intermediate",
+  "language": "es",
+  "tramo": "10-11",
+  "nivel": 1,
+  "unidad": "1.4",
+  "competencia_foco": "pensamiento_critico",
+  "accesibilidad": ["Respuesta con audio", "Se puede señalar y explicar por voz"],
+  "nota_familia": "Contad una vez que algo «sonaba a verdad» pero resultó ser falso.",
+  "duracion_min": [25, 25],
+  "required_badge_id": "chef-prompts",
+  "badge": {
+    "id": "cazaerrores-2",
+    "name": "Cazaerrores Nivel 2",
+    "icon": "🔎",
+    "description": "Detecta errores sutiles en respuestas de la IA y explica por qué están mal."
+  },
+  "initial_node_id": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "sender": "kidia",
+      "text": "Cazaerrores: misión difícil\n\nSubimos de nivel, detective. Ahora los errores se disfrazan de verdad. Necesito tu mejor lupa.",
+      "next_node_id": "explora"
+    },
+    "explora": {
+      "id": "explora",
+      "sender": "kidia",
+      "text": "A veces la IA se equivoca con cosas que parecen ciertas (una fecha, un dato, un nombre). Por eso miramos con lupa y no nos fiamos solo de que «suene bien».",
+      "next_node_id": "crea"
+    },
+    "crea": {
+      "id": "crea",
+      "sender": "kidia",
+      "text": "Lee esta respuesta de la IA con atención y caza el error escondido:\n\n«La Torre Eiffel se construyó en 1920 y mide 330 metros. Está en París, la capital de Francia.»",
+      "action": "activity",
+      "action_data": {
+        "type": "eleccion",
+        "instruction": "Toca la parte que crees que está mal.",
+        "options": [
+          { "id": "fecha", "label": "Se construyó en 1920", "correct": true },
+          { "id": "altura", "label": "Mide 330 metros", "correct": false },
+          { "id": "ciudad", "label": "Está en París, la capital de Francia", "correct": false }
+        ]
+      },
+      "next_node_id": "corrige"
+    },
+    "corrige": {
+      "id": "corrige",
+      "sender": "kidia",
+      "text": "¡Bien visto! (La Torre Eiffel se terminó en 1889, no en 1920.) Ahora escribe con tus palabras por qué ese dato estaba mal y cómo lo comprobarías.",
+      "action": "activity",
+      "action_data": {
+        "type": "escribir",
+        "instruction": "Explica por qué está mal el dato y cómo lo comprobarías.",
+        "placeholder": "Está mal porque... Lo comprobaría...",
+        "minLength": 15
+      },
+      "next_node_id": "reflexiona"
+    },
+    "reflexiona": {
+      "id": "reflexiona",
+      "sender": "kidia",
+      "text": "¿Cómo distingues un dato verdadero de uno que solo suena bien? ¿Qué harías para asegurarte del todo?",
+      "next_node_id": "comparte"
+    },
+    "comparte": {
+      "id": "comparte",
+      "sender": "kidia",
+      "text": "¡Gran trabajo, detective! Ya no te la cuela ni un dato disfrazado. 🔎",
+      "action": "trigger_quiz"
+    }
+  },
+  "quiz": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "Un dato que \"suena a verdad\" pero es falso, ¿por qué es peligroso?",
+        "options": [
+          "Porque nos lo podemos creer sin comprobarlo",
+          "Porque siempre es fácil de detectar",
+          "Porque la IA nunca da datos así"
+        ],
+        "correct_index": 0,
+        "explanation": "Los errores sutiles son los más peligrosos porque suenan convincentes: por eso hay que verificar, no solo confiar en cómo «suenan»."
+      }
+    ]
+  }
+}

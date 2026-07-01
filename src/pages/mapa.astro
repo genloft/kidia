@@ -62,30 +62,67 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
     import { ProgressService } from '../lib/progress-service';
     import { activeChild } from '../lib/active-child';
     import { SubscriptionService } from '../lib/subscription-service';
+    import { ChildrenService } from '../lib/children-service';
+    import { tramoForChild } from '../lib/tramos';
 
     const state = ProgressService.getState();
-    // Correct selector: .mission-card-v3
-    const globalPercent = ProgressService.getGlobalProgress(document.querySelectorAll('.mission-card-v3').length);
 
-    // 1. Update Global Stats
     const globalText = document.getElementById('global-percent');
     const globalBar = document.getElementById('global-bar');
 
-    if (globalText) globalText.innerText = `${globalPercent}%`;
-    if (globalBar) globalBar.style.width = `${globalPercent}%`;
-
     // 2. Hydrate Cards
-    const cards = document.querySelectorAll('.mission-card-v3');
+    const cards = Array.from(document.querySelectorAll('.mission-card-v3'));
     console.log('[Map] Found cards:', cards.length);
+
+    // El mapa contiene las 3 variantes de tramo de cada unidad; aquí se
+    // muestra solo la del tramo del hijo activo (una tarjeta por unidad).
+    function filterByTramo(myTramo) {
+        const byUnidad = new Map();
+        cards.forEach(card => {
+            const unidad = card.getAttribute('data-unidad');
+            if (!byUnidad.has(unidad)) byUnidad.set(unidad, []);
+            byUnidad.get(unidad).push(card);
+        });
+
+        const visible = [];
+        byUnidad.forEach(variants => {
+            const match = (myTramo && variants.find(c => c.getAttribute('data-tramo') === myTramo)) || variants[0];
+            variants.forEach(c => {
+                if (c === match) {
+                    c.classList.remove('hidden');
+                    visible.push(c);
+                } else {
+                    c.classList.add('hidden');
+                }
+            });
+        });
+        return visible;
+    }
 
     async function hydrateCards() {
         const childId = activeChild.get();
-        // Sin hijo activo todavía (sistema de hijos no usado en esta sesión): no se
-        // aplica el gating por suscripción, solo el de insignias de siempre.
-        const hasPlan = childId ? await SubscriptionService.hasActivePlan() : true;
 
-        cards.forEach(card => {
+        let myTramo = null;
+        let hasPlan = true;
+        if (childId) {
+            hasPlan = await SubscriptionService.hasActivePlan();
+            const children = await ChildrenService.listChildren();
+            const child = children.find(c => c.id === childId);
+            if (child) {
+                const tramo = tramoForChild(child.birth_date);
+                myTramo = tramo ? tramo.id : null;
+            }
+        }
+
+        const visibleCards = filterByTramo(myTramo);
+
+        const globalPercent = ProgressService.getGlobalProgress(visibleCards.length);
+        if (globalText) globalText.innerText = `${globalPercent}%`;
+        if (globalBar) globalBar.style.width = `${globalPercent}%`;
+
+        visibleCards.forEach(card => {
             const id = card.getAttribute('data-id');
+            const unidad = card.getAttribute('data-unidad');
             const reqBadge = card.getAttribute('data-req');
             const statusText = card.querySelector('.status-locked');
 
@@ -103,8 +140,8 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
                 requiresSubscription = true;
             }
 
-            // "Intro" is always free (misión de prueba)
-            if (id === 'intro-ia') {
+            // La Unidad 1.1 es siempre la misión de prueba gratuita
+            if (unidad === '1.1') {
                 isLocked = false;
                 requiresSubscription = false;
             }

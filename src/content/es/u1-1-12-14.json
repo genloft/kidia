@@ -1,0 +1,82 @@
+{
+  "id": "u1-1-12-14",
+  "title": "1.1 Mira dentro de la IA",
+  "description": "Todos hablan de la IA como si pensara y sintiera. Hoy vas a ver qué hace de verdad por dentro… y a desmontar unos cuantos mitos.",
+  "difficulty": "advanced",
+  "language": "es",
+  "tramo": "12-14",
+  "nivel": 1,
+  "unidad": "1.1",
+  "competencia_foco": "pensamiento_critico",
+  "accesibilidad": ["Texto con audio", "Formato visual, esquema o explicación grabada"],
+  "nota_familia": "Comentad en casa: ¿creíais que la IA «piensa»? ¿Qué hace en realidad?",
+  "duracion_min": [35, 45],
+  "unlocks_scenario_id": "u1-2-12-14",
+  "badge": {
+    "id": "desmitificador-ia",
+    "name": "Desmitificador de IA",
+    "icon": "🧠",
+    "description": "Entiende que una IA generativa predice patrones, no piensa ni siente."
+  },
+  "initial_node_id": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "sender": "kidia",
+      "text": "Mira dentro de la IA\n\nTodos hablan de la IA como si pensara y sintiera. Hoy vas a ver qué hace de verdad por dentro… y a desmontar unos cuantos mitos.",
+      "next_node_id": "explora"
+    },
+    "explora": {
+      "id": "explora",
+      "sender": "kidia",
+      "text": "Una IA generativa no «sabe» como tú. Ha aprendido patrones de muchísimos textos o imágenes y predice lo más probable que viene después. No tiene intenciones ni conciencia.\n\nPor eso puede sonar segura y equivocarse: no comprende lo que dice, calcula lo más probable.",
+      "next_node_id": "crea"
+    },
+    "crea": {
+      "id": "crea",
+      "sender": "kidia",
+      "text": "Vamos a desmontar tres mitos comunes sobre la IA. Clasifica cada afirmación: ¿es un mito, o describe bien lo que hace de verdad?",
+      "action": "activity",
+      "action_data": {
+        "type": "clasificar",
+        "instruction": "Clasifica cada afirmación: «Mito» o «Realidad».",
+        "categories": ["Mito", "Realidad"],
+        "items": [
+          { "id": "piensa", "label": "La IA piensa como una persona", "correctCategory": 0 },
+          { "id": "siente", "label": "La IA siente emociones de verdad", "correctCategory": 0 },
+          { "id": "sabe-verdad", "label": "Todo lo que dice la IA es siempre verdad", "correctCategory": 0 },
+          { "id": "predice", "label": "La IA predice la palabra más probable según patrones aprendidos", "correctCategory": 1 },
+          { "id": "puede-fallar", "label": "La IA puede sonar segura y aun así estar equivocada", "correctCategory": 1 }
+        ]
+      },
+      "next_node_id": "reflexiona"
+    },
+    "reflexiona": {
+      "id": "reflexiona",
+      "sender": "kidia",
+      "text": "Si la IA solo predice patrones, ¿por qué a veces acierta tanto? ¿Qué significa exactamente que «no entiende» lo que dice?",
+      "next_node_id": "comparte"
+    },
+    "comparte": {
+      "id": "comparte",
+      "sender": "kidia",
+      "text": "Ya sabes lo que casi nadie sabe: la IA predice patrones, no piensa. 🧠",
+      "action": "trigger_quiz"
+    }
+  },
+  "quiz": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "¿Qué hace realmente una IA generativa cuando te responde?",
+        "options": [
+          "Predice la palabra o el contenido más probable según patrones que aprendió",
+          "Piensa la respuesta como lo haría una persona",
+          "Consulta sus sentimientos sobre el tema"
+        ],
+        "correct_index": 0,
+        "explanation": "Una IA generativa no tiene conciencia: calcula, a partir de patrones aprendidos, qué es lo más probable que venga a continuación."
+      }
+    ]
+  }
+}

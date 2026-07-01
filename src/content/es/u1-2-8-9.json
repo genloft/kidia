@@ -1,0 +1,84 @@
+{
+  "id": "u1-2-8-9",
+  "title": "1.2 Entrena a tu mini-robot",
+  "description": "Los robots no nacen sabiendo: ¡aprenden mirando ejemplos! Hoy tú serás el profe de un mini-robot.",
+  "difficulty": "beginner",
+  "language": "es",
+  "tramo": "8-9",
+  "nivel": 1,
+  "unidad": "1.2",
+  "competencia_foco": "pensamiento_critico",
+  "accesibilidad": ["Iconos grandes", "Alternativa por voz", "Sin presión de tiempo"],
+  "nota_familia": "Jugad al «veo, veo» de categorías: ¿en qué se parecen todas las cosas verdes de la cocina?",
+  "duracion_min": [15, 20],
+  "required_badge_id": "detective-maquinas",
+  "unlocks_scenario_id": "u1-3-8-9",
+  "badge": {
+    "id": "entrenador-mini",
+    "name": "Entrenador de Robots",
+    "icon": "🤖",
+    "description": "Sabe que una IA aprende de los ejemplos que le enseñamos."
+  },
+  "initial_node_id": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "sender": "kidia",
+      "text": "Entrena a tu mini-robot\n\nLos robots no nacen sabiendo: ¡aprenden mirando ejemplos! Hoy tú serás el profe de un mini-robot.",
+      "next_node_id": "explora"
+    },
+    "explora": {
+      "id": "explora",
+      "sender": "kidia",
+      "text": "Una IA aprende mirando muchísimos ejemplos. Si solo ve gatos naranjas, puede pensar que TODOS los gatos son naranjas.\n\nIdea clave: **la IA aprende de lo que le enseñamos**.",
+      "next_node_id": "crea"
+    },
+    "crea": {
+      "id": "crea",
+      "sender": "kidia",
+      "text": "Enséñale a tu mini-robot a distinguir «vuela» de «no vuela». Cuando termines, te daré un ejemplo nuevo. ¿Acertará tu robot?",
+      "action": "activity",
+      "action_data": {
+        "type": "clasificar",
+        "instruction": "Toca la caja correcta para cada ejemplo: «Vuela» o «No vuela».",
+        "categories": ["Vuela", "No vuela"],
+        "items": [
+          { "id": "pajaro", "label": "Pájaro", "icon": "🐦", "correctCategory": 0 },
+          { "id": "avion", "label": "Avión", "icon": "✈️", "correctCategory": 0 },
+          { "id": "perro", "label": "Perro", "icon": "🐶", "correctCategory": 1 },
+          { "id": "abeja", "label": "Abeja", "icon": "🐝", "correctCategory": 0 },
+          { "id": "pez", "label": "Pez", "icon": "🐟", "correctCategory": 1 },
+          { "id": "pinguino", "label": "Pingüino", "icon": "🐧", "correctCategory": 1 }
+        ]
+      },
+      "next_node_id": "reflexiona"
+    },
+    "reflexiona": {
+      "id": "reflexiona",
+      "sender": "kidia",
+      "text": "¿Viste el pingüino? Tiene alas, pero no vuela. ¿Qué pasaría si a un robot solo le enseñamos animales con alas que sí vuelan? ¿Reconocería que un pingüino no vuela? ¿Quién decide lo que aprende la máquina?",
+      "next_node_id": "comparte"
+    },
+    "comparte": {
+      "id": "comparte",
+      "sender": "kidia",
+      "text": "¡Eres un gran profe de robots! Recuerda: la IA aprende de lo que le enseñamos. 🤖",
+      "action": "trigger_quiz"
+    }
+  },
+  "quiz": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "Si a una IA solo le enseñamos fotos de manzanas rojas, ¿qué puede pasar?",
+        "options": [
+          "Puede pensar que una manzana verde no es una manzana",
+          "Aprenderá igual de bien todos los colores",
+          "No aprenderá nada"
+        ],
+        "correct_index": 0,
+        "explanation": "Si los ejemplos son pocos o parecidos, la IA se equivoca más con casos nuevos y distintos."
+      }
+    ]
+  }
+}

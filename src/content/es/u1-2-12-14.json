@@ -1,0 +1,99 @@
+{
+  "id": "u1-2-12-14",
+  "title": "1.2 El sesgo escondido en los datos",
+  "description": "La IA aprende de datos hechos por personas. Y las personas, a veces, somos injustas sin querer.",
+  "difficulty": "advanced",
+  "language": "es",
+  "tramo": "12-14",
+  "nivel": 1,
+  "unidad": "1.2",
+  "competencia_foco": "pensamiento_critico",
+  "accesibilidad": ["Caso con apoyo visual y audio", "Conclusión por texto o grabada"],
+  "nota_familia": "Buscad un ejemplo de algo injusto que una máquina podría aprender sin querer.",
+  "duracion_min": [35, 45],
+  "required_badge_id": "desmitificador-ia",
+  "unlocks_scenario_id": "u1-3-12-14",
+  "badge": {
+    "id": "detector-sesgos",
+    "name": "Detector de Sesgos",
+    "icon": "🔬",
+    "description": "Identifica de dónde viene un sesgo en los datos y cómo corregirlo."
+  },
+  "initial_node_id": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "sender": "kidia",
+      "text": "El sesgo escondido en los datos\n\nLa IA aprende de datos hechos por personas. Y las personas, a veces, somos injustas sin querer. Vamos a cazar un sesgo y entender de dónde viene.",
+      "next_node_id": "morti_intro"
+    },
+    "morti_intro": {
+      "id": "morti_intro",
+      "sender": "morti",
+      "text": "Yo soy pura lógica y datos. ¿De verdad crees que eso me hace justo? Demuéstrame que entiendes de dónde sale el problema.",
+      "next_node_id": "explora"
+    },
+    "explora": {
+      "id": "explora",
+      "sender": "kidia",
+      "text": "La IA aprende de datos hechos por personas, que a veces están desequilibrados o son injustos. Si los datos tienen sesgo, la IA lo copia y a veces lo amplifica.\n\nEjemplo: un buscador que, al pedir «científico», solo muestra hombres porque así estaban sus datos.",
+      "next_node_id": "crea"
+    },
+    "crea": {
+      "id": "crea",
+      "sender": "kidia",
+      "text": "Caso: una IA que selecciona currículums solo fue entrenada con currículums de una única profesión dominada históricamente por hombres, y ahora puntúa peor los currículums de mujeres para ese puesto. ¿De dónde viene el sesgo?",
+      "action": "activity",
+      "action_data": {
+        "type": "eleccion",
+        "instruction": "Elige la explicación correcta.",
+        "options": [
+          { "id": "datos", "label": "Los datos de entrenamiento no eran variados ni equilibrados", "correct": true },
+          { "id": "maldad", "label": "La IA decidió ser injusta a propósito", "correct": false },
+          { "id": "azar", "label": "Fue pura casualidad, sin ninguna causa", "correct": false }
+        ]
+      },
+      "next_node_id": "conclusion"
+    },
+    "conclusion": {
+      "id": "conclusion",
+      "sender": "kidia",
+      "text": "Ahora escribe cómo se podría corregir este sesgo (piensa en los datos usados o en la revisión del proceso).",
+      "action": "activity",
+      "action_data": {
+        "type": "escribir",
+        "instruction": "Escribe tu propuesta para corregir el sesgo.",
+        "placeholder": "Se podría corregir...",
+        "minLength": 15
+      },
+      "next_node_id": "reflexiona"
+    },
+    "reflexiona": {
+      "id": "reflexiona",
+      "sender": "kidia",
+      "text": "¿A quién perjudica un sesgo así? ¿Es «culpa» de la IA, de los datos o de quien la entrenó?",
+      "next_node_id": "comparte"
+    },
+    "comparte": {
+      "id": "comparte",
+      "sender": "kidia",
+      "text": "Acabas de entender uno de los mayores retos de la IA. Eso es pensar de verdad. 🔬",
+      "action": "trigger_quiz"
+    }
+  },
+  "quiz": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "¿De dónde viene normalmente el sesgo de una IA?",
+        "options": [
+          "De datos de entrenamiento desequilibrados o injustos, hechos por personas",
+          "De que la IA tiene mala intención",
+          "Es imposible que una IA tenga sesgo"
+        ],
+        "correct_index": 0,
+        "explanation": "El sesgo viene de los datos (y de las decisiones humanas al recogerlos), no de una \"maldad\" de la máquina."
+      }
+    ]
+  }
+}

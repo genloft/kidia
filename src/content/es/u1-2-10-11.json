@@ -1,0 +1,84 @@
+{
+  "id": "u1-2-10-11",
+  "title": "1.2 Hazle una trampa a la IA",
+  "description": "Hoy descubrirás el punto débil de la IA: aprende solo de lo que le enseñas.",
+  "difficulty": "intermediate",
+  "language": "es",
+  "tramo": "10-11",
+  "nivel": 1,
+  "unidad": "1.2",
+  "competencia_foco": "pensamiento_critico",
+  "accesibilidad": ["Iconos grandes", "Alternativa por voz", "Sin presión de tiempo"],
+  "nota_familia": "Pensad en casa: ¿qué pasaría si una IA solo hubiera visto fotos de un tipo de comida?",
+  "duracion_min": [25, 30],
+  "required_badge_id": "agente-secreto-ia",
+  "unlocks_scenario_id": "u1-3-10-11",
+  "badge": {
+    "id": "reparador-ia",
+    "name": "Reparador de IA",
+    "icon": "🧠",
+    "description": "Entiende que la calidad de los datos cambia lo que aprende una IA."
+  },
+  "initial_node_id": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "sender": "kidia",
+      "text": "Hazle una trampa a la IA\n\nHoy descubrirás el punto débil de la IA: aprende solo de lo que le enseñas. ¿La engañamos un poco para entenderla mejor?",
+      "next_node_id": "explora"
+    },
+    "explora": {
+      "id": "explora",
+      "sender": "kidia",
+      "text": "Una IA aprende de ejemplos (datos). Si solo le enseñas perros marrones, pensará que un perro blanco no es un perro.\n\n**Datos torcidos = IA torcida.** Por eso importa CÓMO le enseñamos.",
+      "next_node_id": "crea"
+    },
+    "crea": {
+      "id": "crea",
+      "sender": "kidia",
+      "text": "Primero entrena tu clasificador con ejemplos variados de «fruta» y «verdura».",
+      "action": "activity",
+      "action_data": {
+        "type": "clasificar",
+        "instruction": "Clasifica cada ejemplo: «Fruta» o «Verdura».",
+        "categories": ["Fruta", "Verdura"],
+        "items": [
+          { "id": "manzana", "label": "Manzana", "icon": "🍎", "correctCategory": 0 },
+          { "id": "zanahoria", "label": "Zanahoria", "icon": "🥕", "correctCategory": 1 },
+          { "id": "platano", "label": "Plátano", "icon": "🍌", "correctCategory": 0 },
+          { "id": "brocoli", "label": "Brócoli", "icon": "🥦", "correctCategory": 1 },
+          { "id": "fresa", "label": "Fresa", "icon": "🍓", "correctCategory": 0 },
+          { "id": "pimiento", "label": "Pimiento", "icon": "🫑", "correctCategory": 1 }
+        ]
+      },
+      "next_node_id": "reflexiona"
+    },
+    "reflexiona": {
+      "id": "reflexiona",
+      "sender": "kidia",
+      "text": "Imagina que ahora «tuerzo» tu clasificador y solo le enseño manzanas rojas. Le doy una manzana verde nueva... ¿por qué crees que fallaría? Si una IA eligiera quién gana un premio y solo hubiera visto un tipo de ejemplo, ¿sería justo?",
+      "next_node_id": "comparte"
+    },
+    "comparte": {
+      "id": "comparte",
+      "sender": "kidia",
+      "text": "¡Caso resuelto! La IA es tan lista (o tan torpe) como los datos que le das. 🧠",
+      "action": "trigger_quiz"
+    }
+  },
+  "quiz": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "Si entrenamos una IA solo con manzanas rojas, ¿qué pasará al mostrarle una manzana verde?",
+        "options": [
+          "Puede que no la reconozca bien, porque nunca vio una así",
+          "La reconocerá perfectamente siempre",
+          "No le afecta en nada el tipo de ejemplos usados"
+        ],
+        "correct_index": 0,
+        "explanation": "Cuando los datos de entrenamiento son poco variados, la IA falla más con casos nuevos distintos a lo que vio."
+      }
+    ]
+  }
+}

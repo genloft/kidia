@@ -1,0 +1,98 @@
+{
+  "id": "u1-4-12-14",
+  "title": "1.4 Caza el error: nivel experto",
+  "description": "Subimos al máximo nivel. Ahora los errores se disfrazan de verdad y a veces esconden sesgos.",
+  "difficulty": "advanced",
+  "language": "es",
+  "tramo": "12-14",
+  "nivel": 1,
+  "unidad": "1.4",
+  "competencia_foco": "verificacion",
+  "accesibilidad": ["Respuesta con audio", "Fuentes con apoyo visual", "Argumento por texto o grabado"],
+  "nota_familia": "Comentad una noticia o dato que «sonaba verdad» y resultó ser falso.",
+  "duracion_min": [35, 35],
+  "required_badge_id": "ingeniero-prompts",
+  "badge": {
+    "id": "verificador-experto",
+    "name": "Verificador Experto",
+    "icon": "🧠",
+    "description": "Detecta afirmaciones plausibles pero falsas y sesgos, y los verifica con fuentes."
+  },
+  "initial_node_id": "start",
+  "nodes": {
+    "start": {
+      "id": "start",
+      "sender": "kidia",
+      "text": "Caza el error: nivel experto\n\nSubimos al máximo nivel. Ahora los errores se disfrazan de verdad y a veces esconden sesgos. Tu arma: la verificación con fuentes.",
+      "next_node_id": "morti_intro"
+    },
+    "morti_intro": {
+      "id": "morti_intro",
+      "sender": "morti",
+      "text": "Yo soy frío y lógico, pero hasta yo me equivoco. ¿Serás tú quien me pille con la evidencia en la mano?",
+      "next_node_id": "explora"
+    },
+    "explora": {
+      "id": "explora",
+      "sender": "kidia",
+      "text": "En este nivel los errores son listos: datos plausibles pero falsos, o afirmaciones con sesgo. No basta con que «suene bien». Hay que verificar con fuentes fiables y argumentar por qué algo está mal.",
+      "next_node_id": "crea"
+    },
+    "crea": {
+      "id": "crea",
+      "sender": "morti",
+      "text": "Respuesta de la IA: «Los coches eléctricos contaminan siempre más que los de gasolina durante toda su vida útil, así que no sirven para nada.» ¿Qué falla en esta afirmación?",
+      "action": "activity",
+      "action_data": {
+        "type": "eleccion",
+        "instruction": "Elige la afirmación que mejor describe el problema.",
+        "options": [
+          { "id": "generaliza", "label": "Generaliza «siempre» sin matices: depende del país, la fuente de electricidad y el ciclo de vida completo", "correct": true },
+          { "id": "correcta", "label": "La afirmación es correcta tal cual", "correct": false },
+          { "id": "no-verificable", "label": "No se puede verificar de ninguna forma", "correct": false }
+        ]
+      },
+      "next_node_id": "argumenta"
+    },
+    "argumenta": {
+      "id": "argumenta",
+      "sender": "kidia",
+      "text": "Verifícalo con fuentes fiables y argumenta por qué está mal, escribiendo la corrección.",
+      "action": "activity",
+      "action_data": {
+        "type": "escribir",
+        "instruction": "Escribe tu corrección argumentada, citando qué fuente usarías para comprobarlo.",
+        "placeholder": "Esta afirmación es una verdad a medias porque... Lo verificaría con...",
+        "minLength": 20
+      },
+      "next_node_id": "reflexiona"
+    },
+    "reflexiona": {
+      "id": "reflexiona",
+      "sender": "kidia",
+      "text": "¿Cómo distingues una fuente fiable de una que no lo es? ¿Por qué los errores que «suenan bien» son los más peligrosos?",
+      "next_node_id": "comparte"
+    },
+    "comparte": {
+      "id": "comparte",
+      "sender": "kidia",
+      "text": "Eso es pensamiento crítico de verdad: ni a Morti se la cuelas. 🧠",
+      "action": "trigger_quiz"
+    }
+  },
+  "quiz": {
+    "questions": [
+      {
+        "id": "q1",
+        "text": "¿Por qué son especialmente peligrosas las \"verdades a medias\" de una IA?",
+        "options": [
+          "Porque suenan plausibles y es fácil creérselas sin verificar",
+          "Porque siempre son obviamente falsas",
+          "Porque la IA avisa cuando no está segura"
+        ],
+        "correct_index": 0,
+        "explanation": "Una afirmación plausible pero falsa o sesgada es más peligrosa porque no levanta sospechas a simple vista: hace falta verificar con fuentes."
+      }
+    ]
+  }
+}
