@@ -1,0 +1,130 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+
+const pilares = [
+  {
+    icon: '🎮',
+    title: 'Aprender jugando',
+    text: 'Cada concepto de IA se presenta como una misión narrativa, no como una clase. El niño o niña avanza tomando decisiones, no memorizando definiciones.'
+  },
+  {
+    icon: '🧩',
+    title: 'Progresión por niveles',
+    text: 'El contenido está organizado en caminos por edad, de conceptos básicos a preguntas más profundas sobre ética y el futuro de la tecnología, siempre a un ritmo adecuado para cada etapa.'
+  },
+  {
+    icon: '🦊',
+    title: 'Una amiga, no una profesora',
+    text: 'Kidia acompaña como un personaje cercano que hace preguntas y celebra los aciertos, en vez de dar lecciones largas o corregir con tono académico.'
+  },
+  {
+    icon: '🔒',
+    title: 'Seguro por diseño',
+    text: 'Sin publicidad dirigida a menores, sin chats abiertos con desconocidos. Los padres pueden ver el progreso desde la Zona de Padres en todo momento.'
+  },
+  {
+    icon: '🛠️',
+    title: 'De la teoría a la práctica',
+    text: 'El Constructor de IA deja que los niños apliquen lo aprendido montando su propio modelo pieza a pieza: datos, entrenamiento, examen y salida.'
+  },
+  {
+    icon: '👪',
+    title: 'Pensado para familias',
+    text: 'Un mismo padre o madre puede inscribir a varios hijos, cada uno con su propio progreso, insignias y camino de aprendizaje.'
+  }
+];
+---
+
+<Layout title="Kidia - Metodología" description="Cómo enseña Kidia Inteligencia Artificial a niños de 9 a 14 años: aprendizaje basado en juego, progresión por niveles y acompañamiento seguro.">
+  <Header />
+
+  <main class="methodology-container">
+    <div class="methodology-header">
+      <h1 class="text-gradient">Nuestra Metodología</h1>
+      <p>No enseñamos a programar. Enseñamos a pensar con y sobre la Inteligencia Artificial.</p>
+    </div>
+
+    <div class="pilares-grid">
+      {pilares.map(p => (
+        <div class="card pilar-card">
+          <div class="pilar-icon">{p.icon}</div>
+          <h2>{p.title}</h2>
+          <p>{p.text}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="cta-block card">
+      <h2>¿Quieres ver los caminos por edad?</h2>
+      <p>Descubre qué camino encaja mejor con la edad de tu hijo/a.</p>
+      <a href="/caminos" class="btn">Ver los caminos</a>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .methodology-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  .methodology-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+
+  .methodology-header h1 {
+    font-size: 2.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .methodology-header p {
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.15rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .pilares-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .pilar-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .pilar-icon {
+    font-size: 2.25rem;
+  }
+
+  .pilar-card h2 {
+    font-size: 1.2rem;
+  }
+
+  .pilar-card p {
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .cta-block {
+    text-align: center;
+    padding: 2.5rem;
+  }
+
+  .cta-block h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-block p {
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 1.5rem;
+  }
+</style>

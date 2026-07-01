@@ -59,6 +59,25 @@ if (!scenario) {
     <AnimationStage />
   </main>
   
+  <script define:vars={{ scenarioId: scenario.id, difficulty: scenario.difficulty }}>
+    // Comprobar que el hijo/a activo tiene acceso a este nivel (salvo la
+    // misión de prueba gratuita intro-ia). Si no, lo mandamos a /caminos.
+    (async () => {
+      if (scenarioId === 'intro-ia') return;
+
+      const { activeChild } = await import('../../lib/active-child');
+      const childId = activeChild.get();
+      if (!childId) return; // sin sistema de hijos activo todavía (compatibilidad)
+
+      const { EnrollmentService } = await import('../../lib/enrollment-service');
+      const unlocked = await EnrollmentService.isDifficultyUnlocked(childId, difficulty);
+
+      if (!unlocked) {
+        window.location.href = '/caminos';
+      }
+    })();
+  </script>
+
   <script>
     // Dynamic Kidia expression system
     const kidiaExpressions = {

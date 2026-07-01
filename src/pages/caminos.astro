@@ -1,0 +1,274 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import { loadScenarios } from '../lib/scenario-loader';
+
+const scenarios = await loadScenarios('es');
+const countByDifficulty: Record<string, number> = {};
+for (const s of scenarios) {
+  countByDifficulty[s.difficulty] = (countByDifficulty[s.difficulty] || 0) + 1;
+}
+---
+
+<Layout title="Kidia - Caminos por Edad" description="Elige el camino de aprendizaje de IA adecuado para la edad de tu hijo/a e inscríbelo en Kidia.">
+  <Header />
+
+  <main class="caminos-container">
+    <div class="caminos-header">
+      <h1 class="text-gradient">Caminos por Edad</h1>
+      <p>Cada camino agrupa las misiones de Kidia según la edad y el nivel de tu hijo/a. Puedes inscribir a cada hijo/a en el camino que le corresponda desde su perfil.</p>
+    </div>
+
+    <div id="caminos-grid" class="caminos-grid" data-counts={JSON.stringify(countByDifficulty)}>
+      <p class="loading-msg">Cargando caminos...</p>
+    </div>
+
+    <div id="enroll-modal" class="enroll-modal hidden">
+      <div class="enroll-modal-content card">
+        <button type="button" id="enroll-modal-close" class="modal-close">✕</button>
+        <h2 id="enroll-modal-title">Inscribir</h2>
+        <p id="enroll-modal-error" class="enroll-error hidden"></p>
+        <div class="input-group">
+          <label for="enroll-child-select">¿Para qué hijo/a?</label>
+          <select id="enroll-child-select"></select>
+        </div>
+        <button type="button" id="enroll-confirm-btn" class="btn">Confirmar inscripción</button>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { supabase } from '../lib/supabase';
+  import { PathsService } from '../lib/paths-service';
+  import { ChildrenService } from '../lib/children-service';
+  import { EnrollmentService } from '../lib/enrollment-service';
+
+  const grid = document.getElementById('caminos-grid');
+  const countByDifficulty = JSON.parse(grid.dataset.counts || '{}');
+  const modal = document.getElementById('enroll-modal');
+  const modalTitle = document.getElementById('enroll-modal-title');
+  const modalError = document.getElementById('enroll-modal-error');
+  const modalSelect = document.getElementById('enroll-child-select');
+  const modalConfirm = document.getElementById('enroll-confirm-btn');
+  const modalClose = document.getElementById('enroll-modal-close');
+
+  let activePathId = null;
+  let activePathName = '';
+
+  function priceLabel(cents) {
+    if (!cents) return 'Precio: próximamente';
+    return `${(cents / 100).toFixed(2).replace('.', ',')} € / mes`;
+  }
+
+  async function render() {
+    const paths = await PathsService.listActivePaths();
+
+    if (paths.length === 0) {
+      grid.innerHTML = '<p class="loading-msg">Todavía no hay caminos publicados.</p>';
+      return;
+    }
+
+    grid.innerHTML = paths.map(p => `
+      <div class="card camino-card">
+        <div class="camino-age">${p.age_min}-${p.age_max} años</div>
+        <h2>${p.name}</h2>
+        <p class="camino-desc">${p.description || ''}</p>
+        <p class="camino-meta">${countByDifficulty[p.difficulty] || 0} misiones incluidas</p>
+        <p class="camino-price">${priceLabel(p.price_cents)}</p>
+        <button type="button" class="btn btn-enroll" data-id="${p.id}" data-name="${p.name}">Inscribir</button>
+      </div>
+    `).join('');
+
+    grid.querySelectorAll('.btn-enroll').forEach(btn => {
+      btn.addEventListener('click', () => onEnrollClick(btn.dataset.id, btn.dataset.name));
+    });
+  }
+
+  async function onEnrollClick(pathId, pathName) {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      window.location.href = '/login';
+      return;
+    }
+
+    const children = await ChildrenService.listChildren();
+    if (children.length === 0) {
+      window.location.href = '/perfil#hijos';
+      return;
+    }
+
+    activePathId = pathId;
+    activePathName = pathName;
+    modalTitle.textContent = `Inscribir en "${pathName}"`;
+    modalError.classList.add('hidden');
+    modalSelect.innerHTML = children.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+    modal.classList.remove('hidden');
+  }
+
+  modalClose.addEventListener('click', () => modal.classList.add('hidden'));
+
+  modalConfirm.addEventListener('click', async () => {
+    if (!activePathId) return;
+    modalError.classList.add('hidden');
+    modalConfirm.disabled = true;
+    modalConfirm.textContent = 'Inscribiendo...';
+
+    const { error } = await EnrollmentService.enroll(modalSelect.value, activePathId);
+
+    modalConfirm.disabled = false;
+    modalConfirm.textContent = 'Confirmar inscripción';
+
+    if (error) {
+      modalError.textContent = error;
+      modalError.classList.remove('hidden');
+      return;
+    }
+
+    modal.classList.add('hidden');
+    alert(`¡Inscripción confirmada en "${activePathName}"! Ya puede jugar las misiones de este camino desde el Mapa.`);
+  });
+
+  render();
+</script>
+
+<style>
+  .caminos-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  .caminos-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .caminos-header h1 {
+    font-size: 2.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .caminos-header p {
+    color: var(--text-muted, #94a3b8);
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .caminos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .loading-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--text-muted, #94a3b8);
+    padding: 2rem 0;
+  }
+
+  .camino-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .camino-age {
+    display: inline-block;
+    align-self: flex-start;
+    background: rgba(34, 211, 238, 0.15);
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border-radius: 99px;
+    margin-bottom: 0.5rem;
+  }
+
+  .camino-card h2 {
+    font-size: 1.4rem;
+  }
+
+  .camino-desc {
+    color: var(--text-muted, #94a3b8);
+    line-height: 1.6;
+    flex-grow: 1;
+  }
+
+  .camino-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    margin: 0;
+  }
+
+  .camino-price {
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .btn-enroll {
+    width: 100%;
+  }
+
+  .hidden { display: none; }
+
+  .enroll-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(9, 9, 11, 0.85);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+  }
+
+  .enroll-modal.hidden {
+    display: none;
+  }
+
+  .enroll-modal-content {
+    position: relative;
+    max-width: 420px;
+    width: 100%;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted, #94a3b8);
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+
+  .enroll-error {
+    color: #f87171;
+    font-size: 0.9rem;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem 0 1.5rem 0;
+  }
+
+  .input-group select {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    padding: 0.6rem 1rem;
+    border-radius: 0.6rem;
+    font-family: inherit;
+  }
+
+  #enroll-confirm-btn {
+    width: 100%;
+  }
+</style>

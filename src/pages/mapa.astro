@@ -60,61 +60,83 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
 
 <script>
     import { ProgressService } from '../lib/progress-service';
-    
+    import { activeChild } from '../lib/active-child';
+    import { EnrollmentService } from '../lib/enrollment-service';
+
     const state = ProgressService.getState();
     // Correct selector: .mission-card-v3
     const globalPercent = ProgressService.getGlobalProgress(document.querySelectorAll('.mission-card-v3').length);
-    
+
     // 1. Update Global Stats
     const globalText = document.getElementById('global-percent');
     const globalBar = document.getElementById('global-bar');
-    
+
     if (globalText) globalText.innerText = `${globalPercent}%`;
     if (globalBar) globalBar.style.width = `${globalPercent}%`;
-    
+
     // 2. Hydrate Cards
     const cards = document.querySelectorAll('.mission-card-v3');
     console.log('[Map] Found cards:', cards.length);
 
-    cards.forEach(card => {
-        const id = card.getAttribute('data-id');
-        const reqBadge = card.getAttribute('data-req');
-        const statusText = card.querySelector('.status-text');
-        
-        console.log(`[Map] Checking ${id} (req: ${reqBadge})`);
-        
-        let isLocked = false;
-        
-        // Basic Lock Logic
-        if (reqBadge && !state.badges.includes(reqBadge)) {
-             isLocked = true;
-             console.log(`[Map] ${id} LOCKED due to missing badge: ${reqBadge}`);
-        }
-        
-        // "Intro" is always free if it's the first one or logic dictates
-        if (id === 'intro-ia') {
-            isLocked = false;
-        }
-        
-        const isCompleted = state.completedScenarios.includes(id);
-        
-        // Apply classes
-        if (isLocked) {
-            card.classList.add('locked');
-            card.classList.remove('available');
-            if (statusText) statusText.innerText = '🔒 Bloqueado';
-        } else {
-            card.classList.remove('locked');
-            card.classList.add('available');
-            
-            if (isCompleted) {
-                card.classList.add('completed');
-                if (statusText) statusText.innerText = '✅ Completado';
-            } else {
-                if (statusText) statusText.innerText = '🚀 Disponible';
+    async function hydrateCards() {
+        const childId = activeChild.get();
+        const unlockedDifficulties = childId
+            ? await EnrollmentService.getUnlockedDifficulties(childId)
+            : null; // sin sistema de hijos activo todavía: no se aplica el gating por camino
+
+        cards.forEach(card => {
+            const id = card.getAttribute('data-id');
+            const reqBadge = card.getAttribute('data-req');
+            const difficulty = card.getAttribute('data-difficulty');
+            const statusText = card.querySelector('.status-locked');
+
+            let isLocked = false;
+            let requiresEnrollment = false;
+
+            // Bloqueo por insignia previa
+            if (reqBadge && !state.badges.includes(reqBadge)) {
+                isLocked = true;
             }
-        }
-    });
+
+            // Bloqueo por no estar inscrito en el camino de este nivel
+            if (unlockedDifficulties && !unlockedDifficulties.has(difficulty)) {
+                isLocked = true;
+                requiresEnrollment = true;
+            }
+
+            // "Intro" is always free
+            if (id === 'intro-ia') {
+                isLocked = false;
+                requiresEnrollment = false;
+            }
+
+            const isCompleted = state.completedScenarios.includes(id);
+
+            if (isLocked) {
+                card.classList.add('locked');
+                card.classList.remove('available');
+                if (requiresEnrollment) {
+                    card.classList.add('needs-enrollment');
+                    card.setAttribute('href', '/caminos');
+                    if (statusText) statusText.innerText = '🔒 Requiere inscripción';
+                } else if (statusText) {
+                    statusText.innerText = '🔒 Bloqueado';
+                }
+            } else {
+                card.classList.remove('locked', 'needs-enrollment');
+                card.classList.add('available');
+
+                if (isCompleted) {
+                    card.classList.add('completed');
+                    if (statusText) statusText.innerText = '✅ Completado';
+                } else if (statusText) {
+                    statusText.innerText = '🚀 Disponible';
+                }
+            }
+        });
+    }
+
+    hydrateCards();
 
     // 3. Deep Mode Logic
     const deepBtn = document.getElementById('btn-deep-mode');

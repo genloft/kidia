@@ -1,7 +1,13 @@
-
+import { activeChild } from './active-child';
 
 const isBrowser = typeof window !== 'undefined';
-const KEY = 'kidia-progress';
+
+function currentKey(): string {
+    const childId = activeChild.get();
+    // Antes de que exista el sistema de hijos (o si aún no hay uno activo),
+    // se mantiene la clave global para no perder compatibilidad.
+    return childId ? `kidia-progress-${childId}` : 'kidia-progress';
+}
 
 export interface UserProgress {
     completedScenarios: string[];
@@ -25,7 +31,7 @@ export const storage = {
     get(): UserProgress {
         if (!isBrowser) return defaultState;
         try {
-            const raw = localStorage.getItem(KEY);
+            const raw = localStorage.getItem(currentKey());
             if (!raw) return defaultState;
 
             const parsed = JSON.parse(raw);
@@ -46,7 +52,7 @@ export const storage = {
     set(state: UserProgress) {
         if (!isBrowser) return;
         try {
-            localStorage.setItem(KEY, JSON.stringify(state));
+            localStorage.setItem(currentKey(), JSON.stringify(state));
             window.dispatchEvent(new CustomEvent('progress:updated', { detail: state }));
             // Sincronizar con Supabase en segundo plano sin bloquear la UI
             syncWithCloud();

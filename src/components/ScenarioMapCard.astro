@@ -11,7 +11,7 @@ const difficultyLevels = {
 const level = difficultyLevels[difficulty];
 ---
 
-<a href={`/scenario/${scenario.id}`} class="mission-card-v3" data-id={scenario.id} data-req={scenario.required_badge_id}>
+<a href={`/scenario/${scenario.id}`} class="mission-card-v3" data-id={scenario.id} data-req={scenario.required_badge_id} data-difficulty={difficulty}>
     <div class="card-inner">
         <div class="card-background"></div>
         <div class="card-content-wrapper">
@@ -243,6 +243,25 @@ const level = difficultyLevels[difficulty];
         display: flex;
         align-items: center;
         gap: 0.5rem;
+    }
+
+    /* NEEDS ENROLLMENT: variante de "locked" pero clicable, lleva a /caminos */
+    .mission-card-v3.locked.needs-enrollment {
+        pointer-events: auto;
+        cursor: pointer;
+        filter: grayscale(0.5);
+    }
+
+    .mission-card-v3.locked.needs-enrollment .card-inner {
+        border-color: rgba(34, 211, 238, 0.25);
+    }
+
+    .mission-card-v3.locked.needs-enrollment:hover .card-inner {
+        border-color: rgba(34, 211, 238, 0.5);
+    }
+
+    .mission-card-v3.locked.needs-enrollment .status-locked {
+        color: var(--color-primary);
     }
 
     /* AVAILABLE */

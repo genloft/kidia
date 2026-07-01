@@ -12,7 +12,18 @@ import Header from '../components/Header.astro';
       <p class="subtitle">Elige tu próxima aventura en Kidia</p>
     </div>
 
-    <div class="options-grid">
+    <div id="child-switcher" class="child-switcher hidden">
+      <label for="child-select">Jugando como</label>
+      <select id="child-select"></select>
+      <a href="/perfil#hijos" class="btn-manage-children">Gestionar hijos/as</a>
+    </div>
+
+    <div id="no-children-prompt" class="no-children-prompt hidden">
+      <p>Todavía no has añadido ningún hijo/a a tu cuenta.</p>
+      <a href="/perfil#hijos" class="btn-outline">+ Añadir mi primer hijo/a</a>
+    </div>
+
+    <div id="options-grid" class="options-grid hidden">
       <!-- Mapa Option -->
       <a href="/mapa" class="option-card map-card">
         <div class="card-content">
@@ -61,7 +72,68 @@ import Header from '../components/Header.astro';
 
   .dashboard-header {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .hidden,
+  .child-switcher.hidden,
+  .no-children-prompt.hidden,
+  .options-grid.hidden {
+    display: none;
+  }
+
+  .child-switcher {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .child-switcher label {
+    color: #94a3b8;
+    font-size: 0.95rem;
+  }
+
+  .child-switcher select {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.6rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+  }
+
+  .btn-manage-children {
+    color: #38bdf8;
+    font-size: 0.85rem;
+    text-decoration: underline;
+  }
+
+  .no-children-prompt {
+    text-align: center;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    padding: 3rem 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .no-children-prompt p {
+    color: #94a3b8;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .no-children-prompt .btn-outline {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    border-radius: 99px;
+    font-weight: 600;
+    border: 2px solid #38bdf8;
+    color: #38bdf8;
   }
 
   .title {
@@ -190,11 +262,49 @@ import Header from '../components/Header.astro';
 
 <script>
   import { supabase } from '../lib/supabase';
+  import { ChildrenService } from '../lib/children-service';
+  import { activeChild } from '../lib/active-child';
+  import { SyncService } from '../lib/sync-service';
 
-  // Prevent logged out users from seeing this
-  supabase.auth.getSession().then(({ data: { session } }) => {
+  const switcher = document.getElementById('child-switcher') as HTMLElement;
+  const noChildrenPrompt = document.getElementById('no-children-prompt') as HTMLElement;
+  const optionsGrid = document.getElementById('options-grid') as HTMLElement;
+  const childSelect = document.getElementById('child-select') as HTMLSelectElement;
+
+  async function init() {
+    const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       window.location.href = '/login';
+      return;
     }
-  });
+
+    const children = await ChildrenService.listChildren();
+
+    if (children.length === 0) {
+      noChildrenPrompt.classList.remove('hidden');
+      return;
+    }
+
+    childSelect.innerHTML = children.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
+    const current = activeChild.get();
+    const validCurrent = current && children.some(c => c.id === current);
+    const selected = validCurrent ? current! : children[0].id;
+
+    childSelect.value = selected;
+    if (selected !== current) {
+      activeChild.set(selected);
+      await SyncService.onLogin();
+    }
+
+    switcher.classList.remove('hidden');
+    optionsGrid.classList.remove('hidden');
+
+    childSelect.addEventListener('change', () => {
+      activeChild.set(childSelect.value);
+      window.location.reload();
+    });
+  }
+
+  init();
 </script>

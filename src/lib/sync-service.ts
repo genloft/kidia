@@ -1,8 +1,11 @@
 import { supabase } from './supabase';
 import { storage, type UserProgress } from './storage-simple';
+import { activeChild } from './active-child';
 
 /**
- * Sync Service - Handles synchronization between localStorage and Supabase
+ * Sync Service - Handles synchronization between localStorage and Supabase.
+ * El progreso se guarda por hijo (tabla `children`), no por cuenta:
+ * cada operación necesita saber cuál es el hijo activo de la sesión.
  */
 
 export const SyncService = {
@@ -11,26 +14,23 @@ export const SyncService = {
      */
     async syncLocalToCloud(): Promise<{ success: boolean; error?: string }> {
         try {
-            const { data: { user } } = await supabase.auth.getUser();
-
-            if (!user) {
-                return { success: false, error: 'No user logged in' };
+            const childId = activeChild.get();
+            if (!childId) {
+                return { success: false, error: 'No hay un hijo/a activo en la sesión' };
             }
 
             const localProgress = storage.get();
 
-            // Upsert user profile with progress data
             const { error } = await supabase
-                .from('user_profiles')
-                .upsert({
-                    id: user.id,
-                    email: user.email,
+                .from('children')
+                .update({
                     completed_scenarios: localProgress.completedScenarios,
                     badges: localProgress.badges,
                     scores: localProgress.scores,
                     scenario_progress: localProgress.scenarioProgress,
                     updated_at: new Date().toISOString()
-                });
+                })
+                .eq('id', childId);
 
             if (error) {
                 console.error('[SyncService] Upload error:', error);
@@ -50,20 +50,18 @@ export const SyncService = {
      */
     async syncCloudToLocal(): Promise<{ success: boolean; error?: string }> {
         try {
-            const { data: { user } } = await supabase.auth.getUser();
-
-            if (!user) {
-                return { success: false, error: 'No user logged in' };
+            const childId = activeChild.get();
+            if (!childId) {
+                return { success: false, error: 'No hay un hijo/a activo en la sesión' };
             }
 
             const { data, error } = await supabase
-                .from('user_profiles')
-                .select('*')
-                .eq('id', user.id)
+                .from('children')
+                .select('completed_scenarios, badges, scores, scenario_progress')
+                .eq('id', childId)
                 .single();
 
             if (error) {
-                // User profile doesn't exist yet - this is fine for new users
                 if (error.code === 'PGRST116') {
                     console.log('[SyncService] No cloud data yet, using local');
                     return { success: true };
@@ -73,7 +71,6 @@ export const SyncService = {
             }
 
             if (data) {
-                // Merge cloud data into localStorage
                 const cloudProgress: UserProgress = {
                     completedScenarios: data.completed_scenarios || [],
                     badges: data.badges || [],
@@ -94,22 +91,21 @@ export const SyncService = {
     },
 
     /**
-     * Merge local and cloud progress (use the one with more completed scenarios)
+     * Merge local and cloud progress (union of both, not last-write-wins)
      */
     async mergeProgress(): Promise<{ success: boolean; error?: string }> {
         try {
-            const { data: { user } } = await supabase.auth.getUser();
-
-            if (!user) {
-                return { success: false, error: 'No user logged in' };
+            const childId = activeChild.get();
+            if (!childId) {
+                return { success: false, error: 'No hay un hijo/a activo en la sesión' };
             }
 
             const localProgress = storage.get();
 
             const { data: cloudData } = await supabase
-                .from('user_profiles')
-                .select('*')
-                .eq('id', user.id)
+                .from('children')
+                .select('completed_scenarios, badges, scores, scenario_progress')
+                .eq('id', childId)
                 .single();
 
             // If no cloud data, just upload local
@@ -146,10 +142,14 @@ export const SyncService = {
     },
 
     /**
-     * Auto-sync on login
+     * Auto-sync when the active child changes (e.g. after picking a profile on login)
      */
     async onLogin(): Promise<void> {
-        console.log('[SyncService] User logged in, merging progress...');
+        if (!activeChild.get()) {
+            console.log('[SyncService] No active child yet, skipping sync');
+            return;
+        }
+        console.log('[SyncService] Active child set, merging progress...');
         await this.mergeProgress();
     }
 };
