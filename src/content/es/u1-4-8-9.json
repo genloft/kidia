@@ -1,7 +1,7 @@
 {
   "id": "u1-4-8-9",
   "title": "1.4 ¡Conviértete en Cazaerrores!",
-  "description": "La IA ha soltado unas frases muy raras. Tu misión: cazar las que están mal.",
+  "description": "La IA ha soltado unas frases muy raras. Tu reto: cazar las que están mal.",
   "difficulty": "beginner",
   "language": "es",
   "tramo": "8-9",
@@ -23,7 +23,7 @@
     "start": {
       "id": "start",
       "sender": "kidia",
-      "text": "¡Conviértete en Cazaerrores!\n\n¡Atención, detective! La IA ha soltado unas frases muy raras. Tu misión: cazar las que están mal. 🕵️",
+      "text": "¡Conviértete en Cazaerrores!\n\n¡Atención, detective! La IA ha soltado unas frases muy raras. Tu reto: cazar las que están mal. 🕵️",
       "next_node_id": "explora"
     },
     "explora": {
@@ -58,7 +58,7 @@
     "comparte": {
       "id": "comparte",
       "sender": "kidia",
-      "text": "¡Misión cumplida, Cazaerrores! Recuerda: la IA mola, pero a veces se equivoca. 🏅",
+      "text": "¡Reto cumplido, Cazaerrores! Recuerda: la IA mola, pero a veces se equivoca. 🏅",
       "action": "trigger_quiz"
     }
   },

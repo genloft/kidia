@@ -25,7 +25,7 @@ if (!scenario) {
 <Layout title={`Kidia - ${scenario.title}`} description={scenario.description}>
   <Header />
   
-  <main class="scenario-layout">
+  <main class="scenario-layout" data-unidad={scenario.unidad}>
     <aside class="sidebar">
        <div class="friend-wrapper">
           <img 
@@ -54,22 +54,29 @@ if (!scenario) {
     <section class="chat-area">
         <ChatBox scenario={scenario} />
     </section>
-    
+
     <Quiz scenario={scenario} />
     <AnimationStage />
   </main>
-  
-  <script define:vars={{ unidad: scenario.unidad }}>
-    // Comprobar que la familia tiene una suscripción activa (salvo la Unidad
-    // 1.1, la misión de prueba gratuita). Si no, la mandamos a /caminos.
+
+  <script>
+    // Todo reto requiere sesión + hijo/a activo. La Unidad 1.1 (reto de
+    // prueba gratuito) no exige además una suscripción activa; el resto sí.
+    // Nota: este debe ser un script de módulo con imports estáticos (no
+    // define:vars + import() dinámico) porque un script no-módulo resuelve
+    // los specifiers relativos contra la URL del documento, no del archivo,
+    // y el import() fallaba en silencio dejando la página sin protección.
+    import { requireActiveChild } from '../../lib/require-auth';
+    import { SubscriptionService } from '../../lib/subscription-service';
+
+    const unidad = document.querySelector('.scenario-layout')?.getAttribute('data-unidad') || '';
+
     (async () => {
+      const allowed = await requireActiveChild();
+      if (!allowed) return;
+
       if (unidad === '1.1') return;
 
-      const { activeChild } = await import('../../lib/active-child');
-      const childId = activeChild.get();
-      if (!childId) return; // sin sistema de hijos activo todavía (compatibilidad)
-
-      const { SubscriptionService } = await import('../../lib/subscription-service');
       const hasPlan = await SubscriptionService.hasActivePlan();
 
       if (!hasPlan) {

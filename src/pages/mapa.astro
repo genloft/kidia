@@ -8,7 +8,7 @@ const scenarios = await loadScenarios('es');
 console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
 ---
 
-<Layout title="Kidia - Mapa de Misiones" description="Explora el Mapa del Conocimiento de Kidia: misiones interactivas para aprender IA, desde qué es la inteligencia artificial hasta ética y redes neuronales.">
+<Layout title="Kidia - Mapa de Retos" description="Explora el Mapa del Conocimiento de Kidia: retos interactivos para aprender IA, desde qué es la inteligencia artificial hasta ética y redes neuronales.">
   <Header />
   
   <main class="map-container">
@@ -16,7 +16,7 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
        <div class="header-content">
            <h1 class="text-gradient title-glow">🌌 Mapa del Conocimiento</h1>
            <p class="map-description">
-               Viaja por el universo de la IA: completa cada misión para desbloquear la siguiente.
+               Viaja por el universo de la IA: completa cada reto para desbloquear el siguiente.
            </p>
        </div>
 
@@ -29,7 +29,7 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
                </div>
                
                <div class="tooltip-box">
-                   ¡Completa misiones para llenar la barra y convertirte en experto!
+                   ¡Completa retos para llenar la barra y convertirte en experto!
                </div>
            </div>
            
@@ -64,6 +64,7 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
     import { SubscriptionService } from '../lib/subscription-service';
     import { ChildrenService } from '../lib/children-service';
     import { tramoForChild } from '../lib/tramos';
+    import { requireActiveChild } from '../lib/require-auth';
 
     const state = ProgressService.getState();
 
@@ -100,10 +101,13 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
     }
 
     async function hydrateCards() {
+        const allowed = await requireActiveChild();
+        if (!allowed) return;
+
         const childId = activeChild.get();
 
         let myTramo = null;
-        let hasPlan = true;
+        let hasPlan = false;
         if (childId) {
             hasPlan = await SubscriptionService.hasActivePlan();
             const children = await ChildrenService.listChildren();
@@ -140,7 +144,7 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
                 requiresSubscription = true;
             }
 
-            // La Unidad 1.1 es siempre la misión de prueba gratuita
+            // La Unidad 1.1 es siempre el reto de prueba gratuito
             if (unidad === '1.1') {
                 isLocked = false;
                 requiresSubscription = false;

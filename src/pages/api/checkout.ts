@@ -21,7 +21,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
                     price_data: {
                         currency: 'eur',
                         product_data: {
-                            name: 'Kidia Premium: Misión Avanzada',
+                            name: 'Kidia Premium: Reto Avanzado',
                             description: 'Desbloquea escenarios con IA real y desafíos éticos avanzados.',
                         },
                         unit_amount: 499, // 4.99 EUR

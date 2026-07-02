@@ -8,7 +8,7 @@ import { ProgressService } from '../lib/progress-service';
 // (unless we used cookies/session for SSR, but we used localStorage for simplicity).
 ---
 
-<Layout title="Kidia - Colección de Insignias" description="Consulta las insignias que has desbloqueado completando misiones de IA en Kidia y descubre cuáles te faltan por conseguir.">
+<Layout title="Kidia - Colección de Insignias" description="Consulta las insignias que has desbloqueado completando retos de IA en Kidia y descubre cuáles te faltan por conseguir.">
   <Header />
 
   <main class="badges-page">
@@ -36,6 +36,7 @@ import { ProgressService } from '../lib/progress-service';
     import { ProgressService } from '../lib/progress-service';
     import { storage } from '../lib/storage-simple';
     import badgesData from '../data/badges.json';
+    import { requireActiveChild } from '../lib/require-auth';
 
     function updateStats() {
         const state = ProgressService.getState();
@@ -59,8 +60,11 @@ import { ProgressService } from '../lib/progress-service';
         document.getElementById('global-rank').style.color = 'var(--color-primary)';
     }
 
-    updateStats();
-    window.addEventListener('progress:updated', updateStats);
+    requireActiveChild().then(allowed => {
+        if (!allowed) return;
+        updateStats();
+        window.addEventListener('progress:updated', updateStats);
+    });
 </script>
 
 <style>

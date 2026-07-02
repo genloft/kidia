@@ -241,7 +241,7 @@ export class GameEngine {
         // System Message
         const endDiv = document.createElement('div');
         endDiv.className = 'message system';
-        endDiv.innerHTML = `<div class="bubble system-bubble">🎉 Misión Cumplida</div>`;
+        endDiv.innerHTML = `<div class="bubble system-bubble">🎉 Reto Cumplido</div>`;
         this.messagesList.appendChild(endDiv);
         this.scrollToBottom();
 

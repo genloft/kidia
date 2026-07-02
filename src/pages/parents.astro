@@ -3,23 +3,28 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 ---
 
-<Layout title="Kidia - Zona de Padres" description="Todo lo que necesitas saber como madre o padre sobre Kidia: privacidad, progreso de tu hijo/a y cómo funciona la plataforma por dentro.">
+<Layout title="Kidia - Zona de Padres" description="Todo lo que necesitas saber como madre o padre sobre Kidia: privacidad, progreso de tu hijo/a y cómo funciona el Método Kidia por dentro.">
   <Header />
-  
+
   <main class="info-container">
     <h1>Zona de Padres 🛡️</h1>
     <p class="intro">En Kidia, la seguridad y el aprendizaje ético son nuestra prioridad.</p>
-    
+
+    <div id="child-indicator" class="child-indicator hidden">
+        <span>Viendo el progreso de <strong id="child-name">-</strong> <span id="child-tramo" class="tramo-pill"></span></span>
+        <a href="/dashboard" class="btn-switch-child">Cambiar de hijo/a</a>
+    </div>
+
     <section class="info-block">
         <h2>¿Qué aprenden aquí?</h2>
-        <p>Kidia no enseña a "usar" herramientas de IA ciegamente. Enseña <strong>cómo funcionan</strong>.</p>
+        <p>Kidia no enseña a "usar" herramientas de IA ciegamente. Enseña <strong>cómo pensar con ellas</strong>, a través de retos cortos guiados por la Dra. Vael (y, a partir de los 12 años, también por Morti).</p>
         <ul>
-            <li>Conceptos básicos: Patrones, Datos, Píxeles.</li>
-            <li>Pensamiento crítico: Sesgos, Errores (Alucinaciones).</li>
-            <li>Seguridad digital: Privacidad y uso responsable.</li>
+            <li><strong>4 niveles progresivos:</strong> Entender → Usar bien → Crear → Construir.</li>
+            <li><strong>4 competencias que trabajamos en cada reto:</strong> pensamiento crítico, calidad de las preguntas (prompts), autonomía creativa y verificación de datos.</li>
+            <li><strong>Se adapta sola a la edad:</strong> el lenguaje, la duración y el nivel de autonomía cambian según el tramo (8-9, 10-11 o 12-14 años) de cada hijo/a, sin que tengáis que elegir nada.</li>
         </ul>
     </section>
-    
+
     <section class="info-block">
         <h2>Privacidad y Datos</h2>
         <p>Kidia utiliza un sistema seguro para guardar el progreso.</p>
@@ -30,7 +35,7 @@ import Header from '../components/Header.astro';
             <li>✅ No hay trackers de publicidad ni analíticas intrusivas.</li>
         </ul>
     </section>
-    
+
     <section class="info-block report-card">
         <h2>📊 Informe de Progreso</h2>
         <div id="parent-report">
@@ -39,7 +44,7 @@ import Header from '../components/Header.astro';
         <div class="stats-grid">
             <div class="stat-box">
                 <span class="stat-value" id="stat-progress">0%</span>
-                <span class="stat-label">Completado</span>
+                <span class="stat-label">Nivel 1 completado</span>
             </div>
             <div class="stat-box">
                 <span class="stat-value" id="stat-badges">0</span>
@@ -47,40 +52,52 @@ import Header from '../components/Header.astro';
             </div>
         </div>
     </section>
-    
-    <section class="info-block warning">
-        <h2>Nota sobre la Fase Beta</h2>
-        <p>Estamos en desarrollo. Próximamente añadiremos cuentas de usuario opcionales para guardar el progreso en la nube y funcionalidades avanzadas con supervisión parental.</p>
-    </section>
   </main>
 </Layout>
 
 <script>
+    import { requireActiveChild } from '../lib/require-auth';
     import { ProgressService } from '../lib/progress-service';
-    import { loadScenarios } from '../lib/scenario-loader';
-    
-    // Simulate loading delay for effect
-    setTimeout(async () => {
+    import { loadScenariosForTramo, loadScenarios } from '../lib/scenario-loader';
+    import { ChildrenService } from '../lib/children-service';
+    import { activeChild } from '../lib/active-child';
+    import { tramoForChild } from '../lib/tramos';
+
+    requireActiveChild().then(async (allowed) => {
+        if (!allowed) return;
+
+        const childId = activeChild.get();
+        const children = await ChildrenService.listChildren();
+        const child = children.find(c => c.id === childId);
+        const tramo = child ? tramoForChild(child.birth_date) : null;
+
+        const indicatorEl = document.getElementById('child-indicator');
+        const nameEl = document.getElementById('child-name');
+        const tramoEl = document.getElementById('child-tramo');
+        if (child && indicatorEl && nameEl) {
+            nameEl.textContent = child.name;
+            if (tramo && tramoEl) tramoEl.textContent = tramo.label;
+            indicatorEl.classList.remove('hidden');
+        }
+
+        const scenarios = tramo ? await loadScenariosForTramo(tramo.id) : await loadScenarios('es');
+        const totalScenarios = scenarios.length;
+
         const report = ProgressService.computeParentReport();
         const state = ProgressService.getState();
-        
-        // Load actual scenarios to get correct count
-        const scenarios = await loadScenarios('es');
-        const totalScenarios = scenarios.length;
         const globalProgress = ProgressService.getGlobalProgress(totalScenarios);
-        
+
         const reportEl = document.getElementById('parent-report');
         if (reportEl) {
             reportEl.innerHTML = `<p>${report}</p>`;
         }
-        
+
         const progressEl = document.getElementById('stat-progress');
         if (progressEl) progressEl.innerText = `${globalProgress}%`;
-        
+
         const badgesEl = document.getElementById('stat-badges');
         if (badgesEl) badgesEl.innerText = state.badges.length.toString();
-        
-    }, 500);
+    });
 </script>
 
 <style>
@@ -89,7 +106,7 @@ import Header from '../components/Header.astro';
         margin: 0 auto;
         padding: 4rem 2rem;
     }
-    
+
     h1 {
         font-size: 2.5rem;
         margin-bottom: 1rem;
@@ -97,13 +114,50 @@ import Header from '../components/Header.astro';
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
-    
+
     .intro {
         font-size: 1.2rem;
         color: #e4e4e7;
-        margin-bottom: 3rem;
+        margin-bottom: 2rem;
     }
-    
+
+    .child-indicator {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        background: rgba(30, 41, 59, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 0.75rem;
+        padding: 0.85rem 1.25rem;
+        margin-bottom: 3rem;
+        font-size: 0.95rem;
+        color: #e4e4e7;
+    }
+
+    .child-indicator.hidden {
+        display: none;
+    }
+
+    .tramo-pill {
+        display: inline-block;
+        background: rgba(34, 211, 238, 0.15);
+        color: var(--color-primary);
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 0.15rem 0.6rem;
+        border-radius: 99px;
+        margin-left: 0.5rem;
+    }
+
+    .btn-switch-child {
+        color: #38bdf8;
+        font-size: 0.85rem;
+        text-decoration: underline;
+        white-space: nowrap;
+    }
+
     .info-block {
         margin-bottom: 3rem;
         padding: 2rem;
@@ -111,64 +165,76 @@ import Header from '../components/Header.astro';
         border-radius: 1rem;
         border: 1px solid rgba(255,255,255,0.05);
     }
-    
+
     .info-block h2 {
         color: var(--color-primary);
         margin-bottom: 1rem;
     }
-    
+
+    .info-block p {
+        color: #d4d4d8;
+        line-height: 1.6;
+    }
+
     ul {
         padding-left: 1.5rem;
         line-height: 1.6;
         color: #d4d4d8;
     }
-    
+
     .check-list {
         list-style: none;
         padding: 0;
     }
-    
+
     .check-list li {
         margin-bottom: 0.5rem;
     }
-    
-    .warning {
-        border-color: #eab308;
-        background: rgba(234, 179, 8, 0.05);
-    }
-    
-    .warning h2 {
-        color: #eab308;
-    }
-    
+
     .report-card {
         border-color: var(--color-primary);
         background: rgba(34, 211, 238, 0.05);
     }
-    
+
+    #parent-report p {
+        margin: 0;
+    }
+
     .stats-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
         margin-top: 1.5rem;
     }
-    
+
     .stat-box {
         background: rgba(0,0,0,0.2);
         padding: 1rem;
         border-radius: 0.5rem;
         text-align: center;
     }
-    
+
     .stat-value {
         display: block;
         font-size: 2rem;
         font-weight: bold;
         color: var(--color-primary);
     }
-    
+
     .stat-label {
         font-size: 0.9rem;
         color: #a1a1aa;
+    }
+
+    @media (max-width: 640px) {
+        .info-container {
+            padding: 3rem 1.25rem;
+        }
+        h1 {
+            font-size: 2rem;
+        }
+        .info-block {
+            padding: 1.5rem;
+        }
     }
 </style>

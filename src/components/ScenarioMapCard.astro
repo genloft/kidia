@@ -25,7 +25,7 @@ const level = difficultyLevels[difficulty];
                         <div class={`diff-bar ${i <= level ? 'active' : ''} ${difficulty}`}></div>
                     ))}
                 </div>
-                <span class="mission-number">Misión {index + 1}</span>
+                <span class="mission-number">Reto {index + 1}</span>
                 <h3>{scenario.title.replace(/^\d+\.\s*/, '')}</h3>
                 <p>{scenario.description}</p>
                 {scenario.badge?.name && <div class="badge-tag">🏆 {scenario.badge.name}</div>}

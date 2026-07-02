@@ -10,3 +10,14 @@ import '../styles/constructor.css';
   <!-- El componente Svelte debe renderizarse en el cliente para su interactividad -->
   <ConstructorApp client:only="svelte" />
 </Layout>
+
+<script>
+  import { requireActiveChild } from '../lib/require-auth';
+  import { SubscriptionService } from '../lib/subscription-service';
+
+  requireActiveChild().then(async (allowed) => {
+    if (!allowed) return;
+    const hasPlan = await SubscriptionService.hasActivePlan();
+    if (!hasPlan) window.location.href = '/caminos';
+  });
+</script>

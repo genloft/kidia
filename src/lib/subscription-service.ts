@@ -18,7 +18,7 @@ export const PLANS: Plan[] = [
         id: 'familiar',
         name: 'Familiar',
         priceCents: 1900,
-        features: ['Acceso completo a las misiones', 'Panel familiar', 'Certificados de progreso']
+        features: ['Acceso completo a los retos', 'Panel familiar', 'Certificados de progreso']
     },
     {
         id: 'familiar_plus',

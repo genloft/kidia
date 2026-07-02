@@ -1,6 +1,6 @@
 {
   "id": "u1-4-10-11",
-  "title": "1.4 Cazaerrores: misión difícil",
+  "title": "1.4 Cazaerrores: reto difícil",
   "description": "Subimos de nivel, detective. Ahora los errores se disfrazan de verdad. Necesito tu mejor lupa.",
   "difficulty": "intermediate",
   "language": "es",
@@ -23,7 +23,7 @@
     "start": {
       "id": "start",
       "sender": "kidia",
-      "text": "Cazaerrores: misión difícil\n\nSubimos de nivel, detective. Ahora los errores se disfrazan de verdad. Necesito tu mejor lupa.",
+      "text": "Cazaerrores: reto difícil\n\nSubimos de nivel, detective. Ahora los errores se disfrazan de verdad. Necesito tu mejor lupa.",
       "next_node_id": "explora"
     },
     "explora": {

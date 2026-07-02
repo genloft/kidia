@@ -103,7 +103,7 @@ export const ReminderService = {
             <div class="reminder-modal">
                 <div class="reminder-icon">💾</div>
                 <h2>¡Guarda tu progreso!</h2>
-                <p>Llevas <strong>${this.getState().scenariosCompleted} misiones completadas</strong>.</p>
+                <p>Llevas <strong>${this.getState().scenariosCompleted} retos completados</strong>.</p>
                 <p>Si te registras, podrás:</p>
                 <ul>
                     <li>✅ Guardar tu progreso en la nube</li>
