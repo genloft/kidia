@@ -38,6 +38,27 @@
       "id": "explora",
       "sender": "kidia",
       "text": "En este nivel los errores son listos: datos plausibles pero falsos, o afirmaciones con sesgo. No basta con que «suene bien». Hay que verificar con fuentes fiables y argumentar por qué algo está mal.",
+      "next_node_id": "explora_check"
+    },
+    "explora_check": {
+      "id": "explora_check",
+      "sender": "kidia",
+      "text": "Antes de cazar con Morti: ¿cuál de estas dos es una fuente más fiable para comprobar un dato científico?",
+      "options": [
+        { "label": "Un artículo de una organización científica reconocida, con autor y fecha", "next_node_id": "explora_check_correcto", "style": "primary" },
+        { "label": "Un comentario anónimo sin fuente en una red social", "next_node_id": "explora_check_incorrecto" }
+      ]
+    },
+    "explora_check_correcto": {
+      "id": "explora_check_correcto",
+      "sender": "morti",
+      "text": "Correcto. Autoría clara, respaldo serio y algo que se puede contrastar. Eso es una fuente fiable. Vamos a cazar mi primer error.",
+      "next_node_id": "crea"
+    },
+    "explora_check_incorrecto": {
+      "id": "explora_check_incorrecto",
+      "sender": "morti",
+      "text": "Cuidado: un comentario anónimo sin ninguna fuente no sirve para verificar nada, por muy convincente que suene. Vamos a cazar mi primer error con criterio.",
       "next_node_id": "crea"
     },
     "crea": {
@@ -67,18 +88,46 @@
         "placeholder": "Esta afirmación es una verdad a medias porque... Lo verificaría con...",
         "minLength": 20
       },
+      "next_node_id": "crea_segundo_caso"
+    },
+    "crea_segundo_caso": {
+      "id": "crea_segundo_caso",
+      "sender": "morti",
+      "text": "Un segundo caso, para que compruebes el patrón: «Todos los estudios científicos coinciden en que dormir menos de 6 horas mejora el rendimiento académico.» ¿Qué falla aquí?",
+      "action": "activity",
+      "action_data": {
+        "type": "eleccion",
+        "instruction": "Elige la explicación correcta.",
+        "options": [
+          { "id": "al-reves", "label": "Es al revés: la mayoría de estudios reales dicen que dormir poco EMPEORA el rendimiento", "correct": true },
+          { "id": "correcto", "label": "Nada, es una afirmación correcta tal cual", "correct": false }
+        ]
+      },
       "next_node_id": "reflexiona"
     },
     "reflexiona": {
       "id": "reflexiona",
       "sender": "kidia",
       "text": "¿Cómo distingues una fuente fiable de una que no lo es? ¿Por qué los errores que «suenan bien» son los más peligrosos?",
+      "next_node_id": "reflexiona_verifica"
+    },
+    "reflexiona_verifica": {
+      "id": "reflexiona_verifica",
+      "sender": "kidia",
+      "text": "Da un ejemplo de una fuente que consideres fiable de verdad (puede ser real) y explica por qué confías en ella.",
+      "action": "activity",
+      "action_data": {
+        "type": "escribir",
+        "instruction": "Escribe un ejemplo de fuente fiable y por qué confías en ella.",
+        "placeholder": "Confío en... porque...",
+        "minLength": 15
+      },
       "next_node_id": "comparte"
     },
     "comparte": {
       "id": "comparte",
       "sender": "kidia",
-      "text": "Eso es pensamiento crítico de verdad: ni a Morti se la cuelas. 🧠",
+      "text": "Eso es pensamiento crítico de verdad, Verificador Experto oficial: ni a Morti se la cuelas. 🧠",
       "action": "trigger_quiz"
     }
   },
@@ -94,6 +143,28 @@
         ],
         "correct_index": 0,
         "explanation": "Una afirmación plausible pero falsa o sesgada es más peligrosa porque no levanta sospechas a simple vista: hace falta verificar con fuentes."
+      },
+      {
+        "id": "q2",
+        "text": "«Dormir menos de 6 horas mejora el rendimiento académico», según la mayoría de estudios reales, ¿es cierto?",
+        "options": [
+          "No, es al revés: dormir poco suele empeorar el rendimiento",
+          "Sí, es completamente cierto",
+          "No existe ninguna relación entre el sueño y el rendimiento"
+        ],
+        "correct_index": 0,
+        "explanation": "La evidencia científica real apunta justo en la dirección contraria a esa afirmación: dormir poco perjudica el rendimiento."
+      },
+      {
+        "id": "q3",
+        "text": "¿Qué hace que una fuente sea fiable para verificar un dato?",
+        "options": [
+          "Tener autoría clara, respaldo serio y poder contrastarse con otras fuentes",
+          "Que aparezca la primera en cualquier búsqueda",
+          "Que tenga muchos «me gusta» en redes sociales"
+        ],
+        "correct_index": 0,
+        "explanation": "Una fuente fiable se puede identificar, contrastar y respalda lo que dice, más allá de su popularidad."
       }
     ]
   }

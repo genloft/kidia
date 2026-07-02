@@ -32,12 +32,33 @@
       "id": "explora",
       "sender": "kidia",
       "text": "La IA está escondida en apps que usas a diario: las recomendaciones de vídeos, los filtros de fotos, los mapas que evitan atascos, el corrector del móvil.\n\nCuando una app te sugiere el siguiente vídeo, una IA decidió mostrártelo a ti.",
+      "next_node_id": "explora_check"
+    },
+    "explora_check": {
+      "id": "explora_check",
+      "sender": "kidia",
+      "text": "Un caso rápido antes de investigar: cuando abres la nevera para coger algo, ¿hay una IA ahí trabajando?",
+      "options": [
+        { "label": "No, una nevera normal no aprende nada", "next_node_id": "explora_check_correcto", "style": "primary" },
+        { "label": "Sí, seguro que sí", "next_node_id": "explora_check_incorrecto" }
+      ]
+    },
+    "explora_check_correcto": {
+      "id": "explora_check_correcto",
+      "sender": "kidia",
+      "text": "¡Buen ojo, agente! Una nevera normal siempre enfría igual, no aprende de ti. Vamos a buscar la IA de verdad.",
+      "next_node_id": "crea"
+    },
+    "explora_check_incorrecto": {
+      "id": "explora_check_incorrecto",
+      "sender": "kidia",
+      "text": "¡Cuidado! Una nevera normal no aprende ni decide nada, así que ahí no hay IA. Vamos a investigar los casos reales.",
       "next_node_id": "crea"
     },
     "crea": {
       "id": "crea",
       "sender": "kidia",
-      "text": "Recorre tu día: mañana, cole, recreo, tarde. En cada momento, marca si hay una IA escondida. ¡Cuidado! Un momento NO tiene IA: no lo marques.",
+      "text": "Recorre tu día: mañana, cole, recreo, tarde. En cada momento, marca si hay una IA escondida. ¡Cuidado! Algún momento NO tiene IA: no lo marques.",
       "action": "activity",
       "action_data": {
         "type": "clasificar",
@@ -52,18 +73,39 @@
           { "id": "leer-libro", "label": "Leer un libro de papel", "icon": "📖", "correctCategory": 1 }
         ]
       },
+      "next_node_id": "crea_reaccion"
+    },
+    "crea_reaccion": {
+      "id": "crea_reaccion",
+      "sender": "kidia",
+      "text": "¡Buen mapa, agente! Has encontrado IA escondida en varios momentos del día. Vamos a pensar un poco más sobre lo que has descubierto…",
       "next_node_id": "reflexiona"
     },
     "reflexiona": {
       "id": "reflexiona",
       "sender": "kidia",
       "text": "¿Qué IA te ayuda de verdad y cuál solo quiere que pases más tiempo en la app? ¿Quién decide lo que ves en tu pantalla?",
+      "next_node_id": "reflexiona_verifica"
+    },
+    "reflexiona_verifica": {
+      "id": "reflexiona_verifica",
+      "sender": "kidia",
+      "text": "Último caso, agente: cuando tu mochila pesa porque llevas muchos libros, ¿hay una IA detrás de eso?",
+      "action": "activity",
+      "action_data": {
+        "type": "eleccion",
+        "instruction": "Elige la respuesta correcta.",
+        "options": [
+          { "id": "no-ia", "label": "No, el peso de la mochila no tiene nada que ver con la IA", "correct": true },
+          { "id": "si-ia", "label": "Sí, claro que sí", "correct": false }
+        ]
+      },
       "next_node_id": "comparte"
     },
     "comparte": {
       "id": "comparte",
       "sender": "kidia",
-      "text": "¡Mapa completado! Ya ves la IA que antes era invisible. 🗺️",
+      "text": "¡Mapa completado, Agente Secreto de la IA! 🗺️ Ya ves la IA que antes era invisible — y sabes distinguirla de lo que no lo es.",
       "action": "trigger_quiz"
     }
   },
@@ -79,6 +121,28 @@
         ],
         "correct_index": 0,
         "explanation": "Una llave normal siempre hace lo mismo: no aprende ni decide nada, así que no usa IA."
+      },
+      {
+        "id": "q2",
+        "text": "Cuando una app te recomienda qué vídeo ver a continuación, ¿por qué usa IA?",
+        "options": [
+          "Porque ha aprendido de tus gustos (y de los de otras personas) para elegir qué mostrarte",
+          "Porque todos los vídeos son exactamente iguales",
+          "Porque el móvil elige al azar sin ningún criterio"
+        ],
+        "correct_index": 0,
+        "explanation": "Los sistemas de recomendación son una IA que aprende de tu comportamiento para decidir qué enseñarte."
+      },
+      {
+        "id": "q3",
+        "text": "¿Por qué merece la pena fijarse en si una app usa IA para recomendarte cosas?",
+        "options": [
+          "Porque puede intentar que pases más tiempo en ella, no solo ayudarte",
+          "Porque las apps con IA siempre cuestan más dinero",
+          "No merece la pena fijarse, da igual"
+        ],
+        "correct_index": 0,
+        "explanation": "Algunas IA de recomendación están diseñadas para captar tu atención, no solo para ayudarte: conviene saberlo."
       }
     ]
   }

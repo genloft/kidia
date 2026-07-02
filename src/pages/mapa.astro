@@ -14,7 +14,10 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
   <main class="map-container">
     <div class="map-header">
        <div class="header-content">
-           <h1 class="text-gradient title-glow">🌌 Mapa del Conocimiento</h1>
+           <div class="title-row">
+               <h1 class="text-gradient title-glow">🌌 Mapa del Conocimiento</h1>
+               <span id="map-tramo-pill" class="tramo-pill hidden"></span>
+           </div>
            <p class="map-description">
                Viaja por el universo de la IA: completa cada reto para desbloquear el siguiente.
            </p>
@@ -108,6 +111,7 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
 
         let myTramo = null;
         let hasPlan = false;
+        const tramoPill = document.getElementById('map-tramo-pill');
         if (childId) {
             hasPlan = await SubscriptionService.hasActivePlan();
             const children = await ChildrenService.listChildren();
@@ -115,6 +119,10 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
             if (child) {
                 const tramo = tramoForChild(child.birth_date);
                 myTramo = tramo ? tramo.id : null;
+                if (tramo && tramoPill) {
+                    tramoPill.textContent = `Tramo ${tramo.label}`;
+                    tramoPill.classList.remove('hidden');
+                }
             }
         }
 
@@ -150,11 +158,19 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
                 requiresSubscription = false;
             }
 
+            // "Completado" (diálogo terminado) y "ganado" (insignia real en
+            // el perfil del hijo/a) son cosas distintas: la insignia solo se
+            // concede si aprueba el test de conocimiento (ver Quiz.astro),
+            // así que la tarjeta no debe celebrar un reto que se dejó a
+            // medias o cuyo test no se aprobó.
             const isCompleted = state.completedScenarios.includes(id);
+            const badgeId = card.getAttribute('data-badge');
+            const isEarned = badgeId ? state.badges.includes(badgeId) : isCompleted;
+            const playBtnEl = card.querySelector('.play-btn');
 
             if (isLocked) {
                 card.classList.add('locked');
-                card.classList.remove('available');
+                card.classList.remove('available', 'completed', 'needs-quiz');
                 if (requiresSubscription) {
                     card.classList.add('needs-enrollment');
                     card.setAttribute('href', '/caminos');
@@ -166,11 +182,18 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
                 card.classList.remove('locked', 'needs-enrollment');
                 card.classList.add('available');
 
-                if (isCompleted) {
+                if (isEarned) {
                     card.classList.add('completed');
+                    card.classList.remove('needs-quiz');
                     if (statusText) statusText.innerText = '✅ Completado';
-                } else if (statusText) {
-                    statusText.innerText = '🚀 Disponible';
+                } else if (isCompleted) {
+                    card.classList.add('needs-quiz');
+                    card.classList.remove('completed');
+                    if (statusText) statusText.innerText = '📝 Repite el test';
+                    if (playBtnEl) playBtnEl.textContent = 'TERMINAR TEST';
+                } else {
+                    card.classList.remove('completed', 'needs-quiz');
+                    if (statusText) statusText.innerText = '🚀 Disponible';
                 }
             }
         });
@@ -357,7 +380,29 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
         letter-spacing: -0.05em;
         text-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
     }
-    
+
+    .title-row {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        flex-wrap: wrap;
+    }
+
+    .tramo-pill {
+        background: rgba(139, 92, 246, 0.15);
+        border: 1px solid rgba(139, 92, 246, 0.4);
+        color: #c4b5fd;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 0.35rem 0.9rem;
+        border-radius: 99px;
+        white-space: nowrap;
+    }
+
+    .tramo-pill.hidden {
+        display: none;
+    }
+
     .map-description {
         color: #94a3b8;
         margin: 0.5rem 0 0 0;

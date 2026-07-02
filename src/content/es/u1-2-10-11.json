@@ -33,6 +33,27 @@
       "id": "explora",
       "sender": "kidia",
       "text": "Una IA aprende de ejemplos (datos). Si solo le enseñas perros marrones, pensará que un perro blanco no es un perro.\n\n**Datos torcidos = IA torcida.** Por eso importa CÓMO le enseñamos.",
+      "next_node_id": "explora_check"
+    },
+    "explora_check": {
+      "id": "explora_check",
+      "sender": "kidia",
+      "text": "Antes de romper nada: si entreno una IA solo con fotos de manzanas rojas, ¿reconocerá bien una manzana verde?",
+      "options": [
+        { "label": "Seguramente no, nunca vio ese caso", "next_node_id": "explora_check_correcto", "style": "primary" },
+        { "label": "Sí, sin ningún problema", "next_node_id": "explora_check_incorrecto" }
+      ]
+    },
+    "explora_check_correcto": {
+      "id": "explora_check_correcto",
+      "sender": "kidia",
+      "text": "¡Correcto! Sin ejemplos variados, la IA no tiene con qué comparar. Vamos a comprobarlo entrenando tu propio clasificador.",
+      "next_node_id": "crea"
+    },
+    "explora_check_incorrecto": {
+      "id": "explora_check_incorrecto",
+      "sender": "kidia",
+      "text": "Vamos a comprobarlo juntos: si solo vio manzanas rojas, es fácil que se líe con una verde. Entrenemos tu propio clasificador para verlo.",
       "next_node_id": "crea"
     },
     "crea": {
@@ -53,18 +74,67 @@
           { "id": "pimiento", "label": "Pimiento", "icon": "🫑", "correctCategory": 1 }
         ]
       },
+      "next_node_id": "crea_reaccion"
+    },
+    "crea_reaccion": {
+      "id": "crea_reaccion",
+      "sender": "kidia",
+      "text": "¡Bien entrenado! Con ejemplos variados, tu clasificador funciona. Ahora viene la parte traviesa: vamos a ROMPERLO a propósito.",
+      "next_node_id": "crea_torcido"
+    },
+    "crea_torcido": {
+      "id": "crea_torcido",
+      "sender": "kidia",
+      "text": "Imagina que ahora solo le enseño manzanas rojas a tu clasificador, una y otra vez, sin ninguna verdura de por medio. Le doy una manzana VERDE nueva. ¿Qué crees que va a pasar?",
+      "action": "activity",
+      "action_data": {
+        "type": "eleccion",
+        "instruction": "Elige lo que crees que pasará.",
+        "options": [
+          { "id": "falla", "label": "Puede fallar, porque nunca vio una manzana de ese color", "correct": true },
+          { "id": "acierta", "label": "Acertará seguro, ya sabe lo que es una manzana", "correct": false }
+        ]
+      },
+      "next_node_id": "crea_arregla"
+    },
+    "crea_arregla": {
+      "id": "crea_arregla",
+      "sender": "kidia",
+      "text": "Para arreglar tu clasificador «torcido», ¿qué le añadirías para que deje de equivocarse?",
+      "action": "activity",
+      "action_data": {
+        "type": "escribir",
+        "instruction": "Explica qué le añadirías para arreglarlo.",
+        "placeholder": "Le enseñaría más ejemplos de...",
+        "minLength": 10
+      },
       "next_node_id": "reflexiona"
     },
     "reflexiona": {
       "id": "reflexiona",
       "sender": "kidia",
-      "text": "Imagina que ahora «tuerzo» tu clasificador y solo le enseño manzanas rojas. Le doy una manzana verde nueva... ¿por qué crees que fallaría? Si una IA eligiera quién gana un premio y solo hubiera visto un tipo de ejemplo, ¿sería justo?",
+      "text": "¿Por qué crees que falló la segunda vez? Si una IA eligiera quién gana un premio y solo hubiera visto un tipo de ejemplo, ¿sería justo?",
+      "next_node_id": "reflexiona_verifica"
+    },
+    "reflexiona_verifica": {
+      "id": "reflexiona_verifica",
+      "sender": "kidia",
+      "text": "Un caso real: si una IA elige el mejor dibujo de un concurso y solo ha visto dibujos de tu clase, ¿sería justo compararla con dibujos de otro colegio?",
+      "action": "activity",
+      "action_data": {
+        "type": "eleccion",
+        "instruction": "Elige la respuesta correcta.",
+        "options": [
+          { "id": "no-justo", "label": "No sería justo: le faltarían ejemplos variados para comparar bien", "correct": true },
+          { "id": "si-justo", "label": "Sí, siempre sería justo da igual lo que haya visto", "correct": false }
+        ]
+      },
       "next_node_id": "comparte"
     },
     "comparte": {
       "id": "comparte",
       "sender": "kidia",
-      "text": "¡Caso resuelto! La IA es tan lista (o tan torpe) como los datos que le das. 🧠",
+      "text": "¡Caso resuelto, Reparador de IA! 🧠 La IA es tan lista (o tan torpe) como los datos que le das — y ahora tú sabes cómo arreglarla.",
       "action": "trigger_quiz"
     }
   },
@@ -80,6 +150,28 @@
         ],
         "correct_index": 0,
         "explanation": "Cuando los datos de entrenamiento son poco variados, la IA falla más con casos nuevos distintos a lo que vio."
+      },
+      {
+        "id": "q2",
+        "text": "¿Qué le pasa a un clasificador que solo aprendió con un tipo de ejemplo cuando ve algo nuevo y distinto?",
+        "options": [
+          "Puede equivocarse, porque nunca vio nada parecido",
+          "Siempre acierta, sin excepción",
+          "Deja de funcionar completamente"
+        ],
+        "correct_index": 0,
+        "explanation": "Un clasificador entrenado con pocos tipos de ejemplo no sabe qué hacer ante casos que nunca vio."
+      },
+      {
+        "id": "q3",
+        "text": "¿Cómo se arregla un clasificador que se equivoca por falta de ejemplos variados?",
+        "options": [
+          "Añadiéndole ejemplos más variados para que aprenda mejor",
+          "Borrando todos los datos que tiene",
+          "Es imposible arreglarlo una vez que se equivoca"
+        ],
+        "correct_index": 0,
+        "explanation": "La forma de mejorar un clasificador «torcido» es darle ejemplos más variados y representativos."
       }
     ]
   }

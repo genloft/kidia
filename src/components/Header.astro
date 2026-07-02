@@ -28,6 +28,20 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
       <div id="auth-loading" class="auth-loading">
           <div class="skeleton-btn"></div>
       </div>
+      <div id="active-child-zone" class="active-child-zone hidden">
+          <button id="child-menu-btn" class="child-text-btn" type="button">
+              <span class="child-dot"></span>
+              <span class="child-label">Jugando como</span> <strong id="active-child-name">-</strong>
+              <span id="active-child-tramo" class="child-tramo-pill hidden"></span>
+              <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div id="child-dropdown" class="user-dropdown" style="display: none;">
+              <div class="dropdown-body" id="child-dropdown-list"></div>
+              <div class="dropdown-footer">
+                  <a href="/perfil#hijos" class="dropdown-item">Gestionar hijos/as</a>
+              </div>
+          </div>
+      </div>
       <div id="auth-ui" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
           <a href="/login" class="btn-login">Acceder</a>
       </div>
@@ -37,9 +51,89 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
 <script>
     import { supabase } from '../lib/supabase';
     import { SyncService } from '../lib/sync-service';
-    
+    import { ChildrenService } from '../lib/children-service';
+    import { activeChild } from '../lib/active-child';
+    import { tramoForChild } from '../lib/tramos';
+
     const authUi = document.getElementById('auth-ui');
-    
+
+    // Indicador de hijo/a activo, visible en toda la web mientras haya
+    // sesión y un hijo/a seleccionado (ver src/lib/active-child.ts).
+    async function updateActiveChildBadge() {
+        const zone = document.getElementById('active-child-zone');
+        if (!zone) return;
+
+        const childId = activeChild.get();
+        if (!childId) {
+            zone.classList.add('hidden');
+            return;
+        }
+
+        const children = await ChildrenService.listChildren();
+        const current = children.find(c => c.id === childId);
+        if (!current) {
+            zone.classList.add('hidden');
+            return;
+        }
+
+        const nameEl = document.getElementById('active-child-name');
+        if (nameEl) nameEl.textContent = current.name;
+
+        const tramoEl = document.getElementById('active-child-tramo');
+        if (tramoEl) {
+            const tramo = tramoForChild(current.birth_date);
+            if (tramo) {
+                tramoEl.textContent = tramo.label;
+                tramoEl.classList.remove('hidden');
+            } else {
+                tramoEl.classList.add('hidden');
+            }
+        }
+
+        const listEl = document.getElementById('child-dropdown-list');
+        if (listEl) {
+            listEl.innerHTML = children.map(c => `
+                <button type="button" class="dropdown-item child-option${c.id === childId ? ' is-current' : ''}" data-child-id="${c.id}">
+                    ${c.name}${c.id === childId ? ' ✓' : ''}
+                </button>
+            `).join('');
+
+            listEl.querySelectorAll('.child-option').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = btn.getAttribute('data-child-id');
+                    if (!id || id === activeChild.get()) return;
+                    activeChild.set(id);
+                    await SyncService.onLogin();
+                    window.location.reload();
+                });
+            });
+        }
+
+        zone.classList.remove('hidden');
+    }
+
+    const childMenuBtn = document.getElementById('child-menu-btn');
+    const childDropdown = document.getElementById('child-dropdown');
+    childMenuBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = childDropdown?.style.display !== 'none';
+        if (childDropdown) childDropdown.style.display = isOpen ? 'none' : 'block';
+        childMenuBtn.classList.toggle('open', !isOpen);
+    });
+    document.addEventListener('click', (e) => {
+        const zone = document.getElementById('active-child-zone');
+        if (zone && !zone.contains(e.target as Node)) {
+            if (childDropdown) childDropdown.style.display = 'none';
+            childMenuBtn?.classList.remove('open');
+        }
+    });
+
+    // Si se cambia de hijo/a desde otra parte de la web (p. ej. el selector
+    // del dashboard), refrescar el indicador sin esperar a un reload.
+    window.addEventListener('active-child:changed', () => {
+        updateActiveChildBadge();
+    });
+
     async function updateAuth() {
         const { data: { session } } = await supabase.auth.getSession();
         
@@ -98,9 +192,11 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
             });
             
             // Sync progress on session detection
-            SyncService.onLogin().catch(err => {
-                console.error('[Header] Sync failed:', err);
-            });
+            SyncService.onLogin()
+                .catch(err => console.error('[Header] Sync failed:', err))
+                .finally(() => updateActiveChildBadge());
+        } else {
+            document.getElementById('active-child-zone')?.classList.add('hidden');
         }
         
         // Show the UI after processing
@@ -243,6 +339,74 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
     filter: brightness(1.1);
   }
 
+  /* ===== ACTIVE CHILD BADGE ===== */
+  .active-child-zone {
+    position: relative;
+  }
+
+  #active-child-zone.hidden {
+    display: none;
+  }
+
+  .child-text-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(34, 211, 238, 0.08);
+    border: 1px solid rgba(34, 211, 238, 0.25);
+    color: #e2e8f0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.4rem 0.9rem;
+    border-radius: 99px;
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .child-text-btn strong {
+    font-weight: 700;
+    color: #f8fafc;
+  }
+
+  .child-text-btn:hover, .child-text-btn.open {
+    background: rgba(34, 211, 238, 0.15);
+    border-color: rgba(34, 211, 238, 0.45);
+  }
+
+  .child-text-btn.open .chevron {
+    transform: rotate(180deg);
+  }
+
+  .child-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22d3ee;
+    box-shadow: 0 0 6px #22d3ee;
+    flex-shrink: 0;
+  }
+
+  .child-tramo-pill {
+    background: rgba(139, 92, 246, 0.15);
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    color: #c4b5fd;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.55rem;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+
+  .child-tramo-pill.hidden {
+    display: none;
+  }
+
+  .child-option.is-current {
+    color: #22d3ee;
+    font-weight: 600;
+  }
+
   /* ===== USER MENU (EBAY STYLE) ===== */
   .user-menu-container {
     position: relative;
@@ -365,5 +529,7 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
     .header { padding: 1rem 5%; }
     .main-nav { display: none; } /* Hide on mobile to save space */
     .parent-zone { display: none; }
+    .child-text-btn { padding: 0.4rem 0.7rem; font-size: 0.8rem; }
+    .child-text-btn .child-label { display: none; }
   }
 </style>

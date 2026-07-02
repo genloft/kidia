@@ -33,6 +33,27 @@
       "id": "explora",
       "sender": "kidia",
       "text": "Un prompt profesional puede incluir un **ROL** («actúa como…»), el **OBJETIVO**, el **CONTEXTO**, el **FORMATO** de salida, **EJEMPLOS** y **RESTRICCIONES**.\n\nY casi nunca sale perfecto a la primera: se itera, evaluando cada resultado.",
+      "next_node_id": "explora_check"
+    },
+    "explora_check": {
+      "id": "explora_check",
+      "sender": "kidia",
+      "text": "Antes de diseñar el tuyo: ¿cuál de estos dos prompts crees que dará un resultado más útil y preciso?",
+      "options": [
+        { "label": "«Actúa como profesor de historia. Explícame la Revolución Francesa en 3 puntos, para un examen de 2º ESO.»", "next_node_id": "explora_check_correcto", "style": "primary" },
+        { "label": "«Cuéntame sobre historia»", "next_node_id": "explora_check_incorrecto" }
+      ]
+    },
+    "explora_check_correcto": {
+      "id": "explora_check_correcto",
+      "sender": "kidia",
+      "text": "Exacto: tiene rol (profesor de historia), objetivo (explicar en 3 puntos), contexto (examen de 2º ESO) y formato. Vamos a diseñar el tuyo con ese nivel de detalle.",
+      "next_node_id": "crea"
+    },
+    "explora_check_incorrecto": {
+      "id": "explora_check_incorrecto",
+      "sender": "kidia",
+      "text": "«Cuéntame sobre historia» es tan amplio que la IA no sabe ni por dónde empezar. El otro tiene rol, objetivo, contexto y formato. Vamos a diseñar el tuyo con ese nivel de detalle.",
       "next_node_id": "crea"
     },
     "crea": {
@@ -46,24 +67,53 @@
         "placeholder": "Actúa como... Quiero que... El contexto es... El formato debe ser... No incluyas...",
         "minLength": 30
       },
+      "next_node_id": "crea_refina"
+    },
+    "crea_refina": {
+      "id": "crea_refina",
+      "sender": "kidia",
+      "text": "Relee tu prompt como si fueras la IA que tiene que responderlo. ¿Qué le añadirías o cambiarías para que el resultado fuera aún mejor?",
+      "action": "activity",
+      "action_data": {
+        "type": "escribir",
+        "instruction": "Escribe qué cambiarías o añadirías a tu prompt.",
+        "placeholder": "Añadiría/cambiaría...",
+        "minLength": 15
+      },
       "next_node_id": "refina"
     },
     "refina": {
       "id": "refina",
       "sender": "kidia",
-      "text": "Pruébalo, evalúa el resultado y refínalo. Guarda tu kit de prompts para reutilizarlo.",
+      "text": "Guarda tu kit de prompts (el original y el refinado) para reutilizarlo la próxima vez que necesites algo parecido.",
       "next_node_id": "reflexiona"
     },
     "reflexiona": {
       "id": "reflexiona",
       "sender": "kidia",
       "text": "¿Qué elemento mejoró más el resultado? ¿Cuándo conviene darle un ejemplo a la IA en vez de solo describir lo que quieres?",
+      "next_node_id": "reflexiona_verifica"
+    },
+    "reflexiona_verifica": {
+      "id": "reflexiona_verifica",
+      "sender": "kidia",
+      "text": "Compara estos dos prompts sobre el mismo tema. ¿Cuál crees que da mejor resultado, y por qué?",
+      "action": "activity",
+      "action_data": {
+        "type": "comparar",
+        "instruction": "Elige el prompt que crees mejor y explica por qué.",
+        "options": [
+          { "id": "a", "label": "Prompt A", "content": "«Escribe sobre el cambio climático.»" },
+          { "id": "b", "label": "Prompt B", "content": "«Actúa como divulgador científico. Explica las 3 causas principales del cambio climático en 100 palabras, para estudiantes de 14 años, sin tecnicismos.»" }
+        ],
+        "askWhy": true
+      },
       "next_node_id": "comparte"
     },
     "comparte": {
       "id": "comparte",
       "sender": "kidia",
-      "text": "¡Ingeniería de prompts desbloqueada! Esta habilidad te servirá toda la vida. ⚙️",
+      "text": "¡Ingeniería de prompts desbloqueada, Ingeniero de Prompts oficial! ⚙️ Esta habilidad te servirá toda la vida.",
       "action": "trigger_quiz"
     }
   },
@@ -79,6 +129,28 @@
         ],
         "correct_index": 0,
         "explanation": "Un prompt avanzado combina varios elementos (rol, objetivo, contexto, formato, ejemplos, restricciones) y se refina con la práctica."
+      },
+      {
+        "id": "q2",
+        "text": "¿Por qué un prompt con rol + contexto + formato suele dar mejores resultados que uno corto y genérico?",
+        "options": [
+          "Porque le da a la IA información concreta para ajustar la respuesta a lo que necesitas",
+          "Porque los prompts largos siempre son mejores solo por ser largos",
+          "No hay ninguna diferencia real entre uno y otro"
+        ],
+        "correct_index": 0,
+        "explanation": "Cuantos más elementos concretos (rol, contexto, formato) le das a la IA, mejor puede ajustar su respuesta a lo que de verdad necesitas."
+      },
+      {
+        "id": "q3",
+        "text": "¿Qué significa «iterar» un prompt?",
+        "options": [
+          "Probarlo, evaluar el resultado y mejorarlo en una nueva versión",
+          "Escribirlo una sola vez y no tocarlo nunca más",
+          "Copiarlo exactamente igual varias veces seguidas"
+        ],
+        "correct_index": 0,
+        "explanation": "Iterar significa mejorar poco a poco: pruebas, evalúas qué falló y ajustas el prompt para la siguiente versión."
       }
     ]
   }

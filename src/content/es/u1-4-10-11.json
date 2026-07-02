@@ -32,6 +32,27 @@
       "id": "explora",
       "sender": "kidia",
       "text": "A veces la IA se equivoca con cosas que parecen ciertas (una fecha, un dato, un nombre). Por eso miramos con lupa y no nos fiamos solo de que «suene bien».",
+      "next_node_id": "explora_check"
+    },
+    "explora_check": {
+      "id": "explora_check",
+      "sender": "kidia",
+      "text": "Antes de cazar: ¿qué es más peligroso, un error muy obvio («el fuego moja») o uno que suena creíble?",
+      "options": [
+        { "label": "El que suena creíble: es fácil creérselo sin comprobar", "next_node_id": "explora_check_correcto", "style": "primary" },
+        { "label": "El obvio, porque se nota muchísimo", "next_node_id": "explora_check_incorrecto" }
+      ]
+    },
+    "explora_check_correcto": {
+      "id": "explora_check_correcto",
+      "sender": "kidia",
+      "text": "¡Exacto! Los errores obvios los cazamos a la primera. Los que suenan creíbles son los peligrosos de verdad, porque nadie sospecha. Vamos a cazar uno.",
+      "next_node_id": "crea"
+    },
+    "explora_check_incorrecto": {
+      "id": "explora_check_incorrecto",
+      "sender": "kidia",
+      "text": "Al revés: un error obvio se caza solo. El peligro de verdad son los que suenan creíbles, porque casi nadie los comprueba. Vamos a cazar uno.",
       "next_node_id": "crea"
     },
     "crea": {
@@ -61,18 +82,46 @@
         "placeholder": "Está mal porque... Lo comprobaría...",
         "minLength": 15
       },
+      "next_node_id": "crea_segundo_caso"
+    },
+    "crea_segundo_caso": {
+      "id": "crea_segundo_caso",
+      "sender": "kidia",
+      "text": "Un caso más, detective: «El chocolate se descubrió en Europa hace 3000 años.» ¿Qué tiene esto de sospechoso?",
+      "action": "activity",
+      "action_data": {
+        "type": "eleccion",
+        "instruction": "Elige la explicación correcta.",
+        "options": [
+          { "id": "origen", "label": "El chocolate es originario de América, no de Europa", "correct": true },
+          { "id": "nada", "label": "Nada, está perfectamente bien", "correct": false }
+        ]
+      },
       "next_node_id": "reflexiona"
     },
     "reflexiona": {
       "id": "reflexiona",
       "sender": "kidia",
       "text": "¿Cómo distingues un dato verdadero de uno que solo suena bien? ¿Qué harías para asegurarte del todo?",
+      "next_node_id": "reflexiona_verifica"
+    },
+    "reflexiona_verifica": {
+      "id": "reflexiona_verifica",
+      "sender": "kidia",
+      "text": "Si tuvieras que comprobar de verdad un dato dudoso como estos, ¿qué harías exactamente, paso a paso?",
+      "action": "activity",
+      "action_data": {
+        "type": "escribir",
+        "instruction": "Explica cómo comprobarías un dato dudoso.",
+        "placeholder": "Primero... y después...",
+        "minLength": 10
+      },
       "next_node_id": "comparte"
     },
     "comparte": {
       "id": "comparte",
       "sender": "kidia",
-      "text": "¡Gran trabajo, detective! Ya no te la cuela ni un dato disfrazado. 🔎",
+      "text": "¡Gran trabajo, Cazaerrores Nivel 2! 🔎 Ya no te la cuela ni un dato disfrazado — sabes mirar con lupa y comprobar de verdad.",
       "action": "trigger_quiz"
     }
   },
@@ -88,6 +137,28 @@
         ],
         "correct_index": 0,
         "explanation": "Los errores sutiles son los más peligrosos porque suenan convincentes: por eso hay que verificar, no solo confiar en cómo «suenan»."
+      },
+      {
+        "id": "q2",
+        "text": "«El chocolate se descubrió en Europa hace 3000 años.» ¿Qué tiene de raro este dato?",
+        "options": [
+          "El chocolate es originario de América, no de Europa",
+          "Está completamente bien, no hay ningún error",
+          "3000 años es un periodo de tiempo imposible"
+        ],
+        "correct_index": 0,
+        "explanation": "El chocolate viene originalmente de América; decir que se descubrió en Europa es un error sutil que suena creíble."
+      },
+      {
+        "id": "q3",
+        "text": "Si no estás seguro/a de si un dato de la IA es verdad, ¿qué es lo mejor que puedes hacer?",
+        "options": [
+          "Buscarlo en otra fuente fiable para comprobarlo",
+          "Creerlo directamente porque suena bien",
+          "Ignorarlo sin pensar más en ello"
+        ],
+        "correct_index": 0,
+        "explanation": "Ante la duda, lo más fiable es contrastar el dato con otra fuente en vez de fiarse solo de cómo suena."
       }
     ]
   }

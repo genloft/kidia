@@ -45,11 +45,30 @@ export class GameEngine {
     // dentro de "Crea", que es donde ocurre la parte guiada del reto.
     private stepForNode(nodeId: string): string | null {
         if (nodeId === 'start') return 'chispa';
-        if (nodeId === 'explora' || nodeId === 'morti_intro') return 'explora';
-        if (nodeId === 'reflexiona') return 'reflexiona';
-        if (nodeId === 'comparte') return 'comparte';
+        if (nodeId === 'morti_intro') return 'explora';
+        if (nodeId.startsWith('explora')) return 'explora';
+        if (nodeId.startsWith('reflexiona')) return 'reflexiona';
+        if (nodeId.startsWith('comparte')) return 'comparte';
         if (nodeId.startsWith('crea') || ['corrige', 'conclusion', 'refina', 'argumenta'].includes(nodeId)) return 'crea';
         return null;
+    }
+
+    // Texto del botón "continuar" según el momento al que se dirige, para
+    // que el niño sepa qué viene a continuación en vez de un genérico
+    // "Continuar". Se usa tanto para el botón normal como para el de
+    // actividad completada.
+    private static STEP_CONTINUE_LABELS: Record<string, string> = {
+        chispa: 'Empezar',
+        explora: 'Ver cómo funciona',
+        crea: '¡Vamos a crearlo!',
+        reflexiona: 'Piensa un momento',
+        comparte: 'Compartir y terminar',
+    };
+
+    private continueLabel(nextNodeId?: string): string {
+        const step = nextNodeId ? this.stepForNode(nextNodeId) : null;
+        const label = step ? GameEngine.STEP_CONTINUE_LABELS[step] : null;
+        return `${label || 'Continuar'} ▶`;
     }
 
     private renderNode(nodeId: string) {
@@ -130,7 +149,7 @@ export class GameEngine {
 
         const doneBtn = document.createElement('button');
         doneBtn.className = 'btn-continue activity-done';
-        doneBtn.textContent = 'Continuar ▼';
+        doneBtn.textContent = this.continueLabel(nextNodeId);
         doneBtn.disabled = true;
 
         const finish = () => {
@@ -161,9 +180,11 @@ export class GameEngine {
                     b.className = 'btn-option';
                     b.textContent = cat;
                     b.onclick = () => {
+                        const isCorrect = idx === item.correctCategory;
                         row.classList.add('activity-item-done');
-                        row.classList.toggle('activity-correct', idx === item.correctCategory);
+                        row.classList.toggle('activity-correct', isCorrect);
                         Array.from(btns.children).forEach(c => (c as HTMLButtonElement).disabled = true);
+                        this.playFeedback(row, isCorrect);
                         done.add(item.id);
                         if (done.size === activity.items.length) doneBtn.disabled = false;
                     };
@@ -213,6 +234,26 @@ export class GameEngine {
         this.scrollToBottom();
     }
 
+    // Efecto de "euforia" al acertar (pop + confeti) o de fallo (temblor)
+    // sobre la tarjeta de una actividad de clasificar.
+    private playFeedback(el: HTMLElement, isCorrect: boolean) {
+        el.classList.add(isCorrect ? 'feedback-pop' : 'feedback-shake');
+
+        if (isCorrect) {
+            const particles = ['✨', '🎉', '⭐'];
+            for (let i = 0; i < 5; i++) {
+                const p = document.createElement('span');
+                p.className = 'confetti-particle';
+                p.textContent = particles[i % particles.length];
+                p.style.left = `${30 + Math.random() * 40}%`;
+                p.style.setProperty('--dx', `${(Math.random() - 0.5) * 70}px`);
+                p.style.animationDelay = `${i * 0.03}s`;
+                el.appendChild(p);
+                setTimeout(() => p.remove(), 800);
+            }
+        }
+    }
+
     private renderOptions(options: any[]) {
         this.optionsArea.innerHTML = '';
         this.optionsArea.classList.remove('hidden');
@@ -241,7 +282,7 @@ export class GameEngine {
 
         const btn = document.createElement('button');
         btn.className = 'btn-continue';
-        btn.textContent = 'Continuar ▼';
+        btn.textContent = this.continueLabel(nextId);
         btn.onclick = () => {
             this.renderNode(nextId);
         };

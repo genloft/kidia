@@ -11,7 +11,7 @@ const difficultyLevels = {
 const level = difficultyLevels[difficulty];
 ---
 
-<a href={`/scenario/${scenario.id}`} class="mission-card-v3" data-id={scenario.id} data-req={scenario.required_badge_id} data-difficulty={difficulty} data-unidad={scenario.unidad} data-tramo={scenario.tramo}>
+<a href={`/scenario/${scenario.id}`} class="mission-card-v3" data-id={scenario.id} data-badge={scenario.badge?.id} data-req={scenario.required_badge_id} data-difficulty={difficulty} data-unidad={scenario.unidad} data-tramo={scenario.tramo}>
     <div class="card-inner">
         <div class="card-background"></div>
         <div class="card-content-wrapper">
@@ -294,6 +294,30 @@ const level = difficultyLevels[difficulty];
     .mission-card-v3.available:hover .play-btn {
         transform: scale(1.1);
         box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
+    }
+
+    /* NEEDS QUIZ: terminó el diálogo pero aún no ganó la insignia (falta
+       aprobar el test, o lo dejó a medias) */
+    .mission-card-v3.needs-quiz .card-inner {
+        border-color: #f59e0b;
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(15, 23, 42, 0.8) 100%);
+    }
+
+    .mission-card-v3.needs-quiz .badge-icon {
+        opacity: 0.5;
+        filter: grayscale(0.6) drop-shadow(0 0 20px rgba(245, 158, 11, 0.3));
+    }
+
+    .mission-card-v3.needs-quiz .play-btn {
+        background: transparent;
+        color: #f59e0b;
+        border: 2px solid #f59e0b;
+        box-shadow: none;
+    }
+
+    .mission-card-v3.needs-quiz:hover .play-btn {
+        background: #f59e0b;
+        color: #020617;
     }
 
     /* COMPLETED */

@@ -39,6 +39,27 @@
       "id": "explora",
       "sender": "kidia",
       "text": "La IA aprende de datos hechos por personas, que a veces están desequilibrados o son injustos. Si los datos tienen sesgo, la IA lo copia y a veces lo amplifica.\n\nEjemplo: un buscador que, al pedir «científico», solo muestra hombres porque así estaban sus datos.",
+      "next_node_id": "explora_check"
+    },
+    "explora_check": {
+      "id": "explora_check",
+      "sender": "kidia",
+      "text": "Antes de investigar: si una IA de imágenes solo vio ingenieros hombres en sus datos y le pides «dibuja un ingeniero», ¿qué es más probable que pase?",
+      "options": [
+        { "label": "Que dibuje casi siempre a un hombre, copiando el patrón de sus datos", "next_node_id": "explora_check_correcto", "style": "primary" },
+        { "label": "Que sea totalmente neutral, sin ningún patrón", "next_node_id": "explora_check_incorrecto" }
+      ]
+    },
+    "explora_check_correcto": {
+      "id": "explora_check_correcto",
+      "sender": "morti",
+      "text": "Correcto. Yo no «decido» ser injusto: repito lo que veo en mis datos. Si mis datos están torcidos, yo salgo torcido. Investiguemos un caso real.",
+      "next_node_id": "crea"
+    },
+    "explora_check_incorrecto": {
+      "id": "explora_check_incorrecto",
+      "sender": "morti",
+      "text": "Al contrario: yo no soy neutral por naturaleza. Repito los patrones de mis datos, y si están torcidos, yo salgo torcido también. Investiguemos un caso real.",
       "next_node_id": "crea"
     },
     "crea": {
@@ -53,6 +74,21 @@
           { "id": "datos", "label": "Los datos de entrenamiento no eran variados ni equilibrados", "correct": true },
           { "id": "maldad", "label": "La IA decidió ser injusta a propósito", "correct": false },
           { "id": "azar", "label": "Fue pura casualidad, sin ninguna causa", "correct": false }
+        ]
+      },
+      "next_node_id": "crea_segundo_caso"
+    },
+    "crea_segundo_caso": {
+      "id": "crea_segundo_caso",
+      "sender": "morti",
+      "text": "Comprobemos el patrón con otro caso, para no sacar conclusiones con uno solo: una IA que recomienda quién debería ser «jefe de proyecto» fue entrenada casi siempre con datos históricos donde los jefes eran hombres. ¿Qué es probable que pase con sus recomendaciones?",
+      "action": "activity",
+      "action_data": {
+        "type": "eleccion",
+        "instruction": "Elige la respuesta más probable.",
+        "options": [
+          { "id": "repite", "label": "Que también recomiende más a hombres, repitiendo el patrón de los datos", "correct": true },
+          { "id": "imparcial", "label": "Que sea perfectamente justa e imparcial sin más", "correct": false }
         ]
       },
       "next_node_id": "conclusion"
@@ -74,12 +110,25 @@
       "id": "reflexiona",
       "sender": "kidia",
       "text": "¿A quién perjudica un sesgo así? ¿Es «culpa» de la IA, de los datos o de quien la entrenó?",
+      "next_node_id": "reflexiona_verifica"
+    },
+    "reflexiona_verifica": {
+      "id": "reflexiona_verifica",
+      "sender": "kidia",
+      "text": "Explica con tu propio razonamiento: ¿por qué decimos que la responsabilidad de un sesgo NO es de la IA en sí misma?",
+      "action": "activity",
+      "action_data": {
+        "type": "escribir",
+        "instruction": "Explica de quién es la responsabilidad de un sesgo y por qué.",
+        "placeholder": "Yo creo que la responsabilidad es de...",
+        "minLength": 15
+      },
       "next_node_id": "comparte"
     },
     "comparte": {
       "id": "comparte",
       "sender": "kidia",
-      "text": "Acabas de entender uno de los mayores retos de la IA. Eso es pensar de verdad. 🔬",
+      "text": "Acabas de entender uno de los mayores retos de la IA, Detector de Sesgos oficial. Eso es pensar de verdad. 🔬",
       "action": "trigger_quiz"
     }
   },
@@ -95,6 +144,28 @@
         ],
         "correct_index": 0,
         "explanation": "El sesgo viene de los datos (y de las decisiones humanas al recogerlos), no de una \"maldad\" de la máquina."
+      },
+      {
+        "id": "q2",
+        "text": "Una IA entrenada casi siempre con jefes de proyecto hombres, ¿qué es probable que haga al recomendar candidatos?",
+        "options": [
+          "Repetir el patrón y recomendar más a hombres, aunque no sea justo",
+          "Ser automáticamente imparcial, sin ningún sesgo",
+          "Negarse a dar cualquier recomendación"
+        ],
+        "correct_index": 0,
+        "explanation": "Una IA reproduce los patrones de sus datos de entrenamiento, así que si esos datos están desequilibrados, sus recomendaciones también lo estarán."
+      },
+      {
+        "id": "q3",
+        "text": "¿Por qué decimos que un sesgo NO es «culpa» de la IA en sí misma?",
+        "options": [
+          "Porque el sesgo viene de los datos y de las decisiones humanas al recogerlos",
+          "Porque la IA nunca comete errores de ningún tipo",
+          "Porque los sesgos son imposibles de detectar o corregir"
+        ],
+        "correct_index": 0,
+        "explanation": "La IA no decide ser injusta: reproduce patrones de los datos que las personas eligieron para entrenarla."
       }
     ]
   }

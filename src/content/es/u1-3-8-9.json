@@ -32,7 +32,34 @@
     "explora": {
       "id": "explora",
       "sender": "kidia",
-      "text": "Un prompt es lo que le pedimos a la IA. Cuanto mejor lo decimos, mejor lo entiende.\n\nNo es lo mismo decir «un perro» (sale cualquier cosa) que «un perro pequeño y marrón saltando en la playa» (sale lo que imaginas).",
+      "text": "Un prompt es lo que le pedimos a la IA. Cuanto mejor lo decimos, mejor lo entiende.",
+      "next_node_id": "explora_ejemplo"
+    },
+    "explora_ejemplo": {
+      "id": "explora_ejemplo",
+      "sender": "kidia",
+      "text": "No es lo mismo decir «un perro» (sale cualquier cosa) que «un perro pequeño y marrón saltando en la playa» (sale mucho más parecido a lo que imaginas).",
+      "next_node_id": "explora_check"
+    },
+    "explora_check": {
+      "id": "explora_check",
+      "sender": "kidia",
+      "text": "Antes de lanzar tu hechizo, dime: ¿cuál de estos dos crees que dará un dibujo más parecido a lo que imaginas?",
+      "options": [
+        { "label": "«Un perro pequeño y marrón saltando en la playa»", "next_node_id": "explora_check_correcto", "style": "primary" },
+        { "label": "«Un perro»", "next_node_id": "explora_check_incorrecto" }
+      ]
+    },
+    "explora_check_correcto": {
+      "id": "explora_check_correcto",
+      "sender": "kidia",
+      "text": "¡Exacto! Cuantos más detalles buenos le das, más se parece el resultado a lo que tienes en la cabeza. ¡Vamos a construir el tuyo!",
+      "next_node_id": "crea_animal"
+    },
+    "explora_check_incorrecto": {
+      "id": "explora_check_incorrecto",
+      "sender": "kidia",
+      "text": "¡Casi! «Un perro» a secas puede salir de cualquier color y haciendo cualquier cosa. Con más detalles, acertamos mucho más. ¡Vamos a construir tu hechizo con detalles!",
       "next_node_id": "crea_animal"
     },
     "crea_animal": {
@@ -81,18 +108,37 @@
           { "id": "durmiendo", "label": "Durmiendo en su cueva" }
         ]
       },
+      "next_node_id": "crea_reaccion"
+    },
+    "crea_reaccion": {
+      "id": "crea_reaccion",
+      "sender": "kidia",
+      "text": "¡Mira qué hechizo tan completo has construido! Tiene animal, color Y acción. ¡Vamos a lanzarlo!",
       "next_node_id": "reflexiona"
     },
     "reflexiona": {
       "id": "reflexiona",
       "sender": "kidia",
       "text": "¡Pulsa para crear tu imagen! Mira si salió como lo imaginabas. ¿Qué palabra crees que ayudó más a la IA a entenderte?",
+      "next_node_id": "reflexiona_verifica"
+    },
+    "reflexiona_verifica": {
+      "id": "reflexiona_verifica",
+      "sender": "kidia",
+      "text": "Si la imagen no sale exactamente como esperabas, ¿qué podrías añadir a tu hechizo la próxima vez para que salga aún mejor?",
+      "action": "activity",
+      "action_data": {
+        "type": "escribir",
+        "instruction": "Escribe qué añadirías a tu prompt.",
+        "placeholder": "La próxima vez añadiría...",
+        "minLength": 8
+      },
       "next_node_id": "comparte"
     },
     "comparte": {
       "id": "comparte",
       "sender": "kidia",
-      "text": "¡Magia de palabras conseguida! Cuanto mejor lo dices, mejor te entiende la IA. ✨",
+      "text": "¡Magia de palabras conseguida, Mago de Palabras! ✨ Cuanto mejor lo dices, mejor te entiende la IA. Ya dominas tu primer hechizo.",
       "action": "trigger_quiz"
     }
   },
@@ -108,6 +154,28 @@
         ],
         "correct_index": 0,
         "explanation": "Cuantos más detalles buenos le des a la IA, más se parecerá el resultado a lo que imaginas."
+      },
+      {
+        "id": "q2",
+        "text": "¿Qué tres «ingredientes» usaste para construir tu hechizo de palabras?",
+        "options": [
+          "Un animal, un color y una acción",
+          "Solo números",
+          "Un dibujo ya terminado"
+        ],
+        "correct_index": 0,
+        "explanation": "Combinar varios detalles (qué es, cómo es, qué hace) es lo que hace un buen prompt."
+      },
+      {
+        "id": "q3",
+        "text": "Si tu imagen no sale como esperabas, ¿qué es lo mejor que puedes hacer?",
+        "options": [
+          "Añadir más detalles a tu prompt y probar otra vez",
+          "Rendirte, ya no hay nada que hacer",
+          "Pensar que la IA se ha roto"
+        ],
+        "correct_index": 0,
+        "explanation": "Un buen mago de palabras prueba, mira el resultado y mejora su hechizo con más detalles."
       }
     ]
   }

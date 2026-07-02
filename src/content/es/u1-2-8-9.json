@@ -26,19 +26,46 @@
     "start": {
       "id": "start",
       "sender": "kidia",
-      "text": "Entrena a tu mini-robot\n\nLos robots no nacen sabiendo: ¡aprenden mirando ejemplos! Hoy tú serás el profe de un mini-robot.",
+      "text": "Entrena a tu mini-robot\n\nSi te enseño 5 fotos de gatos y 5 de perros, ¿sabrías decir qué es uno nuevo? ¡Las máquinas aprenden parecido! Hoy tú serás el profe de un mini-robot.",
       "next_node_id": "explora"
     },
     "explora": {
       "id": "explora",
       "sender": "kidia",
-      "text": "Una IA aprende mirando muchísimos ejemplos. Si solo ve gatos naranjas, puede pensar que TODOS los gatos son naranjas.\n\nIdea clave: **la IA aprende de lo que le enseñamos**.",
+      "text": "Una IA aprende mirando muchísimos ejemplos. Si solo ve gatos naranjas, puede pensar que TODOS los gatos son naranjas.",
+      "next_node_id": "explora_idea"
+    },
+    "explora_idea": {
+      "id": "explora_idea",
+      "sender": "kidia",
+      "text": "Idea clave para hoy: **la IA aprende de lo que le enseñamos**. Si le enseñamos poco o mal, se equivoca. ¡Vamos a comprobarlo entrenando tu propio mini-robot!",
+      "next_node_id": "explora_check"
+    },
+    "explora_check": {
+      "id": "explora_check",
+      "sender": "kidia",
+      "text": "Adivina antes de empezar: si a un robot solo le enseño animales que vuelan con alas, ¿reconocerá bien a un pez?",
+      "options": [
+        { "label": "Seguramente no, nunca vio algo parecido", "next_node_id": "explora_check_correcto", "style": "primary" },
+        { "label": "Sí, seguro que sí", "next_node_id": "explora_check_incorrecto" }
+      ]
+    },
+    "explora_check_correcto": {
+      "id": "explora_check_correcto",
+      "sender": "kidia",
+      "text": "¡Muy bien pensado! Si nunca vio nada parecido, no tiene con qué comparar. Vamos a entrenar tu mini-robot de verdad.",
+      "next_node_id": "crea"
+    },
+    "explora_check_incorrecto": {
+      "id": "explora_check_incorrecto",
+      "sender": "kidia",
+      "text": "¡Vamos a comprobarlo juntos! Si el robot nunca vio un pez, le va a costar mucho reconocerlo bien. Entrenemos tu mini-robot para verlo.",
       "next_node_id": "crea"
     },
     "crea": {
       "id": "crea",
       "sender": "kidia",
-      "text": "Enséñale a tu mini-robot a distinguir «vuela» de «no vuela». Cuando termines, te daré un ejemplo nuevo. ¿Acertará tu robot?",
+      "text": "Enséñale a tu mini-robot a distinguir «vuela» de «no vuela» con estos primeros ejemplos.",
       "action": "activity",
       "action_data": {
         "type": "clasificar",
@@ -50,7 +77,28 @@
           { "id": "perro", "label": "Perro", "icon": "🐶", "correctCategory": 1 },
           { "id": "abeja", "label": "Abeja", "icon": "🐝", "correctCategory": 0 },
           { "id": "pez", "label": "Pez", "icon": "🐟", "correctCategory": 1 },
-          { "id": "pinguino", "label": "Pingüino", "icon": "🐧", "correctCategory": 1 }
+          { "id": "arana", "label": "Araña", "icon": "🕷️", "correctCategory": 1 }
+        ]
+      },
+      "next_node_id": "crea_reaccion"
+    },
+    "crea_reaccion": {
+      "id": "crea_reaccion",
+      "sender": "kidia",
+      "text": "¡Tu mini-robot ya tiene su primer entrenamiento! Vamos a ponerlo a prueba con un caso difícil de verdad…",
+      "next_node_id": "crea_prediccion"
+    },
+    "crea_prediccion": {
+      "id": "crea_prediccion",
+      "sender": "kidia",
+      "text": "Aquí va el reto: un PINGÜINO. Tiene alas… pero no vuela. ¿Qué crees que va a pasar con tu mini-robot entrenado?",
+      "action": "activity",
+      "action_data": {
+        "type": "eleccion",
+        "instruction": "Elige lo que crees que hará tu mini-robot.",
+        "options": [
+          { "id": "fallo", "label": "Puede que se equivoque y diga que vuela, porque tiene alas", "correct": true },
+          { "id": "acierto-seguro", "label": "Acertará seguro, es imposible que falle", "correct": false }
         ]
       },
       "next_node_id": "reflexiona"
@@ -58,13 +106,26 @@
     "reflexiona": {
       "id": "reflexiona",
       "sender": "kidia",
-      "text": "¿Viste el pingüino? Tiene alas, pero no vuela. ¿Qué pasaría si a un robot solo le enseñamos animales con alas que sí vuelan? ¿Reconocería que un pingüino no vuela? ¿Quién decide lo que aprende la máquina?",
+      "text": "¿Viste el pingüino? Tiene alas, pero no vuela. ¿Qué pasaría si a un robot solo le enseñamos animales con alas que sí vuelan? ¿Quién decide lo que aprende la máquina?",
+      "next_node_id": "reflexiona_verifica"
+    },
+    "reflexiona_verifica": {
+      "id": "reflexiona_verifica",
+      "sender": "kidia",
+      "text": "Cuéntame con tus palabras: ¿por qué tu mini-robot podría liarse con el pingüino?",
+      "action": "activity",
+      "action_data": {
+        "type": "escribir",
+        "instruction": "Explica por qué el mini-robot podría equivocarse con el pingüino.",
+        "placeholder": "Se lía porque...",
+        "minLength": 10
+      },
       "next_node_id": "comparte"
     },
     "comparte": {
       "id": "comparte",
       "sender": "kidia",
-      "text": "¡Eres un gran profe de robots! Recuerda: la IA aprende de lo que le enseñamos. 🤖",
+      "text": "¡Eres un gran profe de robots, Entrenador de Robots oficial! 🤖 Recuerda: la IA aprende de lo que le enseñamos, ni más ni menos.",
       "action": "trigger_quiz"
     }
   },
@@ -80,6 +141,28 @@
         ],
         "correct_index": 0,
         "explanation": "Si los ejemplos son pocos o parecidos, la IA se equivoca más con casos nuevos y distintos."
+      },
+      {
+        "id": "q2",
+        "text": "¿Por qué un mini-robot entrenado solo con animales que vuelan se lía con un pingüino?",
+        "options": [
+          "Porque nunca vio un ejemplo parecido a un pingüino",
+          "Porque los pingüinos son en realidad robots",
+          "Porque el mini-robot está estropeado"
+        ],
+        "correct_index": 0,
+        "explanation": "Un pingüino tiene alas pero no vuela: si el robot solo aprendió con «alas = vuela», se equivoca al no haber visto ese caso antes."
+      },
+      {
+        "id": "q3",
+        "text": "¿Quién decide, al final, lo que aprende una IA?",
+        "options": [
+          "La persona que elige los ejemplos con los que se entrena",
+          "La propia IA, que decide sola sin ejemplos",
+          "Nadie: aprende sola, sin que nadie influya"
+        ],
+        "correct_index": 0,
+        "explanation": "Los ejemplos que le damos a una IA los elige una persona, y eso determina lo que la IA aprende a hacer bien o mal."
       }
     ]
   }

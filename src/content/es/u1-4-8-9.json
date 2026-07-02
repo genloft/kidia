@@ -31,7 +31,28 @@
     "explora": {
       "id": "explora",
       "sender": "kidia",
-      "text": "Yo sé mucho, pero a veces me equivoco o me invento cosas. Por eso somos detectives y no nos lo creemos todo.",
+      "text": "Yo sé mucho, pero a veces me equivoco o me invento cosas. Por eso somos detectives y no nos lo creemos todo... ¡pero ojo! Tampoco hay que desconfiar de TODO.",
+      "next_node_id": "explora_check"
+    },
+    "explora_check": {
+      "id": "explora_check",
+      "sender": "kidia",
+      "text": "Una pregunta antes de empezar: si yo te digo «el fuego quema», ¿está bien dicho o hay que cazarlo como error?",
+      "options": [
+        { "label": "Está bien, eso es verdad", "next_node_id": "explora_check_correcto", "style": "primary" },
+        { "label": "Está mal, hay que cazarlo", "next_node_id": "explora_check_incorrecto" }
+      ]
+    },
+    "explora_check_correcto": {
+      "id": "explora_check_correcto",
+      "sender": "kidia",
+      "text": "¡Exacto! No todo lo que digo está mal. Un buen Cazaerrores solo caza lo que de verdad está equivocado, ni más ni menos.",
+      "next_node_id": "crea"
+    },
+    "explora_check_incorrecto": {
+      "id": "explora_check_incorrecto",
+      "sender": "kidia",
+      "text": "¡Cuidado! Esa frase es verdad, así que no hay que cazarla. Un buen Cazaerrores solo caza lo que de verdad está mal, no todo lo que oye.",
       "next_node_id": "crea"
     },
     "crea": {
@@ -49,18 +70,46 @@
           { "id": "agua", "label": "El agua moja", "correct": false }
         ]
       },
+      "next_node_id": "crea_corrige"
+    },
+    "crea_corrige": {
+      "id": "crea_corrige",
+      "sender": "kidia",
+      "text": "¡Buena caza! Elige la frase que te pareció más rara y cuéntame cómo sería la versión correcta.",
+      "action": "activity",
+      "action_data": {
+        "type": "escribir",
+        "instruction": "Escribe cómo sería la versión correcta de una de las frases falsas.",
+        "placeholder": "La frase correcta sería...",
+        "minLength": 5
+      },
       "next_node_id": "reflexiona"
     },
     "reflexiona": {
       "id": "reflexiona",
       "sender": "kidia",
       "text": "¿Cómo supiste que esas frases estaban mal? ¿Te creerías TODO lo que dice una pantalla?",
+      "next_node_id": "reflexiona_verifica"
+    },
+    "reflexiona_verifica": {
+      "id": "reflexiona_verifica",
+      "sender": "kidia",
+      "text": "Una última frase mía: «Los perros son animales.» ¿Está bien dicha o hay que cazarla?",
+      "action": "activity",
+      "action_data": {
+        "type": "eleccion",
+        "instruction": "Elige la respuesta correcta.",
+        "options": [
+          { "id": "bien", "label": "Está bien, es verdad", "correct": true },
+          { "id": "mal", "label": "Está mal, hay que cazarla", "correct": false }
+        ]
+      },
       "next_node_id": "comparte"
     },
     "comparte": {
       "id": "comparte",
       "sender": "kidia",
-      "text": "¡Reto cumplido, Cazaerrores! Recuerda: la IA mola, pero a veces se equivoca. 🏅",
+      "text": "¡Reto cumplido, Cazaerrores oficial! 🏅 Recuerda: la IA mola, pero a veces se equivoca — y ahora tú ya sabes cazarlo.",
       "action": "trigger_quiz"
     }
   },
@@ -76,6 +125,28 @@
         ],
         "correct_index": 0,
         "explanation": "La IA es lista, pero a veces se equivoca o se inventa cosas. Por eso conviene comprobar."
+      },
+      {
+        "id": "q2",
+        "text": "La IA dice: «Los peces viven en el agua.» ¿Hay que cazarla como error?",
+        "options": [
+          "No, es verdad: no hay que cazarla",
+          "Sí, es un error clarísimo",
+          "No se puede saber nunca"
+        ],
+        "correct_index": 0,
+        "explanation": "No todo lo que dice la IA está mal: un buen Cazaerrores solo caza lo que de verdad es falso."
+      },
+      {
+        "id": "q3",
+        "text": "Cuando cazas un error de la IA, ¿qué es lo más importante hacer después?",
+        "options": [
+          "Explicar por qué está mal y decir cómo sería la versión correcta",
+          "Solo señalarlo, sin decir nada más",
+          "Ignorarlo y seguir sin comentarlo"
+        ],
+        "correct_index": 0,
+        "explanation": "Cazar el error es el primer paso; explicar por qué está mal es lo que demuestra que de verdad lo has entendido."
       }
     ]
   }

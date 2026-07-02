@@ -33,6 +33,27 @@
       "id": "explora",
       "sender": "kidia",
       "text": "Un buen prompt tiene tres ingredientes: **QUÉ** quieres, **CÓMO** lo quieres (estilo, tono) y un poco de **CONTEXTO** (para qué o para quién).\n\nNo es lo mismo «un cartel» que «un cartel divertido para anunciar la feria de ciencias de mi clase, con colores alegres».",
+      "next_node_id": "explora_check"
+    },
+    "explora_check": {
+      "id": "explora_check",
+      "sender": "kidia",
+      "text": "Antes de cocinar tu receta: ¿cuál de estos dos prompts tiene los tres ingredientes completos?",
+      "options": [
+        { "label": "«Un cartel divertido para la feria de ciencias, con colores alegres»", "next_node_id": "explora_check_correcto", "style": "primary" },
+        { "label": "«Un cartel»", "next_node_id": "explora_check_incorrecto" }
+      ]
+    },
+    "explora_check_correcto": {
+      "id": "explora_check_correcto",
+      "sender": "kidia",
+      "text": "¡Exacto! Tiene el QUÉ (un cartel), el CÓMO (divertido, colores alegres) y el CONTEXTO (para la feria de ciencias). Vamos a preparar el tuyo.",
+      "next_node_id": "crea"
+    },
+    "explora_check_incorrecto": {
+      "id": "explora_check_incorrecto",
+      "sender": "kidia",
+      "text": "«Un cartel» a secas solo tiene el QUÉ. Le faltan el CÓMO y el CONTEXTO, así que puede salir de cualquier manera. Vamos a preparar tu receta completa.",
       "next_node_id": "crea"
     },
     "crea": {
@@ -46,18 +67,39 @@
         "placeholder": "Ej: Un cartel divertido para anunciar la feria de ciencias de mi clase, con colores alegres...",
         "minLength": 20
       },
+      "next_node_id": "crea_revisa"
+    },
+    "crea_revisa": {
+      "id": "crea_revisa",
+      "sender": "kidia",
+      "text": "Relee tu prompt: ¿tiene los tres ingredientes —QUÉ, CÓMO y CONTEXTO—? Si te falta alguno, ya sabes qué mejorar la próxima vez que cocines uno.",
       "next_node_id": "reflexiona"
     },
     "reflexiona": {
       "id": "reflexiona",
       "sender": "kidia",
       "text": "Genera el resultado y revisa: ¿qué ingrediente le faltaba a tu primer intento? ¿El contexto cambió mucho el resultado?",
+      "next_node_id": "reflexiona_verifica"
+    },
+    "reflexiona_verifica": {
+      "id": "reflexiona_verifica",
+      "sender": "kidia",
+      "text": "Compara estos dos: «un cartel» frente a «un cartel divertido para la feria de ciencias de mi clase, con colores alegres». ¿Cuál da un resultado más útil de verdad?",
+      "action": "activity",
+      "action_data": {
+        "type": "eleccion",
+        "instruction": "Elige la respuesta correcta.",
+        "options": [
+          { "id": "con-contexto", "label": "El que tiene contexto: se ajusta mucho mejor a lo que necesitas", "correct": true },
+          { "id": "da-igual", "label": "Da exactamente igual cuál uses", "correct": false }
+        ]
+      },
       "next_node_id": "comparte"
     },
     "comparte": {
       "id": "comparte",
       "sender": "kidia",
-      "text": "¡Receta lista, chef de prompts! Cuantos más ingredientes buenos, mejor sale. 👨‍🍳",
+      "text": "¡Receta lista, Chef de Prompts oficial! 👨‍🍳 Cuantos más ingredientes buenos, mejor sale — y ahora ya sabes prepararla tú solo/a.",
       "action": "trigger_quiz"
     }
   },
@@ -73,6 +115,28 @@
         ],
         "correct_index": 0,
         "explanation": "Un prompt completo dice qué quieres, cómo lo quieres (estilo/tono) y da contexto (para qué o para quién)."
+      },
+      {
+        "id": "q2",
+        "text": "¿Qué le falta a un prompt que solo dice «Un cartel»?",
+        "options": [
+          "El cómo lo quieres y el contexto (para qué o para quién)",
+          "Nada, ya está completo tal cual",
+          "Solo le falta un signo de exclamación"
+        ],
+        "correct_index": 0,
+        "explanation": "«Un cartel» solo tiene el QUÉ; sin el CÓMO ni el CONTEXTO, puede salir de cualquier manera."
+      },
+      {
+        "id": "q3",
+        "text": "¿Por qué mejora un prompt cuando le añades contexto (para qué o para quién es)?",
+        "options": [
+          "Porque ayuda a la IA a ajustar el resultado a lo que de verdad necesitas",
+          "Porque hace el prompt más largo, y eso siempre es mejor",
+          "El contexto no cambia nada el resultado"
+        ],
+        "correct_index": 0,
+        "explanation": "El contexto orienta a la IA sobre para qué situación es el resultado, así que se ajusta mucho mejor a lo que necesitas."
       }
     ]
   }
