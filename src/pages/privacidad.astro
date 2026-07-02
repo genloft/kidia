@@ -1,77 +1,107 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
+
+const secciones = [
+  {
+    icon: '📋',
+    title: 'Información que recopilamos',
+    text: 'En Kidia, nos tomamos muy en serio la privacidad de los menores. Solo recopilamos la información estrictamente necesaria para que la plataforma funcione, como una dirección de correo electrónico (preferiblemente de los padres o tutores) para crear la cuenta de usuario.'
+  },
+  {
+    icon: '⚙️',
+    title: 'Uso de la información',
+    text: 'La información que recopilamos se utiliza exclusivamente para proporcionar acceso a la plataforma, guardar el progreso en los retos de Inteligencia Artificial, y enviar correos electrónicos de confirmación o recuperación de contraseña.'
+  },
+  {
+    icon: '🛡️',
+    title: 'Protección a Menores',
+    text: 'Kidia está diseñada como una plataforma educativa. No vendemos datos a terceros, no mostramos anuncios publicitarios dirigidos ni utilizamos sistemas de rastreo invasivos. Todas las interacciones con nuestra IA están supervisadas y filtradas para garantizar un entorno seguro.'
+  },
+  {
+    icon: '🍪',
+    title: 'Uso de Cookies',
+    text: 'Utilizamos cookies esenciales para mantener tu sesión activa y guardar tus preferencias. No usamos cookies de marketing de terceros.'
+  },
+  {
+    icon: '⚖️',
+    title: 'Derechos del Usuario',
+    text: 'Los padres o tutores legales pueden solicitar en cualquier momento la revisión, modificación o eliminación total de la cuenta y los datos asociados escribiendo a nuestro soporte.'
+  }
+];
 ---
 
-<Layout title="Privacidad - Kidia">
+<Layout title="Privacidad - Kidia" description="Política de privacidad de la plataforma Kidia.">
   <Header />
   <main class="legal-container">
-    <h1>Política de Privacidad</h1>
-    <div class="legal-content">
-      <p>Última actualización: {new Date().toLocaleDateString('es-ES')}</p>
-      
-      <h2>1. Información que recopilamos</h2>
-      <p>En Kidia, nos tomamos muy en serio la privacidad de los menores. Solo recopilamos la información estrictamente necesaria para que la plataforma funcione, como una dirección de correo electrónico (preferiblemente de los padres o tutores) para crear la cuenta de usuario.</p>
-      
-      <h2>2. Uso de la información</h2>
-      <p>La información recopilamos se utiliza exclusivamente para:</p>
-      <ul>
-        <li>Proporcionar acceso a la plataforma.</li>
-        <li>Guardar el progreso en los retos de Inteligencia Artificial.</li>
-        <li>Enviar correos electrónicos de confirmación o recuperación de contraseña.</li>
-      </ul>
-      
-      <h2>3. Protección a Menores</h2>
-      <p>Kidia está diseñada como una plataforma educativa. No vendemos datos a terceros, no mostramos anuncios publicitarios dirigidos ni utilizamos sistemas de rastreo invasivos. Todas las interacciones con nuestra IA están supervisadas y filtradas para garantizar un entorno seguro.</p>
+    <div class="legal-header">
+      <h1 class="text-gradient">Política de Privacidad</h1>
+      <span class="pill">Última actualización: {new Date().toLocaleDateString('es-ES')}</span>
+    </div>
 
-      <h2>4. Uso de Cookies</h2>
-      <p>Utilizamos cookies esenciales para mantener tu sesión activa y guardar tus preferencias. No usamos cookies de marketing de terceros.</p>
-      
-      <h2>5. Derechos del Usuario</h2>
-      <p>Los padres o tutores legales pueden solicitar en cualquier momento la revisión, modificación o eliminación total de la cuenta y los datos asociados escribiendo a nuestro soporte.</p>
+    <div class="legal-sections">
+      {secciones.map((s, i) => (
+        <section class="card legal-card">
+          <div class="legal-card-icon">{s.icon}</div>
+          <div>
+            <h2>{i + 1}. {s.title}</h2>
+            <p>{s.text}</p>
+          </div>
+        </section>
+      ))}
     </div>
   </main>
 </Layout>
 
 <style>
   .legal-container {
-    max-width: 800px;
+    max-width: 780px;
     margin: 0 auto;
     padding: 4rem 2rem;
   }
 
-  h1 {
-    font-size: 3rem;
-    margin-bottom: 2rem;
-    color: #22d3ee;
+  .legal-header {
+    text-align: center;
+    margin-bottom: 3rem;
   }
 
-  .legal-content {
-    background: rgba(30, 41, 59, 0.4);
-    padding: 3rem;
-    border-radius: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  h2 {
-    font-size: 1.5rem;
-    color: white;
-    margin-top: 2.5rem;
+  .legal-header h1 {
+    font-size: 2.75rem;
     margin-bottom: 1rem;
   }
 
-  p, li {
-    color: #cbd5e1;
-    line-height: 1.7;
-    font-size: 1.05rem;
+  .legal-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
   }
 
-  ul {
-    margin-top: 1rem;
-    margin-left: 1.5rem;
+  .legal-card {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
   }
 
-  li {
+  .legal-card-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    border-radius: var(--radius-md);
+    background: rgba(139, 92, 246, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.25);
+  }
+
+  .legal-card h2 {
+    font-size: 1.2rem;
     margin-bottom: 0.5rem;
+  }
+
+  .legal-card p {
+    margin: 0;
+    line-height: 1.7;
   }
 </style>

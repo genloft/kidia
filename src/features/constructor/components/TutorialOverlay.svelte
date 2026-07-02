@@ -294,7 +294,7 @@
             : targetX}px; top: {targetY === -1000 ? -2000 : targetY}px;"
     >
         <div class="tutorial-box arrow-{arrowDir}">
-            <img class="avatar" src="/kidia_explaining.webp" alt="Kidia" />
+            <img class="avatar" src="/dravael-work.webp" alt="Kidia" />
             <div class="content">
                 <h3 id="tut-title">{currentStep.title}</h3>
                 <p id="tut-desc">{currentStep.message}</p>

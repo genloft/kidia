@@ -1,13 +1,17 @@
 ---
 import '../styles/global.css';
 import CookieBanner from '../components/CookieBanner.astro';
+import Footer from '../components/Footer.astro';
 
 interface Props {
 	title: string;
 	description?: string;
+	// false en pantallas de app a pantalla completa (mapa, reto, constructor,
+	// dashboard) donde el pie de página rompería el layout de altura fija.
+	showFooter?: boolean;
 }
 
-const { title, description = 'Kidia - Aprende IA con tu amiga virtual' } = Astro.props;
+const { title, description = 'Kidia - Aprende IA con tu amiga virtual', showFooter = true } = Astro.props;
 ---
 
 <!doctype html>
@@ -25,13 +29,14 @@ const { title, description = 'Kidia - Aprende IA con tu amiga virtual' } = Astro
 	</head>
 	<body>
 		<slot />
+		{showFooter && <Footer />}
 		<CookieBanner />
 	</body>
 </html>
 
 <style>
 	body {
-		background-image: 
+		background-image:
 			radial-gradient(circle at 10% 20%, rgba(34, 211, 238, 0.1) 0%, transparent 20%),
 			radial-gradient(circle at 90% 80%, rgba(232, 121, 249, 0.1) 0%, transparent 20%);
 	}

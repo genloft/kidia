@@ -15,7 +15,7 @@
             class="modal-content"
             transition:scale={{ start: 0.95, duration: 300 }}
         >
-            <img class="robot-avatar" src="/kidia_explaining.webp" alt="Kidia" />
+            <img class="robot-avatar" src="/dravael-work.webp" alt="Kidia" />
             <h2>{$t.game?.welcomeTitle || "¡Bienvenido a Kidia!"}</h2>
             <div class="text-body">
                 <p>

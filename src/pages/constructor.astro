@@ -5,7 +5,7 @@ import ConstructorApp from '../features/constructor/ConstructorApp.svelte';
 import '../styles/constructor.css';
 ---
 
-<Layout title="Constructor - Kidia" description="Construye tu propia Inteligencia Artificial pieza a pieza en el Constructor de Kidia: datos, cerebro, entrenamiento y examen, en un juego pensado para niños.">
+<Layout title="Constructor - Kidia" description="Construye tu propia Inteligencia Artificial pieza a pieza en el Constructor de Kidia: datos, cerebro, entrenamiento y examen, en un juego pensado para niños." showFooter={false}>
   <Header />
   <!-- El componente Svelte debe renderizarse en el cliente para su interactividad -->
   <ConstructorApp client:only="svelte" />

@@ -1,110 +1,175 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
+import Friend from '../components/Friend.astro';
+
+const faqs = [
+  {
+    q: '¿Qué es Kidia?',
+    a: 'Es una academia online interactiva para que niños y niñas de 8 a 14 años entiendan qué es la Inteligencia Artificial y aprendan a usarla con criterio, sin tecnicismos aburridos.'
+  },
+  {
+    q: '¿Cómo se adapta a la edad de mi hijo/a?',
+    a: 'Kidia calcula automáticamente el tramo de edad (8-9, 10-11 o 12-14) a partir de la fecha de nacimiento y ajusta el lenguaje, la duración y el nivel de autonomía de cada reto.'
+  },
+  {
+    q: '¿Necesito saber programar?',
+    a: 'No. Kidia es una aventura guiada por retos y conversación. Solo hace falta curiosidad — nada de código.'
+  },
+  {
+    q: '¿Quién es la Dra. Vael?',
+    a: 'Es la guía del Método Kidia: una IA mediada que acompaña con preguntas en vez de dar la respuesta, para entrenar el pensamiento crítico en vez de la dependencia.'
+  },
+  {
+    q: '¿Es seguro para menores?',
+    a: 'Sí: la IA está siempre mediada (nunca es un chatbot abierto), no hay mensajería privada entre usuarios y todo lo publicado pasa por moderación previa.'
+  }
+];
 ---
 
 <Layout title="Kidia - Sobre Nosotros" description="Descubre qué es Kidia, cómo funciona nuestra academia de IA para niños y qué la hace segura y educativa.">
   <Header />
-  
-  <main class="faq-container">
-    <div class="faq-header">
-        <h1>Sobre Kidia</h1>
-        <p>Preguntas Frecuentes</p>
+
+  <main class="about-container">
+    <div class="about-hero">
+      <div class="about-hero-text">
+        <h1 class="text-gradient">Sobre Kidia</h1>
+        <p class="about-lead">Una academia online donde niños y niñas de 8 a 14 años aprenden Inteligencia Artificial jugando, con seguridad y sentido crítico — sin tecnicismos aburridos.</p>
+      </div>
+      <Friend mode="portrait" state="happy" />
     </div>
-    
-    <div class="faq-grid">
-        <details class="faq-item">
-            <summary>¿Qué es Kidia?</summary>
-            <p>Es una plataforma interactiva diseñada para que niños y niñas de 9 a 12 años entiendan qué es la Inteligencia Artificial, sin tecnicismos aburridos.</p>
-        </details>
-        
-        <details class="faq-item">
-            <summary>¿Es gratis?</summary>
-            <p>¡Sí! Esta versión Beta es totalmente gratuita y de código abierto.</p>
-        </details>
-        
-        <details class="faq-item">
-            <summary>¿Necesito saber programar?</summary>
-            <p>No. Kidia es una aventura narrativa. Solo necesitas curiosidad y ganas de leer.</p>
-        </details>
-        
-        <details class="faq-item">
-            <summary>¿Quién es Kidia?</summary>
-            <p>Es tu compañera virtual. Una IA (simulada) que te guía por los conceptos. No es una profesora, es una amiga que aprende contigo.</p>
-        </details>
+
+    <section class="section-block">
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq-grid">
+        {faqs.map(item => (
+          <details class="card faq-item">
+            <summary>{item.q}</summary>
+            <p>{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <div class="cta-block card">
+      <h2>¿Quieres ver el método completo?</h2>
+      <p>Descubre el ciclo de cinco momentos y los cuatro niveles de progresión de Kidia.</p>
+      <a href="/metodologia" class="btn">Ver la metodología</a>
     </div>
   </main>
 </Layout>
 
 <style>
-    .faq-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 4rem 2rem;
+  .about-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  .about-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .about-hero-text h1 {
+    font-size: 2.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .about-lead {
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    max-width: 480px;
+    margin: 0;
+  }
+
+  .section-block {
+    margin-bottom: 3.5rem;
+  }
+
+  .section-block h2 {
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .faq-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .faq-item {
+    cursor: pointer;
+  }
+
+  .faq-item:hover {
+    border-color: rgba(34, 211, 238, 0.3);
+  }
+
+  summary {
+    font-weight: 700;
+    font-size: 1.05rem;
+    list-style: none;
+    position: relative;
+    padding-right: 2rem;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: '+';
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: var(--color-primary);
+    font-weight: bold;
+    font-size: 1.3rem;
+  }
+
+  details[open] summary::after {
+    content: '−';
+  }
+
+  details[open] p {
+    margin: 1rem 0 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .cta-block {
+    text-align: center;
+    padding: 2.5rem;
+  }
+
+  .cta-block h2 {
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+  }
+
+  .cta-block p {
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .about-hero {
+      flex-direction: column;
+      text-align: center;
     }
-    
-    .faq-header {
-        text-align: center;
-        margin-bottom: 3rem;
+    .about-lead {
+      max-width: none;
     }
-    
-    h1 {
-        font-size: 3rem;
-        margin-bottom: 0.5rem;
-        color: var(--color-primary);
-    }
-    
-    .faq-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-    
-    .faq-item {
-        background: var(--color-surface);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 0.5rem;
-        padding: 1rem;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-    
-    .faq-item:hover {
-        border-color: var(--color-primary);
-    }
-    
-    summary {
-        font-weight: 600;
-        font-size: 1.1rem;
-        list-style: none; /* Hide default arrow */
-        position: relative;
-        padding-right: 2rem;
-    }
-    
-    summary::after {
-        content: '+';
-        position: absolute;
-        right: 0;
-        top: 0;
-        color: var(--color-primary);
-        font-weight: bold;
-    }
-    
-    details[open] summary::after {
-        content: '-';
-    }
-    
-    details[open] p {
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid rgba(255,255,255,0.05);
-        color: #d4d4d8;
-        line-height: 1.6;
-        animation: fadeIn 0.3s ease-out;
-    }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-5px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+  }
 </style>

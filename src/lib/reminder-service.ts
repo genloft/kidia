@@ -168,7 +168,7 @@ export const ReminderService = {
                 font-size: 1.8rem;
                 margin: 0 0 1rem 0;
                 text-align: center;
-                background: linear-gradient(to right, #22d3ee, #818cf8);
+                background: linear-gradient(to right, var(--color-primary), var(--color-accent));
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
             }

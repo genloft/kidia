@@ -126,7 +126,7 @@
         aria-expanded={expanded}
     >
         <div class="avatar-icon">
-            <img src="/kidia_thinking.webp" alt="Kidia" class="avatar-img" />
+            <img src="/dravael-doubt.webp" alt="Kidia" class="avatar-img" />
             {#if !expanded && activeHint.type !== "info"}
                 <span
                     class="notification-dot"

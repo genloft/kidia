@@ -1,7 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
-import Friend from '../../components/Friend.astro';
 import ChatBox from '../../components/ChatBox.astro';
 import Quiz from '../../components/Quiz.astro';
 import AnimationStage from '../../components/AnimationStage.astro';
@@ -30,15 +29,15 @@ const COMPETENCIA_LABELS: Record<string, string> = {
 const competenciaLabel = scenario.competencia_foco ? COMPETENCIA_LABELS[scenario.competencia_foco] : null;
 ---
 
-<Layout title={`Kidia - ${scenario.title}`} description={scenario.description}>
+<Layout title={`Kidia - ${scenario.title}`} description={scenario.description} showFooter={false}>
   <Header />
   
   <main class="scenario-layout" data-unidad={scenario.unidad}>
     <aside class="sidebar">
        <div class="friend-wrapper">
           <img
-            src="/kidia_explaining.webp"
-            alt="Kidia"
+            src="/dravael-work.webp"
+            alt="Dra. Vael"
             class="kidia-explaining"
             id="kidia-expression"
             data-default="explaining"
@@ -127,11 +126,11 @@ const competenciaLabel = scenario.competencia_foco ? COMPETENCIA_LABELS[scenario
   <script>
     // Dynamic Kidia expression system
     const kidiaExpressions = {
-      explaining: '/kidia_explaining.webp',
-      thinking: '/kidia_thinking.webp',
-      surprised: '/kidia_surprised.webp',
-      error: '/kidia_error.webp',
-      celebrating: '/kidia_celebrating.webp'
+      explaining: '/dravael-work.webp',
+      thinking: '/dravael-doubt.webp',
+      surprised: '/dravael-no.webp',
+      error: '/dravael-no.webp',
+      celebrating: '/dravael-dance.webp'
     };
 
     function setKidiaExpression(expression) {

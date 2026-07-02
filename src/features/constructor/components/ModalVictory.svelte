@@ -30,7 +30,7 @@
             class="modal-content"
             transition:scale={{ start: 0.8, duration: 600, opacity: 0 }}
         >
-            <img class="cosmic-avatar" src="/kidia_celebrating.webp" alt="Kidia" />
+            <img class="cosmic-avatar" src="/dravael-dance.webp" alt="Kidia" />
             <h2>{$t.game?.victoryTitle || "¡Victoria!"}</h2>
             <div class="text-body">
                 <p>

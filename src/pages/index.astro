@@ -1,8 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import { Image } from 'astro:assets';
-import backShirt from '../assets/back_shirt.webp';
 ---
 
 <Layout title="Kidia - Aprende Inteligencia Artificial" description="Kidia es la academia online donde niños de 8 a 14 años aprenden Inteligencia Artificial jugando: retos interactivos, un constructor de IA y una mascota virtual que les acompaña.">
@@ -73,7 +71,7 @@ import backShirt from '../assets/back_shirt.webp';
                 <a href="/mapa" class="btn-cta" style="width: 100%; justify-content: center; margin-bottom: 0;">
                   <span>Explorar el Mapa</span>
                 </a>
-                <a href="/constructor" class="btn-cta" style="width: 100%; justify-content: center; margin-bottom: 0; background: linear-gradient(135deg, #8b5cf6, #ec4899); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);">
+                <a href="/constructor" class="btn-cta" style="width: 100%; justify-content: center; margin-bottom: 0; background: linear-gradient(135deg, var(--color-accent), var(--color-secondary)); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);">
                   <span>Entrar al Constructor IA</span>
                 </a>
               </div>
@@ -85,9 +83,9 @@ import backShirt from '../assets/back_shirt.webp';
         <!-- Right: Mascot -->
         <div class="hero-right">
           <div class="mascot-glow"></div>
-          <Image
-            src={backShirt}
-            alt="Personaje Kidia"
+          <img
+            src="/dravael-portada.webp"
+            alt="Dra. Vael, la guía de Kidia"
             class="kidia-character"
             loading="eager"
           />
@@ -115,17 +113,17 @@ import backShirt from '../assets/back_shirt.webp';
 
         <div class="features">
           <div class="feature-card">
-            <div class="icon-wrapper bg-blue-500/10 text-blue-400">🤖</div>
+            <div class="icon-wrapper icon-cyan">🤖</div>
             <h3>Enseñar IA</h3>
             <p>Desmitificamos la Inteligencia Artificial enseñando cómo funciona, sin código complejo y de forma totalmente interactiva.</p>
           </div>
           <div class="feature-card">
-            <div class="icon-wrapper bg-purple-500/10 text-purple-400">🛡️</div>
+            <div class="icon-wrapper icon-purple">🛡️</div>
             <h3>Uso Ético y Seguro</h3>
             <p>Inculcamos el respeto y las buenas prácticas desde el primer día. Aprenden a usar la tecnología de forma responsable.</p>
           </div>
           <div class="feature-card">
-            <div class="icon-wrapper bg-amber-500/10 text-amber-400">🌟</div>
+            <div class="icon-wrapper icon-pink">🌟</div>
             <h3>Potenciar Sueños</h3>
             <p>No solo aprenden herramientas, adquieren superpoderes para construir sus propios proyectos y hacer realidad sus ideas.</p>
           </div>
@@ -182,7 +180,7 @@ import backShirt from '../assets/back_shirt.webp';
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 50%, var(--color-secondary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -217,7 +215,7 @@ import backShirt from '../assets/back_shirt.webp';
   }
 
   .form-title a {
-    color: #38bdf8;
+    color: var(--color-primary);
     text-decoration: none;
     transition: all 0.2s ease;
   }
@@ -262,8 +260,8 @@ import backShirt from '../assets/back_shirt.webp';
   .quick-join-form input:focus {
     outline: none;
     background: rgba(255, 255, 255, 0.06);
-    border-color: #38bdf8;
-    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12);
   }
 
   /* BOTONES */
@@ -281,27 +279,27 @@ import backShirt from '../assets/back_shirt.webp';
     gap: 0.5rem;
     width: 100%;
     padding: 1.1rem;
-    background: linear-gradient(135deg, #0ea5e9, #6366f1);
-    color: white;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    color: #09090b;
     font-weight: 700;
     font-size: 1.1rem;
     border: none;
     border-radius: 0.75rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 10px 20px -5px rgba(34, 211, 238, 0.4);
     font-family: inherit;
   }
 
   .btn-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 15px 25px -5px rgba(99, 102, 241, 0.5);
-    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    box-shadow: 0 15px 25px -5px rgba(34, 211, 238, 0.5);
+    filter: brightness(1.08);
   }
 
   .btn-cta:active {
     transform: translateY(1px);
-    box-shadow: 0 5px 10px -5px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 5px 10px -5px rgba(34, 211, 238, 0.4);
   }
 
   .btn-secondary {
@@ -383,7 +381,7 @@ import backShirt from '../assets/back_shirt.webp';
   }
 
   .auth-hint a {
-    color: #38bdf8;
+    color: var(--color-primary);
     text-decoration: none;
     font-weight: 600;
   }
@@ -442,7 +440,7 @@ import backShirt from '../assets/back_shirt.webp';
     position: absolute;
     width: 80%;
     height: 80%;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.18) 0%, transparent 60%);
     border-radius: 50%;
     z-index: 0;
   }
@@ -543,6 +541,21 @@ import backShirt from '../assets/back_shirt.webp';
     margin-bottom: 1.5rem;
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .icon-cyan {
+    background: rgba(34, 211, 238, 0.1);
+    border-color: rgba(34, 211, 238, 0.2);
+  }
+
+  .icon-purple {
+    background: rgba(139, 92, 246, 0.1);
+    border-color: rgba(139, 92, 246, 0.2);
+  }
+
+  .icon-pink {
+    background: rgba(232, 121, 249, 0.1);
+    border-color: rgba(232, 121, 249, 0.2);
   }
 
   .feature-card h3 {

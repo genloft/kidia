@@ -1,15 +1,33 @@
 :root {
   --color-bg: #09090b;
   --color-text: #e4e4e7;
+  --color-text-muted: #94a3b8;
   --color-primary: #22d3ee; /* Cyan */
   --color-secondary: #e879f9; /* Pink */
   --color-accent: #8b5cf6; /* Purple */
   --color-surface: #18181b;
-  
+
   --font-body: 'Outfit', sans-serif;
-  
+
   --glow-primary: 0 0 20px rgba(34, 211, 238, 0.5);
   --glow-secondary: 0 0 20px rgba(232, 121, 249, 0.5);
+
+  /* Radios (alineados con src/styles/constructor.css) */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 9999px;
+
+  /* Sombras (alineadas con src/styles/constructor.css) */
+  --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.4), 0 2px 6px -1px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.5), 0 4px 10px -2px rgba(0, 0, 0, 0.3);
+
+  /* Escala tipográfica */
+  --text-hero: clamp(2.75rem, 5vw, 4.5rem);
+  --text-h1: clamp(2rem, 3.5vw, 2.75rem);
+  --text-h2: clamp(1.5rem, 2.5vw, 2rem);
+  --text-h3: 1.25rem;
 }
 
 * {
@@ -23,7 +41,6 @@ html, body {
   background: var(--color-bg);
   color: var(--color-text);
   overflow-x: hidden;
-  height: 100%;
 }
 
 body {
@@ -32,10 +49,39 @@ body {
   min-height: 100vh;
 }
 
-h1, h2, h3 {
+/* El contenido principal nunca debe encogerse por debajo de lo que
+   necesita: sin esto, un body en flex-column con altura acotada por el
+   viewport fuerza a <main> a 0px de alto en cuanto hay más contenido
+   (p. ej. al añadir <Footer>), porque overflow-x:hidden en <main> hace
+   que su min-height automático pase a ser 0 en vez de su alto real. */
+main {
+  flex: 1 0 auto;
+}
+
+h1 {
+  font-size: var(--text-h1);
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+h2 {
+  font-size: var(--text-h2);
   margin: 0;
   font-weight: 700;
   letter-spacing: -0.025em;
+}
+
+h3 {
+  font-size: var(--text-h3);
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+p {
+  color: var(--color-text-muted);
+  line-height: 1.6;
 }
 
 a {
@@ -54,7 +100,7 @@ a {
 .card {
   background: var(--color-surface);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
   backdrop-filter: blur(10px);
   transition: transform 0.2s, box-shadow 0.2s;
@@ -62,38 +108,82 @@ a {
 
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-lg);
   border-color: rgba(34, 211, 238, 0.3);
 }
 
+/* Botones: base compartida por todas las variantes */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1.5rem;
-  border-radius: 9999px;
-  font-weight: 600;
-  transition: all 0.2s;
+  gap: 0.5rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.25s ease;
   cursor: pointer;
   border: none;
-  background: var(--color-primary);
-  color: var(--color-bg);
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: #09090b;
 }
 
 .btn:hover {
-  transform: scale(1.05);
+  transform: translateY(-2px);
   box-shadow: var(--glow-primary);
 }
 
+.btn:active {
+  transform: translateY(0);
+}
+
 .btn-secondary {
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--color-text);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
   box-shadow: none;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-ghost:hover {
+  background: rgba(34, 211, 238, 0.08);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  box-shadow: none;
+}
+
+/* Pills / badges */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.85rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
+.pill-accent {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.35);
+  color: #c4b5fd;
 }
 
 /* Animations */

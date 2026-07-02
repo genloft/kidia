@@ -69,8 +69,8 @@ const { Content } = await render(post);
     font-size: 0.9rem;
     font-weight: bold;
     text-transform: uppercase;
-    background: rgba(56, 189, 248, 0.1);
-    color: #38bdf8;
+    background: rgba(34, 211, 238, 0.1);
+    color: var(--color-primary);
     margin-bottom: 1.5rem;
   }
   
@@ -126,7 +126,7 @@ const { Content } = await render(post);
   }
   
   .markdown-body em {
-    color: #a5b4fc;
+    color: var(--color-accent);
     font-style: italic;
   }
   
@@ -144,7 +144,7 @@ const { Content } = await render(post);
   }
   
   .back-link {
-    color: #38bdf8;
+    color: var(--color-primary);
     text-decoration: none;
     font-weight: bold;
     display: inline-flex;
@@ -154,6 +154,6 @@ const { Content } = await render(post);
   }
   
   .back-link:hover {
-    color: #818cf8;
+    color: var(--color-accent);
   }
 </style>
