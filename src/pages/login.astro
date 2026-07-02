@@ -126,6 +126,11 @@ import Header from '../components/Header.astro';
 <script>
   import { supabase } from '../lib/supabase';
 
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('tab') === 'register') {
+    (window as any).switchTab('register');
+  }
+
   supabase.auth.getSession().then(({ data: { session } }) => {
     if (session) {
       window.location.href = '/dashboard';

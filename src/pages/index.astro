@@ -1,6 +1,95 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
+import { PLANS } from '../lib/subscription-service';
+import { TRAMOS } from '../lib/tramos';
+
+const NIVELES = [
+  {
+    n: 1,
+    nombre: 'Entender',
+    icon: '🧠',
+    consigue: 'Vocabulario y criterio inicial',
+    aprende: 'Qué es (y qué no es) la IA, cómo funciona y por qué se equivoca.',
+  },
+  {
+    n: 2,
+    nombre: 'Usar bien',
+    icon: '🎯',
+    consigue: 'Instruir, verificar y detectar errores',
+    aprende: 'Escribir buenos prompts, comprobar con una fuente y cazar fallos.',
+  },
+  {
+    n: 3,
+    nombre: 'Crear',
+    icon: '🎨',
+    consigue: 'Convertir una idea en un proyecto',
+    aprende: 'Diseñar un personaje, un cómic, un cartel; mejorar de la v1 a la v3.',
+  },
+  {
+    n: 4,
+    nombre: 'Construir',
+    icon: '🚀',
+    consigue: 'Proyectos reales completos',
+    aprende: 'Un quiz, un audiocuento o una idea para su entorno; presentar y defender.',
+  },
+];
+
+const CICLO = [
+  { m: 'Chispa', icon: '✨', desc: 'Se engancha con un reto con sentido' },
+  { m: 'Explora', icon: '🔍', desc: 'Comprende la idea de IA que necesita' },
+  { m: 'Crea', icon: '🛠️', desc: 'Produce su proyecto con la IA como herramienta' },
+  { m: 'Reflexiona', icon: '💭', desc: 'Verifica, piensa y mejora lo que hizo' },
+  { m: 'Comparte', icon: '📣', desc: 'Publica su producto, con moderación' },
+];
+
+const HORIZONTES = [
+  {
+    cuando: '1 semana',
+    aprende: 'Su primer reto guiado por la Dra. Vael, con la mecánica «Caza el error».',
+    lleva: 'Su primer producto propio: ¡la IA también se equivoca!',
+  },
+  {
+    cuando: '1 mes',
+    aprende: 'Termina el Nivel 1 · Entender: sabe qué es la IA y por qué falla.',
+    lleva: 'Su 1.ª insignia y la primera «foto de nivel» en el Panel Familiar.',
+  },
+  {
+    cuando: '3 meses',
+    aprende: 'Escribe prompts precisos y verifica todo con una fuente.',
+    lleva: 'Insignias de los Niveles 1 y 2 y sus primeras creaciones.',
+  },
+  {
+    cuando: '1 año',
+    aprende: 'Completa los 4 niveles y defiende un proyecto real.',
+    lleva: 'Certificado «creador con IA» y un portfolio con proyectos reales.',
+  },
+];
+
+const COMPETENCIAS = ['Pensamiento crítico', 'Calidad de las preguntas', 'Autonomía creativa', 'Verificación'];
+
+const STATS = [
+  {
+    num: '60%',
+    text: 'de los menores de 9 a 16 años en España ya usa IA a diario, sin saber cómo funciona ni cuándo falla.',
+    fuente: 'Staksrud et al., 2026',
+  },
+  {
+    num: '3M',
+    text: 'niños de 8 a 14 años en España van a crecer usando IA todos los días.',
+  },
+  {
+    num: 'Ninguna',
+    text: 'academia infantil en español enseña hoy a crear con IA de forma segura y pedagógica.',
+  },
+];
+
+const CONFIANZA = [
+  { icon: '🛡️', title: 'IA mediada, nunca un chat abierto', desc: 'Nunca habla con un chatbot abierto: todo pasa por la capa segura de Kidia.' },
+  { icon: '📜', title: 'RGPD y consentimiento parental', desc: 'La cuenta la crea el adulto responsable. RGPD desde el diseño.' },
+  { icon: '📊', title: 'Progreso por evidencia, no por horas', desc: 'Sin rachas ni premios aleatorios: se avanza demostrando la competencia.' },
+  { icon: '👨‍👩‍👧', title: 'Panel Familiar con progreso real', desc: 'Resumen semanal y una pregunta para hablar en casa sobre lo creado.' },
+];
 ---
 
 <Layout title="Kidia - Aprende Inteligencia Artificial" description="Kidia es la academia online donde niños de 8 a 14 años aprenden Inteligencia Artificial jugando: retos interactivos, un constructor de IA y una mascota virtual que les acompaña.">
@@ -10,74 +99,52 @@ import Header from '../components/Header.astro';
     <div class="hero-container">
       <section class="hero">
 
-        <!-- Left: Text + Form -->
+        <!-- Left: Text + CTA -->
         <div class="hero-left">
 
+          <span id="hero-eyebrow" class="eyebrow">6 de cada 10 niños ya usa IA sin criterio</span>
+
           <h1>
-            Aprende <span class="text-gradient">Inteligencia Artificial</span> jugando.
+            Ayudamos a que tu hijo/a<br />
+            <span class="text-gradient">piense en grande con la IA.</span>
           </h1>
 
           <p class="subtitle">
-            Descubre el futuro de la tecnología con Kidia. Una aventura interactiva
-            donde los niños aprenden IA, la usan con respeto y construyen sus sueños.
+            Kidia es la academia online donde niños de 8 a 14 años aprenden IA de forma
+            segura y guiada: sin chatbots abiertos, con una mascota, la Dra. Vael, que
+            les acompaña en cada reto.
           </p>
 
-          <!-- Form card -->
-          <div class="join-card">
-            
-            <div id="guest-view">
-              <h3 class="form-title">Accede a tu aventura</h3>
-              
-              <form id="home-login-form" class="quick-join-form">
-                <div id="home-error-msg" class="error-message" style="display: none;"></div>
-                
-                <div class="form-grid">
-                  <div class="input-group">
-                    <input type="email" id="home-email" name="email" required placeholder="Tu correo electrónico" />
-                  </div>
-                  <div class="input-group">
-                    <input type="password" id="home-password" name="password" required placeholder="Contraseña" />
-                  </div>
-                </div>
-
-                <div class="form-actions">
-                  <button type="submit" class="btn-cta">
-                    <span>Entrar al juego</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                  </button>
-                </div>
-              </form>
-
-              <div class="card-footer">
-                <div class="social-proof">
-                  <div class="avatars">
-                    <span class="avatar">👨‍💻</span>
-                    <span class="avatar">👩‍🔬</span>
-                    <span class="avatar">🦸‍♂️</span>
-                  </div>
-                  <span>+100 alumnos ya están aprendiendo</span>
-                </div>
-                <div class="divider-vertical"></div>
-                <p class="auth-hint">¿No tienes cuenta? <a href="/login">Regístrate gratis</a></p>
-              </div>
-            </div>
-
-            <div id="logged-in-view" style="display: none; text-align: center; padding: 1rem 0;">
-              <h3 style="font-size: 1.8rem; margin-bottom: 1rem; color: #f8fafc;">¡Hola de nuevo!</h3>
-              <p style="color: #94a3b8; margin-bottom: 2rem;">¿Qué aventura quieres continuar hoy?</p>
-              <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <a href="/mapa" class="btn-cta" style="width: 100%; justify-content: center; margin-bottom: 0;">
-                  <span>Explorar el Mapa</span>
-                </a>
-                <a href="/constructor" class="btn-cta" style="width: 100%; justify-content: center; margin-bottom: 0; background: linear-gradient(135deg, var(--color-accent), var(--color-secondary)); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);">
-                  <span>Entrar al Constructor IA</span>
-                </a>
-              </div>
-            </div>
-
+          <div id="hero-cta-row" class="hero-cta-row">
+            <a href="/login?tab=register" class="btn-cta hero-btn-primary">
+              <span>Regístrate gratis</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+            <a href="#metodo" class="btn-secondary hero-btn-ghost">Ver cómo funciona</a>
           </div>
+
+          <ul id="hero-trust-strip" class="trust-strip">
+            <li>🛡️ IA mediada y segura</li>
+            <li>🇪🇸 100% en español</li>
+            <li>✅ Sin permanencia</li>
+          </ul>
+
+          <p id="hero-guest-hint" class="hero-guest-hint">¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
+
+          <!-- Estado logado: sustituye a la fila de CTA de arriba -->
+          <div id="hero-welcome-back" class="hero-welcome-back hidden">
+            <h2 class="welcome-title">¡Hola de nuevo! 👋</h2>
+            <p class="welcome-sub">¿Qué aventura quieres continuar hoy?</p>
+            <div class="welcome-actions">
+              <a href="/mapa" class="btn-cta hero-btn-primary">
+                <span>Explorar el Mapa</span>
+              </a>
+              <a href="/constructor" class="btn-secondary hero-btn-ghost">Entrar al Constructor IA</a>
+            </div>
+          </div>
+
         </div>
 
         <!-- Right: Mascot -->
@@ -101,33 +168,184 @@ import Header from '../components/Header.astro';
         </div>
 
       </section>
+
+      <button type="button" class="scroll-cue" id="scroll-cue" aria-label="Baja para descubrir el método Kidia">
+        <span>Descubre el método Kidia</span>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </button>
     </div>
 
-    <!-- ====== VALUES ====== -->
-    <section class="values-section">
-      <div class="values-container">
-        <div class="values-header">
-          <h2>Tres pilares, un objetivo</h2>
-          <p>Todo lo que los niños necesitan para entender y usar la IA con propósito.</p>
+    <!-- ====== PROBLEMA ====== -->
+    <section class="problema-section" id="problema">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-eyebrow">La realidad hoy</span>
+          <h2>Tu hijo/a ya usa IA. La pregunta es cómo.</h2>
+          <p>La adopción entre menores ya es masiva, pero casi nadie les enseña a usarla con criterio.</p>
         </div>
 
-        <div class="features">
-          <div class="feature-card">
-            <div class="icon-wrapper icon-cyan">🤖</div>
-            <h3>Enseñar IA</h3>
-            <p>Desmitificamos la Inteligencia Artificial enseñando cómo funciona, sin código complejo y de forma totalmente interactiva.</p>
-          </div>
-          <div class="feature-card">
-            <div class="icon-wrapper icon-purple">🛡️</div>
-            <h3>Uso Ético y Seguro</h3>
-            <p>Inculcamos el respeto y las buenas prácticas desde el primer día. Aprenden a usar la tecnología de forma responsable.</p>
-          </div>
-          <div class="feature-card">
-            <div class="icon-wrapper icon-pink">🌟</div>
-            <h3>Potenciar Sueños</h3>
-            <p>No solo aprenden herramientas, adquieren superpoderes para construir sus propios proyectos y hacer realidad sus ideas.</p>
+        <div class="stat-grid">
+          {STATS.map(s => (
+            <div class="stat-card">
+              <span class="stat-number">{s.num}</span>
+              <p>{s.text}</p>
+              {s.fuente && <span class="stat-fuente">Fuente: {s.fuente}</span>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== MÉTODO ====== -->
+    <section class="metodo-section" id="metodo">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-eyebrow">El Método Kidia</span>
+          <h2>4 niveles para crear con criterio</h2>
+          <p>Todo alumno recorre la misma ruta, adaptada a su tramo de edad. No se avanza por horas jugadas, sino por evidencia.</p>
+        </div>
+
+        <div class="niveles-grid">
+          {NIVELES.map(nv => (
+            <div class="nivel-card">
+              <div class="nivel-badge">Nivel {nv.n}</div>
+              <div class="nivel-icon">{nv.icon}</div>
+              <h3>{nv.nombre}</h3>
+              <p class="nivel-consigue">{nv.consigue}</p>
+              <p class="nivel-aprende">{nv.aprende}</p>
+            </div>
+          ))}
+        </div>
+
+        <div class="ciclo-strip">
+          <p class="ciclo-label">Cada reto sigue siempre el mismo ciclo:</p>
+          <div class="ciclo-steps">
+            {CICLO.map((c, i) => (
+              <>
+                <div class="ciclo-step">
+                  <span class="ciclo-icon">{c.icon}</span>
+                  <strong>{c.m}</strong>
+                  <span class="ciclo-desc">{c.desc}</span>
+                </div>
+                {i < CICLO.length - 1 && <span class="ciclo-arrow">→</span>}
+              </>
+            ))}
           </div>
         </div>
+
+        <div class="tramos-strip">
+          <p class="tramos-label">Y los 4 niveles se adaptan siempre a la edad de tu hijo/a — mismo contenido, distinta profundidad y autonomía:</p>
+          <div class="tramos-mini-grid">
+            {TRAMOS.map(t => (
+              <div class="tramo-mini-card">
+                <span class="tramo-mini-age">{t.label}</span>
+                <p class="tramo-mini-desc">{t.descripcion}</p>
+                <ul class="tramo-mini-meta">
+                  <li><strong>Sesión:</strong> {t.sesion}</li>
+                  <li><strong>Autonomía:</strong> {t.autonomia}</li>
+                  <li><strong>Personajes:</strong> {t.personajes}</li>
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="inline-cta">
+          <p>¿Listo para que tu hijo/a empiece a crear con IA?</p>
+          <a href="/login?tab=register" id="inline-cta-btn" class="btn btn-inline-cta js-cta-register" data-logged-href="/mapa" data-logged-text="Ir al Mapa de Retos">Quiero que empiece — Regístrate gratis</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== RESULTADOS ====== -->
+    <section class="resultados-section" id="resultados">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-eyebrow">La promesa, en concreto</span>
+          <h2>Qué aprende tu hijo/a, semana a semana</h2>
+          <p>Con un ritmo recomendado de 2-3 sesiones cortas por semana. El avance real depende de cada niño/a: se progresa por evidencia, no por tiempo de pantalla.</p>
+        </div>
+
+        <div class="horizontes-grid">
+          {HORIZONTES.map(h => (
+            <div class="horizonte-card">
+              <div class="horizonte-cuando">{h.cuando}</div>
+              <p class="horizonte-aprende">{h.aprende}</p>
+              <p class="horizonte-lleva"><strong>Se lleva:</strong> {h.lleva}</p>
+            </div>
+          ))}
+        </div>
+
+        <div class="competencias-strip">
+          <p class="competencias-label">Las 4 competencias que medimos (no solo el «uso»):</p>
+          <div class="competencias-pills">
+            {COMPETENCIAS.map(c => <span class="pill pill-accent">{c}</span>)}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== CONFIANZA ====== -->
+    <section class="confianza-section" id="confianza">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-eyebrow">Para que estés tranquilo/a</span>
+          <h2>Diseñado pensando en las familias primero</h2>
+        </div>
+
+        <div class="confianza-grid">
+          {CONFIANZA.map(c => (
+            <div class="confianza-card">
+              <div class="confianza-icon">{c.icon}</div>
+              <h3>{c.title}</h3>
+              <p>{c.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== PRECIO ====== -->
+    <section class="precio-section" id="precio">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-eyebrow">Sin sorpresas</span>
+          <h2>Menos que una extraescolar</h2>
+          <p>El plan Familiar es ≈228 €/año, por debajo del gasto medio de una extraescolar en España (≈270 €/año) — en una competencia que hoy casi ninguna cubre.</p>
+        </div>
+
+        <div class="planes-grid">
+          {PLANS.map((p, i) => (
+            <div class={`card plan-card ${i === 1 ? 'plan-featured' : ''}`}>
+              {i === 1 && <span class="plan-tag">Más elegido</span>}
+              <h3>{p.name}</h3>
+              <p class="plan-price">{(p.priceCents / 100).toFixed(2).replace('.', ',')} € <span>/ mes</span></p>
+              <ul class="plan-features">
+                {p.features.map(f => <li>{f}</li>)}
+              </ul>
+              <a href="/login?tab=register" class="btn btn-plan-cta js-cta-register" data-logged-href="/caminos" data-logged-text="Ver planes">Empezar con {p.name}</a>
+            </div>
+          ))}
+        </div>
+
+        <p class="precio-footnote">Suscripción familiar, sin permanencia. <a href="/caminos">Ver todos los detalles de los planes →</a></p>
+      </div>
+    </section>
+
+    <!-- ====== CTA FINAL ====== -->
+    <section class="cta-final-section">
+      <div class="section-container cta-final-inner">
+        <h2>Empieza gratis hoy</h2>
+        <p>Crea la cuenta familiar, añade a tu hijo/a y en la primera semana ya tendrá su primer proyecto creado con IA. Sin permanencia, cancela cuando quieras.</p>
+        <a href="/login?tab=register" id="final-cta-btn" class="btn-cta cta-final-btn js-cta-register" data-logged-href="/dashboard" data-logged-text="Ir a mi Panel">
+          <span class="cta-label">Regístrate gratis</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <p id="cta-final-hint" class="cta-final-hint">¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
       </div>
     </section>
 
@@ -142,6 +360,7 @@ import Header from '../components/Header.astro';
   }
 
   .hero-container {
+    position: relative;
     max-width: 100%;
     margin: 0 auto;
     padding: 0 6%;
@@ -171,12 +390,13 @@ import Header from '../components/Header.astro';
   }
 
   h1 {
-    font-size: clamp(3rem, 5vw, 5.5rem);
-    line-height: 1.1;
+    font-size: clamp(2.25rem, 3vw, 3.25rem);
+    line-height: 1.2;
     font-weight: 800;
     letter-spacing: -0.02em;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
     color: #f8fafc;
+    max-width: 640px;
   }
 
   .text-gradient {
@@ -194,84 +414,7 @@ import Header from '../components/Header.astro';
     max-width: 90%;
   }
 
-  /* ===== JOIN CARD ===== */
-  .join-card {
-    background: rgba(15, 23, 42, 0.4);
-    backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 1.25rem;
-    padding: 2.25rem;
-    max-width: 540px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  }
-
-  .form-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #f8fafc;
-    margin-top: 0;
-    margin-bottom: 1.25rem;
-    text-align: left;
-  }
-
-  .form-title a {
-    color: var(--color-primary);
-    text-decoration: none;
-    transition: all 0.2s ease;
-  }
-
-  .form-title a:hover {
-    text-decoration: underline;
-  }
-
-  .quick-join-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.85rem;
-  }
-
-  .input-group {
-    position: relative;
-  }
-
-  .quick-join-form input {
-    width: 100%;
-    padding: 1rem 1.25rem;
-    border-radius: 0.75rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #f8fafc;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
-    box-sizing: border-box;
-    font-family: inherit;
-  }
-
-  .quick-join-form input::placeholder {
-    color: #64748b;
-  }
-
-  .quick-join-form input:focus {
-    outline: none;
-    background: rgba(255, 255, 255, 0.06);
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12);
-  }
-
-  /* BOTONES */
-  .form-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-    margin-top: 0.5rem;
-  }
-
+  /* ===== BOTONES ===== */
   .btn-cta {
     display: flex;
     align-items: center;
@@ -326,106 +469,48 @@ import Header from '../components/Header.astro';
     color: #fff;
   }
 
-  /* FOOTER DEL FORMULARIO */
-  .card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 1.5rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  .social-proof {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .avatars {
-    display: flex;
-  }
-
-  .avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 2px solid #0f172a;
-    margin-left: -10px;
-    background: #fff;
-  }
-
-  .avatar:first-child { margin-left: 0; }
-
-  .social-proof span {
-    font-size: 0.8rem;
-    color: #94a3b8;
-  }
-
-  .social-proof strong {
-    color: #e2e8f0;
-  }
-
-  .divider-vertical {
-    width: 1px;
-    height: 24px;
-    background: rgba(255, 255, 255, 0.1);
-    margin: 0 1rem;
-  }
-
-  .auth-hint {
-    font-size: 0.85rem;
+  /* ===== HERO GUEST HINT / WELCOME BACK ===== */
+  .hero-guest-hint {
+    font-size: 0.9rem;
     color: #94a3b8;
     margin: 0;
-    white-space: nowrap;
   }
 
-  .auth-hint a {
+  .hero-guest-hint a {
     color: var(--color-primary);
     text-decoration: none;
     font-weight: 600;
   }
 
-  .auth-hint a:hover { text-decoration: underline; }
-
-  /* ===== MESSAGES ===== */
-  .error-message {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    padding: 0.85rem;
-    border-radius: 0.5rem;
-    color: #fca5a5;
-    font-size: 0.85rem;
+  .hero-guest-hint a:hover {
+    text-decoration: underline;
   }
 
-  .success-message {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    background: rgba(34, 197, 94, 0.05);
-    border: 1px solid rgba(34, 197, 94, 0.2);
-    padding: 1.25rem;
-    border-radius: 0.75rem;
+  .hero-welcome-back {
+    max-width: 460px;
   }
 
-  .success-icon-wrap {
-    color: #4ade80;
-    background: rgba(74, 222, 128, 0.1);
-    padding: 0.5rem;
-    border-radius: 50%;
-    display: flex;
+  .welcome-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #f8fafc;
+    margin: 0 0 0.5rem;
   }
 
-  .success-text h4 {
-    color: #4ade80;
-    margin: 0 0 0.25rem 0;
-    font-size: 1rem;
-  }
-
-  .success-text p {
+  .welcome-sub {
     color: #94a3b8;
-    margin: 0;
-    font-size: 0.9rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .welcome-actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .welcome-actions .btn-cta,
+  .welcome-actions .btn-secondary {
+    width: auto;
+    padding: 1rem 1.75rem;
   }
 
   /* ===== HERO RIGHT ===== */
@@ -483,92 +568,627 @@ import Header from '../components/Header.astro';
   .tag-2 { top: 50%; left: -5%; animation-delay: 1.2s; }
   .tag-3 { bottom: 15%; right: 5%; animation-delay: 0.8s; }
 
-  /* ===== VALUES ===== */
-  .values-section {
-    padding: 5rem 0 8rem;
-    border-top: 1px solid rgba(255,255,255,0.03);
-    background: linear-gradient(to bottom, rgba(15, 23, 42, 0), rgba(15, 23, 42, 0.4));
+  /* ===== HERO: eyebrow / CTA row / trust strip ===== */
+  .eyebrow {
+    display: inline-block;
+    background: rgba(232, 121, 249, 0.12);
+    border: 1px solid rgba(232, 121, 249, 0.3);
+    color: var(--color-secondary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.35rem 0.9rem;
+    border-radius: 99px;
+    margin-bottom: 1.25rem;
+    width: fit-content;
   }
 
-  .values-header {
+  .hero-cta-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-btn-primary {
+    width: auto;
+    padding: 1.1rem 1.75rem;
+  }
+
+  .hero-btn-ghost {
+    width: auto;
+    padding: 1.1rem 1.75rem;
+    text-decoration: none;
+  }
+
+  .trust-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem;
+    font-size: 0.95rem;
+    color: #cbd5e1;
+  }
+
+  /* ===== SCROLL CUE ===== */
+  .scroll-cue {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.65rem;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(34, 211, 238, 0.25);
+    border-radius: 99px;
+    padding: 0.85rem 1.5rem;
+    color: #e2e8f0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    animation: scroll-cue-bounce 2.2s ease-in-out infinite;
+    z-index: 3;
+    box-shadow: 0 10px 30px -8px rgba(34, 211, 238, 0.25);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+  }
+
+  .scroll-cue:hover {
+    color: var(--color-primary);
+    border-color: rgba(34, 211, 238, 0.5);
+    box-shadow: 0 12px 36px -6px rgba(34, 211, 238, 0.4);
+  }
+
+  @keyframes scroll-cue-bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ===== SHARED SECTION LAYOUT ===== */
+  .section-container {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 5%;
+  }
+
+  .section-header {
     text-align: center;
-    margin-bottom: 4rem;
+    margin: 0 auto 3.5rem;
   }
 
-  .values-header h2 {
-    font-size: clamp(2rem, 3vw, 2.5rem);
+  .section-eyebrow {
+    display: inline-block;
+    color: var(--color-primary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-header h2 {
+    font-size: clamp(2rem, 3.4vw, 2.75rem);
     font-weight: 800;
     color: #f8fafc;
-    margin-bottom: 1rem;
+    margin: 0 0 1rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    text-wrap: balance;
   }
 
-  .values-header p {
-    font-size: 1.1rem;
+  .section-header p {
+    font-size: 1.2rem;
     color: #94a3b8;
-    max-width: 600px;
+    line-height: 1.6;
+    max-width: 680px;
     margin: 0 auto;
   }
 
-  .features {
+  /* ===== PROBLEMA ===== */
+  .problema-section {
+    padding: 6rem 0;
+    border-top: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .stat-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
   }
 
-  .feature-card {
+  .stat-card {
     background: rgba(30, 41, 59, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 1.25rem;
-    padding: 2.5rem;
+    border-radius: 1.5rem;
+    padding: 2.75rem 2.25rem;
+    text-align: center;
+  }
+
+  .stat-number {
+    display: block;
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+  }
+
+  .stat-card p {
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .stat-fuente {
+    display: block;
+    margin-top: 0.85rem;
+    color: #64748b;
+    font-size: 0.75rem;
+    font-style: italic;
+  }
+
+  /* ===== METODO ===== */
+  .metodo-section {
+    padding: 6rem 0;
+    background: linear-gradient(to bottom, rgba(15, 23, 42, 0), rgba(15, 23, 42, 0.4));
+    border-top: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .niveles-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+    margin-bottom: 4rem;
+  }
+
+  .nivel-card {
+    position: relative;
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.5rem;
+    padding: 2.25rem 2rem;
     transition: all 0.3s ease;
   }
 
-  .feature-card:hover {
+  .nivel-card:hover {
     background: rgba(30, 41, 59, 0.6);
     border-color: rgba(255, 255, 255, 0.1);
     transform: translateY(-5px);
-    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3);
   }
 
-  .icon-wrapper {
-    font-size: 2rem;
-    width: 64px;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 1rem;
-    margin-bottom: 1.5rem;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.05);
-  }
-
-  .icon-cyan {
+  .nivel-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-primary);
     background: rgba(34, 211, 238, 0.1);
-    border-color: rgba(34, 211, 238, 0.2);
+    padding: 0.25rem 0.7rem;
+    border-radius: 99px;
+    margin-bottom: 1.1rem;
   }
 
-  .icon-purple {
-    background: rgba(139, 92, 246, 0.1);
-    border-color: rgba(139, 92, 246, 0.2);
+  .nivel-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.85rem;
   }
 
-  .icon-pink {
-    background: rgba(232, 121, 249, 0.1);
-    border-color: rgba(232, 121, 249, 0.2);
-  }
-
-  .feature-card h3 {
-    font-size: 1.25rem;
+  .nivel-card h3 {
+    font-size: 1.5rem;
     color: #f8fafc;
-    margin-bottom: 1rem;
+    margin: 0 0 0.6rem;
+  }
+
+  .nivel-consigue {
+    font-weight: 600;
+    color: var(--color-secondary);
+    font-size: 1.05rem;
+    margin: 0 0 0.6rem;
+  }
+
+  .nivel-aprende {
+    color: #cbd5e1;
+    font-size: 1.05rem;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .ciclo-strip {
+    text-align: center;
+  }
+
+  .ciclo-label {
+    color: #cbd5e1;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .ciclo-steps {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .ciclo-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    width: 170px;
+  }
+
+  .ciclo-icon {
+    font-size: 2rem;
+  }
+
+  .ciclo-step strong {
+    color: #f8fafc;
+    font-size: 1.1rem;
+  }
+
+  .ciclo-desc {
+    color: #94a3b8;
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+
+  .ciclo-arrow {
+    color: var(--color-primary);
+    font-size: 1.25rem;
+    opacity: 0.5;
+  }
+
+  .tramos-strip {
+    margin-top: 4rem;
+    padding-top: 3.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    text-align: center;
+  }
+
+  .tramos-label {
+    color: #cbd5e1;
+    font-weight: 600;
+    font-size: 1.1rem;
+    max-width: 680px;
+    margin: 0 auto 1.75rem;
+  }
+
+  .tramos-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+  }
+
+  .tramo-mini-card {
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.5rem;
+    padding: 2rem 1.75rem;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .tramo-mini-age {
+    display: inline-block;
+    align-self: flex-start;
+    background: rgba(232, 121, 249, 0.12);
+    color: var(--color-secondary);
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.3rem 0.85rem;
+    border-radius: 99px;
+  }
+
+  .tramo-mini-desc {
+    color: #cbd5e1;
+    font-size: 1.02rem;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .tramo-mini-meta {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    font-size: 0.95rem;
+    color: #94a3b8;
+  }
+
+  .tramo-mini-meta strong {
+    color: #e4e4e7;
+  }
+
+  .inline-cta {
+    margin-top: 4rem;
+    text-align: center;
+    background: rgba(139, 92, 246, 0.08);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 1.5rem;
+    padding: 2.25rem;
+  }
+
+  .inline-cta p {
+    color: #e2e8f0;
+    font-weight: 600;
+    margin: 0 0 1.25rem;
+    font-size: 1.25rem;
+  }
+
+  .btn-inline-cta {
+    display: inline-flex;
+  }
+
+  /* ===== RESULTADOS ===== */
+  .resultados-section {
+    padding: 6rem 0;
+    border-top: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .horizontes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+    margin-bottom: 3rem;
+  }
+
+  .horizonte-card {
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.5rem;
+    padding: 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .horizonte-cuando {
+    display: inline-block;
+    width: fit-content;
+    font-weight: 800;
+    color: #09090b;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    padding: 0.35rem 1rem;
+    border-radius: 99px;
+    font-size: 0.95rem;
+  }
+
+  .horizonte-aprende {
+    color: #e2e8f0;
+    font-size: 1.1rem;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .horizonte-lleva {
+    color: #cbd5e1;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .horizonte-lleva strong {
+    color: var(--color-secondary);
+  }
+
+  .competencias-strip {
+    text-align: center;
+  }
+
+  .competencias-label {
+    color: #cbd5e1;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .competencias-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  /* ===== CONFIANZA ===== */
+  .confianza-section {
+    padding: 6rem 0;
+    background: linear-gradient(to bottom, rgba(15, 23, 42, 0), rgba(15, 23, 42, 0.4));
+    border-top: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .confianza-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+  }
+
+  .confianza-card {
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.5rem;
+    padding: 2.25rem 2rem;
+  }
+
+  .confianza-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .confianza-card h3 {
+    font-size: 1.3rem;
+    color: #f8fafc;
+    margin: 0 0 0.65rem;
+  }
+
+  .confianza-card p {
+    color: #cbd5e1;
+    font-size: 1.05rem;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ===== PRECIO ===== */
+  .precio-section {
+    padding: 6rem 0;
+    border-top: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .planes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .plan-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .plan-featured {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.15);
+  }
+
+  .plan-tag {
+    position: absolute;
+    top: -0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    color: #09090b;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.3rem 0.9rem;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+
+  .plan-card h3 {
+    font-size: 1.5rem;
+    margin: 0.5rem 0 0;
+  }
+
+  .plan-price {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 0;
+  }
+
+  .plan-price span {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #94a3b8;
+  }
+
+  .plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    text-align: left;
+    color: #cbd5e1;
+    font-size: 1.02rem;
+  }
+
+  .plan-features li::before {
+    content: '✓ ';
+    color: var(--color-primary);
     font-weight: 700;
   }
 
-  .feature-card p {
+  .btn-plan-cta {
+    width: 100%;
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .precio-footnote {
+    text-align: center;
     color: #94a3b8;
+    font-size: 1rem;
+  }
+
+  .precio-footnote a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .precio-footnote a:hover {
+    text-decoration: underline;
+  }
+
+  /* ===== CTA FINAL ===== */
+  .cta-final-section {
+    padding: 6rem 0 8rem;
+    border-top: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .cta-final-inner {
+    text-align: center;
+    max-width: 620px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .cta-final-inner h2 {
+    font-size: clamp(2rem, 3vw, 2.75rem);
+    font-weight: 800;
+    color: #f8fafc;
+    margin: 0;
+  }
+
+  .cta-final-inner p {
+    color: #cbd5e1;
+    font-size: 1.15rem;
     line-height: 1.6;
-    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .cta-final-btn {
+    width: auto;
+    padding: 1.1rem 2.5rem;
+  }
+
+  .cta-final-hint {
+    font-size: 0.85rem;
+  }
+
+  .cta-final-hint a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .cta-final-hint a:hover {
+    text-decoration: underline;
+  }
+
+  .hidden {
+    display: none;
   }
 
   /* ===== RESPONSIVE ===== */
@@ -585,27 +1205,50 @@ import Header from '../components/Header.astro';
     .subtitle {
       max-width: 600px;
     }
-    .join-card {
-      width: 100%;
+    .hero-cta-row {
+      justify-content: center;
+    }
+    .trust-strip {
+      justify-content: center;
+    }
+    .welcome-actions {
+      justify-content: center;
     }
     .hero-right {
       order: -1;
     }
-    .features {
+    .tramos-mini-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .stat-grid,
+    .planes-grid {
       grid-template-columns: 1fr;
-      gap: 1.5rem;
     }
   }
 
   @media (max-width: 640px) {
-    .card-footer {
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-    .divider-vertical {
+    .floating-tag {
       display: none;
     }
-    .floating-tag {
+    .hero-cta-row,
+    .welcome-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .welcome-actions .btn-cta,
+    .welcome-actions .btn-secondary {
+      width: 100%;
+    }
+    .niveles-grid,
+    .horizontes-grid,
+    .confianza-grid,
+    .tramos-mini-grid {
+      grid-template-columns: 1fr;
+    }
+    .scroll-cue span {
       display: none;
     }
   }
@@ -613,47 +1256,37 @@ import Header from '../components/Header.astro';
 
 <script>
   import { supabase } from '../lib/supabase';
-  
-  const form = document.getElementById('home-login-form') as HTMLFormElement;
-  const errorMsg = document.getElementById('home-error-msg') as HTMLElement;
-  const guestView = document.getElementById('guest-view') as HTMLElement;
-  const loggedInView = document.getElementById('logged-in-view') as HTMLElement;
+
+  document.getElementById('scroll-cue')?.addEventListener('click', () => {
+    document.getElementById('metodo')?.scrollIntoView({ behavior: 'smooth' });
+  });
 
   supabase.auth.getSession().then(({ data: { session } }) => {
     if (session) {
-      if (guestView) guestView.style.display = 'none';
-      if (loggedInView) loggedInView.style.display = 'block';
-    }
-  });
+      // Usuario ya logado: la home deja de vender el registro y pasa a ser
+      // un acceso rápido a continuar donde lo dejó.
+      document.getElementById('hero-eyebrow')?.classList.add('hidden');
+      document.getElementById('hero-cta-row')?.classList.add('hidden');
+      document.getElementById('hero-trust-strip')?.classList.add('hidden');
+      document.getElementById('hero-guest-hint')?.classList.add('hidden');
+      document.getElementById('hero-welcome-back')?.classList.remove('hidden');
 
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = form.querySelector('button') as HTMLButtonElement;
-    btn.disabled = true;
-    btn.textContent = 'Procesando...';
-    errorMsg.style.display = 'none';
+      // El resto de CTA de "Regístrate gratis" repartidos por la home
+      // tampoco aplican: los sustituimos por su equivalente ya-logado
+      // (ir al panel, al mapa de retos o a gestionar el plan).
+      document.querySelectorAll<HTMLAnchorElement>('.js-cta-register').forEach(el => {
+        const loggedHref = el.dataset.loggedHref;
+        const loggedText = el.dataset.loggedText;
+        if (loggedHref) el.href = loggedHref;
+        const label = el.querySelector('.cta-label');
+        if (label && loggedText) {
+          label.textContent = loggedText;
+        } else if (loggedText) {
+          el.textContent = loggedText;
+        }
+      });
 
-    const formData = new FormData(form);
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      errorMsg.textContent = 'Correo o contraseña incorrectos.';
-      errorMsg.style.display = 'block';
-      btn.disabled = false;
-      btn.innerHTML = `
-        <span>Entrar al juego</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      `;
-    } else {
-      window.location.href = '/dashboard';
+      document.getElementById('cta-final-hint')?.classList.add('hidden');
     }
   });
 </script>
