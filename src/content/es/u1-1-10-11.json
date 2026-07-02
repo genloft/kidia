@@ -11,6 +11,8 @@
   "accesibilidad": ["Momentos con icono y audio", "Se puede completar hablando, sin escribir"],
   "nota_familia": "Contad en la cena tres IA que habéis usado hoy y para qué.",
   "duracion_min": [25, 30],
+  "objetivo": "Identificar dónde aparece la IA en la vida diaria (recomendaciones, filtros, asistentes de voz, mapas, corrector) y explicar qué hace cada una, entendiendo que la IA está en muchos sitios aunque no se vea.",
+  "producto": "Mapa «Mi día con IA»",
   "unlocks_scenario_id": "u1-2-10-11",
   "badge": {
     "id": "agente-secreto-ia",

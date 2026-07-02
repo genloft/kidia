@@ -16,6 +16,8 @@ export interface ScenarioSchema {
     accesibilidad?: string[];
     nota_familia?: string;
     duracion_min?: [number, number];
+    objetivo?: string; // Qué se aprende en este reto, en lenguaje claro (ficha docx: "Objetivo")
+    producto?: string; // Nombre del entregable que produce el niño (ficha docx: "Producto y duración")
 
     // Logic & Progression
     required_badge_id?: string;

@@ -11,6 +11,8 @@
   "accesibilidad": ["Texto con audio", "Formato visual, esquema o explicación grabada"],
   "nota_familia": "Comentad en casa: ¿creíais que la IA «piensa»? ¿Qué hace en realidad?",
   "duracion_min": [35, 45],
+  "objetivo": "Entender a grandes rasgos cómo funciona una IA generativa (predice lo más probable a partir de patrones aprendidos de muchísimos datos; no «entiende» ni «es consciente») y desmontar el mito de la IA que piensa o siente como un humano.",
+  "producto": "Infografía «Cómo funciona (y cómo no) una IA»",
   "unlocks_scenario_id": "u1-2-12-14",
   "badge": {
     "id": "desmitificador-ia",

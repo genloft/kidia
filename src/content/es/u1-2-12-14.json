@@ -11,6 +11,8 @@
   "accesibilidad": ["Caso con apoyo visual y audio", "Conclusión por texto o grabada"],
   "nota_familia": "Buscad un ejemplo de algo injusto que una máquina podría aprender sin querer.",
   "duracion_min": [35, 45],
+  "objetivo": "Comprender que la IA aprende de datos masivos creados por personas y que esos datos pueden contener sesgos que la IA reproduce e incluso amplifica. Analizar un caso sencillo de sesgo y proponer cómo corregirlo.",
+  "producto": "Análisis de un caso de sesgo",
   "required_badge_id": "desmitificador-ia",
   "unlocks_scenario_id": "u1-3-12-14",
   "badge": {

@@ -20,6 +20,14 @@ const scenario = await getScenarioById(slug || '');
 if (!scenario) {
   return Astro.redirect('/404');
 }
+
+const COMPETENCIA_LABELS: Record<string, string> = {
+  pensamiento_critico: 'Pensamiento crítico',
+  calidad_preguntas: 'Calidad de las preguntas',
+  autonomia_creativa: 'Autonomía creativa',
+  verificacion: 'Verificación',
+};
+const competenciaLabel = scenario.competencia_foco ? COMPETENCIA_LABELS[scenario.competencia_foco] : null;
 ---
 
 <Layout title={`Kidia - ${scenario.title}`} description={scenario.description}>
@@ -39,15 +47,44 @@ if (!scenario) {
        <div class="scenario-info">
            <h1>{scenario.title}</h1>
            <p>{scenario.description}</p>
-           <div class="progress-indicator">
-               Insignia <span class="badge-preview">{scenario.badge.icon}</span> al finalizar
-           </div>
-           
+
+           {(scenario.duracion_min || competenciaLabel) && (
+             <div class="meta-row">
+                {scenario.duracion_min && (
+                  <span class="meta-pill">⏱ {scenario.duracion_min[0]}–{scenario.duracion_min[1]} min</span>
+                )}
+                {competenciaLabel && (
+                  <span class="meta-pill">🧠 {competenciaLabel}</span>
+                )}
+             </div>
+           )}
+
+           {scenario.objetivo && (
+             <div class="info-card">
+                <h2>🎯 Qué vas a aprender</h2>
+                <p>{scenario.objetivo}</p>
+             </div>
+           )}
+
+           {scenario.producto && (
+             <div class="info-card">
+                <h2>📦 Vas a crear</h2>
+                <p>{scenario.producto}</p>
+             </div>
+           )}
+
            {scenario.deep_mode?.enabled && (
              <div class="deep-mode-info">
                 ℹ️ +Info Disponible
              </div>
            )}
+       </div>
+
+       <div class="badge-reward">
+            <span class="badge-reward-label">Consigue la insignia</span>
+            <div class="badge-reward-icon">{scenario.badge.icon}</div>
+            <span class="badge-reward-name">{scenario.badge.name}</span>
+            <p class="badge-reward-desc">{scenario.badge.description}</p>
        </div>
     </aside>
     
@@ -154,51 +191,132 @@ if (!scenario) {
     .sidebar {
         display: flex;
         flex-direction: column;
-        gap: 2rem;
+        gap: 1.5rem;
         align-items: center;
         text-align: center;
+        overflow-y: auto;
+        padding-bottom: 1rem;
     }
-    
+
     .friend-wrapper {
-        margin-top: 2rem;
+        margin-top: 1rem;
+        flex-shrink: 0;
     }
-    
+
     .kidia-explaining {
-        width: 200px;
+        width: 140px;
         height: auto;
         filter: drop-shadow(0 8px 20px rgba(34, 211, 238, 0.3));
         animation: float-kidia 3s ease-in-out infinite;
     }
-    
+
     @keyframes float-kidia {
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-8px); }
     }
-    
+
+    .scenario-info {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+    }
+
     .scenario-info h1 {
-        font-size: 1.5rem;
-        margin-bottom: 0.5rem;
+        font-size: 1.4rem;
+        margin-bottom: 0.25rem;
         line-height: 1.2;
     }
-    
-    .scenario-info p {
+
+    .scenario-info > p {
         color: #a1a1aa;
         font-size: 0.9rem;
+        margin: 0;
     }
-    
-    .badge-preview {
-        font-size: 1.5rem;
-        vertical-align: middle;
+
+    .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
     }
-    
-    .progress-indicator {
-        margin-top: 1rem;
-        padding: 0.5rem;
-        background: rgba(255,255,255,0.05);
-        border-radius: 0.5rem;
+
+    .meta-pill {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #cbd5e1;
+        font-size: 0.75rem;
+        padding: 0.3rem 0.7rem;
+        border-radius: 99px;
+        white-space: nowrap;
+    }
+
+    .info-card {
+        text-align: left;
+        background: var(--color-surface);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 0.9rem;
+        padding: 1rem 1.1rem;
+    }
+
+    .info-card h2 {
         font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: var(--color-primary);
+        margin-bottom: 0.4rem;
     }
-    
+
+    .info-card p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #e4e4e7;
+        line-height: 1.5;
+    }
+
+    .badge-reward {
+        flex-shrink: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 1.5rem 1.25rem;
+        border-radius: 1.25rem;
+        background: linear-gradient(160deg, rgba(34, 211, 238, 0.12), rgba(139, 92, 246, 0.12));
+        border: 1px solid rgba(34, 211, 238, 0.35);
+        box-shadow: 0 0 30px rgba(34, 211, 238, 0.12);
+    }
+
+    .badge-reward-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #a1a1aa;
+    }
+
+    .badge-reward-icon {
+        font-size: 3.5rem;
+        line-height: 1;
+        margin: 0.4rem 0;
+        filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.5));
+    }
+
+    .badge-reward-name {
+        font-weight: 700;
+        font-size: 1.05rem;
+        background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .badge-reward-desc {
+        margin: 0.2rem 0 0 0;
+        font-size: 0.8rem;
+        color: #a1a1aa;
+        line-height: 1.4;
+    }
+
     .chat-area {
         height: 100%;
         display: flex;

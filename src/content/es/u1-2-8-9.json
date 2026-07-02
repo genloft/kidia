@@ -11,6 +11,8 @@
   "accesibilidad": ["Iconos grandes", "Alternativa por voz", "Sin presión de tiempo"],
   "nota_familia": "Jugad al «veo, veo» de categorías: ¿en qué se parecen todas las cosas verdes de la cocina?",
   "duracion_min": [15, 20],
+  "objetivo": "Entender que una IA aprende mirando muchos ejemplos y que lo que le enseñamos cambia lo que sabe hacer: si solo ve un tipo de ejemplo, se equivoca con los nuevos.",
+  "producto": "Clasificador entrenado",
   "required_badge_id": "detective-maquinas",
   "unlocks_scenario_id": "u1-3-8-9",
   "badge": {

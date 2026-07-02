@@ -13,9 +13,9 @@ import { ProgressService } from '../lib/progress-service';
 
   <main class="badges-page">
       <div class="page-header">
-          <h1>🏆 Salón de la Fama</h1>
-          <p>Colecciona hitos históricos, conceptos clave y secretos del universo.</p>
-          
+          <h1>🏆 Colección de Insignias</h1>
+          <p>Cada reto que completes te da una insignia. Aquí están todas las de tu tramo de edad.</p>
+
           <div class="stats-overview">
               <div class="stat-box">
                   <span class="stat-value" id="total-badges">0</span>
@@ -34,31 +34,36 @@ import { ProgressService } from '../lib/progress-service';
 
 <script>
     import { ProgressService } from '../lib/progress-service';
-    import { storage } from '../lib/storage-simple';
-    import badgesData from '../data/badges.json';
     import { requireActiveChild } from '../lib/require-auth';
+
+    let totalReachable = 0;
 
     function updateStats() {
         const state = ProgressService.getState();
         const earnedCount = state.badges.length;
-        const totalCount = badgesData.length;
 
-        // Update Stats
-        document.getElementById('total-badges').innerText = `${earnedCount} / ${totalCount}`;
+        document.getElementById('total-badges').innerText = totalReachable ? `${earnedCount} / ${totalReachable}` : `${earnedCount}`;
 
-        // Calculate Rank
-        const ranks = [
-            { limit: 0, title: "Novato" },
-            { limit: 5, title: "Explorador" },
-            { limit: 10, title: "Promtpadawan" },
-            { limit: 20, title: "Arquitecto" },
-            { limit: 30, title: "Superinteligencia" }
-        ];
-        
-        const currentRank = ranks.reverse().find(r => earnedCount >= r.limit) || ranks[ranks.length-1];
+        // Rangos en proporción a las insignias que este hijo/a puede llegar a ganar
+        const ranks = totalReachable > 0
+            ? [
+                { limit: 0, title: 'Novato' },
+                { limit: Math.ceil(totalReachable * 0.25), title: 'Explorador' },
+                { limit: Math.ceil(totalReachable * 0.5), title: 'Aprendiz de IA' },
+                { limit: Math.ceil(totalReachable * 0.75), title: 'Arquitecto' },
+                { limit: totalReachable, title: 'Superinteligencia' },
+            ]
+            : [{ limit: 0, title: 'Novato' }];
+
+        const currentRank = [...ranks].reverse().find(r => earnedCount >= r.limit) || ranks[0];
         document.getElementById('global-rank').innerText = currentRank.title;
         document.getElementById('global-rank').style.color = 'var(--color-primary)';
     }
+
+    window.addEventListener('badges:tramo-ready', (e) => {
+        totalReachable = e.detail?.total || 0;
+        updateStats();
+    });
 
     requireActiveChild().then(allowed => {
         if (!allowed) return;

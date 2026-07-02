@@ -38,11 +38,31 @@ export class GameEngine {
         this.renderNode(startNodeId);
     }
 
+    // Deriva el "momento" del Método Kidia (Chispa/Explora/Crea/Reflexiona/
+    // Comparte) a partir del id de nodo. Los 12 retos reales siguen esta
+    // convención de nombres; los nodos intermedios de un mismo momento
+    // (crea_animal, corrige, conclusion, refina, argumenta...) se agrupan
+    // dentro de "Crea", que es donde ocurre la parte guiada del reto.
+    private stepForNode(nodeId: string): string | null {
+        if (nodeId === 'start') return 'chispa';
+        if (nodeId === 'explora' || nodeId === 'morti_intro') return 'explora';
+        if (nodeId === 'reflexiona') return 'reflexiona';
+        if (nodeId === 'comparte') return 'comparte';
+        if (nodeId.startsWith('crea') || ['corrige', 'conclusion', 'refina', 'argumenta'].includes(nodeId)) return 'crea';
+        return null;
+    }
+
     private renderNode(nodeId: string) {
         const node = this.scenario.nodes[nodeId];
         if (!node) return;
 
         console.log('Rendering Node:', nodeId);
+
+        // 0. Notificar el momento actual al indicador de pasos de ChatBox
+        const step = this.stepForNode(nodeId);
+        if (step) {
+            window.dispatchEvent(new CustomEvent('kidia:step', { detail: { step } }));
+        }
 
         // 1. Render Message
         const msgDiv = document.createElement('div');

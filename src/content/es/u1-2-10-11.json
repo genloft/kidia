@@ -11,6 +11,8 @@
   "accesibilidad": ["Iconos grandes", "Alternativa por voz", "Sin presión de tiempo"],
   "nota_familia": "Pensad en casa: ¿qué pasaría si una IA solo hubiera visto fotos de un tipo de comida?",
   "duracion_min": [25, 30],
+  "objetivo": "Entender que una IA aprende de datos y que, si los datos son pocos o están «torcidos», la IA se equivoca. Entrenar un clasificador, provocar un fallo a propósito y luego arreglarlo.",
+  "producto": "Clasificador «roto y arreglado»",
   "required_badge_id": "agente-secreto-ia",
   "unlocks_scenario_id": "u1-3-10-11",
   "badge": {

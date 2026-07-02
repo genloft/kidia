@@ -11,6 +11,8 @@
   "accesibilidad": ["Respuesta con audio", "Fuentes con apoyo visual", "Argumento por texto o grabado"],
   "nota_familia": "Comentad una noticia o dato que «sonaba verdad» y resultó ser falso.",
   "duracion_min": [35, 35],
+  "objetivo": "Detectar en una respuesta de la IA afirmaciones plausibles pero falsas y posibles sesgos, verificarlas con fuentes y argumentar la corrección.",
+  "producto": "Respuesta verificada y argumentada",
   "required_badge_id": "ingeniero-prompts",
   "badge": {
     "id": "verificador-experto",

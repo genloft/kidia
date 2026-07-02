@@ -11,6 +11,8 @@
   "accesibilidad": ["Plantilla de ingredientes con iconos", "Dictado por voz", "Lectura del prompt en voz alta"],
   "nota_familia": "En casa, describid un plato con todos sus «ingredientes», como un prompt completo.",
   "duracion_min": [25, 30],
+  "objetivo": "Conocer las partes de un buen prompt —qué quiero, cómo lo quiero y contexto— y escribir prompts más completos con autonomía semiguiada.",
+  "producto": "Prompt «receta» + resultado",
   "required_badge_id": "reparador-ia",
   "unlocks_scenario_id": "u1-4-10-11",
   "badge": {

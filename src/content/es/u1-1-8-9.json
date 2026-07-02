@@ -11,6 +11,8 @@
   "accesibilidad": ["Icono grande + audio en cada tarjeta", "Se puede completar solo con voz, sin leer"],
   "nota_familia": "Buscad juntos en casa tres cosas que creáis que usan IA y una que no.",
   "duracion_min": [15, 20],
+  "objetivo": "Distinguir qué objetos y aplicaciones del día a día usan inteligencia artificial y cuáles no, entendiendo que una IA es un programa que aprende de ejemplos, no magia ni un ser vivo.",
+  "producto": "Mural «IA sí / IA no»",
   "unlocks_scenario_id": "u1-2-8-9",
   "badge": {
     "id": "detective-maquinas",

@@ -36,8 +36,10 @@ const { scenario } = Astro.props;
           <p id="kidia-reaction" class="reaction-text"></p>
           
           <div id="badge-notification" class="hidden">
-              <div class="badge-icon-animate">🏆</div>
-              <p>¡Has ganado la insignia <strong id="badge-name"></strong>!</p>
+              <div class="badge-icon-animate" id="badge-icon">🏆</div>
+              <p class="badge-earned-label">¡Insignia conseguida!</p>
+              <p class="badge-earned-name" id="badge-name"></p>
+              <p class="badge-earned-desc" id="badge-desc"></p>
           </div>
 
           <button id="btn-finish" class="btn-primary">Volver al Mapa</button>
@@ -97,25 +99,17 @@ const { scenario } = Astro.props;
         };
     }
 
-    // Restart Button Logic
+    // Restart Button Logic (a través de storage-simple.ts para que quede
+    // por hijo activo, no en una clave global compartida por todos)
     const restartBtn = document.getElementById('btn-restart');
     if (restartBtn) {
         restartBtn.onclick = () => {
-            const KEY = 'kidia-progress';
             try {
-                const raw = localStorage.getItem(KEY);
-                if (raw) {
-                    const state = JSON.parse(raw);
-                    // Clear progress for this scenario
-                    if (state.scenarioProgress) {
-                        delete state.scenarioProgress[scenario.id];
-                    }
-                    // Optional: Remove from completed list if we want to force re-completion? 
-                    // User just wants to restart, usually implies re-watching.
-                    // But if they already completed it, maybe keep it as completed?
-                    // Let's just clear the *current node* progress so it starts from beginning.
-                    localStorage.setItem(KEY, JSON.stringify(state));
-                }
+                storage.update(s => {
+                    const scenarioProgress = { ...(s.scenarioProgress || {}) };
+                    delete scenarioProgress[scenario.id];
+                    return { ...s, scenarioProgress };
+                });
             } catch (e) {
                 console.error('Error clearing progress', e);
             }
@@ -211,7 +205,9 @@ const { scenario } = Astro.props;
         // Save Logic (a través de storage-simple.ts para que quede por hijo activo, no global)
         try {
             const badgeNotif = document.getElementById('badge-notification');
+            const badgeIconEl = document.getElementById('badge-icon');
             const badgeNameEl = document.getElementById('badge-name');
+            const badgeDescEl = document.getElementById('badge-desc');
             const earnedBadge = score >= 70 && scenario.badge;
 
             storage.update(s => ({
@@ -224,7 +220,9 @@ const { scenario } = Astro.props;
             }));
 
             if (earnedBadge) {
+                badgeIconEl.innerText = scenario.badge.icon || '🏆';
                 badgeNameEl.innerText = scenario.badge.name;
+                badgeDescEl.innerText = scenario.badge.description || '';
                 badgeNotif.classList.remove('hidden');
                 badgeNotif.classList.add('animate-pop');
             }
@@ -443,18 +441,44 @@ const { scenario } = Astro.props;
     .hidden { display: none !important; }
     
     #badge-notification {
-        background: linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(234, 179, 8, 0.05));
-        border: 1px solid rgba(234, 179, 8, 0.5);
-        border-radius: 1rem;
-        padding: 1.5rem;
+        background: linear-gradient(160deg, rgba(34, 211, 238, 0.15), rgba(139, 92, 246, 0.15));
+        border: 1px solid rgba(34, 211, 238, 0.5);
+        box-shadow: 0 0 30px rgba(34, 211, 238, 0.15);
+        border-radius: 1.25rem;
+        padding: 2rem 1.5rem;
         margin: 2rem 0;
         animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    
+
     .badge-icon-animate {
-        font-size: 4rem;
+        font-size: 5rem;
+        line-height: 1;
         margin-bottom: 0.5rem;
-        filter: drop-shadow(0 0 10px gold);
+        filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.6));
+    }
+
+    .badge-earned-label {
+        margin: 0;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #a1a1aa;
+    }
+
+    .badge-earned-name {
+        margin: 0.2rem 0 0.4rem 0;
+        font-size: 1.4rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .badge-earned-desc {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #cbd5e1;
+        line-height: 1.4;
     }
     
     @keyframes popIn {

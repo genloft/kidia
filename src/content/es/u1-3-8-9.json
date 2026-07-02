@@ -11,6 +11,8 @@
   "accesibilidad": ["Selección por iconos y por voz", "Lectura del prompt en voz alta"],
   "nota_familia": "Contad en casa qué prompt usasteis y qué salió.",
   "duracion_min": [15, 20],
+  "objetivo": "Aprender que a la IA se le habla con palabras (un prompt) y que cuanto mejor lo decimos, mejor nos entiende. Escribir, con ayuda, su primer prompt guiado.",
+  "producto": "Imagen + su primer prompt",
   "required_badge_id": "entrenador-mini",
   "unlocks_scenario_id": "u1-4-8-9",
   "badge": {

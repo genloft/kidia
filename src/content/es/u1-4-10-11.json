@@ -11,6 +11,8 @@
   "accesibilidad": ["Respuesta con audio", "Se puede señalar y explicar por voz"],
   "nota_familia": "Contad una vez que algo «sonaba a verdad» pero resultó ser falso.",
   "duracion_min": [25, 25],
+  "objetivo": "Detectar errores sutiles en una respuesta de la IA (un dato falso que suena verdadero), explicar por qué está mal y escribir la versión corregida.",
+  "producto": "Respuesta corregida",
   "required_badge_id": "chef-prompts",
   "badge": {
     "id": "cazaerrores-2",

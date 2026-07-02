@@ -11,6 +11,8 @@
   "accesibilidad": ["Plantilla de elementos con apoyo visual", "Dictado por voz", "Sin presión de tiempo"],
   "nota_familia": "Probad en casa a pedirle algo a una IA con y sin contexto y comparad.",
   "duracion_min": [35, 45],
+  "objetivo": "Diseñar prompts avanzados usando rol, objetivo, contexto, formato, ejemplos y restricciones, e iterar para mejorar el resultado. Crear un «kit de prompts» reutilizable para una tarea propia.",
+  "producto": "«Kit de prompts» para una tarea",
   "required_badge_id": "detector-sesgos",
   "unlocks_scenario_id": "u1-4-12-14",
   "badge": {

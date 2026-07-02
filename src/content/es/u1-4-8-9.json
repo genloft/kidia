@@ -11,6 +11,8 @@
   "accesibilidad": ["Frases con audio e icono", "Respuesta por toque o por voz"],
   "nota_familia": "Pide a un adulto que te cuente una vez que un aparato o una app se equivocó.",
   "duracion_min": [15, 15],
+  "objetivo": "Descubrir que la IA, aunque parezca muy lista, a veces se equivoca o inventa, y que por eso conviene mirar con ojo de detective. Detectar errores evidentes en respuestas de la IA.",
+  "producto": "«Caza el error» superado",
   "required_badge_id": "mago-palabras",
   "badge": {
     "id": "cazaerrores-1",
