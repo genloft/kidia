@@ -60,13 +60,13 @@ export const ProgressService = {
     },
 
     // 5. Parent Report
-    computeParentReport: () => {
-        const state = storage.get();
+    computeParentReport: (extra?: import('./parent-rules').ParentReportExtra) => {
+        const state = { ...storage.get(), ...extra };
         const comments: string[] = [];
 
         PARENT_REPORT_RULES.forEach(rule => {
-            if (rule.condition(state)) {
-                comments.push(rule.text);
+            if (rule.condition(state as any)) {
+                comments.push(typeof rule.text === 'function' ? rule.text(state as any) : rule.text);
             }
         });
 

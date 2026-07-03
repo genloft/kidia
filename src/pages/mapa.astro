@@ -2,10 +2,55 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import ScenarioMapCard from '../components/ScenarioMapCard.astro';
-import { loadScenarios } from '../lib/scenario-loader';
+import { loadScenarios, loadUnidadesAventura, loadMisionesEspeciales } from '../lib/scenario-loader';
 
 const scenarios = await loadScenarios('es');
 console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
+
+// Las 16 unidades del tramo 8-9 (4 zonas · 4 niveles) viven en el formato
+// nuevo "unidad-aventura" (ver src/schemas/unidad.ts) y en /laboratorio/[id],
+// no en /scenario/[slug]. Se muestran como tarjetas más en el mismo
+// carrusel, reutilizando ScenarioMapCard con un shim + href propio. Como
+// loadUnidadesAventura ya ordena por id (1.1..4.4), las tarjetas quedan
+// agrupadas por zona en el orden natural del carrusel.
+const unidadesAventura = await loadUnidadesAventura('8-9');
+const unidadAventuraShims = unidadesAventura.map(u => ({
+  scenario: {
+    id: u.id,
+    title: u.titulo,
+    description: u.mision.textoVael,
+    badge: u.comparte.insigniaPosible || undefined,
+    unidad: u.id,
+    tramo: '8-9',
+    difficulty: 'beginner',
+  },
+  href: `/laboratorio/${u.id}`,
+}));
+
+// Misiones especiales de cierre de cada zona (5-7 min, no son examen).
+const misionesEspeciales = await loadMisionesEspeciales('8-9');
+const misionEspecialPorNivel = new Map(
+  misionesEspeciales.map(m => [m.nivel, {
+    scenario: {
+      id: m.id,
+      title: m.titulo,
+      description: m.introVael,
+      badge: { id: `especial-${m.id}`, name: 'Misión especial', icon: '🔭' },
+      unidad: m.id,
+      tramo: '8-9',
+      difficulty: 'beginner',
+    },
+    href: `/laboratorio/especial/${m.id}`,
+  }])
+);
+
+// Intercala cada misión especial justo después de su zona (tras la unidad .4).
+const unidadesConEspeciales = unidadAventuraShims.flatMap(shim => {
+  if (!shim.scenario.id.endsWith('.4')) return [shim];
+  const nivel = Math.floor(parseFloat(shim.scenario.id));
+  const especial = misionEspecialPorNivel.get(nivel);
+  return especial ? [shim, especial] : [shim];
+});
 ---
 
 <Layout title="Kidia - Mapa de Retos" description="Explora el Mapa del Conocimiento de Kidia: retos interactivos para aprender IA, desde qué es la inteligencia artificial hasta ética y redes neuronales." showFooter={false}>
@@ -56,6 +101,9 @@ console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
     <div class="mission-grid">
        {scenarios.map((scenario, index) => (
          <ScenarioMapCard scenario={scenario} index={index} />
+       ))}
+       {unidadesConEspeciales.map((shim, index) => (
+         <ScenarioMapCard scenario={shim.scenario} href={shim.href} index={scenarios.length + index} />
        ))}
     </div>
   </main>

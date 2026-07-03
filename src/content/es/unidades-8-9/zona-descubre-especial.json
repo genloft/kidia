@@ -1,0 +1,35 @@
+{
+  "id": "zona-descubre-especial",
+  "zona": "Zona Descubre",
+  "nivel": 1,
+  "titulo": "Misión especial del laboratorio",
+  "duracionMinutos": [5, 7],
+  "introVael": "Antes de cerrar la Zona Descubre, el laboratorio necesita comprobar cuatro cosas contigo. No es un examen: es una misión más. ¿Lista/o?",
+  "miniTareas": [
+    {
+      "id": "caza_el_error",
+      "nombre": "Caza el error",
+      "descripcion": "Una frase con un fallo evidente: lo señala.",
+      "competencia": "pensamiento_critico"
+    },
+    {
+      "id": "ia_si_ia_no",
+      "nombre": "¿IA sí o IA no?",
+      "descripcion": "Clasifica una cosa nueva como «usa IA» o «no».",
+      "competencia": "criterio_inicial"
+    },
+    {
+      "id": "mini_hechizo",
+      "nombre": "Mi mini-hechizo",
+      "descripcion": "Compone un prompt corto con menús + su voz.",
+      "competencia": "calidad_preguntas"
+    },
+    {
+      "id": "crea_algo_solo",
+      "nombre": "Crea algo solo",
+      "descripcion": "Una mini-creación; se observa cuánta ayuda pide.",
+      "competencia": "autonomia_creativa"
+    }
+  ],
+  "cierreVael": "¡Lo lograste! Has recorrido toda la Zona Descubre. Tu Cuaderno de Inventor/a ya tiene tus primeras páginas. 🎉"
+}

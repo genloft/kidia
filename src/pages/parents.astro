@@ -62,6 +62,7 @@ import Header from '../components/Header.astro';
     import { ChildrenService } from '../lib/children-service';
     import { activeChild } from '../lib/active-child';
     import { tramoForChild } from '../lib/tramos';
+    import { UnidadService } from '../lib/unidad-service';
 
     requireActiveChild().then(async (allowed) => {
         if (!allowed) return;
@@ -83,7 +84,11 @@ import Header from '../components/Header.astro';
         const scenarios = tramo ? await loadScenariosForTramo(tramo.id) : await loadScenarios('es');
         const totalScenarios = scenarios.length;
 
-        const report = ProgressService.computeParentReport();
+        // Señales del módulo unidad-aventura (Misión en familia, Muro de
+        // Palabras) — solo existen si el hijo/a ya jugó alguna unidad de la
+        // Zona Descubre; getFamilyPanelData devuelve arrays vacíos si no.
+        const familyPanelData = childId ? await UnidadService.getFamilyPanelData(childId) : { familyMissionsCompleted: [], vocabularyCount: 0 };
+        const report = ProgressService.computeParentReport(familyPanelData);
         const state = ProgressService.getState();
         const globalProgress = ProgressService.getGlobalProgress(totalScenarios);
 

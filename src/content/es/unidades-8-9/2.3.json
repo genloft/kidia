@@ -1,0 +1,84 @@
+{
+  "id": "2.3",
+  "nivel": 2,
+  "zona": {
+    "nombre": "Zona Taller",
+    "colorPrimario": "#B45309",
+    "colorFondo": "#FEF3C7"
+  },
+  "unidadCurricular": "2.3 · Comparar y mejorar",
+  "titulo": "El juez inventor",
+  "objetivoBloom": "Analizar: comparar dos resultados de la IA y elegir uno con una razón ligada a lo que se pedía; después, mejorar combinando lo mejor de cada uno.",
+  "competenciaFoco": "pensamiento_critico",
+  "ai4k12": "Representación y razonamiento.",
+  "duracionMinutos": 18,
+  "producto": "Veredicto + versión combinada",
+  "palabras": [
+    { "palabra": "Comparar", "definicion": "mirar dos cosas para ver cuál cumple mejor lo que quieres.", "icono": "search" },
+    { "palabra": "Versión", "definicion": "cada intento distinto de lo mismo.", "icono": "shapes" },
+    { "palabra": "Razón", "definicion": "el porqué de una decisión.", "icono": "book" },
+    { "palabra": "Mejor", "definicion": "el que cumple más lo que pedíamos (no siempre el más bonito).", "icono": "check-circle" }
+  ],
+  "mision": {
+    "textoVael": "La IA ha hecho dos versiones de lo mismo y no se pone de acuerdo. Necesito un juez con criterio: ¿eliges la mejor con una buena razón… y luego creas una aún mejor juntando lo bueno de las dos?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "comparar_versiones",
+    "encargo": "Un dragón amigable jugando en un jardín lleno de flores.",
+    "versiones": [
+      { "id": "v1", "label": "Versión 1", "descripcion": "Un dragón feroz en una cueva oscura y fría.", "cumpleEncargo": false },
+      { "id": "v2", "label": "Versión 2", "descripcion": "Un dragón sonriente jugando entre flores de colores.", "cumpleEncargo": true }
+    ]
+  },
+  "crea": {
+    "tipo": "veredicto_juez",
+    "instrucciones": "Crea una tercera versión combinando lo mejor de las dos (elige el fondo de una, el detalle de otra) y explica tu elección.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Elegiste por bonito o porque cumple lo que pedíamos?",
+      "¿Qué le falta a la que no elegiste?"
+    ]
+  },
+  "familia": {
+    "nombre": "El jurado de casa",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "La familia elige entre dos opciones reales (dos postres, dos planes) y cada persona da una razón. Descubren que decidir con razones es más justo que «porque sí».",
+    "capturaEnApp": { "tipo": "texto_corto", "campo": "veredictoFamiliar" }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«¿Cuál cumple mejor lo que pedíamos?» · «Dame tu razón de juez.» · «¿Y si juntas lo mejor de las dos?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "razon_ligada_al_encargo",
+    "version_combinada_creada"
+  ],
+  "web": {
+    "tituloPantalla": "El juez inventor",
+    "introVael": "¡La IA ha hecho dos versiones y necesita un juez con criterio! Ese juez eres tú.",
+    "pasos": [
+      "Recuerda qué pedíamos.",
+      "Mira las dos versiones: ¿cuál cumple mejor? Dime tu razón.",
+      "Junta lo mejor de las dos y crea una versión campeona.",
+      "Comparte tu veredicto."
+    ],
+    "cierreVael": "¡Buen veredicto, juez! Elegir con una razón es pensar mejor. ⚖️"
+  }
+}

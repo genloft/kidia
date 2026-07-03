@@ -1,0 +1,97 @@
+{
+  "id": "3.2",
+  "nivel": 3,
+  "zona": {
+    "nombre": "Zona Creación",
+    "colorPrimario": "#A21CAF",
+    "colorFondo": "#FAE8FF"
+  },
+  "unidadCurricular": "3.2 · Crea una historia o cómic",
+  "titulo": "La aventura de tu criatura",
+  "objetivoBloom": "Crear: escribir un mini-relato en tres partes (principio, problema y final) decidiendo el niño qué ocurre, usando la IA como ayudante de escritura y no como autora, y añadiendo un giro inventado por él.",
+  "competenciaFoco": "autonomia_creativa",
+  "ai4k12": "Interacción natural.",
+  "duracionMinutos": 20,
+  "producto": "Mini-relato de 3 partes ilustrado",
+  "dependeDe": ["3.1"],
+  "palabras": [
+    { "palabra": "Historia", "definicion": "un relato con principio, medio y final.", "icono": "book" },
+    { "palabra": "Principio", "definicion": "cómo empieza la aventura.", "icono": "sparkles" },
+    { "palabra": "Problema", "definicion": "el lío o reto que aparece en el medio.", "icono": "alert-triangle" },
+    { "palabra": "Final", "definicion": "cómo se resuelve todo.", "icono": "check-circle" }
+  ],
+  "mision": {
+    "textoVael": "Tu criatura está lista para su primera aventura. Tú decides qué le pasa: la IA te ayuda a escribir, pero el autor eres TÚ. ¿Le añades un giro que nadie se espere?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "construir_historia",
+    "principios": [
+      { "id": "bosque", "label": "Se despierta en un bosque desconocido" },
+      { "id": "mensaje", "label": "Recibe un mensaje misterioso" },
+      { "id": "amigo_perdido", "label": "Un amigo suyo ha desaparecido" }
+    ],
+    "problemas": [
+      { "id": "tormenta", "label": "Una tormenta le corta el camino" },
+      { "id": "puzzle", "label": "Debe resolver un acertijo para pasar" },
+      { "id": "villano", "label": "Un personaje travieso le esconde algo importante" }
+    ],
+    "finales": [
+      { "id": "ayuda", "label": "Lo resuelve pidiendo ayuda a un nuevo amigo" },
+      { "id": "ingenio", "label": "Lo resuelve con una idea ingeniosa suya" },
+      { "id": "valentia", "label": "Lo resuelve siendo valiente" }
+    ],
+    "permiteGiroLibre": true
+  },
+  "crea": {
+    "tipo": "mini_relato",
+    "instrucciones": "Crea un mini-relato de 3 partes protagonizado por tu criatura, con un giro inventado por ti, ilustrado.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿La IA escribió lo que TÚ querías?",
+      "¿Qué parte cambiaste para que fuera tuya?"
+    ]
+  },
+  "familia": {
+    "nombre": "Cuentacuentos al revés",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "El niño lee su historia al adulto y, al final, el adulto adivina qué parte inventó el niño y qué parte ayudó la IA.",
+    "capturaEnApp": { "tipo": "texto_corto", "campo": "parteFavorita" }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«¿Cómo empieza la aventura de tu criatura?» · «¿Y si el problema fuera otro?» · «¿Qué frase cambiarías para que sea 100 % tuya?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "aporte_de_trama",
+    "giro_propio",
+    "edicion_del_texto_ia"
+  ],
+  "web": {
+    "tituloPantalla": "¡Escribe la aventura de tu criatura!",
+    "introVael": "¡Tu criatura va a vivir su primera aventura! Tú decides la historia y yo te ayudo a escribirla. ¡Tú eres el autor!",
+    "pasos": [
+      "Cuéntame cómo EMPIEZA.",
+      "¿Qué PROBLEMA aparece? ¡Añade un giro sorpresa!",
+      "¿Cómo TERMINA?",
+      "Lee lo que escribimos y cambia lo que quieras: es tu cuento."
+    ],
+    "cierreVael": "¡Bravo, autor! La IA te ayudó, pero la historia es 100 % tuya. 📖"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "id": "zona-gran-invento-especial",
+  "zona": "Zona Gran Invento",
+  "nivel": 4,
+  "titulo": "Misión especial del gran invento",
+  "duracionMinutos": [5, 7],
+  "introVael": "Antes de cerrar la Zona Gran Invento, comprobemos juntos cuatro cosas. No es un examen: es una misión más del laboratorio.",
+  "miniTareas": [
+    {
+      "id": "mini_proyecto",
+      "nombre": "Mini-proyecto",
+      "descripcion": "Completa un proyecto corto con ayuda decreciente.",
+      "competencia": "autonomia_creativa"
+    },
+    {
+      "id": "a_quien_ayuda",
+      "nombre": "¿A quién ayuda?",
+      "descripcion": "Dice a quién ayuda o para quién es su creación.",
+      "competencia": "pensamiento_critico"
+    },
+    {
+      "id": "verifica_que_funciona",
+      "nombre": "Verifica que funciona",
+      "descripcion": "Comprueba que su producto se entiende/funciona.",
+      "competencia": "verificacion"
+    },
+    {
+      "id": "presenta",
+      "nombre": "Presenta",
+      "descripcion": "Cuenta qué hizo y cómo a la comunidad/familia.",
+      "competencia": "comunicacion"
+    }
+  ],
+  "cierreVael": "¡Lo lograste! Has recorrido las 4 zonas del laboratorio. Eres, oficialmente, creador/a con IA. 🌟"
+}

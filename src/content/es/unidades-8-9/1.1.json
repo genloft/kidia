@@ -1,0 +1,90 @@
+{
+  "id": "1.1",
+  "nivel": 1,
+  "zona": {
+    "nombre": "Zona Descubre",
+    "colorPrimario": "#1E7A46",
+    "colorFondo": "#E6F4EC"
+  },
+  "unidadCurricular": "1.1 · ¿Qué es (y qué no) una IA?",
+  "titulo": "La caza del cerebro invisible",
+  "objetivoBloom": "Identificar / Comprender: distinguir qué cosas usan IA y cuáles no, descubriendo la regla por sí mismo: «una IA es un programa que APRENDE de ejemplos; si siempre hace lo mismo, no es IA».",
+  "competenciaFoco": "criterio_inicial",
+  "ai4k12": "Percepción — qué puede «notar» o reconocer una máquina.",
+  "duracionMinutos": 18,
+  "producto": "Detector de IA (3+1 objetos con motivo)",
+  "palabras": [
+    { "palabra": "Inteligencia artificial", "definicion": "un programa que aprende de muchos ejemplos para hacer una tarea. No es magia ni está vivo.", "icono": "brain" },
+    { "palabra": "Aprender", "definicion": "mejorar en algo después de ver o practicar muchas veces.", "icono": "book" },
+    { "palabra": "Programa", "definicion": "una lista de instrucciones que sigue una máquina.", "icono": "code" }
+  ],
+  "mision": {
+    "textoVael": "Por el mundo hay cerebros de IA escondidos dentro de cosas normales… y otras cosas que solo fingen. ¿Aprendes a distinguirlos y creas tu propio Detector de IA?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "hipotesis_prueba_regla",
+    "preguntaLinterna": "¿Esta cosa APRENDE o SIEMPRE hace lo mismo?",
+    "banco": [
+      { "id": "altavoz_inteligente", "label": "Altavoz inteligente", "icono": "speaker", "usaIA": true, "pista": "Este altavoz entiende lo que le dices y responde cosas distintas cada vez: eso es aprender." },
+      { "id": "termostato_simple", "label": "Termostato simple", "icono": "thermometer", "usaIA": false, "pista": "Este termostato siempre hace lo mismo cuando giras la rueda: no aprende, solo obedece." },
+      { "id": "recomendador_videos", "label": "Recomendador de vídeos", "icono": "video", "usaIA": true, "pista": "Cuantos más vídeos ves, mejor adivina cuáles te van a gustar: eso es aprender de ti." },
+      { "id": "calculadora", "label": "Calculadora", "icono": "calculator", "usaIA": false, "pista": "La calculadora da siempre el mismo resultado con los mismos números: sigue una instrucción, no aprende." },
+      { "id": "asistente_voz", "label": "Asistente de voz", "icono": "microphone", "usaIA": true, "pista": "Cuanto más le hablas, mejor entiende tu voz y tus gustos: eso es aprender." }
+    ],
+    "minimoObjetos": 2,
+    "maximoObjetos": 3
+  },
+  "crea": {
+    "tipo": "detector_ia",
+    "instrucciones": "Elige (o describe por voz) tres cosas que creas que usan IA y una que no. Para cada una, elige un icono y di tu motivo.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "casoTruco": "Un altavoz que solo repite un sonido grabado, no responde a lo que dices.",
+    "preguntas": [
+      "¿Aprende o solo repite?",
+      "¿Qué pista usaste para decidir?"
+    ]
+  },
+  "familia": {
+    "nombre": "Safari de IA en casa",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Recorred la casa buscando 3 aparatos. El niño entrevista al adulto: «¿esto aprende de ti o siempre hace lo mismo?». Votad juntos.",
+    "capturaEnApp": { "tipo": "checklist_con_iconos", "campo": "objetosEncontrados" }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«¿Esta cosa aprende, o siempre hace lo mismo?» · «Cuéntame por qué crees que ese sí tiene cerebro de IA.» · «¡Buena pista! ¿La probamos con otra cosa?»",
+  "andamiaje": "alto",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "regla_formulada_por_nino",
+    "numero_objetos_investigados",
+    "motivos_dados"
+  ],
+  "web": {
+    "tituloPantalla": "¡Rastreador de cerebros invisibles!",
+    "introVael": "¡Hola, aprendiz! Por tu casa hay cosas con un cerebro de IA escondido… y otras que solo lo fingen. ¿Me ayudas a cazarlas?",
+    "pasos": [
+      "Elige una cosa (o dime una tú).",
+      "Antes de nada: ¿crees que APRENDE o siempre hace lo mismo? ¡Adivina!",
+      "Mira mi pista y descubre si acertaste.",
+      "Con lo que aprendiste, monta tu propio Detector de IA."
+    ],
+    "cierreVael": "¡Ya miras el mundo como un rastreador! Recuerda tu regla: si aprende, es IA. 🔍"
+  }
+}

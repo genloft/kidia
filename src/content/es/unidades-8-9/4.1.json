@@ -1,0 +1,94 @@
+{
+  "id": "4.1",
+  "nivel": 4,
+  "zona": {
+    "nombre": "Zona Gran Invento",
+    "colorPrimario": "#1D4ED8",
+    "colorFondo": "#DBEAFE"
+  },
+  "unidadCurricular": "4.1 · Proyecto: juego sencillo",
+  "titulo": "Inventa tu juego",
+  "objetivoBloom": "Crear: construir, paso a paso y con la IA como ayudante, un pequeño juego de tres adivinanzas sobre un tema elegido por el niño, probarlo con otra persona y mejorarlo con lo que descubra.",
+  "competenciaFoco": "autonomia_creativa",
+  "ai4k12": "Las cinco ideas, en versión sencilla.",
+  "duracionMinutos": 20,
+  "producto": "Mini-juego de 3 adivinanzas",
+  "palabras": [
+    { "palabra": "Juego", "definicion": "una actividad con reglas para divertirse.", "icono": "shapes" },
+    { "palabra": "Regla", "definicion": "lo que se puede y no se puede hacer en el juego.", "icono": "book" },
+    { "palabra": "Pista", "definicion": "una ayuda que acerca a la respuesta.", "icono": "search" },
+    { "palabra": "Probar", "definicion": "jugar con alguien para ver si funciona.", "icono": "check-circle" }
+  ],
+  "mision": {
+    "textoVael": "¡Te toca ser creador/a de juegos! Vas a inventar un juego de adivinanzas para retar a tu familia… y como todo buen inventor, lo vas a PROBAR y a mejorar con lo que descubras.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "construir_juego",
+    "temas": [
+      { "id": "animales", "label": "Animales", "valor": "animales" },
+      { "id": "espacio", "label": "Espacio", "valor": "espacio" },
+      { "id": "comida", "label": "Comida", "valor": "comida" },
+      { "id": "deportes", "label": "Deportes", "valor": "deportes" }
+    ],
+    "bancoAdivinanzas": [
+      { "id": "leon", "pregunta": "Soy el rey de la selva y tengo una gran melena.", "pista": "Ruge muy fuerte.", "respuesta": "El león", "dificultad": "facil" },
+      { "id": "planeta_rojo", "pregunta": "Soy un planeta y me llaman «el planeta rojo».", "pista": "Está cerca de la Tierra.", "respuesta": "Marte", "dificultad": "media" },
+      { "id": "platano", "pregunta": "Soy amarilla por fuera y blanda por dentro; los monos me adoran.", "pista": "Tiene forma curva.", "respuesta": "El plátano", "dificultad": "facil" },
+      { "id": "balon", "pregunta": "Soy redondo, boto y once jugadores me persiguen en un campo.", "pista": "Se usa en el fútbol.", "respuesta": "El balón", "dificultad": "facil" },
+      { "id": "estrella", "pregunta": "Brillo en el cielo de noche, pero de día no me ves.", "pista": "Hay millones en el cielo.", "respuesta": "Una estrella", "dificultad": "media" },
+      { "id": "pinguino", "pregunta": "Tengo alas pero no vuelo, y nado en agua helada.", "pista": "Vive en la Antártida.", "respuesta": "El pingüino", "dificultad": "dificil" }
+    ]
+  },
+  "crea": {
+    "tipo": "mini_juego",
+    "instrucciones": "Construye TU juego: tema propio, tres adivinanzas que decidas y ajustes, un título y unas reglas.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Qué adivinanza fue la más difícil? ¿Por qué?",
+      "¿Qué cambiaste de lo que propuso la IA?"
+    ]
+  },
+  "familia": {
+    "nombre": "Noche de adivinanzas",
+    "duracionMinutos": 10,
+    "modo": "offline",
+    "instrucciones": "El niño dirige su juego con la familia como jugadores. Después pregunta qué adivinanza gustó más y ajusta su juego con esa opinión.",
+    "capturaEnApp": { "tipo": "numero", "campo": "puntuacionFamiliar" }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«¿De qué será tu juego?» · «Elige y cambia las adivinanzas que quieras.» · «¿Qué mejorarías después de probarlo?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "juego_completo_propio",
+    "prueba_realizada",
+    "mejora_tras_feedback"
+  ],
+  "web": {
+    "tituloPantalla": "Crea tu juego de adivinanzas",
+    "introVael": "¡Vas a ser creador/a de juegos! Haremos un juego de adivinanzas para retar a tu familia… ¡y lo mejoraremos probándolo!",
+    "pasos": [
+      "Elige el tema de tu juego.",
+      "Elige y cambia las adivinanzas que quieras.",
+      "Ordénalas y ponle un título.",
+      "Pruébalo con alguien y mejóralo con lo que descubras."
+    ],
+    "cierreVael": "¡Has creado tu propio juego! Tú decidiste, la IA solo ayudó. 🎮"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "id": "2.1",
+  "nivel": 2,
+  "zona": {
+    "nombre": "Zona Taller",
+    "colorPrimario": "#B45309",
+    "colorFondo": "#FEF3C7"
+  },
+  "unidadCurricular": "2.1 · De vago a específico",
+  "titulo": "El taller de prompts campeones",
+  "objetivoBloom": "Aplicar: descubrir, comparando, que un prompt con detalles da mejores resultados; reescribir una instrucción floja añadiéndole detalles y averiguar qué detalle cambia más el resultado.",
+  "competenciaFoco": "calidad_preguntas",
+  "ai4k12": "Interacción natural.",
+  "duracionMinutos": 18,
+  "producto": "Receta de prompt campeón + 2 imágenes",
+  "palabras": [
+    { "palabra": "Específico", "definicion": "muy concreto, con detalles claros; lo contrario de vago.", "icono": "search" },
+    { "palabra": "Detalle", "definicion": "una pista extra que afina lo que pides.", "icono": "sparkles" },
+    { "palabra": "Mejorar", "definicion": "hacer algo mejor cambiando o añadiendo cosas.", "icono": "wand" },
+    { "palabra": "Comparar", "definicion": "mirar dos cosas para ver en qué se diferencian.", "icono": "search" }
+  ],
+  "mision": {
+    "textoVael": "La IA hizo un dibujo aburrido porque le pedimos algo muy flojo. Abro mi taller: ¿conviertes ese prompt flojo en un prompt campeón y descubres qué detalle tiene más poder?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "afinar_prompt_detalles",
+    "promptBase": "un perro",
+    "banco": [
+      { "id": "color", "label": "Marrón y blanco", "categoria": "color" },
+      { "id": "lugar", "label": "En el parque", "categoria": "lugar" },
+      { "id": "accion", "label": "Corriendo con una pelota", "categoria": "acción" }
+    ],
+    "preguntaClave": "¿Qué detalle cambió MÁS el dibujo?"
+  },
+  "crea": {
+    "tipo": "receta_prompt",
+    "instrucciones": "Escribe tu «receta de prompt campeón» (una fórmula sencilla: qué + cómo + dónde) para reutilizarla en futuros retos, junto a tus dos imágenes (antes/después).",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Qué detalle cambió MÁS el dibujo?",
+      "¿El flojo o el campeón se parece más a lo que querías?"
+    ]
+  },
+  "familia": {
+    "nombre": "Describe para adivinar",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "El niño describe un objeto de casa empezando muy vago y añadiendo detalles hasta que el adulto lo adivina. Cuentan cuántos detalles hicieron falta.",
+    "capturaEnApp": { "tipo": "numero", "campo": "numeroDetalles" }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«Añade solo un color y mira… ¿cambió mucho?» · «¿Qué detalle tuvo más poder?» · «¿Guardamos tu receta de campeón?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "numero_detalles_utiles_anadidos",
+    "detalle_mayor_efecto_identificado",
+    "receta_creada"
+  ],
+  "web": {
+    "tituloPantalla": "Convierte un prompt flojo en campeón",
+    "introVael": "¡Uy! Este prompt es muy flojo y salió algo aburrido. ¿Lo hacemos campeón y descubrimos qué detalle tiene más poder?",
+    "pasos": [
+      "Mira el dibujo flojo.",
+      "Añade un detalle (solo uno) y crea de nuevo. ¿Cambió mucho?",
+      "Prueba otros detalles y descubre cuál tiene más poder.",
+      "Guarda tu receta de prompt campeón."
+    ],
+    "cierreVael": "¡Eso es! Más y mejores detalles = la IA te entiende mejor. 🏆"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "id": "3.3",
+  "nivel": 3,
+  "zona": {
+    "nombre": "Zona Creación",
+    "colorPrimario": "#A21CAF",
+    "colorFondo": "#FAE8FF"
+  },
+  "unidadCurricular": "3.3 · Crea una imagen describiéndola",
+  "titulo": "Pinta con palabras",
+  "objetivoBloom": "Aplicar / Crear: describir una escena por capas (lugar, personajes, detalle) para que la imagen salga lo más parecida posible a la que el niño imagina, y descubrir qué capa importa más.",
+  "competenciaFoco": "calidad_preguntas",
+  "ai4k12": "Percepción.",
+  "duracionMinutos": 18,
+  "producto": "Imagen + descripción por capas",
+  "palabras": [
+    { "palabra": "Capa", "definicion": "cada trozo que añades a tu descripción, uno encima de otro.", "icono": "shapes" },
+    { "palabra": "Escena", "definicion": "el momento completo que quieres dibujar.", "icono": "image" },
+    { "palabra": "Fondo", "definicion": "el lugar donde ocurre todo.", "icono": "search" },
+    { "palabra": "Detalle", "definicion": "el toque especial que hace única la imagen.", "icono": "sparkles" }
+  ],
+  "mision": {
+    "textoVael": "Imagina el cumpleaños más loco del mundo. ¿Logras que lo pinte igual que en tu cabeza… construyéndolo capa a capa como un pintor de palabras?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "afinar_prompt_detalles",
+    "promptBase": "una fiesta de cumpleaños",
+    "banco": [
+      { "id": "fondo", "label": "En la luna, con estrellas alrededor", "categoria": "fondo" },
+      { "id": "personajes", "label": "Tu criatura y globos bailarines", "categoria": "personajes" },
+      { "id": "detalle_loco", "label": "Una tarta que también lleva sombrero", "categoria": "detalle loco" }
+    ],
+    "preguntaClave": "¿Qué capa cambió MÁS la imagen?"
+  },
+  "crea": {
+    "tipo": "escena_por_capas",
+    "instrucciones": "Crea tu escena por capas y guarda la imagen junto a su descripción. Puedes usar tu criatura como protagonista.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Qué le falta para parecerse más a tu idea?",
+      "¿Qué capa fue la más importante?"
+    ]
+  },
+  "familia": {
+    "nombre": "El cuadro de palabras",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "El niño describe por capas una escena de casa y el adulto intenta imaginarla/dibujarla; comparan.",
+    "capturaEnApp": { "tipo": "texto_corto", "campo": "resultado" }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«Empecemos por el lugar…» · «Ahora, ¿quién está ahí?» · «¿Qué capa cambió más el dibujo?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "numero_capas_construidas",
+    "deteccion_de_lo_que_falta",
+    "refinado_segunda_pasada"
+  ],
+  "web": {
+    "tituloPantalla": "Dibuja… ¡con palabras!",
+    "introVael": "¿Y si pudieras dibujar solo hablando? ¡Hoy sí! Vamos a construir tu imagen capa a capa.",
+    "pasos": [
+      "Primero, el LUGAR.",
+      "Después, QUIÉN está ahí (¡puede ser tu criatura!).",
+      "Y por último, ¡un detalle loco!",
+      "Mira qué capa cambió más… y añade lo que falte."
+    ],
+    "cierreVael": "¡Has pintado con palabras! Cada capa acerca el dibujo a tu idea. 🎨"
+  }
+}

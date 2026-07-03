@@ -1,0 +1,120 @@
+{
+  "id": "3.1",
+  "nivel": 3,
+  "zona": {
+    "nombre": "Zona Creación",
+    "colorPrimario": "#A21CAF",
+    "colorFondo": "#FAE8FF"
+  },
+  "unidadCurricular": "3.1 · Crea un personaje",
+  "titulo": "Da vida a tu criatura",
+  "objetivoBloom": "Crear: inventar una criatura describiéndola con sus propias palabras y ajustar la descripción hasta que la IA la imagine como el niño la ve. La criatura se convierte en el personaje estrella de sus próximas creaciones.",
+  "competenciaFoco": "autonomia_creativa",
+  "ai4k12": "Interacción natural.",
+  "duracionMinutos": 18,
+  "producto": "Criatura (imagen + nombre + ficha)",
+  "palabras": [
+    { "palabra": "Personaje", "definicion": "un ser inventado que protagoniza tus creaciones.", "icono": "sparkles" },
+    { "palabra": "Describir", "definicion": "contar con palabras cómo es algo.", "icono": "type" },
+    { "palabra": "Imaginar", "definicion": "ver algo en tu cabeza antes de crearlo.", "icono": "brain" },
+    { "palabra": "Característica", "definicion": "algo que hace especial a tu criatura (su color, su poder…).", "icono": "search" }
+  ],
+  "mision": {
+    "textoVael": "El gran reto de inventor/a: crear una criatura que no exista en ningún sitio y lograr que la imagine igual que en tu cabeza. Será TU personaje, y volverá en tus próximas aventuras.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "construir_prompt_imagen",
+    "categorias": [
+      {
+        "label": "Color",
+        "opciones": [
+          { "id": "azul", "label": "Azul", "valor": "#3B82F6" },
+          { "id": "verde", "label": "Verde", "valor": "#22C55E" },
+          { "id": "morado", "label": "Morado", "valor": "#8B5CF6" },
+          { "id": "dorado", "label": "Dorado", "valor": "#F5B914" },
+          { "id": "rosa", "label": "Rosa", "valor": "#EC4899" }
+        ]
+      },
+      {
+        "label": "Tamaño",
+        "opciones": [
+          { "id": "diminuta", "label": "Diminuta", "valor": "diminuta" },
+          { "id": "mediana", "label": "Mediana", "valor": "mediana" },
+          { "id": "gigante", "label": "Gigante", "valor": "gigante" }
+        ]
+      },
+      {
+        "label": "Algo raro",
+        "opciones": [
+          { "id": "alas", "label": "Con alas", "valor": "alas" },
+          { "id": "escamas", "label": "Con escamas brillantes", "valor": "escamas" },
+          { "id": "cuernos", "label": "Con cuernos", "valor": "cuernos" },
+          { "id": "invisible", "label": "A veces invisible", "valor": "invisible" }
+        ]
+      },
+      {
+        "label": "Qué hace",
+        "opciones": [
+          { "id": "vuela", "label": "Vuela", "valor": "volando" },
+          { "id": "nada", "label": "Nada", "valor": "nadando" },
+          { "id": "esconde", "label": "Se esconde", "valor": "durmiendo" },
+          { "id": "brilla", "label": "Brilla en la oscuridad", "valor": "sonriendo" }
+        ]
+      }
+    ],
+    "permiteDetalleLibre": true,
+    "comparaCambiandoUna": true
+  },
+  "crea": {
+    "tipo": "criatura",
+    "instrucciones": "Nace tu criatura: imagen + nombre inventado + su ficha de características. Es tu creación personal y volverá en tus próximas aventuras.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Se parece a lo que imaginabas?",
+      "¿Qué palabra faltó para que saliera mejor?"
+    ]
+  },
+  "familia": {
+    "nombre": "El retrato hablado",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "El niño describe su criatura con palabras y el adulto la dibuja sin verla; comparan el dibujo del adulto con la versión de la IA. Se ríen de las diferencias.",
+    "capturaEnApp": { "tipo": "texto_corto", "campo": "diferenciasEncontradas" }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«Cuéntame cómo es tu criatura…» · «¿Se parece a la de tu cabeza?» · «¿Qué palabra le falta para clavarla?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "numero_rasgos_propios",
+    "ajuste_tras_comparar",
+    "originalidad"
+  ],
+  "web": {
+    "tituloPantalla": "Da vida a tu criatura imposible",
+    "introVael": "¡Hoy eres inventor/a de criaturas! Descríbeme una que no exista y haré que cobre vida. ¿Logras que salga igual que en tu cabeza?",
+    "pasos": [
+      "Dime su color y su tamaño.",
+      "Dime qué tiene de raro y qué hace.",
+      "La creamos… ¿se parece a tu idea?",
+      "Ajusta las palabras y ponle nombre. ¡Ya es tu personaje!"
+    ],
+    "cierreVael": "¡Has creado una criatura única! Tú la imaginaste, tú la describiste. 🐉"
+  }
+}

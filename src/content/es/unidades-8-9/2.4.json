@@ -1,0 +1,106 @@
+{
+  "id": "2.4",
+  "nivel": 2,
+  "zona": {
+    "nombre": "Zona Taller",
+    "colorPrimario": "#B45309",
+    "colorFondo": "#FEF3C7"
+  },
+  "unidadCurricular": "2.4 · Límites de la IA y datos personales",
+  "titulo": "El guardián de secretos",
+  "objetivoBloom": "Comprender / Aplicar: entender que la IA es una herramienta (no una persona ni una amiga) y decidir, ante situaciones reales, qué datos personales nunca se comparten. Crear sus propias reglas de secretos.",
+  "competenciaFoco": "criterio",
+  "ai4k12": "Impacto social.",
+  "duracionMinutos": 18,
+  "producto": "Escudo de secretos + pacto familiar",
+  "palabras": [
+    { "palabra": "Dato personal", "definicion": "una información tuya: tu nombre completo, tu dirección, tu cole, tu teléfono.", "icono": "alert-triangle" },
+    { "palabra": "Secreto", "definicion": "algo que solo se cuenta a personas de confianza, nunca por una pantalla.", "icono": "check-circle" },
+    { "palabra": "Herramienta", "definicion": "algo que usamos para hacer cosas; la IA es una herramienta, no una amiga.", "icono": "code" },
+    { "palabra": "Privado", "definicion": "que es solo tuyo y no se comparte con desconocidos.", "icono": "search" }
+  ],
+  "mision": {
+    "textoVael": "Te confío un puesto importante: guardián/a de secretos del laboratorio. La IA es una herramienta genial, pero no te conoce ni es tu amiga. ¿Aprendes a proteger lo que es privado y creas tu propio Escudo de secretos?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "decision_consecuencia",
+    "escenarios": [
+      {
+        "id": "direccion",
+        "situacion": "Un personaje nuevo en el juego te pregunta: «¿dónde vives?».",
+        "opciones": [
+          { "id": "decir", "label": "Le digo mi dirección", "segura": false, "consecuencia": "Un desconocido no necesita saber dónde vives. Mejor no compartir eso nunca." },
+          { "id": "callar", "label": "Le digo que eso es secreto", "segura": true, "consecuencia": "¡Bien hecho! Tu dirección es tuya, no se comparte con quien no conoces." }
+        ]
+      },
+      {
+        "id": "nombre",
+        "situacion": "La IA te pregunta tu nombre y apellidos para «personalizar tu experiencia».",
+        "opciones": [
+          { "id": "decir", "label": "Le doy mi nombre completo", "segura": false, "consecuencia": "La IA no necesita tu nombre completo. Mejor usar un apodo o seudónimo." },
+          { "id": "apodo", "label": "Uso un apodo inventado", "segura": true, "consecuencia": "¡Genial! Un apodo protege quién eres de verdad." }
+        ]
+      },
+      {
+        "id": "foto",
+        "situacion": "Alguien en un juego te pide una foto tuya para «ser amigos».",
+        "opciones": [
+          { "id": "enviar", "label": "Le mando una foto mía", "segura": false, "consecuencia": "Nunca compartas fotos tuyas con desconocidos por una pantalla." },
+          { "id": "negar", "label": "Digo que no comparto fotos con desconocidos", "segura": true, "consecuencia": "¡Exacto! Tus fotos son tuyas." }
+        ]
+      }
+    ]
+  },
+  "crea": {
+    "tipo": "escudo_secretos",
+    "instrucciones": "Diseña tu Escudo de secretos: elige y decora una tarjeta con TUS reglas («guardo mi dirección», «guardo mi cole»).",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Qué cosas son secretas?",
+      "¿La IA es una persona o una herramienta?"
+    ]
+  },
+  "familia": {
+    "nombre": "El pacto de la familia",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Adulto y niño acuerdan juntos una lista corta de secretos que nunca se dan por una pantalla y la «firman» (cada uno pone su nombre o un dibujo).",
+    "capturaEnApp": { "tipo": "texto_corto", "campo": "pactoFirmado" }
+  },
+  "comparte": {
+    "publicaEnGaleria": false,
+    "insigniaPosible": { "id": "guardian-secretos", "name": "Guardián/a de secretos", "icon": "🛡️", "description": "Aprendió a proteger sus datos personales y creó su propio pacto familiar." },
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«Un personaje nuevo te pregunta dónde vives… ¿qué haces?» · «¿Por qué eso es un secreto?» · «¿Qué regla pondrías en tu escudo?»",
+  "andamiaje": "alto",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "decisiones_correctas_datos_personales",
+    "reglas_propias_creadas",
+    "pacto_familiar_completado"
+  ],
+  "web": {
+    "tituloPantalla": "El guardián de los secretos",
+    "introVael": "La IA es una herramienta genial… pero NO es tu amiga y no conoce tu vida. ¿Aprendes a proteger tus secretos?",
+    "pasos": [
+      "Un personaje nuevo te hace preguntas: decide qué contar y qué guardar.",
+      "Descubre qué pasa con cada decisión.",
+      "Diseña tu Escudo de secretos con tus propias reglas.",
+      "Haz el pacto de secretos con tu familia."
+    ],
+    "cierreVael": "¡Eres un gran guardián! La IA es una herramienta; tus secretos son tuyos. 🛡️"
+  }
+}

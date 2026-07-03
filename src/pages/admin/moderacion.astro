@@ -1,0 +1,162 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+---
+
+<Layout title="Kidia - Moderación" description="Panel interno de moderación de contenido del Cuaderno de Inventor/a." showFooter={false}>
+  <Header />
+  <main class="mod-container">
+    <div id="mod-guard" class="mod-guard">
+      <p>Comprobando acceso…</p>
+    </div>
+    <div id="mod-content" class="hidden">
+      <h1>Moderación del Cuaderno de Inventor/a</h1>
+      <p class="mod-subtitle">Artefactos pendientes de revisión antes de aparecer en la galería. Ningún dato personal identificativo debería aparecer aquí — si lo ves, rechaza el artefacto.</p>
+      <div id="mod-list" class="mod-list"></div>
+      <p id="mod-empty" class="hidden">No hay nada pendiente de moderar. 🎉</p>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+  import { UnidadService, type ChildArtifact } from '../../lib/unidad-service';
+
+  // Sin sistema de roles de staff todavía: el acceso real lo aplica la
+  // RLS de child_artifacts (ver supabase/migrations/003_unidad_aventura.sql,
+  // políticas "Admins can..."), esta lista es solo para no mostrar el panel
+  // vacío/confuso a quien no tiene acceso. Mantener ambas listas en sync.
+  const ADMIN_EMAILS = ['garciagarcia.juanantonio@gmail.com'];
+
+  const guard = document.getElementById('mod-guard') as HTMLElement;
+  const content = document.getElementById('mod-content') as HTMLElement;
+  const list = document.getElementById('mod-list') as HTMLElement;
+  const empty = document.getElementById('mod-empty') as HTMLElement;
+
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, className?: string, text?: string): HTMLElementTagNameMap[K] {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function renderArtifactCard(artefacto: ChildArtifact): HTMLElement {
+    const card = el('div', 'mod-card');
+
+    const header = el('div', 'mod-card-header');
+    header.appendChild(el('span', 'mod-card-unidad', `Unidad ${artefacto.unidad_id}`));
+    header.appendChild(el('span', 'mod-card-tipo', artefacto.tipo));
+    card.appendChild(header);
+
+    // JSON.stringify + textContent (nunca innerHTML): el contenido incluye
+    // texto libre del niño y no debe interpretarse como HTML.
+    const pre = el('pre', 'mod-card-json', JSON.stringify(artefacto.contenido, null, 2));
+    card.appendChild(pre);
+
+    const actions = el('div', 'mod-card-actions');
+    const approveBtn = el('button', 'btn btn-primary', 'Aprobar');
+    approveBtn.type = 'button';
+    approveBtn.addEventListener('click', async () => {
+      await UnidadService.moderar(artefacto.id, 'approved');
+      await loadPending();
+    });
+
+    const rejectBtn = el('button', 'btn btn-secondary', 'Rechazar');
+    rejectBtn.type = 'button';
+    rejectBtn.addEventListener('click', async () => {
+      await UnidadService.moderar(artefacto.id, 'rejected');
+      await loadPending();
+    });
+
+    actions.appendChild(approveBtn);
+    actions.appendChild(rejectBtn);
+    card.appendChild(actions);
+    return card;
+  }
+
+  async function loadPending() {
+    const pendientes = await UnidadService.getPendientesModeracion();
+    list.innerHTML = '';
+    if (pendientes.length === 0) {
+      empty.classList.remove('hidden');
+      return;
+    }
+    empty.classList.add('hidden');
+    pendientes.forEach(artefacto => list.appendChild(renderArtifactCard(artefacto)));
+  }
+
+  async function init() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user || !ADMIN_EMAILS.includes(user.email || '')) {
+      window.location.href = '/login';
+      return;
+    }
+    guard.classList.add('hidden');
+    content.classList.remove('hidden');
+    await loadPending();
+  }
+
+  init();
+</script>
+
+<style>
+  .mod-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  .mod-subtitle {
+    color: #94a3b8;
+    margin-bottom: 2rem;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .mod-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .mod-card {
+    background: var(--color-surface, #18181b);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
+
+  .mod-card-header {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .mod-card-unidad {
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .mod-card-tipo {
+    color: #94a3b8;
+  }
+
+  .mod-card-json {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    font-size: 0.8rem;
+    color: #cbd5e1;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .mod-card-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+</style>

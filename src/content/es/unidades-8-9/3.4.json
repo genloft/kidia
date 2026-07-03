@@ -1,0 +1,86 @@
+{
+  "id": "3.4",
+  "nivel": 3,
+  "zona": {
+    "nombre": "Zona Creación",
+    "colorPrimario": "#A21CAF",
+    "colorFondo": "#FAE8FF"
+  },
+  "unidadCurricular": "3.4 · Mejora e itera",
+  "titulo": "El taller de versiones",
+  "objetivoBloom": "Evaluar / Crear: aprender que las buenas creaciones se mejoran: revisar algo hecho, decidir UNA cosa a mejorar, crear una versión 2 y compararla con la 1, decidiendo si merece una versión 3.",
+  "competenciaFoco": "verificacion",
+  "ai4k12": "Representación y razonamiento.",
+  "duracionMinutos": 18,
+  "producto": "Versión 2 + comparación",
+  "palabras": [
+    { "palabra": "Versión", "definicion": "cada intento mejorado de tu creación (v1, v2, v3…).", "icono": "shapes" },
+    { "palabra": "Mejorar", "definicion": "hacer algo mejor con un cambio pensado.", "icono": "wand" },
+    { "palabra": "Iterar", "definicion": "repetir mejorando un poco cada vez.", "icono": "search" },
+    { "palabra": "Cambio", "definicion": "lo que decides modificar para mejorar.", "icono": "sparkles" }
+  ],
+  "mision": {
+    "textoVael": "Tu creación ya está genial… pero los grandes inventores nunca se quedan con el primer intento. ¿La haces AÚN mejor cambiando solo UNA cosa? Descubre el superpoder de las versiones.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "iterar_version",
+    "cambiosPosibles": [
+      { "id": "color", "label": "Cambiar el color" },
+      { "id": "tamano", "label": "Cambiar el tamaño" },
+      { "id": "expresion", "label": "Cambiar la expresión (feliz, sorprendido...)" },
+      { "id": "fondo", "label": "Cambiar el fondo" }
+    ]
+  },
+  "crea": {
+    "tipo": "version_2",
+    "instrucciones": "Crea la versión 2 de una creación previa y colócala junto a la v1 en tu Cuaderno, con una nota de qué mejoraste.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿La versión 2 es mejor? ¿En qué?",
+      "¿Cambiarías algo más para una versión 3?"
+    ]
+  },
+  "familia": {
+    "nombre": "Mejora algo de casa",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "La familia elige algo suyo (un dibujo, un plato, un rincón) y lo mejora cambiando solo una cosa; comparan antes/después.",
+    "capturaEnApp": { "tipo": "texto_corto", "campo": "queCambiaron" }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«¿Qué UNA cosa mejorarías?» · «¿En qué es mejor la v2?» · «¿Habría una v3?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "mejora_concreta_aplicada",
+    "comparacion_razonada",
+    "decision_sobre_v3"
+  ],
+  "web": {
+    "tituloPantalla": "¡Crea tu versión 2!",
+    "introVael": "Los grandes inventores siempre mejoran sus inventos. ¿Mejoramos tu creación? Solo cambiaremos UNA cosa.",
+    "pasos": [
+      "Elige una creación tuya de antes.",
+      "Piensa UNA cosa para mejorar.",
+      "Crea la versión 2.",
+      "Pon las dos juntas: ¿a que la 2 mola más?"
+    ],
+    "cierreVael": "¡Eso es ser inventor de verdad! Mejorar es pensar mejor. 🚀"
+  }
+}

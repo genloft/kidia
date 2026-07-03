@@ -1,0 +1,46 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import UnidadAventura from '../../components/UnidadAventura.astro';
+import { loadUnidadesAventura, getUnidadAventuraById } from '../../lib/scenario-loader';
+
+export async function getStaticPaths() {
+  const unidades = await loadUnidadesAventura('8-9');
+  return unidades.map(u => ({ params: { id: u.id } }));
+}
+
+const { id } = Astro.params;
+const unidad = await getUnidadAventuraById(id || '');
+
+if (!unidad) {
+  return Astro.redirect('/404');
+}
+---
+
+<Layout title={`Kidia - ${unidad.titulo}`} description={unidad.mision.textoVael} showFooter={false}>
+  <Header />
+  <main data-unidad-id={unidad.id}>
+    <UnidadAventura unidad={unidad} />
+  </main>
+
+  <script>
+    // Mismo guard que src/pages/scenario/[slug].astro: sesión + hijo/a activo
+    // siempre; suscripción activa salvo la 1.1 (gratuita, igual que hoy).
+    import { requireActiveChild } from '../../lib/require-auth';
+    import { SubscriptionService } from '../../lib/subscription-service';
+
+    const unidadId = document.querySelector('main')?.getAttribute('data-unidad-id') || '';
+
+    (async () => {
+      const allowed = await requireActiveChild();
+      if (!allowed) return;
+
+      if (unidadId === '1.1') return;
+
+      const hasPlan = await SubscriptionService.hasActivePlan();
+      if (!hasPlan) {
+        window.location.href = '/caminos';
+      }
+    })();
+  </script>
+</Layout>

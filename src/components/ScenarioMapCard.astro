@@ -1,5 +1,8 @@
 ---
-const { scenario, index } = Astro.props;
+// href es opcional: por defecto va a /scenario/[id] (formato de diálogo
+// antiguo). Las unidades-aventura (src/schemas/unidad.ts) vive en otra
+// ruta (/laboratorio/[id]) y pasan su propio href explícito.
+const { scenario, index, href } = Astro.props;
 
 // Complexity Logic
 const difficulty = scenario.difficulty || 'beginner';
@@ -9,9 +12,10 @@ const difficultyLevels = {
     'advanced': 3
 };
 const level = difficultyLevels[difficulty];
+const finalHref = href || `/scenario/${scenario.id}`;
 ---
 
-<a href={`/scenario/${scenario.id}`} class="mission-card-v3" data-id={scenario.id} data-badge={scenario.badge?.id} data-req={scenario.required_badge_id} data-difficulty={difficulty} data-unidad={scenario.unidad} data-tramo={scenario.tramo}>
+<a href={finalHref} class="mission-card-v3" data-id={scenario.id} data-badge={scenario.badge?.id} data-req={scenario.required_badge_id} data-difficulty={difficulty} data-unidad={scenario.unidad} data-tramo={scenario.tramo}>
     <div class="card-inner">
         <div class="card-background"></div>
         <div class="card-content-wrapper">

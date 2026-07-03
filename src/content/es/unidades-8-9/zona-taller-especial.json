@@ -1,0 +1,35 @@
+{
+  "id": "zona-taller-especial",
+  "zona": "Zona Taller",
+  "nivel": 2,
+  "titulo": "Misión especial del taller",
+  "duracionMinutos": [5, 7],
+  "introVael": "Antes de cerrar la Zona Taller, comprobemos juntos cuatro cosas. No es un examen: es una misión más del laboratorio.",
+  "miniTareas": [
+    {
+      "id": "caza_el_error_2",
+      "nombre": "Caza el error",
+      "descripcion": "Un fallo algo menos obvio: lo señala y lo corrige.",
+      "competencia": "pensamiento_critico"
+    },
+    {
+      "id": "afina_el_prompt",
+      "nombre": "Afina el prompt",
+      "descripcion": "Mejora un prompt flojo añadiendo detalles.",
+      "competencia": "calidad_preguntas"
+    },
+    {
+      "id": "es_verdad",
+      "nombre": "¿Es verdad?",
+      "descripcion": "Decide si comprueba una afirmación y dónde.",
+      "competencia": "verificacion"
+    },
+    {
+      "id": "elige_y_di_por_que",
+      "nombre": "Elige y di por qué",
+      "descripcion": "Compara dos versiones y justifica su elección.",
+      "competencia": "pensamiento_critico"
+    }
+  ],
+  "cierreVael": "¡Lo lograste! Has recorrido toda la Zona Taller. Tu Cuaderno de Inventor/a sigue creciendo. 🎉"
+}

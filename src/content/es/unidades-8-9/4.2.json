@@ -1,0 +1,82 @@
+{
+  "id": "4.2",
+  "nivel": 4,
+  "zona": {
+    "nombre": "Zona Gran Invento",
+    "colorPrimario": "#1D4ED8",
+    "colorFondo": "#DBEAFE"
+  },
+  "unidadCurricular": "4.2 · Proyecto: libro",
+  "titulo": "Tu primer libro",
+  "objetivoBloom": "Crear: reunir las creaciones de niveles anteriores (criatura, historia, imágenes) en un mini-libro de 3-4 páginas con texto e ilustración, montado paso a paso, con portada y autoría.",
+  "competenciaFoco": "autonomia_creativa",
+  "ai4k12": "Las cinco ideas, en versión sencilla.",
+  "duracionMinutos": 25,
+  "producto": "Librito ilustrado de 3-4 páginas",
+  "dependeDe": ["3.1", "3.2"],
+  "palabras": [
+    { "palabra": "Libro", "definicion": "muchas páginas ordenadas que cuentan algo.", "icono": "book" },
+    { "palabra": "Portada", "definicion": "la primera página, con el título y una imagen.", "icono": "image" },
+    { "palabra": "Página", "definicion": "cada hoja de tu libro.", "icono": "type" },
+    { "palabra": "Autor", "definicion": "quien crea el libro: ¡tú!", "icono": "sparkles" }
+  ],
+  "mision": {
+    "textoVael": "Tienes una criatura, un cuento y unas imágenes… ¿y si los juntas en TU propio libro? Te ayudo a montarlo página a página. Al final, serás autor/a de tu primer libro.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "montar_libro",
+    "estructuraSugerida": ["Portada", "Página 1", "Página 2", "Página final"]
+  },
+  "crea": {
+    "tipo": "libro",
+    "instrucciones": "Monta tu libro: portada (título + criatura), tu cuento repartido en páginas con imágenes, y una página final con tu nombre de creador/a.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿El orden de las páginas se entiende?",
+      "¿Qué página es tu favorita y por qué?"
+    ]
+  },
+  "familia": {
+    "nombre": "Cuento de buenas noches",
+    "duracionMinutos": 10,
+    "modo": "offline",
+    "instrucciones": "La familia lee el libro del niño junto a él como cuento antes de dormir. El niño explica cómo creó cada parte.",
+    "capturaEnApp": { "tipo": "texto_corto", "campo": "paginaFavoritaFamilia" }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«¿Qué imagen quieres en la portada?» · «¿Este orden se entiende?» · «¿Qué página te da más orgullo?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "libro_coherente",
+    "reutilizacion_de_creaciones",
+    "cuidado_del_orden"
+  ],
+  "web": {
+    "tituloPantalla": "¡Monta tu propio libro!",
+    "introVael": "Has creado un montón de cosas geniales. ¡Vamos a juntarlas en un libro que será solo tuyo!",
+    "pasos": [
+      "Elige tu portada con título e imagen de tu criatura.",
+      "Coloca tu cuento en las páginas con sus dibujos.",
+      "Añade la página final con tu nombre de creador/a.",
+      "Repasa el orden… ¡y hojea tu libro!"
+    ],
+    "cierreVael": "¡Eres autor/a de tu primer libro! Qué orgullo enseñarlo. 📚"
+  }
+}

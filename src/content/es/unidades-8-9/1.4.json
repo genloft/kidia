@@ -1,0 +1,87 @@
+{
+  "id": "1.4",
+  "nivel": 1,
+  "zona": {
+    "nombre": "Zona Descubre",
+    "colorPrimario": "#1E7A46",
+    "colorFondo": "#E6F4EC"
+  },
+  "unidadCurricular": "1.4 · La IA se equivoca",
+  "titulo": "Detective Caza-errores",
+  "objetivoBloom": "Analizar (sencillo): descubrir que la IA, aunque parezca lista, a veces se equivoca o se inventa cosas, y por eso miramos con ojo de detective. Detectar errores evidentes y explicar por qué están mal.",
+  "competenciaFoco": "pensamiento_critico",
+  "ai4k12": "Impacto social — no todo lo que dice una pantalla es verdad.",
+  "duracionMinutos": 15,
+  "producto": "Expediente «Caza-errores» + insignia",
+  "palabras": [
+    { "palabra": "Error", "definicion": "algo que está mal o equivocado.", "icono": "alert-triangle" },
+    { "palabra": "Inventar", "definicion": "decir algo que suena seguro pero no es verdad.", "icono": "wand" },
+    { "palabra": "Comprobar", "definicion": "mirar si algo es verdad antes de creerlo.", "icono": "check-circle" },
+    { "palabra": "Detective", "definicion": "quien no se cree las cosas a la primera y busca pistas.", "icono": "search" }
+  ],
+  "mision": {
+    "textoVael": "¡Alerta en el laboratorio! La IA ha soltado frases muy raras. Te nombro Detective Caza-errores y te entrego tu primera misión: cazar los fallos… sin cazar por error una frase que SÍ es verdad.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "detectar_invencion",
+    "banco": [
+      { "id": "pulpos", "texto": "Los pulpos tienen tres corazones.", "esVerdadera": true },
+      { "id": "peces", "texto": "Los peces pueden vivir fuera del agua para siempre.", "esVerdadera": false, "pistaSiFalsa": "Los peces respiran con branquias: necesitan el agua para poder respirar." },
+      { "id": "sol", "texto": "El Sol gira alrededor de la Tierra.", "esVerdadera": false, "pistaSiFalsa": "Es al revés: la Tierra gira alrededor del Sol." },
+      { "id": "aranas", "texto": "Las arañas tienen seis patas.", "esVerdadera": false, "pistaSiFalsa": "Las arañas tienen ocho patas, no seis." },
+      { "id": "zanahorias", "texto": "Comer zanahorias te da visión de rayos X.", "esVerdadera": false, "pistaSiFalsa": "Las zanahorias son buenas para los ojos, pero no dan superpoderes." }
+    ]
+  },
+  "crea": {
+    "tipo": "expediente_error",
+    "instrucciones": "Por cada error cazado, crea una «Ficha de error cazado»: dibuja/elige el error y al lado cómo sería lo correcto.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Cómo supiste que estaba mal?",
+      "¿Te creerías TODO lo que ves en una pantalla?"
+    ]
+  },
+  "familia": {
+    "nombre": "El teléfono estropeado",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "La familia se pasa una frase al oído en cadena y comparan cómo cambió del principio al final. Descubren que la información se puede distorsionar, igual que la IA a veces se equivoca.",
+    "capturaEnApp": { "tipo": "texto_corto", "campo": "fraseFinal" }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": { "id": "cazaerrores-n1", "name": "Cazaerrores Nivel 1", "icon": "🕵️", "description": "Cazó sus primeros errores de la IA como un detective de verdad." },
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«Detective, ¿qué frase te huele raro?» · «¿Cómo lo sabes?» · «¡Cuidado! Una de estas es verdad: no la caces por error.»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "porcentaje_errores_detectados",
+    "frase_verdadera_respetada",
+    "explicacion_del_porque"
+  ],
+  "web": {
+    "tituloPantalla": "¡Conviértete en Detective Caza-errores!",
+    "introVael": "¡Atención, detective! La IA ha soltado frases muy raras. Tu misión: cazar las que están mal… y no cazar la que es verdad. 🕵️",
+    "pasos": [
+      "Lee o escucha cada frase.",
+      "Antes de marcar, adivina: ¿cuál será falsa y por qué?",
+      "Caza los errores y dime cómo sería lo correcto.",
+      "Guarda tus fichas de errores cazados."
+    ],
+    "cierreVael": "¡Misión cumplida! La IA mola, pero a veces se equivoca: por eso comprobamos. 🏅"
+  }
+}

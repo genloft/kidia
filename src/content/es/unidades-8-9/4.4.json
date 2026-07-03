@@ -1,0 +1,85 @@
+{
+  "id": "4.4",
+  "nivel": 4,
+  "zona": {
+    "nombre": "Zona Gran Invento",
+    "colorPrimario": "#1D4ED8",
+    "colorFondo": "#DBEAFE"
+  },
+  "unidadCurricular": "4.4 · Presenta y comparte",
+  "titulo": "La gran feria de inventos",
+  "objetivoBloom": "Comunicar / Integrar todo: elegir su mejor creación del tramo y presentarla a la comunidad y a la familia, contando qué hizo y cómo lo hizo. Cierre y celebración del recorrido 8-9.",
+  "competenciaFoco": "pensamiento_critico",
+  "ai4k12": "Impacto social (compartir con otros).",
+  "duracionMinutos": 18,
+  "producto": "Presentación + producto público",
+  "palabras": [
+    { "palabra": "Presentar", "definicion": "enseñar tu creación y contar cómo la hiciste.", "icono": "sparkles" },
+    { "palabra": "Explicar", "definicion": "contar algo para que se entienda.", "icono": "type" },
+    { "palabra": "Orgullo", "definicion": "lo que sientes cuando logras algo tú mismo.", "icono": "check-circle" },
+    { "palabra": "Feria", "definicion": "una fiesta donde cada quien enseña lo que creó.", "icono": "shapes" }
+  ],
+  "mision": {
+    "textoVael": "¡Llegó el gran día! De todo lo que has creado, eliges tu favorito y lo presentas en la gran feria de inventos del laboratorio. Es tu momento de brillar y de mirar todo lo que aprendiste.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "presentar_creacion",
+    "preguntasGuia": [
+      "¿Qué es?",
+      "¿Cómo lo hiciste?",
+      "¿Por qué te gusta?"
+    ]
+  },
+  "crea": {
+    "tipo": "presentacion_final",
+    "instrucciones": "Elige tu obra favorita de tu Cuaderno y prepara tres frases (qué es, cómo lo hiciste, por qué te gusta).",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Qué fue lo que más te gustó aprender?",
+      "¿Qué crearás la próxima vez?"
+    ]
+  },
+  "familia": {
+    "nombre": "La feria en casa",
+    "duracionMinutos": 10,
+    "modo": "offline",
+    "instrucciones": "La familia asiste a la presentación del niño como público de una feria de inventos; aplauden, preguntan y celebran. El niño enseña su Muro de Palabras y sus insignias.",
+    "capturaEnApp": { "tipo": "texto_corto", "campo": "mensajeFamilia" }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": { "id": "creador-ia-8-9", "name": "Creador/a con IA 8-9", "icon": "🌟", "description": "Completó el recorrido de la Zona Descubre a la Zona Gran Invento y presentó su mejor creación." },
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«De todo tu viaje, ¿cuál es tu favorita?» · «Cuéntame: ¿qué es, cómo la hiciste y por qué te gusta?» · «¡Prepárate para brillar!»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "seleccion_justificada",
+    "explicacion_del_proceso",
+    "presentacion_completada"
+  ],
+  "web": {
+    "tituloPantalla": "¡Tu gran feria de inventos!",
+    "introVael": "¡Has creado cosas increíbles! Hoy elegimos tu favorita y la presentamos en la feria. ¡Es tu momento de brillar!",
+    "pasos": [
+      "Repasa tu Cuaderno y elige tu creación favorita.",
+      "Prepara tres frases: qué es, cómo la hiciste, por qué te gusta.",
+      "Compártela en la feria (galería).",
+      "¡Preséntala a tu familia como un gran inventor/a!"
+    ],
+    "cierreVael": "¡Felicidades, creador/a con IA! Has terminado tu primer gran viaje. 🌟"
+  }
+}

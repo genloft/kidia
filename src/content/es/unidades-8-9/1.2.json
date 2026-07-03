@@ -1,0 +1,96 @@
+{
+  "id": "1.2",
+  "nivel": 1,
+  "zona": {
+    "nombre": "Zona Descubre",
+    "colorPrimario": "#1E7A46",
+    "colorFondo": "#E6F4EC"
+  },
+  "unidadCurricular": "1.2 · ¿Cómo aprende una máquina?",
+  "titulo": "El profe de la máquina",
+  "objetivoBloom": "Comprender / Aplicar: descubrir, con un experimento propio, que una IA aprende de los ejemplos que le damos: si le enseñamos ejemplos variados acierta más, y si solo ve un tipo, se equivoca con lo nuevo.",
+  "competenciaFoco": "criterio",
+  "ai4k12": "Aprendizaje — la IA mejora con los datos que ve.",
+  "duracionMinutos": 18,
+  "producto": "Mini-cerebro entrenado + regla descubierta",
+  "palabras": [
+    { "palabra": "Ejemplo", "definicion": "una muestra que le enseñamos a la IA para que aprenda.", "icono": "tag" },
+    { "palabra": "Entrenar", "definicion": "enseñar a una IA dándole muchos ejemplos.", "icono": "dumbbell" },
+    { "palabra": "Dato", "definicion": "una información que la IA usa para aprender (una foto, una palabra…).", "icono": "database" },
+    { "palabra": "Variado", "definicion": "de muchos tipos distintos, no todos iguales.", "icono": "shapes" }
+  ],
+  "mision": {
+    "textoVael": "Hoy tú no aprendes: ENSEÑAS. Te presto un mini-cerebro vacío y te reto a convertirte en su profe. Pero cuidado: cómo entrenes a tu máquina cambia lo lista que será.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "entrenar_clasificador",
+    "categorias": ["vuela", "no_vuela"],
+    "bancoEntrenamiento": [
+      { "id": "gorrion", "label": "Gorrión", "icono": "bird", "categoria": "vuela" },
+      { "id": "aguila", "label": "Águila", "icono": "bird", "categoria": "vuela" },
+      { "id": "loro", "label": "Loro", "icono": "bird", "categoria": "vuela" }
+    ],
+    "ejemploTrampa": { "id": "avion", "label": "Avión", "icono": "plane", "categoria": "vuela" },
+    "bancoReentrenamiento": [
+      { "id": "gorrion2", "label": "Gorrión", "icono": "bird", "categoria": "vuela" },
+      { "id": "avion2", "label": "Avión", "icono": "plane", "categoria": "vuela" },
+      { "id": "murcielago", "label": "Murciélago", "icono": "bird", "categoria": "vuela" },
+      { "id": "perro", "label": "Perro", "icono": "dog", "categoria": "no_vuela" },
+      { "id": "pez", "label": "Pez", "icono": "fish", "categoria": "no_vuela" },
+      { "id": "abeja", "label": "Abeja", "icono": "bug", "categoria": "vuela" }
+    ]
+  },
+  "crea": {
+    "tipo": "mini_cerebro",
+    "instrucciones": "Guarda tu «máquina entrenada» y escribe (o dicta) la regla que descubriste: «una IA necesita ejemplos variados para no equivocarse».",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "casoTruco": "Un pingüino colado en la categoría «vuela / no vuela».",
+    "preguntas": [
+      "¿Por qué se lió tu máquina?",
+      "¿Qué le faltó aprender?"
+    ]
+  },
+  "familia": {
+    "nombre": "El juego del profe",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "El niño elige una categoría secreta (p. ej. «cosas rojas») y le da ejemplos al adulto uno a uno; el adulto adivina la regla. Luego cambian los papeles. Descubren que con ejemplos variados se adivina antes.",
+    "capturaEnApp": { "tipo": "texto_corto", "campo": "quienAdivinoPrimero" }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«Si solo le enseñas pájaros… ¿qué pasará con un avión? ¡Adivina antes de probar!» · «¿Qué le faltó aprender a tu máquina?» · «¿Cómo la harías más lista?»",
+  "andamiaje": "alto",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "prediccion_antes_de_probar",
+    "regla_descubierta",
+    "conexion_ejemplos_variados_menos_errores"
+  ],
+  "web": {
+    "tituloPantalla": "¡Sé el profe de tu máquina!",
+    "introVael": "Las máquinas no nacen sabiendo: aprenden de los ejemplos que TÚ les das. Hoy tú eres el profe. ¿Enseñas bien a la tuya?",
+    "pasos": [
+      "Dale ejemplos a tu mini-cerebro para enseñarle.",
+      "Reto: entrénalo solo con un tipo… ¿acertará con algo nuevo? ¡Adivina!",
+      "Pruébalo y descubre qué le faltó.",
+      "Re-entrénalo con ejemplos variados y mira cómo mejora."
+    ],
+    "cierreVael": "¡Gran profe! Descubriste el secreto: una IA necesita ejemplos variados. 🤖"
+  }
+}

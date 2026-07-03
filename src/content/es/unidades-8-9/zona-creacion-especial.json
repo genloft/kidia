@@ -1,0 +1,35 @@
+{
+  "id": "zona-creacion-especial",
+  "zona": "Zona Creación",
+  "nivel": 3,
+  "titulo": "Misión especial de creación",
+  "duracionMinutos": [5, 7],
+  "introVael": "Antes de cerrar la Zona Creación, comprobemos juntos cuatro cosas. No es un examen: es una misión más del laboratorio.",
+  "miniTareas": [
+    {
+      "id": "describe_tu_idea",
+      "nombre": "Describe tu idea",
+      "descripcion": "Crea una mini-imagen describiéndola por capas.",
+      "competencia": "calidad_preguntas"
+    },
+    {
+      "id": "hazlo_tuyo",
+      "nombre": "Hazlo tuyo",
+      "descripcion": "Cambia algo que la IA propuso para que sea suyo.",
+      "competencia": "autonomia_creativa"
+    },
+    {
+      "id": "mejora_una_cosa",
+      "nombre": "Mejora una cosa",
+      "descripcion": "Crea una versión 2 de una creación.",
+      "competencia": "verificacion"
+    },
+    {
+      "id": "cuenta_tu_proceso",
+      "nombre": "Cuenta tu proceso",
+      "descripcion": "Explica cómo lo hizo.",
+      "competencia": "metacognicion"
+    }
+  ],
+  "cierreVael": "¡Lo lograste! Has recorrido toda la Zona Creación. Tu criatura y tus historias ya son inolvidables. 🎉"
+}

@@ -1,4 +1,5 @@
 import type { ScenarioSchema, Tramo } from '../schemas/scenario';
+import type { UnidadAventuraSchema, MisionEspecialSchema } from '../schemas/unidad';
 
 // This map will hold all loaded scenarios
 // Key: "es/intro-ia"
@@ -81,4 +82,59 @@ export async function loadScenariosForTramo(tramo: Tramo, lang: 'es' | 'en' = 'e
     }
 
     return result.sort((a, b) => (parseFloat(a.unidad || '0') - parseFloat(b.unidad || '0')));
+}
+
+// --- Formato "unidad-aventura" (rediseño 8-9, ver src/schemas/unidad.ts) ---
+// Contenido independiente de los escenarios de diálogo de arriba: vive en
+// src/content/es/unidades-8-9/ y no pasa por scenarioCache ni por loadScenarios().
+
+let unidadesAventuraCache: UnidadAventuraSchema[] | null = null;
+let misionesEspecialesCache: MisionEspecialSchema[] | null = null;
+
+async function loadUnidadesAventuraRaw(): Promise<void> {
+    if (unidadesAventuraCache && misionesEspecialesCache) return;
+
+    const modules = import.meta.glob('/src/content/es/unidades-8-9/*.json');
+    const unidades: UnidadAventuraSchema[] = [];
+    const especiales: MisionEspecialSchema[] = [];
+
+    for (const path in modules) {
+        const mod = await modules[path]() as any;
+        const data = mod.default || mod;
+        if (path.includes('-especial')) {
+            especiales.push(data as MisionEspecialSchema);
+        } else {
+            unidades.push(data as UnidadAventuraSchema);
+        }
+    }
+
+    unidades.sort((a, b) => parseFloat(a.id) - parseFloat(b.id));
+    unidadesAventuraCache = unidades;
+    misionesEspecialesCache = especiales;
+}
+
+/**
+ * Unidades del formato "unidad-aventura". Por ahora solo existe contenido
+ * para el tramo 8-9 (Nivel 1 · Zona Descubre); otros tramos devuelven [].
+ */
+export async function loadUnidadesAventura(tramo: Tramo): Promise<UnidadAventuraSchema[]> {
+    if (tramo !== '8-9') return [];
+    await loadUnidadesAventuraRaw();
+    return unidadesAventuraCache || [];
+}
+
+export async function getUnidadAventuraById(id: string): Promise<UnidadAventuraSchema | undefined> {
+    await loadUnidadesAventuraRaw();
+    return (unidadesAventuraCache || []).find(u => u.id === id);
+}
+
+export async function loadMisionesEspeciales(tramo: Tramo): Promise<MisionEspecialSchema[]> {
+    if (tramo !== '8-9') return [];
+    await loadUnidadesAventuraRaw();
+    return misionesEspecialesCache || [];
+}
+
+export async function getMisionEspecialById(id: string): Promise<MisionEspecialSchema | undefined> {
+    await loadUnidadesAventuraRaw();
+    return (misionesEspecialesCache || []).find(m => m.id === id);
 }

@@ -1,0 +1,114 @@
+{
+  "id": "1.3",
+  "nivel": 1,
+  "zona": {
+    "nombre": "Zona Descubre",
+    "colorPrimario": "#1E7A46",
+    "colorFondo": "#E6F4EC"
+  },
+  "unidadCurricular": "1.3 · ¿Qué es un prompt?",
+  "titulo": "El hechizo de las palabras",
+  "objetivoBloom": "Aplicar: aprender que a la IA se le habla con palabras (un prompt) y descubrir, cambiando palabras, que cuanto mejor lo decimos mejor nos entiende. Escribir su primer prompt.",
+  "competenciaFoco": "calidad_preguntas",
+  "ai4k12": "Interacción natural — hablamos a la IA con lenguaje.",
+  "duracionMinutos": 18,
+  "producto": "Imagen + su primer hechizo (prompt)",
+  "palabras": [
+    { "palabra": "Prompt", "definicion": "las palabras que le pedimos a la IA para que haga algo.", "icono": "sparkles" },
+    { "palabra": "Palabra", "definicion": "cada trocito de tu hechizo; ¡cada una cuenta!", "icono": "type" },
+    { "palabra": "Detalle", "definicion": "una pista extra (un color, un lugar) que ayuda a la IA a entenderte.", "icono": "search" },
+    { "palabra": "Imagen", "definicion": "el dibujo que crea la IA con tu hechizo.", "icono": "image" }
+  ],
+  "mision": {
+    "textoVael": "Te voy a revelar un secreto: a la IA se le habla con palabras, como un hechizo. Lanza tu primer hechizo… y descubre que cambiar una sola palabra cambia toda la magia.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "construir_prompt_imagen",
+    "categorias": [
+      {
+        "label": "Animal",
+        "opciones": [
+          { "id": "gato", "label": "Gato", "valor": "gato" },
+          { "id": "perro", "label": "Perro", "valor": "perro" },
+          { "id": "dragon", "label": "Dragón", "valor": "dragon" },
+          { "id": "unicornio", "label": "Unicornio", "valor": "unicornio" },
+          { "id": "pajaro", "label": "Pájaro", "valor": "pajaro" }
+        ]
+      },
+      {
+        "label": "Color",
+        "opciones": [
+          { "id": "rojo", "label": "Rojo", "valor": "#E5484D" },
+          { "id": "azul", "label": "Azul", "valor": "#3B82F6" },
+          { "id": "verde", "label": "Verde", "valor": "#22C55E" },
+          { "id": "morado", "label": "Morado", "valor": "#8B5CF6" },
+          { "id": "dorado", "label": "Dorado", "valor": "#F5B914" }
+        ]
+      },
+      {
+        "label": "Acción",
+        "opciones": [
+          { "id": "saltando", "label": "Saltando", "valor": "saltando" },
+          { "id": "durmiendo", "label": "Durmiendo", "valor": "durmiendo" },
+          { "id": "volando", "label": "Volando", "valor": "volando" },
+          { "id": "bailando", "label": "Bailando", "valor": "bailando" },
+          { "id": "sonriendo", "label": "Sonriendo", "valor": "sonriendo" }
+        ]
+      }
+    ],
+    "permiteDetalleLibre": true,
+    "comparaCambiandoUna": true
+  },
+  "crea": {
+    "tipo": "hechizo_imagen",
+    "instrucciones": "Crea tu imagen y guarda «tu primer hechizo» (el prompt) junto a ella en el Cuaderno.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Salió como lo imaginabas?",
+      "¿Qué palabra crees que ayudó MÁS?"
+    ]
+  },
+  "familia": {
+    "nombre": "El dibujante ciego",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "El niño describe con palabras algo para que el adulto lo dibuje sin verlo; comparan el dibujo con la idea. Descubren que los detalles ayudan.",
+    "capturaEnApp": { "tipo": "texto_corto", "campo": "queDibujoElAdulto" }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«Vamos a juntar tus palabras para el hechizo…» · «Cambia solo el color: ¿qué crees que pasará?» · «¿Qué palabra hizo la magia más grande?»",
+  "andamiaje": "alto",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "numero_elementos_prompt",
+    "relacion_palabra_cambio_identificada",
+    "primera_comparacion_idea_resultado"
+  ],
+  "web": {
+    "tituloPantalla": "Lanza tu primer hechizo de palabras",
+    "introVael": "¿Sabías que a la IA se le habla con palabras, como un hechizo? ¡Vamos a lanzar el tuyo y ver la magia!",
+    "pasos": [
+      "Elige tu animal, un color y qué está haciendo.",
+      "Junta tus palabras para formar el hechizo (¡el prompt!).",
+      "Lánzalo y mira tu imagen.",
+      "Cambia UNA palabra y vuelve a lanzarlo: ¿ves cómo cambia?"
+    ],
+    "cierreVael": "¡Magia conseguida! Cada palabra es una pista para la IA. ✨"
+  }
+}

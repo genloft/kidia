@@ -1,0 +1,103 @@
+{
+  "id": "4.3",
+  "nivel": 4,
+  "zona": {
+    "nombre": "Zona Gran Invento",
+    "colorPrimario": "#1D4ED8",
+    "colorFondo": "#DBEAFE"
+  },
+  "unidadCurricular": "4.3 · Proyecto: idea para ayudar",
+  "titulo": "Mi invento que ayuda",
+  "objetivoBloom": "Crear / Pensar en los demás: pensar una idea sencilla que ayude a alguien (la familia, la clase, los animales, el planeta) y explicar, en positivo, a quién ayuda y cómo.",
+  "competenciaFoco": "pensamiento_critico",
+  "ai4k12": "Impacto social (en versión amable).",
+  "duracionMinutos": 20,
+  "producto": "Cartel «Mi invento que ayuda»",
+  "palabras": [
+    { "palabra": "Ayudar", "definicion": "hacer más fácil o más feliz la vida de alguien.", "icono": "check-circle" },
+    { "palabra": "Idea", "definicion": "algo nuevo que se te ocurre.", "icono": "sparkles" },
+    { "palabra": "Invento", "definicion": "una idea que creas para resolver algo.", "icono": "wand" },
+    { "palabra": "Cuidar", "definicion": "atender y proteger a alguien o algo.", "icono": "check-circle" }
+  ],
+  "mision": {
+    "textoVael": "Las mejores ideas no solo molan: también ayudan. ¿Qué pequeño invento se te ocurre para hacer más feliz a alguien que quieres o para cuidar del planeta? Te ayudo a darle forma.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "idea_para_ayudar",
+    "destinatarios": [
+      { "id": "familia", "label": "Mi familia", "valor": "familia" },
+      { "id": "clase", "label": "Mi clase", "valor": "clase" },
+      { "id": "animales", "label": "Los animales", "valor": "animales" },
+      { "id": "planeta", "label": "El planeta", "valor": "planeta" }
+    ],
+    "necesidadesPorDestinatario": {
+      "familia": [
+        { "id": "tiempo", "label": "Más tiempo juntos", "valor": "tiempo" },
+        { "id": "ayuda_casa", "label": "Ayuda con las tareas de casa", "valor": "ayuda_casa" }
+      ],
+      "clase": [
+        { "id": "menos_ruido", "label": "Menos ruido para concentrarse", "valor": "menos_ruido" },
+        { "id": "nadie_solo", "label": "Que nadie se sienta solo/a", "valor": "nadie_solo" }
+      ],
+      "animales": [
+        { "id": "agua_limpia", "label": "Agua limpia", "valor": "agua_limpia" },
+        { "id": "hogar_seguro", "label": "Un hogar seguro", "valor": "hogar_seguro" }
+      ],
+      "planeta": [
+        { "id": "menos_basura", "label": "Menos basura", "valor": "menos_basura" },
+        { "id": "mas_arboles", "label": "Más árboles", "valor": "mas_arboles" }
+      ]
+    }
+  },
+  "crea": {
+    "tipo": "cartel_invento",
+    "instrucciones": "Crea el cartel de tu invento: un dibujo + un nombre + una frase que diga a quién ayuda.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿A quién ayuda tu idea?",
+      "¿Hace más fácil o más feliz la vida de alguien?"
+    ]
+  },
+  "familia": {
+    "nombre": "Un paso de verdad",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "La familia escoge un paso pequeñito para acercar la idea a la realidad (regar una planta, llamar a la abuela…) y se comprometen a hacerlo.",
+    "capturaEnApp": { "tipo": "texto_corto", "campo": "pasoElegido" }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«¿A quién te gustaría ayudar?» · «¿Qué necesita esa persona?» · «¿Cómo la ayuda tu invento?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "idea_con_destinatario_claro",
+    "explicacion_en_positivo"
+  ],
+  "web": {
+    "tituloPantalla": "Tu invento que ayuda",
+    "introVael": "Las ideas más bonitas ayudan a alguien. ¿Qué te gustaría inventar para hacer feliz a una persona, un animal o al planeta?",
+    "pasos": [
+      "Piensa a quién quieres ayudar y qué necesita.",
+      "Inventa una idea sencilla y ponle nombre.",
+      "Crea un cartel con un dibujo y una frase.",
+      "Cuéntame: ¿a quién ayuda tu idea?"
+    ],
+    "cierreVael": "¡Qué idea tan bonita! Crear para ayudar es lo más valiente. 💛"
+  }
+}

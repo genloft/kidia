@@ -1,0 +1,87 @@
+{
+  "id": "2.2",
+  "nivel": 2,
+  "zona": {
+    "nombre": "Zona Taller",
+    "colorPrimario": "#B45309",
+    "colorFondo": "#FEF3C7"
+  },
+  "unidadCurricular": "2.2 · ¿Es verdad? Verificar",
+  "titulo": "La brújula de la verdad",
+  "objetivoBloom": "Evaluar (sencillo): aprender que cuando algo nos sorprende no nos lo creemos a la primera: lo comprobamos en una fuente de confianza. Practicar el gesto de verificar con ayuda guiada.",
+  "competenciaFoco": "verificacion",
+  "ai4k12": "Impacto social.",
+  "duracionMinutos": 18,
+  "producto": "Tarjeta comprobada",
+  "palabras": [
+    { "palabra": "Verdad", "definicion": "algo que de verdad ocurre o es real.", "icono": "check-circle" },
+    { "palabra": "Fuente", "definicion": "un sitio de confianza donde comprobar algo (un libro, una web buena, un mayor).", "icono": "book" },
+    { "palabra": "Comprobar", "definicion": "mirar en una fuente si algo es verdad.", "icono": "search" },
+    { "palabra": "Confiar", "definicion": "creer en algo o alguien porque es seguro.", "icono": "check-circle" }
+  ],
+  "mision": {
+    "textoVael": "La IA ha dicho algo sorprendente: «los pingüinos viven en el desierto». Te entrego una brújula de la verdad: ¿te lo crees o lo compruebas como un investigador?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "verificar_con_fuente",
+    "afirmacionIA": "Los pingüinos viven en el desierto.",
+    "fuentes": [
+      { "id": "libro_animales", "label": "Libro de animales", "contenido": "Los pingüinos viven en zonas frías y en costas, nunca en el desierto." },
+      { "id": "web_segura", "label": "Web segura para niños", "contenido": "La mayoría de pingüinos vive en la Antártida y en costas frías del hemisferio sur." },
+      { "id": "preguntar_mayor", "label": "Preguntar a un mayor", "contenido": "Un adulto te confirma: los pingüinos aguantan mucho frío, no calor de desierto." }
+    ],
+    "esCorrecta": false
+  },
+  "crea": {
+    "tipo": "tarjeta_comprobada",
+    "instrucciones": "Escribe/dicta qué afirmó la IA, dónde lo comprobaste y qué descubriste. Empieza tu colección de comprobaciones.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Por qué no nos creemos todo a la primera?",
+      "¿Qué te hizo dudar de esa frase?"
+    ]
+  },
+  "familia": {
+    "nombre": "¿Mito o verdad?",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "El adulto y el niño eligen un dicho de casa («si te tragas un chicle…») y lo comprueban juntos en una fuente de confianza. Descubren si era mito.",
+    "capturaEnApp": { "tipo": "texto_corto", "campo": "veredicto" }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": true
+  },
+  "guionVael": "«¿Esto te lo crees o lo compruebas?» · «¿Dónde podríamos mirarlo?» · «¿Y bien? ¿La IA tenía razón?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "decision_de_comprobar",
+    "fuente_elegida",
+    "conclusion_razonada"
+  ],
+  "web": {
+    "tituloPantalla": "¿Verdad o cuento? Usa tu brújula",
+    "introVael": "La IA ha dicho algo sorprendente… ¿será verdad o se lo ha inventado? ¡Saca tu brújula de la verdad!",
+    "pasos": [
+      "Lee la frase de la IA.",
+      "Decide: ¿me lo creo o lo compruebo?",
+      "Elige una fuente de confianza y míralo.",
+      "Descubre si la IA tenía razón y guarda tu tarjeta comprobada."
+    ],
+    "cierreVael": "¡Muy bien! Comprobar nos hace más listos que cualquier pantalla. 🧭"
+  }
+}
