@@ -30,6 +30,7 @@ if (!mision) {
         <span class="me-zona-badge">{mision.zona}</span>
         <h1 class="me-titulo">{mision.titulo}</h1>
       </div>
+      <div id="me-listen-slot" class="me-listen-slot"></div>
     </div>
 
     <p class="me-intro">{mision.introVael}</p>
@@ -55,6 +56,16 @@ if (!mision) {
   <script>
     import { storage, syncWithCloud } from '../../../lib/storage-simple';
     import { requireActiveChild } from '../../../lib/require-auth';
+    import { createReadAloudButton, readableText } from '../../../lib/speech';
+
+    const listenSlot = document.getElementById('me-listen-slot');
+    if (listenSlot) {
+      const btn = createReadAloudButton(() => {
+        const layout = document.querySelector('.me-layout') as HTMLElement;
+        return layout ? readableText(layout) : '';
+      }, { label: 'Escuchar', className: 'me-listen-btn' });
+      listenSlot.appendChild(btn);
+    }
 
     requireActiveChild().then((allowed) => {
       if (!allowed) return;
@@ -101,6 +112,38 @@ if (!mision) {
     display: flex;
     align-items: center;
     gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .me-listen-slot {
+    margin-left: auto;
+  }
+
+  .me-listen-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+    padding: 0.55rem 1rem;
+    color: #e4e4e7;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .me-listen-btn:hover:not(:disabled) {
+    border-color: var(--color-primary);
+  }
+
+  .me-listen-btn.listening {
+    background: rgba(34, 211, 238, 0.12);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .me-listen-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
   }
 
   .me-zona-badge {

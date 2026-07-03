@@ -23,6 +23,7 @@ import { mountMontarLibro } from './unidad-widgets/montar-libro';
 import { mountIdeaParaAyudar } from './unidad-widgets/idea-para-ayudar';
 import { mountPresentarCreacion } from './unidad-widgets/presentar-creacion';
 import { el, iconEmoji, createGatedInput, fireVaelAction } from './unidad-widgets/shared';
+import { stopSpeaking } from './speech';
 
 type Screen = 'portada' | 'mision' | 'palabras' | 'investiga' | 'crea' | 'detective' | 'familia' | 'comparte' | 'cierre';
 
@@ -121,6 +122,7 @@ export class UnidadEngine {
     }
 
     private renderScreen(screen: Screen) {
+        stopSpeaking();
         this.updateProgress(screen);
         this.container.innerHTML = '';
         const map: Record<Screen, () => void> = {
@@ -284,6 +286,7 @@ export class UnidadEngine {
         this.container.appendChild(preguntaBox);
 
         const renderPregunta = () => {
+            stopSpeaking();
             preguntaBox.innerHTML = '';
             if (this.unidad.detective.casoTruco && i === 0) {
                 preguntaBox.appendChild(el('p', 'ua-pista-texto', this.unidad.detective.casoTruco));

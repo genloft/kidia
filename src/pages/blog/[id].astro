@@ -28,10 +28,11 @@ const { Content } = await render(post);
             {post.data.date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
           </time>
         </div>
+        <div id="post-listen-slot" class="post-listen-slot"></div>
         {post.data.image && <img src={post.data.image} alt={post.data.title} class="hero-image" />}
       </header>
 
-      <div class="markdown-body">
+      <div class="markdown-body" id="post-body">
         <Content />
       </div>
       
@@ -41,6 +42,20 @@ const { Content } = await render(post);
     </article>
   </main>
 </Layout>
+
+<script>
+  import { createReadAloudButton, readableText } from '../../lib/speech';
+
+  const slot = document.getElementById('post-listen-slot');
+  if (slot) {
+    const btn = createReadAloudButton(() => {
+      const title = document.querySelector('.post-header h1')?.textContent || '';
+      const body = document.getElementById('post-body');
+      return [title, body ? readableText(body) : ''].filter(Boolean).join('. ');
+    }, { label: 'Escuchar artículo', className: 'post-listen-btn' });
+    slot.appendChild(btn);
+  }
+</script>
 
 <style is:global>
   .article-container {
@@ -85,6 +100,38 @@ const { Content } = await render(post);
   .post-meta {
     font-size: 1rem;
     color: #94a3b8;
+  }
+
+  .post-listen-slot {
+    margin-top: 1.25rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .post-listen-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+    padding: 0.6rem 1.2rem;
+    color: #e4e4e7;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .post-listen-btn:hover:not(:disabled) {
+    border-color: var(--color-primary);
+  }
+
+  .post-listen-btn.listening {
+    background: rgba(34, 211, 238, 0.12);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .post-listen-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
   }
   
   /* Estilos para el contenido Markdown */

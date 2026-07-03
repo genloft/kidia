@@ -26,6 +26,7 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
         </div>
       ))}
     </div>
+    <div id="ua-listen-slot" class="ua-listen-slot"></div>
   </div>
 
   <div class="ua-stage" id="ua-stage"></div>
@@ -33,6 +34,7 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
 
 <script>
   import { UnidadEngine } from '../lib/unidad-engine';
+  import { createReadAloudButton, readableText } from '../lib/speech';
 
   const root = document.getElementById('ua-root') as HTMLElement;
   const raw = root?.getAttribute('data-unidad');
@@ -42,6 +44,13 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
     new UnidadEngine(unidad, 'ua-stage');
   }
 
+  const listenSlot = document.getElementById('ua-listen-slot');
+  const listenBtn = listenSlot ? createReadAloudButton(() => {
+    const stage = document.getElementById('ua-stage');
+    return stage ? readableText(stage) : '';
+  }, { label: 'Escuchar', className: 'ua-listen-btn' }) : null;
+  if (listenSlot && listenBtn) listenSlot.appendChild(listenBtn);
+
   window.addEventListener('unidad:step', (e: Event) => {
     const { index } = (e as CustomEvent).detail;
     document.querySelectorAll('.ua-progress-dot').forEach((dot) => {
@@ -49,6 +58,7 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
       dot.classList.toggle('active', i === index);
       dot.classList.toggle('done', i < index);
     });
+    (listenBtn as any)?._reset?.();
   });
 </script>
 
@@ -123,6 +133,37 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
   .ua-progress-dot.active .ua-progress-dot-label {
     color: var(--color-primary);
     font-weight: 700;
+  }
+
+  .ua-listen-slot {
+    flex-shrink: 0;
+  }
+
+  .ua-listen-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+    padding: 0.55rem 1rem;
+    color: #e4e4e7;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .ua-listen-btn:hover:not(:disabled) {
+    border-color: var(--color-primary);
+  }
+
+  .ua-listen-btn.listening {
+    background: rgba(34, 211, 238, 0.12);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .ua-listen-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
   }
 
   .ua-stage {
