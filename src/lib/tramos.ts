@@ -58,8 +58,14 @@ export const TRAMOS: Tramo[] = [
 ];
 
 export function calcAge(birthDate: string): number {
-    const diff = Date.now() - new Date(birthDate).getTime();
-    return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+    const birth = new Date(birthDate);
+    const now = new Date();
+    let age = now.getFullYear() - birth.getFullYear();
+    const monthDiff = now.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birth.getDate())) {
+        age--;
+    }
+    return age;
 }
 
 export function tramoForAge(age: number): Tramo | null {
