@@ -111,19 +111,19 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
   }
 
   .ua-progress-dot.active .ua-progress-dot-circle {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
+    background: var(--k-brand-primary);
+    border-color: var(--k-brand-primary);
     box-shadow: 0 0 12px rgba(34, 211, 238, 0.6);
   }
 
   .ua-progress-dot.done .ua-progress-dot-circle {
-    background: var(--color-secondary);
-    border-color: var(--color-secondary);
+    background: var(--k-brand-secondary);
+    border-color: var(--k-brand-secondary);
   }
 
   .ua-progress-dot-label {
     font-size: 0.7rem;
-    color: #64748b;
+    color: var(--k-text-muted);
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -131,7 +131,7 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
   }
 
   .ua-progress-dot.active .ua-progress-dot-label {
-    color: var(--color-primary);
+    color: var(--k-brand-primary);
     font-weight: 700;
   }
 
@@ -141,10 +141,10 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
 
   .ua-listen-btn {
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 99px;
+    border: 1px solid var(--k-border-subtle);
+    border-radius: var(--radius-pill);
     padding: 0.55rem 1rem;
-    color: #e4e4e7;
+    color: var(--k-text-body);
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
@@ -152,13 +152,13 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
   }
 
   .ua-listen-btn:hover:not(:disabled) {
-    border-color: var(--color-primary);
+    border-color: var(--k-brand-primary);
   }
 
   .ua-listen-btn.listening {
     background: rgba(34, 211, 238, 0.12);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
+    border-color: var(--k-brand-primary);
+    color: var(--k-brand-primary);
   }
 
   .ua-listen-btn:disabled {
@@ -167,9 +167,9 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
   }
 
   .ua-stage {
-    background: var(--color-surface, #18181b);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 1.5rem;
+    background: var(--k-bg-surface);
+    border: 1px solid var(--k-border-subtle);
+    border-radius: var(--radius-lg);
     padding: 2.5rem;
     display: flex;
     flex-direction: column;
@@ -184,7 +184,7 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
 
   /* ===== TEXTOS GENÉRICOS ===== */
   .ua-eyebrow {
-    color: var(--color-primary);
+    color: var(--k-brand-primary);
     font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -196,29 +196,29 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
     display: inline-block;
     width: fit-content;
     background: rgba(34, 211, 238, 0.12);
-    color: var(--color-primary);
+    color: var(--k-brand-primary);
     font-size: 0.8rem;
     font-weight: 700;
     padding: 0.3rem 0.85rem;
-    border-radius: 99px;
+    border-radius: var(--radius-pill);
   }
 
   .ua-titulo {
     font-size: clamp(1.75rem, 3vw, 2.25rem);
     font-weight: 800;
     margin: 0;
-    color: #f8fafc;
+    color: var(--k-text-strong);
   }
 
   .ua-subtitulo {
-    color: #94a3b8;
+    color: var(--k-text-muted);
     margin: 0;
   }
 
   .ua-vael-texto {
     font-size: 1.15rem;
     line-height: 1.6;
-    color: #e4e4e7;
+    color: var(--k-text-body);
     margin: 0;
   }
 
@@ -229,13 +229,13 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
 
   .ua-prompt {
     font-size: 1.05rem;
-    color: #e4e4e7;
+    color: var(--k-text-body);
     margin: 0;
   }
 
   .ua-prompt-preview {
     font-style: italic;
-    color: var(--color-secondary);
+    color: var(--k-brand-secondary);
     margin: 0;
   }
 
@@ -252,8 +252,8 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
 
   .ua-palabra-card {
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 1rem;
+    border: 1px solid var(--k-border-subtle);
+    border-radius: var(--radius-md);
     padding: 1.25rem;
     display: flex;
     flex-direction: column;
@@ -265,12 +265,12 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
   }
 
   .ua-palabra-nombre {
-    color: #f8fafc;
+    color: var(--k-text-strong);
     font-size: 1rem;
   }
 
   .ua-palabra-def {
-    color: #94a3b8;
+    color: var(--k-text-muted);
     font-size: 0.9rem;
     line-height: 1.5;
     margin: 0;
@@ -289,22 +289,22 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
     align-items: center;
     gap: 0.5rem;
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 1rem;
+    border: 1px solid var(--k-border-subtle);
+    border-radius: var(--radius-md);
     padding: 1.1rem 0.75rem;
     cursor: pointer;
     transition: all 0.2s ease;
     font-family: inherit;
-    color: #e4e4e7;
+    color: var(--k-text-body);
   }
 
   .ua-bank-card:hover {
-    border-color: var(--color-primary);
+    border-color: var(--k-brand-primary);
     background: rgba(34, 211, 238, 0.08);
   }
 
   .ua-bank-card.selected {
-    border-color: var(--color-secondary);
+    border-color: var(--k-brand-secondary);
     background: rgba(232, 121, 249, 0.1);
     box-shadow: 0 0 0 2px rgba(232, 121, 249, 0.3);
   }
@@ -334,7 +334,7 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
   .ua-pista-box {
     background: rgba(139, 92, 246, 0.08);
     border: 1px solid rgba(139, 92, 246, 0.25);
-    border-radius: 1rem;
+    border-radius: var(--radius-md);
     padding: 1.25rem;
     display: flex;
     flex-direction: column;
@@ -344,18 +344,18 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
 
   .ua-pista-label {
     font-weight: 700;
-    color: #f8fafc;
+    color: var(--k-text-strong);
     margin: 0;
   }
 
   .ua-pista-texto {
-    color: #cbd5e1;
+    color: var(--k-text-body);
     line-height: 1.55;
     margin: 0;
   }
 
   .ua-feedback-correct {
-    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.4);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--k-state-success) 40%, transparent);
   }
 
   .ua-feedback-incorrect {
@@ -365,7 +365,7 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
   .ua-frase-texto {
     font-size: 1.2rem;
     font-style: italic;
-    color: #f8fafc;
+    color: var(--k-text-strong);
   }
 
   /* ===== ENTRADA LIBRE (GATED) ===== */
@@ -382,15 +382,15 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
     padding: 0.85rem 1rem;
     border-radius: 0.65rem;
     background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #f8fafc;
+    border: 1px solid var(--k-border-subtle);
+    color: var(--k-text-strong);
     font-size: 0.95rem;
     font-family: inherit;
   }
 
   .ua-voice-btn {
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--k-border-subtle);
     border-radius: 0.65rem;
     padding: 0.75rem 0.9rem;
     cursor: pointer;
@@ -403,7 +403,7 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
 
   .ua-gated-error {
     flex-basis: 100%;
-    color: #f0abfc;
+    color: var(--k-state-warning);
     font-size: 0.85rem;
     margin: 0;
   }
@@ -421,7 +421,7 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
 
   .ua-chip-label {
     font-size: 0.8rem;
-    color: #94a3b8;
+    color: var(--k-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.04em;
     margin: 0;
@@ -435,19 +435,19 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
 
   .ua-chip {
     background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 99px;
+    border: 1px solid var(--k-border-subtle);
+    border-radius: var(--radius-pill);
     padding: 0.5rem 1rem;
-    color: #e4e4e7;
+    color: var(--k-text-body);
     cursor: pointer;
     font-size: 0.9rem;
     font-family: inherit;
   }
 
   .ua-chip.selected {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    background: linear-gradient(135deg, var(--k-brand-primary), var(--k-brand-accent));
     border-color: transparent;
-    color: #09090b;
+    color: var(--k-text-inverse);
     font-weight: 700;
   }
 
@@ -457,8 +457,8 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
     flex-direction: column;
     align-items: center;
     gap: 0.75rem;
-    background: color-mix(in srgb, var(--ua-tint, #8b5cf6) 18%, #18181b);
-    border: 1px solid color-mix(in srgb, var(--ua-tint, #8b5cf6) 45%, transparent);
+    background: color-mix(in srgb, var(--ua-tint, var(--k-brand-accent)) 18%, var(--k-bg-surface));
+    border: 1px solid color-mix(in srgb, var(--ua-tint, var(--k-brand-accent)) 45%, transparent);
     border-radius: 1.25rem;
     padding: 2.5rem 1.5rem;
   }
@@ -490,15 +490,15 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
   }
 
   .ua-imagen-caption {
-    color: #cbd5e1;
+    color: var(--k-text-body);
     font-size: 0.9rem;
   }
 
   /* ===== RESUMEN (Crea) ===== */
   .ua-resumen-box {
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 1rem;
+    border: 1px solid var(--k-border-subtle);
+    border-radius: var(--radius-md);
     padding: 1.25rem;
     display: flex;
     flex-direction: column;
@@ -506,24 +506,24 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
   }
 
   .ua-resumen-row {
-    color: #cbd5e1;
+    color: var(--k-text-body);
     font-size: 0.9rem;
     margin: 0;
   }
 
   .ua-resumen-row strong {
-    color: #f8fafc;
+    color: var(--k-text-strong);
   }
 
   /* ===== FAMILIA ===== */
   .ua-familia-nombre {
     font-size: 1.4rem;
     margin: 0;
-    color: #f8fafc;
+    color: var(--k-text-strong);
   }
 
   .ua-familia-meta {
-    color: var(--color-secondary);
+    color: var(--k-brand-secondary);
     font-size: 0.85rem;
     font-weight: 600;
     margin: 0;

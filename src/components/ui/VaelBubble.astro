@@ -1,0 +1,49 @@
+---
+// Burbuja de personaje (doc 03 §3): avatar + nombre + texto, con lectura
+// en voz alta opcional (accesibilidad DUA: el audio complementa al texto).
+// Las imágenes dravael-*.webp viven en public/.
+interface Props {
+  mood?: 'ok' | 'doubt' | 'dance' | 'work' | 'no';
+  name?: string;
+  listen?: boolean;
+  id?: string;
+  class?: string;
+}
+
+const { mood = 'ok', name = 'Dra. Vael', listen = false, id, class: extraClass } = Astro.props;
+---
+
+<div id={id} class:list={['k-vael', extraClass]}>
+  <img class="k-vael__avatar" src={`/dravael-${mood}.webp`} alt="" width="64" height="64" loading="lazy" />
+  <div class="k-vael__bubble">
+    <span class="k-vael__name">{name}</span>
+    <p class="k-vael__text"><slot /></p>
+    {listen && (
+      <button type="button" class="k-btn k-btn--ghost k-btn--sm k-vael__listen">🔊 Escuchar</button>
+    )}
+  </div>
+</div>
+
+<script>
+  // Delegación global (Astro dedupe: este script se incluye una sola vez
+  // aunque haya varias burbujas): leer en voz alta el texto de la burbuja.
+  import { speak, stopSpeaking, isSpeaking, readableText } from '../../lib/speech';
+
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('.k-vael__listen');
+    if (!btn) return;
+
+    if (isSpeaking()) {
+      stopSpeaking();
+      btn.textContent = '🔊 Escuchar';
+      return;
+    }
+
+    const bubble = btn.closest('.k-vael__bubble') as HTMLElement;
+    const text = bubble ? readableText(bubble) : '';
+    if (!text) return;
+
+    btn.textContent = '⏹ Parar';
+    speak(text, () => { btn.textContent = '🔊 Escuchar'; });
+  });
+</script>

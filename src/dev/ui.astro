@@ -1,0 +1,266 @@
+---
+// Biblioteca visual del sistema de diseño (doc 03 §3). SOLO existe en
+// `astro dev` — la ruta /dev/ui se inyecta condicionalmente desde
+// astro.config.mjs y este fichero vive fuera de src/pages a propósito
+// para no publicarse nunca en producción.
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/ui/Button.astro';
+import Card from '../components/ui/Card.astro';
+import Pill from '../components/ui/Pill.astro';
+import ProgressBar from '../components/ui/ProgressBar.astro';
+import ProgressSteps from '../components/ui/ProgressSteps.astro';
+import Modal from '../components/ui/Modal.astro';
+import VaelBubble from '../components/ui/VaelBubble.astro';
+import EmptyState from '../components/ui/EmptyState.astro';
+
+const swatches = [
+  ['--k-bg-page', 'Fondo página'],
+  ['--k-bg-surface', 'Superficie'],
+  ['--k-bg-surface-raised', 'Superficie elevada'],
+  ['--k-text-strong', 'Texto fuerte'],
+  ['--k-text-body', 'Texto'],
+  ['--k-text-muted', 'Texto atenuado'],
+  ['--k-brand-primary', 'Marca primaria'],
+  ['--k-brand-secondary', 'Marca secundaria'],
+  ['--k-brand-accent', 'Marca acento'],
+  ['--k-state-success', 'Éxito'],
+  ['--k-state-warning', 'Aviso'],
+  ['--k-state-danger', 'Peligro'],
+  ['--k-state-locked', 'Bloqueado'],
+  ['--k-zona-1', 'Zona 1'],
+  ['--k-zona-2', 'Zona 2'],
+  ['--k-zona-3', 'Zona 3'],
+  ['--k-zona-4', 'Zona 4'],
+];
+
+const spaces = ['1', '2', '3', '4', '5', '6', '8', '10', '12', '16', '24'];
+---
+
+<Layout title="Kidia · Sistema de diseño (dev)" showFooter={false}>
+  <main class="ui-page">
+    <h1>Sistema de diseño <Pill variant="accent">solo dev</Pill></h1>
+    <p>
+      Contrato visual vivo de <code>tokens.css</code> + <code>components.css</code>.
+      Ver <code>docs/mejora/03-sistema-diseno.md</code>.
+    </p>
+
+    <h2>Color</h2>
+    <div class="swatch-grid">
+      {swatches.map(([token, label]) => (
+        <div class="swatch">
+          <div class="swatch-color" style={`background: var(${token})`}></div>
+          <strong>{label}</strong>
+          <code>{token}</code>
+        </div>
+      ))}
+    </div>
+
+    <h2>Botones</h2>
+    {(['primary', 'secondary', 'ghost'] as const).map(variant => (
+      <div class="row">
+        <Button variant={variant} size="sm">Pequeño</Button>
+        <Button variant={variant} size="md">Mediano</Button>
+        <Button variant={variant} size="lg">Grande</Button>
+        <Button variant={variant} size="xl">🚀 Niño (xl)</Button>
+        <Button variant={variant} size="md" disabled>Desactivado</Button>
+        <Button variant={variant} size="md" href="#enlace">Como enlace</Button>
+      </div>
+    ))}
+
+    <h2>Tarjetas</h2>
+    <div class="row row-cards">
+      <Card>
+        <h3>Base</h3>
+        <p>Tarjeta estática de contenido.</p>
+      </Card>
+      <Card interactive>
+        <h3>Interactiva</h3>
+        <p>Con hover (transform + sombra).</p>
+      </Card>
+      <Card href="#tarjeta">
+        <h3>Enlace</h3>
+        <p>Recibe href y es interactiva por defecto.</p>
+      </Card>
+      <Card locked>
+        <h3>Bloqueada</h3>
+        <p>Borde discontinuo + atenuada.</p>
+      </Card>
+    </div>
+
+    <h2>Pills</h2>
+    <div class="row">
+      <Pill>primary</Pill>
+      <Pill variant="accent">accent</Pill>
+      <Pill variant="success">✅ success</Pill>
+      <Pill variant="warning">⚠️ warning</Pill>
+      <Pill variant="danger">danger</Pill>
+      <Pill variant="locked">🔒 locked</Pill>
+    </div>
+
+    <h2>Progreso</h2>
+    <div class="stack">
+      <ProgressBar value={35} label="Progreso de ejemplo" />
+      <ProgressSteps total={7} current={2} label="Pasos de una misión (3 de 7)" />
+    </div>
+
+    <h2>Modal</h2>
+    <div class="row">
+      <Button variant="secondary" id="open-modal-demo">Abrir modal</Button>
+    </div>
+    <Modal id="modal-demo">
+      <h3>Un modal de ejemplo</h3>
+      <p>Sobre <code>&lt;dialog&gt;</code> nativo: Escape y focus-trap gratis.</p>
+      <Button variant="primary" id="close-modal-demo">Cerrar</Button>
+    </Modal>
+
+    <h2>Burbuja de Vael</h2>
+    <div class="stack">
+      <VaelBubble mood="ok" listen>
+        ¡Hola! Soy la Dra. Vael. Pulsa «Escuchar» y te leo esto en voz alta.
+      </VaelBubble>
+      <VaelBubble mood="doubt" name="Dra. Vael">
+        Variante pensativa (mood="doubt"), sin botón de audio.
+      </VaelBubble>
+    </div>
+
+    <h2>Estado vacío</h2>
+    <EmptyState>
+      <span slot="visual" style="font-size: 3rem;">🧪</span>
+      Todavía no has añadido ningún hijo/a a tu cuenta.
+      <Button slot="action" variant="primary">+ Añadir mi primer hijo/a</Button>
+    </EmptyState>
+
+    <h2>Toast</h2>
+    <div class="row">
+      <Button variant="secondary" size="sm" data-toast="default">Toast normal</Button>
+      <Button variant="secondary" size="sm" data-toast="success">Éxito</Button>
+      <Button variant="secondary" size="sm" data-toast="warning">Aviso</Button>
+      <Button variant="secondary" size="sm" data-toast="danger">Error</Button>
+    </div>
+
+    <h2>Espaciado</h2>
+    <div class="space-list">
+      {spaces.map(s => (
+        <div class="space-row">
+          <code>--k-space-{s}</code>
+          <div class="space-bar" style={`width: var(--k-space-${s})`}></div>
+        </div>
+      ))}
+    </div>
+
+    <h2>Tipografía</h2>
+    <p style="font-size: var(--text-hero); font-weight: 800; line-height: 1.1;">Hero</p>
+    <h1>Título h1</h1>
+    <h2 style="margin-top: 0;">Título h2</h2>
+    <h3>Título h3</h3>
+    <p style="font-size: var(--k-text-xl)">Texto xl — acción del niño</p>
+    <p style="font-size: var(--k-text-lg)">Texto lg — cuerpo Modo Aventura</p>
+    <p style="font-size: var(--k-text-base)">Texto base — cuerpo Modo Familia</p>
+    <p style="font-size: var(--k-text-sm)">Texto sm — secundario</p>
+    <p style="font-size: var(--k-text-xs)">Texto xs — pills y metadatos</p>
+  </main>
+</Layout>
+
+<script>
+  import { showToast } from '../lib/toast';
+
+  document.getElementById('open-modal-demo')?.addEventListener('click', () => {
+    (document.getElementById('modal-demo') as HTMLDialogElement)?.showModal();
+  });
+  document.getElementById('close-modal-demo')?.addEventListener('click', () => {
+    (document.getElementById('modal-demo') as HTMLDialogElement)?.close();
+  });
+
+  const mensajes: Record<string, [string, any]> = {
+    default: ['Progreso guardado', {}],
+    success: ['✅ ¡Misión completada!', { variant: 'success' }],
+    warning: ['⚠️ Te falta el test de esta misión', { variant: 'warning' }],
+    danger: ['¡Ups! Mi laboratorio ha hecho puf. Inténtalo otra vez.', { variant: 'danger' }],
+  };
+  document.querySelectorAll<HTMLElement>('[data-toast]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const [msg, opts] = mensajes[btn.dataset.toast || 'default'];
+      showToast(msg, opts);
+    });
+  });
+</script>
+
+<style>
+  .ui-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: var(--k-space-12) var(--k-space-6) var(--k-space-24);
+  }
+
+  .ui-page > h2 {
+    margin-top: var(--k-space-16);
+    margin-bottom: var(--k-space-6);
+    border-bottom: 1px solid var(--k-border-subtle);
+    padding-bottom: var(--k-space-2);
+  }
+
+  code {
+    color: var(--k-brand-primary);
+    font-size: 0.85em;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--k-space-4);
+    margin-bottom: var(--k-space-6);
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--k-space-6);
+    max-width: 640px;
+  }
+
+  .row-cards :global(.k-card) {
+    width: 240px;
+  }
+
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--k-space-4);
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    gap: var(--k-space-1);
+    font-size: var(--k-text-sm);
+  }
+
+  .swatch-color {
+    height: 56px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--k-border-subtle);
+  }
+
+  .space-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--k-space-2);
+  }
+
+  .space-row {
+    display: flex;
+    align-items: center;
+    gap: var(--k-space-4);
+  }
+
+  .space-row code {
+    width: 120px;
+  }
+
+  .space-bar {
+    height: 12px;
+    background: var(--k-brand-primary);
+    border-radius: 2px;
+  }
+</style>

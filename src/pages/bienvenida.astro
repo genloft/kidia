@@ -1,0 +1,326 @@
+---
+// Onboarding wizard (Fase 2, doc 02 §2.8): del registro a la primera misión
+// en 3 pasos, sin callejones sin salida. Sustituye el flujo antiguo
+// dashboard → aviso "no tienes hijos" → perfil → formulario → volver.
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Button from '../components/ui/Button.astro';
+import Card from '../components/ui/Card.astro';
+import Pill from '../components/ui/Pill.astro';
+import ProgressSteps from '../components/ui/ProgressSteps.astro';
+import VaelBubble from '../components/ui/VaelBubble.astro';
+---
+
+<Layout title="Kidia - Bienvenida" showFooter={false}>
+  <Header mode="aventura" />
+
+  <main class="bienvenida">
+    <ProgressSteps total={3} current={0} id="wizard-steps" label="Pasos de bienvenida" class="wizard-steps" />
+
+    <!-- ============ Paso 1: ¿Quién va a jugar? ============ -->
+    <section data-step="0">
+      <VaelBubble mood="ok">
+        ¡Hola, familia! Soy la Dra. Vael, la guía del laboratorio Kidia.
+        Primero, cuéntame quién va a explorar conmigo.
+      </VaelBubble>
+
+      <form id="form-hijo" class="form-hijo">
+        <h1>¿Quién va a jugar?</h1>
+
+        <label class="campo">
+          <span>Su nombre (solo el nombre, sin apellidos)</span>
+          <input id="hijo-nombre" type="text" maxlength="30" autocomplete="off" required placeholder="Por ejemplo: Leo" />
+        </label>
+
+        <label class="campo">
+          <span>Su fecha de nacimiento</span>
+          <input id="hijo-fecha" type="date" required />
+        </label>
+
+        <div id="tramo-preview" class="tramo-preview hidden">
+          <Pill variant="accent" id="tramo-preview-pill">·</Pill>
+          <p id="tramo-preview-texto"></p>
+        </div>
+
+        <p id="form-error" class="form-error hidden"></p>
+
+        <Button type="submit" size="lg" id="btn-crear">Crear su perfil →</Button>
+      </form>
+    </section>
+
+    <!-- ============ Paso 2: Así funciona Kidia ============ -->
+    <section data-step="1" class="hidden">
+      <h1>Así funciona Kidia</h1>
+
+      <div class="info-grid">
+        <Card>
+          <span class="info-icon" aria-hidden="true">🧭</span>
+          <h3>Misiones cortas guiadas</h3>
+          <p>Sesiones de 15-45 minutos según la edad, con la Dra. Vael acompañando cada paso. Cada misión termina en una creación real.</p>
+        </Card>
+        <Card>
+          <span class="info-icon" aria-hidden="true">🛡️</span>
+          <h3>Seguridad primero</h3>
+          <p>Nunca pedimos datos personales a tu hijo/a. Todo lo que se comparte en la galería pasa por revisión antes de publicarse.</p>
+        </Card>
+        <Card>
+          <span class="info-icon" aria-hidden="true">👨‍👩‍👧</span>
+          <h3>En familia</h3>
+          <p>Cada misión incluye una mini-actividad para hacer juntos sin pantalla, y tú sigues su progreso desde la Zona de Padres.</p>
+        </Card>
+      </div>
+
+      <Button size="lg" id="btn-paso2">¡Todo listo! →</Button>
+    </section>
+
+    <!-- ============ Paso 3: primera misión ============ -->
+    <section data-step="2" class="hidden">
+      <VaelBubble mood="dance">
+        <span id="cierre-texto">¡Perfil creado! Su primera misión ya está esperando en el laboratorio. Es gratuita y dura unos 15 minutos.</span>
+      </VaelBubble>
+
+      <div class="cierre-acciones">
+        <Button size="xl" href="/laboratorio/1.1">🚀 Empezar la primera misión</Button>
+        <Button variant="ghost" size="md" href="/mapa">Ver el mapa primero</Button>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  import { supabase } from '../lib/supabase';
+  import { ChildrenService } from '../lib/children-service';
+  import { activeChild } from '../lib/active-child';
+  import { calcAge, tramoForAge } from '../lib/tramos';
+
+  // OJO: section[data-step], no [data-step] a secas — los puntos de
+  // ProgressSteps también llevan data-step y no hay que ocultarlos.
+  const pasos = Array.from(document.querySelectorAll<HTMLElement>('section[data-step]'));
+  const stepsBar = document.getElementById('wizard-steps');
+
+  function irAPaso(n: number) {
+    pasos.forEach(p => p.classList.toggle('hidden', Number(p.dataset.step) !== n));
+    stepsBar?.querySelectorAll('.k-step').forEach((s, i) => {
+      s.classList.toggle('k-step--done', i < n);
+      s.classList.toggle('k-step--current', i === n);
+    });
+    window.scrollTo({ top: 0 });
+  }
+
+  async function init() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      window.location.href = '/login';
+      return;
+    }
+    // Si ya hay hijos, este wizard no pinta nada aquí.
+    const children = await ChildrenService.listChildren();
+    if (children.length > 0) {
+      window.location.href = '/dashboard';
+    }
+  }
+  init();
+
+  // --- Paso 1: crear el perfil del hijo/a ---
+  const nombreInput = document.getElementById('hijo-nombre') as HTMLInputElement;
+  const fechaInput = document.getElementById('hijo-fecha') as HTMLInputElement;
+  const preview = document.getElementById('tramo-preview');
+  const previewPill = document.getElementById('tramo-preview-pill');
+  const previewTexto = document.getElementById('tramo-preview-texto');
+  const formError = document.getElementById('form-error');
+
+  function actualizarPreview() {
+    const nombre = nombreInput.value.trim();
+    const fecha = fechaInput.value;
+    if (!fecha) {
+      preview?.classList.add('hidden');
+      return;
+    }
+    const edad = calcAge(fecha);
+    const tramo = tramoForAge(edad);
+    if (!tramo || edad < 4 || edad > 17) {
+      preview?.classList.add('hidden');
+      return;
+    }
+    if (previewPill) previewPill.textContent = `Tramo ${tramo.label}`;
+    if (previewTexto) {
+      const quien = nombre || 'Su explorador/a';
+      previewTexto.textContent = `${quien}, ${edad} años → misiones de ${tramo.sesion}, ${tramo.autonomia.toLowerCase()}.`;
+    }
+    preview?.classList.remove('hidden');
+  }
+
+  nombreInput?.addEventListener('input', actualizarPreview);
+  fechaInput?.addEventListener('change', actualizarPreview);
+
+  document.getElementById('form-hijo')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    formError?.classList.add('hidden');
+
+    const nombre = nombreInput.value.trim();
+    const fecha = fechaInput.value;
+
+    const mostrarError = (msg: string) => {
+      if (formError) {
+        formError.textContent = msg;
+        formError.classList.remove('hidden');
+      }
+    };
+
+    if (nombre.length < 2) return mostrarError('Escribe su nombre (al menos 2 letras).');
+    if (/\s\S+\s\S+/.test(nombre)) return mostrarError('Solo el nombre, sin apellidos — así protegemos su identidad.');
+    if (!fecha) return mostrarError('Falta la fecha de nacimiento.');
+    const edad = calcAge(fecha);
+    if (edad < 4 || edad > 17) return mostrarError('Kidia está pensado para niños y niñas de 8 a 14 años. Revisa la fecha.');
+
+    const btn = document.getElementById('btn-crear') as HTMLButtonElement;
+    btn.disabled = true;
+
+    const { data, error } = await ChildrenService.addChild(nombre, fecha);
+    if (error || !data) {
+      btn.disabled = false;
+      return mostrarError('No se pudo crear el perfil. Inténtalo otra vez.');
+    }
+
+    activeChild.set(data.id);
+
+    const cierre = document.getElementById('cierre-texto');
+    if (cierre) cierre.textContent = `¡El perfil de ${nombre} está listo! Su primera misión ya le espera en el laboratorio. Es gratuita y dura unos 15 minutos.`;
+
+    irAPaso(1);
+  });
+
+  // --- Paso 2 → 3 ---
+  document.getElementById('btn-paso2')?.addEventListener('click', () => irAPaso(2));
+</script>
+
+<style>
+  .bienvenida {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: var(--k-space-10) var(--k-space-4) var(--k-space-24);
+    display: flex;
+    flex-direction: column;
+    gap: var(--k-space-8);
+  }
+
+  .bienvenida :global(.wizard-steps) {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--k-space-6);
+  }
+
+  section.hidden,
+  .hidden {
+    display: none;
+  }
+
+  h1 {
+    font-size: var(--text-h2);
+  }
+
+  /* --- Paso 1 --- */
+  .form-hijo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--k-space-5);
+  }
+
+  .campo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--k-space-2);
+  }
+
+  .campo span {
+    font-size: var(--k-text-sm);
+    font-weight: 600;
+    color: var(--k-text-muted);
+  }
+
+  .campo input {
+    padding: var(--k-space-3) var(--k-space-4);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--k-border-subtle);
+    color: var(--k-text-strong);
+    font-size: var(--k-text-base);
+    font-family: inherit;
+    color-scheme: dark;
+  }
+
+  .campo input:focus {
+    border-color: var(--k-brand-primary);
+    outline: none;
+  }
+
+  .tramo-preview {
+    display: flex;
+    align-items: center;
+    gap: var(--k-space-3);
+    background: color-mix(in srgb, var(--k-brand-accent) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--k-brand-accent) 30%, transparent);
+    border-radius: var(--radius-md);
+    padding: var(--k-space-3) var(--k-space-4);
+  }
+
+  .tramo-preview p {
+    margin: 0;
+    font-size: var(--k-text-sm);
+    color: var(--k-text-body);
+  }
+
+  .form-error {
+    color: var(--k-state-warning);
+    font-size: var(--k-text-sm);
+    margin: 0;
+  }
+
+  .form-hijo :global(.k-btn) {
+    align-self: flex-start;
+  }
+
+  /* --- Paso 2 --- */
+  .info-grid {
+    display: grid;
+    gap: var(--k-space-4);
+  }
+
+  .info-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: var(--k-space-2);
+  }
+
+  .info-grid h3 {
+    margin-bottom: var(--k-space-2);
+  }
+
+  .info-grid p {
+    margin: 0;
+    font-size: var(--k-text-sm);
+  }
+
+  section :global(#btn-paso2) {
+    align-self: flex-start;
+  }
+
+  /* --- Paso 3 --- */
+  .cierre-acciones {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--k-space-4);
+  }
+
+  @media (min-width: 640px) {
+    .info-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

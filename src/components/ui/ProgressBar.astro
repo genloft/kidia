@@ -1,0 +1,27 @@
+---
+// Barra de progreso del sistema de diseño (doc 03 §3).
+// El fill lleva id opcional para que las páginas que actualizan el
+// progreso por JS (mapa) puedan hacer fill.style.width = `${n}%`.
+interface Props {
+  value?: number; // 0-100
+  fillId?: string;
+  label?: string;
+  id?: string;
+  class?: string;
+}
+
+const { value = 0, fillId, label, id, class: extraClass } = Astro.props;
+const clamped = Math.max(0, Math.min(100, value));
+---
+
+<div
+  id={id}
+  class:list={['k-progress', extraClass]}
+  role="progressbar"
+  aria-valuenow={clamped}
+  aria-valuemin="0"
+  aria-valuemax="100"
+  aria-label={label}
+>
+  <div id={fillId} class="k-progress__fill" style={`width: ${clamped}%`}></div>
+</div>

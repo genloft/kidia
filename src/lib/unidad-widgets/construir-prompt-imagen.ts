@@ -74,7 +74,7 @@ export function mountConstruirPromptImagen(
 
         container.appendChild(el('p', 'ua-prompt-preview', `Tu hechizo: "${promptTexto()}"`));
 
-        const lanzarBtn = el('button', 'btn btn-primary', 'Lanza tu hechizo ✨');
+        const lanzarBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'Lanza tu hechizo ✨');
         lanzarBtn.type = 'button';
         lanzarBtn.addEventListener('click', renderResultado);
         container.appendChild(lanzarBtn);
@@ -102,13 +102,13 @@ export function mountConstruirPromptImagen(
         if (data.comparaCambiandoUna && !primeraGeneracion) {
             primeraGeneracion = { ...seleccion };
             const primeraCat = data.categorias[0];
-            const cambiarBtn = el('button', 'btn btn-secondary', `Cambia SOLO "${primeraCat.label}" y vuelve a lanzarlo →`);
+            const cambiarBtn = el('button', 'k-btn k-btn--secondary k-btn--lg', `Cambia SOLO "${primeraCat.label}" y vuelve a lanzarlo →`);
             cambiarBtn.type = 'button';
             cambiarBtn.addEventListener('click', () => {
                 container.innerHTML = '';
                 container.appendChild(el('p', 'ua-prompt', `Elige otro/a ${primeraCat.label.toLowerCase()} (deja lo demás igual).`));
                 container.appendChild(chipRow(primeraCat, primeraCat.opciones.filter(o => o.id !== primeraGeneracion![primeraCat.label].id)));
-                const seguirBtn = el('button', 'btn btn-primary', 'Volver a lanzar →');
+                const seguirBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'Volver a lanzar →');
                 seguirBtn.type = 'button';
                 seguirBtn.addEventListener('click', renderResultado);
                 container.appendChild(seguirBtn);
@@ -117,7 +117,7 @@ export function mountConstruirPromptImagen(
             return;
         }
 
-        const seguirBtn = el('button', 'btn btn-primary', 'Guardar mi creación →');
+        const seguirBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'Guardar mi creación →');
         seguirBtn.type = 'button';
         seguirBtn.addEventListener('click', () => {
             const eleccionLabels: Record<string, string> = {};

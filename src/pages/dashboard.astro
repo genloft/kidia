@@ -1,281 +1,39 @@
 ---
+// Selector de perfiles (Fase 2, doc 02 §2.2): "¿Quién va a jugar?" estilo
+// elige-tu-personaje. Sustituye al antiguo dashboard de dos tarjetas
+// (Mapa/Constructor): elegir hijo/a lleva directo al Mapa; el Constructor
+// sigue accesible desde la navegación.
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import Friend from '../components/Friend.astro';
 ---
 
-<Layout title="Kidia - Selecciona tu destino" showFooter={false}>
-  <Header />
+<Layout title="Kidia - ¿Quién va a jugar?" showFooter={false}>
+  <Header mode="aventura" />
 
-  <main class="dashboard-container">
-    <div class="dashboard-header">
-      <h1 class="title">¿Qué quieres hacer hoy?</h1>
-      <p class="subtitle">Elige tu próxima aventura en Kidia</p>
-    </div>
+  <main class="perfiles">
+    <h1>¿Quién va a jugar hoy?</h1>
+    <p class="perfiles-sub">Cada explorador/a tiene su propio progreso y sus misiones.</p>
 
-    <div id="child-switcher" class="child-switcher hidden">
-      <label for="child-select">Jugando como</label>
-      <select id="child-select"></select>
-      <a href="/perfil#hijos" class="btn-manage-children">Gestionar hijos/as</a>
-    </div>
+    <div id="perfiles-grid" class="perfiles-grid" aria-busy="true"></div>
 
-    <div id="no-children-prompt" class="no-children-prompt hidden">
-      <Friend mode="avatar" state="idle" />
-      <p>Todavía no has añadido ningún hijo/a a tu cuenta.</p>
-      <a href="/perfil#hijos" class="btn-outline">+ Añadir mi primer hijo/a</a>
-    </div>
-
-    <div id="options-grid" class="options-grid hidden">
-      <!-- Mapa Option -->
-      <a href="/mapa" class="option-card map-card">
-        <div class="card-content">
-          <div class="icon-wrap">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
-              <line x1="9" y1="3" x2="9" y2="18"></line>
-              <line x1="15" y1="6" x2="15" y2="21"></line>
-            </svg>
-          </div>
-          <h2>Mapa de Aventuras</h2>
-          <p>Explora el mundo de Kidia, completa retos y aprende IA paso a paso.</p>
-          <span class="btn-outline">Entrar al Mapa</span>
-        </div>
-      </a>
-
-      <!-- Constructor Option -->
-      <a href="/constructor" class="option-card constructor-card">
-        <div class="card-content">
-          <div class="icon-wrap">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-              <path d="M2 17l10 5 10-5"></path>
-              <path d="M2 12l10 5 10-5"></path>
-            </svg>
-          </div>
-          <h2>Constructor IA</h2>
-          <p>Crea tus propios asistentes virtuales y dales instrucciones personalizadas.</p>
-          <span class="btn-outline">Entrar al Constructor</span>
-        </div>
-      </a>
-    </div>
+    <a class="k-btn k-btn--ghost k-btn--sm perfiles-gestionar" href="/parents">Gestionar hijos/as 🔒</a>
   </main>
 </Layout>
-
-<style>
-  .dashboard-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
-    min-height: calc(100vh - 72px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .dashboard-header {
-    text-align: center;
-    margin-bottom: 2.5rem;
-  }
-
-  .hidden,
-  .child-switcher.hidden,
-  .no-children-prompt.hidden,
-  .options-grid.hidden {
-    display: none;
-  }
-
-  .child-switcher {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-bottom: 3rem;
-    flex-wrap: wrap;
-  }
-
-  .child-switcher label {
-    color: #94a3b8;
-    font-size: 0.95rem;
-  }
-
-  .child-switcher select {
-    background: rgba(15, 23, 42, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 0.6rem;
-    font-family: inherit;
-    font-size: 0.95rem;
-  }
-
-  .btn-manage-children {
-    color: var(--color-primary);
-    font-size: 0.85rem;
-    text-decoration: underline;
-  }
-
-  .no-children-prompt {
-    text-align: center;
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 1.25rem;
-    padding: 3rem 2rem;
-    margin-bottom: 2rem;
-  }
-
-  .no-children-prompt :global(.friend-container) {
-    margin-bottom: 1.25rem;
-  }
-
-  .no-children-prompt p {
-    color: #94a3b8;
-    margin-bottom: 1.5rem;
-    font-size: 1.1rem;
-  }
-
-  .no-children-prompt .btn-outline {
-    display: inline-block;
-    padding: 0.8rem 1.5rem;
-    border-radius: 99px;
-    font-weight: 600;
-    border: 2px solid var(--color-primary);
-    color: var(--color-primary);
-  }
-
-  .title {
-    font-size: 3rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-    color: #f1f5f9;
-  }
-
-  .subtitle {
-    font-size: 1.2rem;
-    color: #94a3b8;
-  }
-
-  .options-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-  }
-
-  .option-card {
-    position: relative;
-    border-radius: 1.5rem;
-    padding: 3px;
-    text-decoration: none;
-    color: white;
-    transition: all 0.3s ease;
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    overflow: hidden;
-  }
-
-  .option-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    z-index: 0;
-    opacity: 0.1;
-    transition: opacity 0.3s ease;
-  }
-
-  .map-card::before {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-  }
-
-  .constructor-card::before {
-    background: linear-gradient(135deg, var(--color-accent), var(--color-secondary));
-  }
-
-  .option-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    border-color: rgba(255, 255, 255, 0.2);
-  }
-
-  .option-card:hover::before {
-    opacity: 0.2;
-  }
-
-  .card-content {
-    position: relative;
-    z-index: 1;
-    background: #0f172a;
-    padding: 3rem 2rem;
-    border-radius: 1.4rem;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .icon-wrap {
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  .map-card .icon-wrap {
-    color: var(--color-primary);
-  }
-
-  .constructor-card .icon-wrap {
-    color: var(--color-accent);
-  }
-
-  .option-card h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-  }
-
-  .option-card p {
-    color: #94a3b8;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-    flex-grow: 1;
-  }
-
-  .btn-outline {
-    display: inline-block;
-    padding: 0.8rem 1.5rem;
-    border-radius: 99px;
-    font-weight: 600;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-  }
-
-  .option-card:hover .btn-outline {
-    background: white;
-    color: #0f172a;
-  }
-
-  @media (max-width: 768px) {
-    .options-grid {
-      grid-template-columns: 1fr;
-    }
-    .dashboard-container {
-      padding: 2rem 1rem;
-    }
-    .title {
-      font-size: 2.2rem;
-    }
-  }
-</style>
 
 <script>
   import { supabase } from '../lib/supabase';
   import { ChildrenService } from '../lib/children-service';
   import { activeChild } from '../lib/active-child';
   import { SyncService } from '../lib/sync-service';
+  import { tramoForChild } from '../lib/tramos';
 
-  const switcher = document.getElementById('child-switcher') as HTMLElement;
-  const noChildrenPrompt = document.getElementById('no-children-prompt') as HTMLElement;
-  const optionsGrid = document.getElementById('options-grid') as HTMLElement;
-  const childSelect = document.getElementById('child-select') as HTMLSelectElement;
+  const grid = document.getElementById('perfiles-grid') as HTMLElement;
+
+  async function elegir(childId: string) {
+    activeChild.set(childId);
+    await SyncService.onLogin();
+    window.location.href = '/mapa';
+  }
 
   async function init() {
     const { data: { session } } = await supabase.auth.getSession();
@@ -286,31 +44,118 @@ import Friend from '../components/Friend.astro';
 
     const children = await ChildrenService.listChildren();
 
+    // Sin hijos aún → wizard de bienvenida (crea el perfil y lleva a la
+    // primera misión).
     if (children.length === 0) {
-      noChildrenPrompt.classList.remove('hidden');
+      window.location.href = '/bienvenida';
       return;
     }
 
-    childSelect.innerHTML = children.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-
-    const current = activeChild.get();
-    const validCurrent = current && children.some(c => c.id === current);
-    const selected = validCurrent ? current! : children[0].id;
-
-    childSelect.value = selected;
-    if (selected !== current) {
-      activeChild.set(selected);
-      await SyncService.onLogin();
+    // Un solo hijo/a: no hay nada que elegir — directo al Mapa.
+    if (children.length === 1) {
+      await elegir(children[0].id);
+      return;
     }
 
-    switcher.classList.remove('hidden');
-    optionsGrid.classList.remove('hidden');
+    grid.innerHTML = '';
+    grid.setAttribute('aria-busy', 'false');
 
-    childSelect.addEventListener('change', () => {
-      activeChild.set(childSelect.value);
-      window.location.reload();
+    children.forEach(child => {
+      const tramo = tramoForChild(child.birth_date);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'perfil-card';
+      const inicial = (child.avatar || child.name.charAt(0)).toUpperCase();
+      btn.innerHTML = `
+        <span class="perfil-avatar" aria-hidden="true">${inicial}</span>
+        <strong class="perfil-nombre">${child.name}</strong>
+        ${tramo ? `<span class="k-pill k-pill--accent">${tramo.label}</span>` : ''}
+      `;
+      btn.addEventListener('click', () => {
+        btn.disabled = true;
+        elegir(child.id);
+      });
+      grid.appendChild(btn);
     });
   }
 
   init();
 </script>
+
+<style>
+  .perfiles {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: var(--k-space-16) var(--k-space-4) var(--k-space-24);
+    min-height: calc(100vh - 72px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: var(--k-space-4);
+  }
+
+  .perfiles-sub {
+    margin: 0;
+  }
+
+  .perfiles-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--k-space-6);
+    margin: var(--k-space-8) 0;
+  }
+
+  /* Tarjeta de perfil generada por JS (estilos globales a propósito) */
+  .perfiles :global(.perfil-card) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--k-space-3);
+    width: 180px;
+    padding: var(--k-space-6) var(--k-space-4);
+    background: var(--k-bg-surface);
+    border: 1px solid var(--k-border-subtle);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    font-family: inherit;
+    transition:
+      transform var(--k-motion-base) var(--k-ease-out),
+      border-color var(--k-motion-base) var(--k-ease-out),
+      box-shadow var(--k-motion-base) var(--k-ease-out);
+  }
+
+  .perfiles :global(.perfil-card:hover) {
+    transform: translateY(-4px);
+    border-color: var(--k-brand-primary);
+    box-shadow: var(--k-glow-primary);
+  }
+
+  .perfiles :global(.perfil-card:disabled) {
+    opacity: 0.6;
+  }
+
+  .perfiles :global(.perfil-avatar) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--k-text-inverse);
+    background: linear-gradient(135deg, var(--k-brand-primary), var(--k-brand-accent));
+  }
+
+  .perfiles :global(.perfil-nombre) {
+    font-size: var(--k-text-xl);
+    color: var(--k-text-strong);
+  }
+
+  .perfiles-gestionar {
+    color: var(--k-text-muted);
+  }
+</style>

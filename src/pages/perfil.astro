@@ -26,21 +26,20 @@ import Header from '../components/Header.astro';
       margin: 0 auto;
     }
 
+    /* Una sola tarjeta (la gestión de hijos/as vive ahora en el Panel
+       Familiar): columna centrada en vez del grid a dos columnas. */
     .profile-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 1.75rem;
-      align-items: start;
+      max-width: 720px;
+      margin: 0 auto;
     }
 
-    @media (max-width: 900px) {
-      .profile-grid {
-        grid-template-columns: 1fr;
-      }
+    /* Hasta pasar el gate del Modo Familia no se enseña el contenido. */
+    .profile-container.familia-locked {
+      visibility: hidden;
     }
 
     .profile-card {
-      background: var(--color-surface);
+      background: var(--k-bg-surface);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: var(--radius-lg);
       padding: 2.25rem;
@@ -61,88 +60,15 @@ import Header from '../components/Header.astro';
       line-height: 1.5;
     }
 
-    .children-list {
-      list-style: none;
-      margin: 0 0 1.5rem 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .child-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 0.75rem;
-      padding: 0.9rem 1.25rem;
-    }
-
-    .child-row .child-info strong {
-      display: block;
-      font-size: 1.05rem;
-    }
-
-    .child-row .child-info span {
-      color: #94a3b8;
-      font-size: 0.85rem;
-    }
-
-    .child-row .child-actions {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .child-row button {
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #e2e8f0;
-      border-radius: 0.5rem;
-      padding: 0.4rem 0.8rem;
-      font-size: 0.85rem;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.2s;
-    }
-
-    .child-row button:hover {
-      border-color: var(--color-primary);
-      color: var(--color-primary);
-    }
-
-    .child-row button.btn-delete-child:hover {
-      border-color: #f87171;
-      color: #f87171;
-    }
-
-    .empty-children {
-      color: #94a3b8;
-      font-size: 0.95rem;
+    .panel-link {
       text-align: center;
-      padding: 1rem 0;
+      color: var(--k-text-muted);
+      margin-top: 1.5rem;
     }
 
-    .add-child-form {
-      display: grid;
-      grid-template-columns: 2fr 1fr auto;
-      gap: 1rem;
-      align-items: end;
-    }
-
-    .add-child-form .btn-add-child {
-      width: auto;
-      padding: 0.9rem 1.5rem;
-      margin-top: 0;
-      white-space: nowrap;
-    }
-
-    @media (max-width: 600px) {
-      .add-child-form {
-        grid-template-columns: 1fr;
-      }
+    .panel-link a {
+      color: var(--k-brand-primary);
+      text-decoration: underline;
     }
 
     .alert {
@@ -155,13 +81,13 @@ import Header from '../components/Header.astro';
     .alert.success {
       background: rgba(34, 197, 94, 0.1);
       border: 1px solid rgba(34, 197, 94, 0.2);
-      color: #4ade80;
+      color: var(--k-state-success);
     }
 
     .alert.error {
       background: rgba(239, 68, 68, 0.1);
       border: 1px solid rgba(239, 68, 68, 0.2);
-      color: #f87171;
+      color: var(--k-state-danger);
     }
 
     .form-section {
@@ -171,7 +97,7 @@ import Header from '../components/Header.astro';
     .form-section h3 {
       font-size: 1.25rem;
       margin: 0 0 1.25rem 0;
-      color: #e2e8f0;
+      color: var(--k-text-body);
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -192,7 +118,7 @@ import Header from '../components/Header.astro';
     .input-group label {
       font-size: 0.9rem;
       font-weight: 600;
-      color: #94a3b8;
+      color: var(--k-text-muted);
     }
 
     .input-group input {
@@ -208,7 +134,7 @@ import Header from '../components/Header.astro';
 
     .input-group input:focus {
       outline: none;
-      border-color: var(--color-primary);
+      border-color: var(--k-brand-primary);
       box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12);
       background: rgba(15, 23, 42, 0.9);
     }
@@ -222,8 +148,8 @@ import Header from '../components/Header.astro';
     .btn-save {
       width: 100%;
       padding: 1.15rem;
-      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-      color: #09090b;
+      background: linear-gradient(135deg, var(--k-brand-primary), var(--k-brand-accent));
+      color: var(--k-text-inverse);
       font-weight: 700;
       font-size: 1.1rem;
       border: none;
@@ -263,12 +189,12 @@ import Header from '../components/Header.astro';
     }
   </style>
 
-  <Header />
+  <Header mode="familia" />
 
-  <main class="profile-container">
+  <main class="profile-container familia-locked" id="perfil-main">
     <div class="profile-header">
-      <h1 class="text-gradient">Mi Perfil</h1>
-      <p>Actualiza tus datos de cuenta y gestiona los hijos/as que van a usar Kidia. Cada uno tiene su propio progreso e inscripciones.</p>
+      <h1 class="text-gradient">Mi Cuenta</h1>
+      <p>Actualiza tu correo, contraseña y datos de tutor/a. El progreso y la gestión de tus hijos/as están en el <a href="/parents">Panel Familiar</a>.</p>
     </div>
 
     <div class="profile-grid">
@@ -321,35 +247,15 @@ import Header from '../components/Header.astro';
         </form>
       </div>
 
-      <div class="profile-card" id="hijos">
-        <h2>👦 Mis Hijos/as</h2>
-        <p>Añade a cada hijo/a que vaya a usar Kidia.</p>
-
-        <div id="children-error" class="alert error hidden"></div>
-
-        <ul id="children-list" class="children-list"></ul>
-
-        <form id="add-child-form" class="add-child-form">
-          <div class="input-group">
-            <label>Nombre</label>
-            <input type="text" id="new_child_name" placeholder="Ej. Leo" required />
-          </div>
-          <div class="input-group">
-            <label>Fecha de nacimiento</label>
-            <input type="date" id="new_child_dob" />
-          </div>
-          <button type="submit" class="btn-save btn-add-child">+ Añadir hijo/a</button>
-        </form>
-      </div>
     </div>
+
+    <p class="panel-link">¿Buscabas a tus hijos/as? Se gestionan desde el <a href="/parents">Panel Familiar 🛡️</a>.</p>
   </main>
-</body>
-</html>
+</Layout>
 
 <script>
   import { supabase } from '../lib/supabase';
-  import { ChildrenService, type Child } from '../lib/children-service';
-  import { calcAge, tramoForAge } from '../lib/tramos';
+  import { FamiliaGate } from '../lib/familia-gate';
 
   let currentUserId = '';
   let currentUserEmail = '';
@@ -366,6 +272,12 @@ import Header from '../components/Header.astro';
       window.location.href = '/login';
       return;
     }
+
+    // Página del Modo Familia: con PIN activo, pide el gate antes de
+    // enseñar nada (si se cancela, redirige al Mapa).
+    const pass = await FamiliaGate.requireFamiliaAccess();
+    if (!pass) return;
+    document.getElementById('perfil-main')?.classList.remove('familia-locked');
 
     currentUserId = session.user.id;
     currentUserEmail = session.user.email || '';
@@ -385,7 +297,6 @@ import Header from '../components/Header.astro';
   }
 
   loadProfile();
-  loadChildren();
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -450,79 +361,5 @@ import Header from '../components/Header.astro';
     }
   });
 
-  // ---- Gestión de hijos/as ----
-
-  const childrenList = document.getElementById('children-list') as HTMLUListElement;
-  const childrenError = document.getElementById('children-error') as HTMLElement;
-  const addChildForm = document.getElementById('add-child-form') as HTMLFormElement;
-
-  function childMeta(birthDate: string | null): string {
-    if (!birthDate) return '';
-    const age = calcAge(birthDate);
-    const tramo = tramoForAge(age);
-    return `${age} años${tramo ? ' · Tramo ' + tramo.id : ''}`;
-  }
-
-  function renderChildren(children: Child[]) {
-    if (children.length === 0) {
-      childrenList.innerHTML = '<li class="empty-children">Todavía no has añadido ningún hijo/a.</li>';
-      return;
-    }
-
-    childrenList.innerHTML = children.map(c => `
-      <li class="child-row" data-id="${c.id}">
-        <div class="child-info">
-          <strong>${escapeHtml(c.name)}</strong>
-          <span>${childMeta(c.birth_date)}</span>
-        </div>
-        <div class="child-actions">
-          <button type="button" class="btn-delete-child" data-id="${c.id}">Eliminar</button>
-        </div>
-      </li>
-    `).join('');
-
-    childrenList.querySelectorAll('.btn-delete-child').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const id = (btn as HTMLElement).dataset.id!;
-        if (!confirm('¿Seguro que quieres eliminar a este hijo/a? Se perderá su progreso e inscripciones.')) return;
-        const { error } = await ChildrenService.deleteChild(id);
-        if (error) {
-          childrenError.textContent = error;
-          childrenError.classList.remove('hidden');
-        } else {
-          loadChildren();
-        }
-      });
-    });
-  }
-
-  function escapeHtml(str: string): string {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
-
-  async function loadChildren() {
-    const children = await ChildrenService.listChildren();
-    renderChildren(children);
-  }
-
-  addChildForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    childrenError.classList.add('hidden');
-
-    const nameInput = document.getElementById('new_child_name') as HTMLInputElement;
-    const dobInput = document.getElementById('new_child_dob') as HTMLInputElement;
-
-    const { error } = await ChildrenService.addChild(nameInput.value.trim(), dobInput.value || null);
-    if (error) {
-      childrenError.textContent = error;
-      childrenError.classList.remove('hidden');
-      return;
-    }
-
-    nameInput.value = '';
-    dobInput.value = '';
-    loadChildren();
-  });
+  // La gestión de hijos/as vive en el Panel Familiar (/parents).
 </script>

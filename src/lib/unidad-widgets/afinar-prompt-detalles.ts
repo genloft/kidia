@@ -59,7 +59,7 @@ export function mountAfinarPromptDetalles(
         container.appendChild(grid);
 
         if (anadidos.length >= 1) {
-            const paraBtn = el('button', 'btn btn-secondary', 'Ya tengo suficiente →');
+            const paraBtn = el('button', 'k-btn k-btn--secondary k-btn--lg', 'Ya tengo suficiente →');
             paraBtn.type = 'button';
             paraBtn.addEventListener('click', renderPreguntaClave);
             container.appendChild(paraBtn);

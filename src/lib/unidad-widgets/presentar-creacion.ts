@@ -34,7 +34,7 @@ export async function mountPresentarCreacion(
             });
             container.appendChild(grid);
         }
-        const seguirBtn = el('button', 'btn btn-primary', 'Preparar mi presentación →');
+        const seguirBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'Preparar mi presentación →');
         seguirBtn.type = 'button';
         seguirBtn.addEventListener('click', renderPregunta);
         container.appendChild(seguirBtn);

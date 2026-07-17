@@ -1,0 +1,17 @@
+---
+// Modal del sistema de diseño (doc 03 §3), sobre <dialog> nativo:
+// focus-trap y cierre con Escape vienen gratis del navegador.
+// Abrir/cerrar desde la página: document.getElementById(id).showModal() / .close()
+interface Props {
+  id: string;
+  class?: string;
+}
+
+const { id, class: extraClass } = Astro.props;
+---
+
+<dialog id={id} class:list={['k-modal', extraClass]}>
+  <div class="k-modal__content">
+    <slot />
+  </div>
+</dialog>

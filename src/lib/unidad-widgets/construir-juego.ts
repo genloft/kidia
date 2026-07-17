@@ -59,7 +59,7 @@ export function mountConstruirJuego(
         container.appendChild(grid);
 
         if (elegidas.length === MAX_ADIVINANZAS) {
-            const confirmarBtn = el('button', 'btn btn-primary', 'Ordenar y confirmar mi juego →');
+            const confirmarBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'Ordenar y confirmar mi juego →');
             confirmarBtn.type = 'button';
             confirmarBtn.addEventListener('click', () => {
                 fireVaelAction('celebrate');

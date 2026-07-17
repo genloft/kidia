@@ -42,7 +42,7 @@ export function mountHipotesisPruebaRegla(
         container.appendChild(grid);
 
         if (investigados.length >= data.minimoObjetos) {
-            const seguirBtn = el('button', 'btn btn-secondary', 'Ya tengo suficientes pistas →');
+            const seguirBtn = el('button', 'k-btn k-btn--secondary k-btn--lg', 'Ya tengo suficientes pistas →');
             seguirBtn.type = 'button';
             seguirBtn.addEventListener('click', renderFormularRegla);
             container.appendChild(seguirBtn);
@@ -54,9 +54,9 @@ export function mountHipotesisPruebaRegla(
         container.appendChild(el('p', 'ua-prompt', `¿Crees que "${obj.label}" APRENDE o SIEMPRE hace lo mismo?`));
 
         const row = el('div', 'ua-choice-row');
-        const aprendeBtn = el('button', 'btn btn-secondary', 'Aprende 🧠');
+        const aprendeBtn = el('button', 'k-btn k-btn--secondary k-btn--lg', 'Aprende 🧠');
         aprendeBtn.type = 'button';
-        const igualBtn = el('button', 'btn btn-secondary', 'Siempre lo mismo 🔁');
+        const igualBtn = el('button', 'k-btn k-btn--secondary k-btn--lg', 'Siempre lo mismo 🔁');
         igualBtn.type = 'button';
 
         aprendeBtn.addEventListener('click', () => renderPista(obj, true));
@@ -88,7 +88,7 @@ export function mountHipotesisPruebaRegla(
         });
         container.appendChild(motivoInput);
 
-        const continuarBtn = el('button', 'btn btn-primary', 'Seguir investigando →');
+        const continuarBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'Seguir investigando →');
         continuarBtn.type = 'button';
         continuarBtn.addEventListener('click', render);
         container.appendChild(continuarBtn);

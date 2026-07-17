@@ -1,0 +1,135 @@
+/* ============================================================
+   Tokens del sistema de diseño Kidia (ver docs/mejora/03-sistema-diseno.md)
+
+   Prefijo --k-: evita colisiones con los tokens legacy de
+   constructor.css (--text-muted, --primary...), que migrará el último.
+   Los nombres viejos de global.css (--color-primary...) se mantienen
+   abajo como ALIAS hasta que todas las páginas migren; código nuevo
+   usa SIEMPRE los --k-*.
+
+   Nivel 1: primitivos (paleta bruta) → Nivel 2: semánticos (lo que
+   consume el código). Ninguna página debería usar un primitivo directo.
+   ============================================================ */
+
+:root {
+  /* ---------- Nivel 1 · Primitivos ---------- */
+
+  /* Marca */
+  --k-cyan-400: #22d3ee;
+  --k-fuchsia-400: #e879f9;
+  --k-violet-500: #8b5cf6;
+  --k-violet-300: #c4b5fd;
+
+  /* Neutros (fondo espacio/laboratorio) */
+  --k-night-950: #020617;
+  --k-night-900: #09090b;
+  --k-night-850: #0f172a;
+  --k-night-800: #18181b;
+  --k-gray-400: #94a3b8;
+  --k-gray-200: #e4e4e7;
+  --k-gray-100: #f1f5f9;
+
+  /* Estado */
+  --k-green-400: #4ade80;
+  --k-amber-400: #fbbf24;
+  --k-red-400: #f87171;
+
+  /* ---------- Nivel 2 · Semánticos ---------- */
+
+  /* Fondos */
+  --k-bg-page: var(--k-night-900);
+  --k-bg-page-deep: var(--k-night-950);
+  --k-bg-surface: var(--k-night-800);
+  --k-bg-surface-raised: var(--k-night-850);
+  --k-bg-overlay: rgba(15, 23, 42, 0.9);
+
+  /* Texto */
+  --k-text-strong: var(--k-gray-100);
+  --k-text-body: var(--k-gray-200);
+  --k-text-muted: var(--k-gray-400); /* PENDIENTE revisión AA sobre superficies translúcidas */
+  --k-text-inverse: var(--k-night-900);
+
+  /* Marca */
+  --k-brand-primary: var(--k-cyan-400);
+  --k-brand-secondary: var(--k-fuchsia-400);
+  --k-brand-accent: var(--k-violet-500);
+  --k-brand-accent-soft: var(--k-violet-300);
+
+  /* Bordes y foco */
+  --k-border-subtle: rgba(255, 255, 255, 0.1);
+  --k-border-strong: rgba(255, 255, 255, 0.25);
+  --k-border-focus: var(--k-cyan-400);
+
+  /* Estados */
+  --k-state-success: var(--k-green-400);
+  --k-state-warning: var(--k-amber-400);
+  --k-state-danger: var(--k-red-400);
+  --k-state-locked: #64748b;
+
+  /* Acento por zona del mapa (gamificación, doc 04) */
+  --k-zona-1: var(--k-cyan-400);
+  --k-zona-2: var(--k-violet-500);
+  --k-zona-3: var(--k-fuchsia-400);
+  --k-zona-4: var(--k-amber-400);
+
+  /* Efectos */
+  --k-glow-primary: 0 0 20px rgba(34, 211, 238, 0.5);
+  --k-glow-secondary: 0 0 20px rgba(232, 121, 249, 0.5);
+
+  /* ---------- Espaciado (base 4px) ---------- */
+  --k-space-1: 4px;
+  --k-space-2: 8px;
+  --k-space-3: 12px;
+  --k-space-4: 16px;
+  --k-space-5: 20px;
+  --k-space-6: 24px;
+  --k-space-8: 32px;
+  --k-space-10: 40px;
+  --k-space-12: 48px;
+  --k-space-16: 64px;
+  --k-space-24: 96px;
+
+  /* ---------- Radios ---------- */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 9999px;
+
+  /* ---------- Sombras ---------- */
+  --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.4), 0 2px 6px -1px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.5), 0 4px 10px -2px rgba(0, 0, 0, 0.3);
+
+  /* ---------- Movimiento ---------- */
+  --k-motion-fast: 150ms;
+  --k-motion-base: 250ms;
+  --k-motion-celebrate: 600ms;
+  --k-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --k-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ---------- Tipografía ---------- */
+  --font-body: 'Outfit', system-ui, sans-serif;
+
+  --k-text-xs: 0.8rem;
+  --k-text-sm: 0.9rem;
+  --k-text-base: 1rem;
+  --k-text-lg: 1.125rem;
+  --k-text-xl: 1.25rem;
+  --text-h3: 1.25rem;
+  --text-h2: clamp(1.5rem, 2.5vw, 2rem);
+  --text-h1: clamp(2rem, 3.5vw, 2.75rem);
+  --text-hero: clamp(2.75rem, 5vw, 4.5rem);
+
+  /* ---------- ALIAS LEGACY (no usar en código nuevo) ----------
+     Nombres originales de global.css que siguen usando las páginas
+     sin migrar. Se eliminan cuando la Fase 1 termine la migración. */
+  --color-bg: var(--k-bg-page);
+  --color-text: var(--k-text-body);
+  --color-text-muted: var(--k-text-muted);
+  --color-primary: var(--k-brand-primary);
+  --color-secondary: var(--k-brand-secondary);
+  --color-accent: var(--k-brand-accent);
+  --color-surface: var(--k-bg-surface);
+  --glow-primary: var(--k-glow-primary);
+  --glow-secondary: var(--k-glow-secondary);
+}

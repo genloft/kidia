@@ -22,7 +22,7 @@ if (!mision) {
 ---
 
 <Layout title={`Kidia - ${mision.titulo}`} description={mision.introVael} showFooter={false}>
-  <Header />
+  <Header mode="aventura" />
   <main class="me-layout" data-mision-id={mision.id}>
     <div class="me-header">
       <Friend mode="avatar" state="idle" />
@@ -42,14 +42,14 @@ if (!mision) {
             <strong>{t.nombre}</strong>
             <p>{t.descripcion}</p>
           </div>
-          <button type="button" class="btn btn-secondary me-check">Hecho ✓</button>
+          <button type="button" class="k-btn k-btn--secondary k-btn--lg me-check">Hecho ✓</button>
         </div>
       ))}
     </div>
 
     <div id="me-cierre" class="me-cierre hidden">
       <p class="me-cierre-texto">{mision.cierreVael}</p>
-      <a href="/mapa" class="btn btn-primary">Volver al Mapa</a>
+      <a href="/mapa" class="k-btn k-btn--primary k-btn--lg">Volver al Mapa</a>
     </div>
   </main>
 
@@ -124,7 +124,7 @@ if (!mision) {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 99px;
     padding: 0.55rem 1rem;
-    color: #e4e4e7;
+    color: var(--k-text-body);
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
@@ -132,13 +132,13 @@ if (!mision) {
   }
 
   .me-listen-btn:hover:not(:disabled) {
-    border-color: var(--color-primary);
+    border-color: var(--k-brand-primary);
   }
 
   .me-listen-btn.listening {
     background: rgba(34, 211, 238, 0.12);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
+    border-color: var(--k-brand-primary);
+    color: var(--k-brand-primary);
   }
 
   .me-listen-btn:disabled {
@@ -149,7 +149,7 @@ if (!mision) {
   .me-zona-badge {
     display: inline-block;
     background: rgba(139, 92, 246, 0.12);
-    color: var(--color-accent);
+    color: var(--k-brand-accent);
     font-size: 0.8rem;
     font-weight: 700;
     padding: 0.3rem 0.85rem;
@@ -163,7 +163,7 @@ if (!mision) {
   }
 
   .me-intro {
-    color: #cbd5e1;
+    color: var(--k-text-body);
     font-size: 1.1rem;
     line-height: 1.6;
   }
@@ -179,7 +179,7 @@ if (!mision) {
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    background: var(--color-surface, #18181b);
+    background: var(--k-bg-surface);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 1rem;
     padding: 1.25rem;
@@ -192,12 +192,12 @@ if (!mision) {
 
   .me-tarea-info strong {
     display: block;
-    color: #f8fafc;
+    color: var(--k-text-strong);
     margin-bottom: 0.25rem;
   }
 
   .me-tarea-info p {
-    color: #94a3b8;
+    color: var(--k-text-muted);
     font-size: 0.9rem;
     margin: 0;
   }

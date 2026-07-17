@@ -29,7 +29,7 @@ export function mountMontarLibro(
                 resumen.appendChild(el('p', 'ua-resumen-row', `${p}: ${paginas[p]}`));
             });
             container.appendChild(resumen);
-            const continuarBtn = el('button', 'btn btn-primary', 'Hojear mi libro →');
+            const continuarBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'Hojear mi libro →');
             continuarBtn.type = 'button';
             continuarBtn.addEventListener('click', () => onComplete({ paginas }));
             container.appendChild(continuarBtn);

@@ -22,7 +22,7 @@ export function mountVerificarConFuente(
         container.appendChild(el('p', 'ua-prompt', '¿Te lo crees o lo compruebas?'));
 
         const row = el('div', 'ua-choice-row');
-        const creoBtn = el('button', 'btn btn-secondary', 'Me lo creo');
+        const creoBtn = el('button', 'k-btn k-btn--secondary k-btn--lg', 'Me lo creo');
         creoBtn.type = 'button';
         creoBtn.addEventListener('click', () => {
             fireVaelAction('think');
@@ -31,7 +31,7 @@ export function mountVerificarConFuente(
             setTimeout(renderFuentes, 900);
         });
 
-        const compruoBtn = el('button', 'btn btn-primary', 'Lo compruebo');
+        const compruoBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'Lo compruebo');
         compruoBtn.type = 'button';
         compruoBtn.addEventListener('click', renderFuentes);
 

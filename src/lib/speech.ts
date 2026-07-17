@@ -1,7 +1,7 @@
 // Lectura en voz alta vía Web Speech API (SpeechSynthesis del propio
-// navegador). No hay llamada a servidor ni a un modelo — es la misma
-// limitación de hosting estático que ya afecta a /api/chat: aquí no hace
-// falta rodearla porque el navegador ya trae su propio motor de voz.
+// navegador). No hay llamada a servidor ni a un modelo — el hosting es
+// estático y no ejecuta rutas de servidor, pero aquí no hace falta
+// rodearlo porque el navegador ya trae su propio motor de voz.
 // La disponibilidad y calidad de la voz "es-ES" depende del dispositivo
 // del usuario (accesibilidad DUA: el texto siempre sigue visible, el
 // audio es un complemento, nunca la única vía).

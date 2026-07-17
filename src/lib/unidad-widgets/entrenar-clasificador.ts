@@ -28,7 +28,7 @@ export function mountEntrenarClasificador(
         });
         container.appendChild(grid);
 
-        const listoBtn = el('button', 'btn btn-primary', 'Ya lo entrené →');
+        const listoBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'Ya lo entrené →');
         listoBtn.type = 'button';
         listoBtn.addEventListener('click', renderPredecirTrampa);
         container.appendChild(listoBtn);
@@ -41,7 +41,7 @@ export function mountEntrenarClasificador(
 
         const row = el('div', 'ua-choice-row');
         data.categorias.forEach(cat => {
-            const btn = el('button', 'btn btn-secondary', cat.replace('_', ' '));
+            const btn = el('button', 'k-btn k-btn--secondary k-btn--lg', cat.replace('_', ' '));
             btn.type = 'button';
             btn.addEventListener('click', () => renderResultadoTrampa(cat === data.ejemploTrampa.categoria));
             row.appendChild(btn);
@@ -57,7 +57,7 @@ export function mountEntrenarClasificador(
         container.appendChild(box);
         showFeedback(box, prediccionCorrecta);
 
-        const reentrenarBtn = el('button', 'btn btn-primary', 'Reentrenarlo con ejemplos variados →');
+        const reentrenarBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'Reentrenarlo con ejemplos variados →');
         reentrenarBtn.type = 'button';
         reentrenarBtn.addEventListener('click', () => renderReentrenar(prediccionCorrecta));
         container.appendChild(reentrenarBtn);
@@ -74,7 +74,7 @@ export function mountEntrenarClasificador(
         });
         container.appendChild(grid);
 
-        const listoBtn = el('button', 'btn btn-primary', 'Ya lo reentrené →');
+        const listoBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'Ya lo reentrené →');
         listoBtn.type = 'button';
         listoBtn.addEventListener('click', () => renderFormularRegla(prediccionInicialCorrecta));
         container.appendChild(listoBtn);

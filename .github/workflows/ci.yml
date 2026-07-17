@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      # Bloqueante: el sitio tiene que compilar siempre.
+      - name: Build
+        run: npm run build
+
+      # Informativo (no bloqueante): el código legacy (Quiz, mapa, animations,
+      # scenario) acumula ~186 errores de tipos que se eliminarán al jubilarlo
+      # (ver docs/mejora/05-roadmap.md, Fase 4). Pasará a bloqueante entonces.
+      - name: Astro check (informativo)
+        run: npx astro check || echo "::warning::astro check con errores (legacy, no bloqueante todavía)"

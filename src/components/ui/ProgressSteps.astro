@@ -1,0 +1,35 @@
+---
+// Pasos de progreso (doc 03 §3): los 7 puntos de una misión, el quiz, etc.
+// `current` es 0-based; los anteriores quedan como hechos.
+interface Props {
+  total: number;
+  current?: number; // 0-based; -1 = ninguno empezado
+  label?: string;
+  id?: string;
+  class?: string;
+}
+
+const { total, current = -1, label, id, class: extraClass } = Astro.props;
+const steps = Array.from({ length: total }, (_, i) => i);
+---
+
+<div
+  id={id}
+  class:list={['k-steps', extraClass]}
+  role="progressbar"
+  aria-valuenow={current + 1}
+  aria-valuemin="0"
+  aria-valuemax={total}
+  aria-label={label}
+>
+  {steps.map(i => (
+    <div
+      class:list={[
+        'k-step',
+        i < current && 'k-step--done',
+        i === current && 'k-step--current',
+      ]}
+      data-step={i}
+    ></div>
+  ))}
+</div>

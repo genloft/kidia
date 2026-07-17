@@ -1,0 +1,407 @@
+/* ============================================================
+   Componentes del sistema de diseño Kidia (doc 03 §3).
+
+   Clases globales .k-* consumidas de dos formas:
+   1. Vía los wrappers de src/components/ui/*.astro (páginas).
+   2. Directamente como className en DOM generado por JS
+      (unidad-engine.ts y sus widgets).
+
+   Solo tokens --k-* aquí; ningún valor literal de color/espaciado.
+   ============================================================ */
+
+/* ---------- Botón ---------- */
+
+.k-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--k-space-2);
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition:
+    transform var(--k-motion-fast) var(--k-ease-out),
+    box-shadow var(--k-motion-base) var(--k-ease-out),
+    background-color var(--k-motion-base) var(--k-ease-out),
+    border-color var(--k-motion-base) var(--k-ease-out);
+}
+
+.k-btn:active {
+  transform: translateY(0);
+}
+
+.k-btn:disabled,
+.k-btn[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Tamaños. xl es el botón de acción principal del niño (Modo Aventura):
+   objetivo táctil >= 48px garantizado por min-height. */
+.k-btn--sm { padding: var(--k-space-1) var(--k-space-4); font-size: var(--k-text-sm); min-height: 32px; }
+.k-btn--md { padding: var(--k-space-2) var(--k-space-6); font-size: var(--k-text-base); min-height: 40px; }
+.k-btn--lg { padding: var(--k-space-3) var(--k-space-8); font-size: var(--k-text-lg); min-height: 48px; }
+.k-btn--xl { padding: var(--k-space-4) var(--k-space-10); font-size: var(--k-text-xl); min-height: 56px; }
+
+/* Variantes */
+.k-btn--primary {
+  background: linear-gradient(135deg, var(--k-brand-primary), var(--k-brand-accent));
+  color: var(--k-text-inverse);
+}
+
+.k-btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--k-glow-primary);
+}
+
+.k-btn--secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--k-text-body);
+  border-color: var(--k-border-subtle);
+}
+
+.k-btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--k-border-strong);
+}
+
+.k-btn--ghost {
+  background: transparent;
+  color: var(--k-text-body);
+  border-color: var(--k-border-strong);
+}
+
+.k-btn--ghost:hover {
+  background: rgba(34, 211, 238, 0.08);
+  border-color: var(--k-brand-primary);
+  color: var(--k-brand-primary);
+}
+
+/* ---------- Tarjeta ---------- */
+
+.k-card {
+  display: block;
+  background: var(--k-bg-surface);
+  border: 1px solid var(--k-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--k-space-6);
+  color: inherit;
+}
+
+.k-card--interactive {
+  transition:
+    transform var(--k-motion-base) var(--k-ease-out),
+    box-shadow var(--k-motion-base) var(--k-ease-out),
+    border-color var(--k-motion-base) var(--k-ease-out);
+}
+
+.k-card--interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(34, 211, 238, 0.3);
+}
+
+.k-card--locked {
+  opacity: 0.6;
+  border-style: dashed;
+  border-color: var(--k-state-locked);
+}
+
+/* ---------- Pill ---------- */
+
+.k-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--k-space-1);
+  padding: var(--k-space-1) var(--k-space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--k-text-xs);
+  font-weight: 700;
+  white-space: nowrap;
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  color: var(--k-brand-primary);
+}
+
+.k-pill--accent {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.35);
+  color: var(--k-brand-accent-soft);
+}
+
+.k-pill--success {
+  background: rgba(74, 222, 128, 0.12);
+  border-color: rgba(74, 222, 128, 0.35);
+  color: var(--k-state-success);
+}
+
+.k-pill--warning {
+  background: rgba(251, 191, 36, 0.12);
+  border-color: rgba(251, 191, 36, 0.35);
+  color: var(--k-state-warning);
+}
+
+.k-pill--danger {
+  background: rgba(248, 113, 113, 0.12);
+  border-color: rgba(248, 113, 113, 0.35);
+  color: var(--k-state-danger);
+}
+
+.k-pill--locked {
+  background: rgba(100, 116, 139, 0.12);
+  border-color: rgba(100, 116, 139, 0.35);
+  color: var(--k-state-locked);
+}
+
+/* ---------- Barra de progreso ---------- */
+
+.k-progress {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.k-progress__fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--k-brand-primary), var(--k-brand-accent));
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+  border-radius: var(--radius-pill);
+  transition: width var(--k-motion-celebrate) var(--k-ease-out);
+}
+
+/* ---------- Pasos de progreso (misión: 7 puntos) ---------- */
+
+.k-steps {
+  display: flex;
+  align-items: center;
+  gap: var(--k-space-2);
+  width: 100%;
+}
+
+.k-step {
+  flex: 1;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  transition: background-color var(--k-motion-base) var(--k-ease-out);
+}
+
+.k-step--done {
+  background: var(--k-brand-primary);
+}
+
+.k-step--current {
+  background: linear-gradient(90deg, var(--k-brand-primary), var(--k-brand-accent));
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.6);
+}
+
+/* ---------- Modal (sobre <dialog> nativo: foco y Escape gratis) ---------- */
+
+.k-modal {
+  border: none;
+  padding: 0;
+  background: transparent;
+  width: min(92vw, 560px);
+  /* <dialog> nativo ya centra con margin auto */
+}
+
+.k-modal::backdrop {
+  background: rgba(2, 6, 23, 0.75);
+  backdrop-filter: blur(6px);
+}
+
+.k-modal__content {
+  background: var(--k-bg-surface-raised);
+  border: 1px solid var(--k-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--k-space-8);
+  box-shadow: var(--shadow-lg);
+  color: var(--k-text-body);
+}
+
+/* ---------- Burbuja de Vael ---------- */
+
+.k-vael {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--k-space-4);
+}
+
+.k-vael__avatar {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--k-bg-surface);
+  border: 2px solid rgba(34, 211, 238, 0.35);
+}
+
+.k-vael__bubble {
+  position: relative;
+  background: var(--k-bg-surface);
+  border: 1px solid var(--k-border-subtle);
+  border-radius: var(--k-space-1) var(--radius-lg) var(--radius-lg) var(--radius-lg);
+  padding: var(--k-space-4) var(--k-space-5);
+  flex: 1;
+}
+
+.k-vael__name {
+  display: block;
+  font-size: var(--k-text-xs);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--k-brand-primary);
+  margin-bottom: var(--k-space-1);
+}
+
+.k-vael__text {
+  margin: 0;
+  color: var(--k-text-body);
+  font-size: var(--k-text-lg);
+  line-height: 1.6;
+}
+
+.k-vael__listen {
+  margin-top: var(--k-space-3);
+}
+
+/* ---------- Estado vacío ---------- */
+
+.k-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--k-space-4);
+  text-align: center;
+  padding: var(--k-space-12) var(--k-space-6);
+  background: var(--k-bg-surface);
+  border: 1px solid var(--k-border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.k-empty__text {
+  color: var(--k-text-muted);
+  font-size: var(--k-text-lg);
+  margin: 0;
+  max-width: 40ch;
+}
+
+/* ---------- Toast (creado por src/lib/toast.ts) ---------- */
+
+.k-toast-container {
+  position: fixed;
+  bottom: var(--k-space-6);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--k-space-2);
+  pointer-events: none;
+}
+
+.k-toast {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--k-space-2);
+  background: var(--k-bg-overlay);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--k-border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--k-space-3) var(--k-space-5);
+  color: var(--k-text-body);
+  font-weight: 600;
+  box-shadow: var(--shadow-lg);
+  animation: k-toast-in var(--k-motion-base) var(--k-ease-out);
+}
+
+.k-toast--success { border-color: rgba(74, 222, 128, 0.4); }
+.k-toast--danger { border-color: rgba(248, 113, 113, 0.4); }
+.k-toast--warning { border-color: rgba(251, 191, 36, 0.4); }
+
+@keyframes k-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Gate del Modo Familia (modal montado por familia-gate.ts) ---------- */
+
+.familia-gate {
+  text-align: center;
+}
+
+.familia-gate__title {
+  margin: 0 0 var(--k-space-2);
+  font-size: var(--text-h3);
+  color: var(--k-text-strong);
+}
+
+.familia-gate__text {
+  margin: 0 0 var(--k-space-6);
+  color: var(--k-text-muted);
+}
+
+.familia-gate__form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--k-space-3);
+}
+
+.familia-gate__label {
+  font-size: var(--k-text-sm);
+  font-weight: 600;
+  color: var(--k-text-muted);
+}
+
+.familia-gate__input {
+  width: 9rem;
+  padding: var(--k-space-3) var(--k-space-4);
+  background: var(--k-bg-page-deep);
+  border: 1px solid var(--k-border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--k-text-strong);
+  font-family: inherit;
+  font-size: var(--k-text-xl);
+  letter-spacing: 0.5em;
+  text-indent: 0.25em;
+  text-align: center;
+}
+
+.familia-gate__input:focus {
+  outline: none;
+  border-color: var(--k-border-focus);
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12);
+}
+
+.familia-gate__error {
+  margin: 0;
+  color: var(--k-state-danger);
+  font-size: var(--k-text-sm);
+  font-weight: 600;
+}
+
+.familia-gate__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--k-space-3);
+  margin-top: var(--k-space-4);
+}

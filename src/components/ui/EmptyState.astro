@@ -1,0 +1,16 @@
+---
+// Estado vacío (doc 03 §3): ilustración + mensaje + una única acción.
+// Uso: <EmptyState><Friend slot="visual" .../>Texto<Button slot="action".../></EmptyState>
+interface Props {
+  id?: string;
+  class?: string;
+}
+
+const { id, class: extraClass } = Astro.props;
+---
+
+<div id={id} class:list={['k-empty', extraClass]}>
+  <slot name="visual" />
+  <p class="k-empty__text"><slot /></p>
+  <slot name="action" />
+</div>

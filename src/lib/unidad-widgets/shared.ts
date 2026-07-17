@@ -67,7 +67,7 @@ export function createGatedInput(opts: {
     voiceBtn.title = 'Hablar en vez de escribir';
     voiceBtn.addEventListener('click', () => startVoiceInput(input));
 
-    const submitBtn = el('button', 'btn btn-primary ua-gated-submit', 'Listo');
+    const submitBtn = el('button', 'k-btn k-btn--primary k-btn--md ua-gated-submit', 'Listo');
     submitBtn.type = 'button';
 
     const errorMsg = el('p', 'ua-gated-error hidden');

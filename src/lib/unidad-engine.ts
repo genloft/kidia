@@ -30,6 +30,17 @@ type Screen = 'portada' | 'mision' | 'palabras' | 'investiga' | 'crea' | 'detect
 // 7 puntos visibles en la barra de progreso (Portada y Cierre son estados, no pasos).
 const PROGRESS_SCREENS: Screen[] = ['mision', 'palabras', 'investiga', 'crea', 'detective', 'familia', 'comparte'];
 
+// Estado de "retomar donde ibas": si el niño cierra a mitad de misión
+// (merienda, fin de sesión...), al volver puede continuar en su pantalla.
+// Vive solo en localStorage (transitorio, por hijo y unidad) — no se
+// sincroniza a la nube a propósito.
+interface ResumeState {
+    screen: Screen;
+    investigaResultado: Record<string, any> | null;
+    artifactId: string | null;
+    savedAt: number;
+}
+
 const RESUMEN_LABELS: Record<string, string> = {
     reglaFormulada: 'Tu regla',
     objetosInvestigados: 'Cosas investigadas',
@@ -110,7 +121,7 @@ export class UnidadEngine {
         this.container.appendChild(el('p', 'ua-eyebrow', 'Todavía no'));
         this.container.appendChild(el('h1', 'ua-titulo', 'Antes de esta misión...'));
         this.container.appendChild(el('p', 'ua-vael-texto', `Esta misión usa cosas que creaste en la unidad ${faltantes.join(', ')}. Complétala primero y vuelve por aquí.`));
-        const link = el('a', 'btn btn-primary', 'Volver al Mapa');
+        const link = el('a', 'k-btn k-btn--primary k-btn--lg', 'Volver al Mapa');
         link.setAttribute('href', '/mapa');
         this.container.appendChild(link);
     }
@@ -121,8 +132,56 @@ export class UnidadEngine {
         }));
     }
 
+    // --- Persistencia "retomar donde ibas" ---
+
+    private resumeKey(): string {
+        return `kidia-unidad-resume-${this.childId || 'anon'}-${this.unidad.id}`;
+    }
+
+    private saveResumeState(screen: Screen) {
+        if (typeof localStorage === 'undefined') return;
+        try {
+            if (screen === 'portada') return;
+            if (screen === 'cierre') {
+                localStorage.removeItem(this.resumeKey());
+                return;
+            }
+            const state: ResumeState = {
+                screen,
+                investigaResultado: this.investigaResultado,
+                artifactId: this.artifactId,
+                savedAt: Date.now(),
+            };
+            localStorage.setItem(this.resumeKey(), JSON.stringify(state));
+        } catch { /* almacenamiento lleno o bloqueado: retomar es opcional */ }
+    }
+
+    private loadResumeState(): ResumeState | null {
+        if (typeof localStorage === 'undefined') return null;
+        try {
+            const raw = localStorage.getItem(this.resumeKey());
+            if (!raw) return null;
+            const parsed = JSON.parse(raw) as ResumeState;
+            if (!PROGRESS_SCREENS.includes(parsed.screen)) return null;
+            // "Crea" sin resultado de investiga no puede reconstruirse: se
+            // retoma desde investiga.
+            if (parsed.screen === 'crea' && !parsed.investigaResultado) {
+                parsed.screen = 'investiga';
+            }
+            return parsed;
+        } catch {
+            return null;
+        }
+    }
+
+    private clearResumeState() {
+        if (typeof localStorage === 'undefined') return;
+        try { localStorage.removeItem(this.resumeKey()); } catch { /* ídem */ }
+    }
+
     private renderScreen(screen: Screen) {
         stopSpeaking();
+        this.saveResumeState(screen);
         this.updateProgress(screen);
         this.container.innerHTML = '';
         const map: Record<Screen, () => void> = {
@@ -140,7 +199,7 @@ export class UnidadEngine {
     }
 
     private continueButton(label: string, onClick: () => void): HTMLButtonElement {
-        const btn = el('button', 'btn btn-primary ua-continue', label);
+        const btn = el('button', 'k-btn k-btn--primary k-btn--xl ua-continue', label);
         btn.type = 'button';
         btn.addEventListener('click', onClick);
         return btn;
@@ -153,6 +212,28 @@ export class UnidadEngine {
         this.container.appendChild(el('span', 'ua-zona-badge', this.unidad.zona.nombre));
         this.container.appendChild(el('h1', 'ua-titulo', this.unidad.web.tituloPantalla));
         this.container.appendChild(el('p', 'ua-subtitulo', this.unidad.unidadCurricular));
+
+        // Si dejó la misión a medias, ofrecer retomarla donde estaba.
+        const saved = this.loadResumeState();
+        if (saved) {
+            this.container.appendChild(el('p', 'ua-vael-texto', 'Dejaste esta misión a medias. ¿Seguimos donde estabas?'));
+            this.container.appendChild(this.continueButton('Seguir donde lo dejé →', () => {
+                this.investigaResultado = saved.investigaResultado;
+                this.artifactId = saved.artifactId;
+                this.renderScreen(saved.screen);
+            }));
+            const restart = el('button', 'k-btn k-btn--ghost k-btn--md', 'Empezar desde el principio');
+            restart.setAttribute('type', 'button');
+            restart.addEventListener('click', () => {
+                this.clearResumeState();
+                this.investigaResultado = null;
+                this.artifactId = null;
+                this.renderScreen('mision');
+            });
+            this.container.appendChild(restart);
+            return;
+        }
+
         this.container.appendChild(this.continueButton('Empezar misión →', () => this.renderScreen('mision')));
     }
 
@@ -261,17 +342,25 @@ export class UnidadEngine {
         const tituloInput = createGatedInput({
             placeholder: 'Ponle un nombre a tu creación',
             onAccepted: async (titulo) => {
-                fireVaelAction('celebrate');
                 if (this.childId) {
-                    const { data } = await UnidadService.saveArtifact(
+                    const { data, error } = await UnidadService.saveArtifact(
                         this.childId,
                         this.unidad.id,
                         this.unidad.crea.tipo,
                         { ...this.investigaResultado, tituloArtefacto: titulo },
                         this.unidad.dependeDe || []
                     );
-                    this.artifactId = data?.id || null;
+                    // Error amable (doc 02 §3): si no se pudo guardar, el niño
+                    // no avanza a ciegas — puede reintentar con el mismo input.
+                    if (error || !data) {
+                        fireVaelAction('think');
+                        const { showToast } = await import('./toast');
+                        showToast('¡Ups! Mi laboratorio ha hecho puf y no guardó tu creación. Prueba otra vez.', { variant: 'danger' });
+                        return;
+                    }
+                    this.artifactId = data.id;
                 }
+                fireVaelAction('celebrate');
                 this.renderScreen('detective');
             },
         });
@@ -361,7 +450,7 @@ export class UnidadEngine {
     private renderCierre() {
         fireVaelAction('celebrate');
         this.container.appendChild(el('p', 'ua-vael-texto ua-cierre-texto', this.unidad.web.cierreVael));
-        const link = el('a', 'btn btn-primary', 'Volver al Mapa');
+        const link = el('a', 'k-btn k-btn--primary k-btn--lg', 'Volver al Mapa');
         link.setAttribute('href', '/mapa');
         this.container.appendChild(link);
     }

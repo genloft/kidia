@@ -10,10 +10,10 @@
  * libres que sí escribe el niño (el "motivo" en 1.1, la "regla descubierta"
  * en 1.2, el detalle libre del prompt en 1.3).
  *
- * Sustituir por una llamada real (p.ej. OpenAI moderation endpoint vía
- * ruta de servidor) cuando se resuelva el hosting SSR: hoy las rutas
- * /api/*.ts no funcionan como servidor real en producción en Hostinger
- * (mismo problema ya conocido que afecta a /api/chat y /api/checkout).
+ * Sustituir por una llamada real (p.ej. OpenAI moderation endpoint) cuando
+ * exista backend: el build es estático y Hostinger no ejecuta rutas de
+ * servidor, así que la moderación por modelo irá en el backend que se
+ * decida (ver docs/mejora/01-auditoria-tecnica.md §2.1).
  */
 
 export interface GateResult {

@@ -26,7 +26,7 @@ export function mountDecisionConsecuencia(
             const resumen = el('div', 'ua-pista-box');
             resumen.appendChild(el('p', 'ua-pista-label', `Tomaste ${seguras} de ${data.escenarios.length} decisiones seguras.`));
             container.appendChild(resumen);
-            const continuarBtn = el('button', 'btn btn-primary', 'Diseñar mi Escudo →');
+            const continuarBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'Diseñar mi Escudo →');
             continuarBtn.type = 'button';
             continuarBtn.addEventListener('click', () => onComplete({ decisionesSeguras: seguras, total: data.escenarios.length }));
             container.appendChild(continuarBtn);
@@ -38,7 +38,7 @@ export function mountDecisionConsecuencia(
 
         const row = el('div', 'ua-choice-row');
         escenario.opciones.forEach(op => {
-            const btn = el('button', 'btn btn-secondary', op.label);
+            const btn = el('button', 'k-btn k-btn--secondary k-btn--lg', op.label);
             btn.type = 'button';
             btn.addEventListener('click', () => revelar(op));
             row.appendChild(btn);
@@ -54,7 +54,7 @@ export function mountDecisionConsecuencia(
         container.appendChild(box);
         showFeedback(box, opcion.segura);
 
-        const siguienteBtn = el('button', 'btn btn-primary', 'Siguiente →');
+        const siguienteBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'Siguiente →');
         siguienteBtn.type = 'button';
         siguienteBtn.addEventListener('click', () => { indice++; render(); });
         container.appendChild(siguienteBtn);

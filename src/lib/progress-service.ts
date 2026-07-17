@@ -59,9 +59,9 @@ export const ProgressService = {
         return Math.min(percentage, 100); // Cap at 100%
     },
 
-    // 5. Parent Report
-    computeParentReport: (extra?: import('./parent-rules').ParentReportExtra) => {
-        const state = { ...storage.get(), ...extra };
+    // 5. Parent Report — versión pura, sobre cualquier estado (p. ej. los
+    // datos en nube de un hijo/a que no es el activo, en el Panel Familiar).
+    computeParentReportFrom: (state: { completedScenarios: string[]; badges: string[] } & import('./parent-rules').ParentReportExtra) => {
         const comments: string[] = [];
 
         PARENT_REPORT_RULES.forEach(rule => {
@@ -75,5 +75,10 @@ export const ProgressService = {
         }
 
         return comments.join(' ');
+    },
+
+    // Informe del hijo/a activo (estado local).
+    computeParentReport: (extra?: import('./parent-rules').ParentReportExtra) => {
+        return ProgressService.computeParentReportFrom({ ...storage.get(), ...extra });
     }
 };

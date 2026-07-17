@@ -30,7 +30,7 @@ export function mountDetectarInvencion(
             const resumen = el('div', 'ua-pista-box');
             resumen.appendChild(el('p', 'ua-pista-label', `¡Investigación terminada! Acertaste ${aciertos} de ${data.banco.length}.`));
             container.appendChild(resumen);
-            const continuarBtn = el('button', 'btn btn-primary', 'Crear mi expediente →');
+            const continuarBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'Crear mi expediente →');
             continuarBtn.type = 'button';
             continuarBtn.addEventListener('click', () => onComplete({ aciertos, total: data.banco.length, fraseVerdaderaRespetada }));
             container.appendChild(continuarBtn);
@@ -42,9 +42,9 @@ export function mountDetectarInvencion(
         container.appendChild(el('p', 'ua-frase-texto', `"${frase.texto}"`));
 
         const row = el('div', 'ua-choice-row');
-        const verdadBtn = el('button', 'btn btn-secondary', 'Es verdad ✅');
+        const verdadBtn = el('button', 'k-btn k-btn--secondary k-btn--lg', 'Es verdad ✅');
         verdadBtn.type = 'button';
-        const inventoBtn = el('button', 'btn btn-secondary', 'Es un invento ❌');
+        const inventoBtn = el('button', 'k-btn k-btn--secondary k-btn--lg', 'Es un invento ❌');
         inventoBtn.type = 'button';
 
         verdadBtn.addEventListener('click', () => revelar(frase, true));
@@ -69,7 +69,7 @@ export function mountDetectarInvencion(
         container.appendChild(box);
         showFeedback(box, correcto);
 
-        const siguienteBtn = el('button', 'btn btn-primary', 'Siguiente frase →');
+        const siguienteBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'Siguiente frase →');
         siguienteBtn.type = 'button';
         siguienteBtn.addEventListener('click', () => { indice++; render(); });
         container.appendChild(siguienteBtn);

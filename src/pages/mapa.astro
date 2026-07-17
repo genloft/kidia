@@ -1,712 +1,564 @@
 ---
+// Mapa de Misiones v2 — "mapa de zonas" (docs/mejora/02 §2.3 y 04 §3.2).
+// Vertical y touch-first: las 4 zonas del método como secciones con camino,
+// sin drag de ratón, sin tilt 3D ni tooltips-hover. Cada tramo tiene su
+// panel; el del hijo activo se muestra en cliente (data-tramo-panel).
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import ScenarioMapCard from '../components/ScenarioMapCard.astro';
+import ProgressBar from '../components/ui/ProgressBar.astro';
 import { loadScenarios, loadUnidadesAventura, loadMisionesEspeciales } from '../lib/scenario-loader';
 
-const scenarios = await loadScenarios('es');
-console.log(`[SSR] Loaded ${scenarios.length} scenarios for Map.`);
+// --- Tramo 8-9: 16 unidades-aventura agrupadas en 4 zonas + especiales ---
+const unidades = await loadUnidadesAventura('8-9');
+const especiales = await loadMisionesEspeciales('8-9');
+const especialPorNivel = new Map(especiales.map(m => [m.nivel, m]));
 
-// Las 16 unidades del tramo 8-9 (4 zonas · 4 niveles) viven en el formato
-// nuevo "unidad-aventura" (ver src/schemas/unidad.ts) y en /laboratorio/[id],
-// no en /scenario/[slug]. Se muestran como tarjetas más en el mismo
-// carrusel, reutilizando ScenarioMapCard con un shim + href propio. Como
-// loadUnidadesAventura ya ordena por id (1.1..4.4), las tarjetas quedan
-// agrupadas por zona en el orden natural del carrusel.
-const unidadesAventura = await loadUnidadesAventura('8-9');
-const unidadAventuraShims = unidadesAventura.map(u => ({
-  scenario: {
-    id: u.id,
-    title: u.titulo,
-    description: u.mision.textoVael,
-    badge: u.comparte.insigniaPosible || undefined,
-    unidad: u.id,
-    tramo: '8-9',
-    difficulty: 'beginner',
-  },
-  href: `/laboratorio/${u.id}`,
-}));
-
-// Misiones especiales de cierre de cada zona (5-7 min, no son examen).
-const misionesEspeciales = await loadMisionesEspeciales('8-9');
-const misionEspecialPorNivel = new Map(
-  misionesEspeciales.map(m => [m.nivel, {
-    scenario: {
-      id: m.id,
-      title: m.titulo,
-      description: m.introVael,
-      badge: { id: `especial-${m.id}`, name: 'Misión especial', icon: '🔭' },
-      unidad: m.id,
-      tramo: '8-9',
-      difficulty: 'beginner',
-    },
-    href: `/laboratorio/especial/${m.id}`,
-  }])
-);
-
-// Intercala cada misión especial justo después de su zona (tras la unidad .4).
-const unidadesConEspeciales = unidadAventuraShims.flatMap(shim => {
-  if (!shim.scenario.id.endsWith('.4')) return [shim];
-  const nivel = Math.floor(parseFloat(shim.scenario.id));
-  const especial = misionEspecialPorNivel.get(nivel);
-  return especial ? [shim, especial] : [shim];
+const zonas89 = [1, 2, 3, 4].map(nivel => {
+  const delNivel = unidades.filter(u => u.nivel === nivel);
+  return {
+    nivel,
+    nombre: delNivel[0]?.zona.nombre ?? `Zona ${nivel}`,
+    unidades: delNivel,
+    especial: especialPorNivel.get(nivel as 1 | 2 | 3 | 4) ?? null,
+  };
 });
+
+// --- Tramos 10-11 y 12-14: retos legacy (formato scenario), solo Nivel 1 ---
+const scenarios = await loadScenarios('es');
+const panelesLegacy = (['10-11', '12-14'] as const).map(tramo => ({
+  tramo,
+  scenarios: scenarios.filter(s => s.tramo === tramo),
+}));
 ---
 
-<Layout title="Kidia - Mapa de Retos" description="Explora el Mapa del Conocimiento de Kidia: retos interactivos para aprender IA, desde qué es la inteligencia artificial hasta ética y redes neuronales." showFooter={false}>
-  <Header />
-  
-  <main class="map-container">
-    <div class="map-header">
-       <div class="header-content">
-           <div class="title-row">
-               <h1 class="text-gradient title-glow">🌌 Mapa del Conocimiento</h1>
-               <span id="map-tramo-pill" class="tramo-pill hidden"></span>
-           </div>
-           <p class="map-description">
-               Viaja por el universo de la IA: completa cada reto para desbloquear el siguiente.
-           </p>
-       </div>
+<Layout title="Kidia - Mapa de Misiones" description="El Mapa de Misiones de Kidia: avanza por las zonas del laboratorio completando misiones para aprender IA a tu ritmo." showFooter={false}>
+  <Header mode="aventura" />
 
-       <div class="map-controls">
-           <div class="global-progress tooltip-container">
-               <span class="progress-label">PROGRESO GLOBAL</span>
-               <div class="progress-track">
-                   <div class="progress-fill" id="global-bar"></div>
-                   <span id="global-percent" class="progress-text">0%</span>
-               </div>
-               
-               <div class="tooltip-box">
-                   ¡Completa retos para llenar la barra y convertirte en experto!
-               </div>
-           </div>
-           
-           <button id="btn-deep-mode" class="btn-deep-mode tooltip-container">
-               <span class="icon">🧠</span> 
-               <span class="label">MODO PROFUNDO</span>
-               <span id="deep-status" class="status-indicator">OFF</span>
-               
-               <div class="tooltip-box tooltip-right">
-                   Actívalo para preguntas difíciles y desafíos avanzados.
-               </div>
-           </button>
-       </div>
+  <main class="mapa">
+    <header class="mapa-head">
+      <div class="mapa-title-row">
+        <h1>Mapa de Misiones</h1>
+        <span id="map-tramo-pill" class="k-pill k-pill--accent hidden"></span>
+      </div>
+      <p class="mapa-sub">Avanza por las zonas del laboratorio: cada misión completada ilumina el camino.</p>
+      <div class="mapa-progress">
+        <span class="mapa-progress-label">Progreso</span>
+        <ProgressBar value={0} fillId="global-bar" label="Progreso global" class="mapa-progress-bar" />
+        <strong id="global-percent">0%</strong>
+      </div>
+    </header>
+
+    <!-- ============ Panel tramo 8-9 (unidades-aventura) ============ -->
+    <div data-tramo-panel="8-9" class="tramo-panel hidden">
+      {zonas89.map(zona => (
+        <section class="zona" style={`--zona-accent: var(--k-zona-${zona.nivel})`}>
+          <header class="zona-head">
+            <span class="zona-num" aria-hidden="true">{zona.nivel}</span>
+            <div class="zona-head-text">
+              <h2>{zona.nombre}</h2>
+              <span class="zona-count k-pill" data-zona-count>· / ·</span>
+            </div>
+          </header>
+
+          <ol class="zona-path">
+            {zona.unidades.map(u => (
+              <li>
+                <a
+                  class="mision-card"
+                  href={`/laboratorio/${u.id}`}
+                  data-id={u.id}
+                  data-unidad={u.id}
+                  data-badge={u.comparte.insigniaPosible?.id}
+                >
+                  <span class="mision-num" aria-hidden="true">{u.id}</span>
+                  <span class="mision-body">
+                    <h3>{u.titulo}</h3>
+                    <p>{u.mision.textoVael}</p>
+                  </span>
+                  <span class="k-pill mision-pill" data-pill>…</span>
+                </a>
+              </li>
+            ))}
+            {zona.especial && (
+              <li>
+                <a
+                  class="mision-card mision-card--especial"
+                  href={`/laboratorio/especial/${zona.especial.id}`}
+                  data-id={zona.especial.id}
+                  data-unidad={`${zona.nivel}.especial`}
+                >
+                  <span class="mision-num" aria-hidden="true">🔭</span>
+                  <span class="mision-body">
+                    <h3>{zona.especial.titulo}</h3>
+                    <p>Cierra la {zona.nombre} con una misión corta de 5-7 minutos. No es un examen.</p>
+                  </span>
+                  <span class="k-pill mision-pill" data-pill>…</span>
+                </a>
+              </li>
+            )}
+          </ol>
+        </section>
+      ))}
     </div>
-    
-    <!-- Navigation Arrows -->
-    <button id="scroll-left" class="nav-arrow prev" aria-label="Anterior">‹</button>
-    <button id="scroll-right" class="nav-arrow next" aria-label="Siguiente">›</button>
-    
-    <!-- Map Grid -->
-    <div class="mission-grid">
-       {scenarios.map((scenario, index) => (
-         <ScenarioMapCard scenario={scenario} index={index} />
-       ))}
-       {unidadesConEspeciales.map((shim, index) => (
-         <ScenarioMapCard scenario={shim.scenario} href={shim.href} index={scenarios.length + index} />
-       ))}
-    </div>
+
+    <!-- ============ Paneles tramos 10-11 y 12-14 (retos legacy) ============ -->
+    {panelesLegacy.map(panel => (
+      <div data-tramo-panel={panel.tramo} class="tramo-panel hidden">
+        <section class="zona" style="--zona-accent: var(--k-zona-1)">
+          <header class="zona-head">
+            <span class="zona-num" aria-hidden="true">1</span>
+            <div class="zona-head-text">
+              <h2>Nivel 1</h2>
+              <span class="zona-count k-pill" data-zona-count>· / ·</span>
+            </div>
+          </header>
+
+          <ol class="zona-path">
+            {panel.scenarios.map(s => (
+              <li>
+                <a
+                  class="mision-card"
+                  href={`/scenario/${s.id}`}
+                  data-id={s.id}
+                  data-unidad={s.unidad}
+                  data-badge={s.badge?.id}
+                  data-req={s.required_badge_id}
+                >
+                  <span class="mision-num" aria-hidden="true">{s.unidad}</span>
+                  <span class="mision-body">
+                    <h3>{s.title.replace(/^[\d.]+\s*/, '')}</h3>
+                    <p>{s.description}</p>
+                  </span>
+                  <span class="k-pill mision-pill" data-pill>…</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      </div>
+    ))}
   </main>
 </Layout>
 
 <script>
-    import { ProgressService } from '../lib/progress-service';
-    import { activeChild } from '../lib/active-child';
-    import { SubscriptionService } from '../lib/subscription-service';
-    import { ChildrenService } from '../lib/children-service';
-    import { tramoForChild } from '../lib/tramos';
-    import { requireActiveChild } from '../lib/require-auth';
+  import { ProgressService } from '../lib/progress-service';
+  import { activeChild } from '../lib/active-child';
+  import { SubscriptionService } from '../lib/subscription-service';
+  import { ChildrenService } from '../lib/children-service';
+  import { tramoForChild } from '../lib/tramos';
+  import { requireActiveChild } from '../lib/require-auth';
+
+  type PillVariant = 'success' | 'warning' | 'locked' | 'accent' | '';
+
+  function setPill(card: Element, text: string, variant: PillVariant) {
+    const pill = card.querySelector('[data-pill]');
+    if (!pill) return;
+    pill.textContent = text;
+    pill.className = `k-pill mision-pill${variant ? ` k-pill--${variant}` : ''}`;
+  }
+
+  async function init() {
+    const allowed = await requireActiveChild();
+    if (!allowed) return;
 
     const state = ProgressService.getState();
+    const childId = activeChild.get();
 
-    const globalText = document.getElementById('global-percent');
-    const globalBar = document.getElementById('global-bar');
+    let myTramo: string | null = null;
+    let hasPlan = false;
 
-    // 2. Hydrate Cards
-    const cards = Array.from(document.querySelectorAll('.mission-card-v3'));
-    console.log('[Map] Found cards:', cards.length);
-
-    // El mapa contiene las 3 variantes de tramo de cada unidad; aquí se
-    // muestra solo la del tramo del hijo activo (una tarjeta por unidad).
-    function filterByTramo(myTramo) {
-        const byUnidad = new Map();
-        cards.forEach(card => {
-            const unidad = card.getAttribute('data-unidad');
-            if (!byUnidad.has(unidad)) byUnidad.set(unidad, []);
-            byUnidad.get(unidad).push(card);
-        });
-
-        const visible = [];
-        byUnidad.forEach(variants => {
-            const match = (myTramo && variants.find(c => c.getAttribute('data-tramo') === myTramo)) || variants[0];
-            variants.forEach(c => {
-                if (c === match) {
-                    c.classList.remove('hidden');
-                    visible.push(c);
-                } else {
-                    c.classList.add('hidden');
-                }
-            });
-        });
-        return visible;
-    }
-
-    async function hydrateCards() {
-        const allowed = await requireActiveChild();
-        if (!allowed) return;
-
-        const childId = activeChild.get();
-
-        let myTramo = null;
-        let hasPlan = false;
+    if (childId) {
+      hasPlan = await SubscriptionService.hasActivePlan();
+      const children = await ChildrenService.listChildren();
+      const child = children.find(c => c.id === childId);
+      if (child) {
+        const tramo = tramoForChild(child.birth_date);
+        myTramo = tramo ? tramo.id : null;
         const tramoPill = document.getElementById('map-tramo-pill');
-        if (childId) {
-            hasPlan = await SubscriptionService.hasActivePlan();
-            const children = await ChildrenService.listChildren();
-            const child = children.find(c => c.id === childId);
-            if (child) {
-                const tramo = tramoForChild(child.birth_date);
-                myTramo = tramo ? tramo.id : null;
-                if (tramo && tramoPill) {
-                    tramoPill.textContent = `Tramo ${tramo.label}`;
-                    tramoPill.classList.remove('hidden');
-                }
-            }
+        if (tramo && tramoPill) {
+          tramoPill.textContent = `Tramo ${tramo.label}`;
+          tramoPill.classList.remove('hidden');
         }
-
-        const visibleCards = filterByTramo(myTramo);
-
-        const globalPercent = ProgressService.getGlobalProgress(visibleCards.length);
-        if (globalText) globalText.innerText = `${globalPercent}%`;
-        if (globalBar) globalBar.style.width = `${globalPercent}%`;
-
-        visibleCards.forEach(card => {
-            const id = card.getAttribute('data-id');
-            const unidad = card.getAttribute('data-unidad');
-            const reqBadge = card.getAttribute('data-req');
-            const statusText = card.querySelector('.status-locked');
-
-            let isLocked = false;
-            let requiresSubscription = false;
-
-            // Bloqueo por insignia previa
-            if (reqBadge && !state.badges.includes(reqBadge)) {
-                isLocked = true;
-            }
-
-            // Bloqueo por no tener suscripción familiar activa
-            if (!hasPlan) {
-                isLocked = true;
-                requiresSubscription = true;
-            }
-
-            // La Unidad 1.1 es siempre el reto de prueba gratuito
-            if (unidad === '1.1') {
-                isLocked = false;
-                requiresSubscription = false;
-            }
-
-            // "Completado" (diálogo terminado) y "ganado" (insignia real en
-            // el perfil del hijo/a) son cosas distintas: la insignia solo se
-            // concede si aprueba el test de conocimiento (ver Quiz.astro),
-            // así que la tarjeta no debe celebrar un reto que se dejó a
-            // medias o cuyo test no se aprobó.
-            const isCompleted = state.completedScenarios.includes(id);
-            const badgeId = card.getAttribute('data-badge');
-            const isEarned = badgeId ? state.badges.includes(badgeId) : isCompleted;
-            const playBtnEl = card.querySelector('.play-btn');
-
-            if (isLocked) {
-                card.classList.add('locked');
-                card.classList.remove('available', 'completed', 'needs-quiz');
-                if (requiresSubscription) {
-                    card.classList.add('needs-enrollment');
-                    card.setAttribute('href', '/caminos');
-                    if (statusText) statusText.innerText = '🔒 Requiere suscripción';
-                } else if (statusText) {
-                    statusText.innerText = '🔒 Bloqueado';
-                }
-            } else {
-                card.classList.remove('locked', 'needs-enrollment');
-                card.classList.add('available');
-
-                if (isEarned) {
-                    card.classList.add('completed');
-                    card.classList.remove('needs-quiz');
-                    if (statusText) statusText.innerText = '✅ Completado';
-                } else if (isCompleted) {
-                    card.classList.add('needs-quiz');
-                    card.classList.remove('completed');
-                    if (statusText) statusText.innerText = '📝 Repite el test';
-                    if (playBtnEl) playBtnEl.textContent = 'TERMINAR TEST';
-                } else {
-                    card.classList.remove('completed', 'needs-quiz');
-                    if (statusText) statusText.innerText = '🚀 Disponible';
-                }
-            }
-        });
+      }
     }
 
-    hydrateCards();
+    // Mostrar solo el panel del tramo del hijo activo (8-9 por defecto).
+    const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-tramo-panel]'));
+    const target = panels.some(p => p.dataset.tramoPanel === myTramo) ? myTramo : '8-9';
+    panels.forEach(p => p.classList.toggle('hidden', p.dataset.tramoPanel !== target));
+    const panel = panels.find(p => p.dataset.tramoPanel === target);
+    if (!panel) return;
 
-    // 3. Deep Mode Logic
-    const deepBtn = document.getElementById('btn-deep-mode');
-    const deepStatus = document.getElementById('deep-status');
-    let deepMode = localStorage.getItem('kidia_deep_mode') === 'true';
-    
-    function updateDeepUI() {
-        deepStatus.innerText = deepMode ? 'ON' : 'OFF';
-        deepBtn.classList.toggle('active', deepMode);
-        document.body.classList.toggle('deep-mode-enabled', deepMode);
-    }
-    
-    deepBtn.addEventListener('click', () => {
-        deepMode = !deepMode;
-        localStorage.setItem('kidia_deep_mode', deepMode);
-        updateDeepUI();
-    });
-    
-    updateDeepUI();
+    // Estados de cada tarjeta de misión.
+    const cards = Array.from(panel.querySelectorAll<HTMLAnchorElement>('.mision-card'));
+    let teTocaAsignado = false;
+    let completadas = 0;
 
-    // 5. Drag-to-Scroll Logic (2D: Horizontal + Vertical)
-    const slider = document.querySelector('.mission-grid');
-    let isDown = false;
-    let startX;
-    let startY;
-    let scrollLeft;
-    let scrollTop;
-    let isDragging = false; 
+    cards.forEach(card => {
+      const id = card.dataset.id || '';
+      const unidad = card.dataset.unidad || '';
+      const reqBadge = card.dataset.req;
+      const badgeId = card.dataset.badge;
 
-    slider.addEventListener('mousedown', (e) => {
-        isDown = true;
-        isDragging = false;
-        slider.classList.add('active');
-        
-        // Track Start Positions
-        startX = e.pageX - slider.offsetLeft;
-        startY = e.pageY - slider.offsetTop;
-        
-        scrollLeft = slider.scrollLeft;
-        scrollTop = slider.scrollTop;
-        
-        // Disable snap
-        slider.style.scrollSnapType = 'none';
-        slider.style.cursor = 'grabbing';
-    });
+      const isCompleted = state.completedScenarios.includes(id);
+      // "Completada" (flujo terminado) y "ganada" (insignia real tras el test)
+      // son distintas en los retos legacy — ver Quiz.astro.
+      const isEarned = badgeId ? state.badges.includes(badgeId) : isCompleted;
 
-    window.addEventListener('mouseleave', () => {
-        if(isDown) stopDrag();
-    });
+      let locked = Boolean(reqBadge && !state.badges.includes(reqBadge));
+      let needsSubscription = false;
+      if (!hasPlan && unidad !== '1.1') {
+        locked = true;
+        needsSubscription = true;
+      }
 
-    window.addEventListener('mouseup', () => {
-        if(isDown) stopDrag();
-    });
+      card.classList.remove('completada', 'bloqueada', 'es-aqui', 'pendiente-test');
 
-    window.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        
-        // Prevent default only if we are actively dragging to avoid selecting text, 
-        // but since we want 2D scroll, we might want to allow some native behavior?
-        // Actually, custom drag replaces native scroll. So preventDefault is correct.
-        e.preventDefault();
-        
-        // Horizontal
-        const x = e.pageX - slider.offsetLeft;
-        const walkX = (x - startX) * 1.5; 
-        slider.scrollLeft = scrollLeft - walkX;
-        
-        // Vertical
-        const y = e.pageY - slider.offsetTop;
-        const walkY = (y - startY) * 1.0; 
-        slider.scrollTop = scrollTop - walkY;
-
-        // Flag dragging
-        if (Math.abs(walkX) > 5 || Math.abs(walkY) > 5) {
-            isDragging = true;
+      if (isEarned) {
+        completadas++;
+        card.classList.add('completada');
+        setPill(card, '✅ Completada', 'success');
+      } else if (isCompleted) {
+        // Terminó el reto pero no aprobó (o no hizo) el test → no cuenta aún.
+        card.classList.add('pendiente-test');
+        setPill(card, '📝 Termina el test', 'warning');
+      } else if (locked) {
+        card.classList.add('bloqueada');
+        if (needsSubscription) {
+          card.setAttribute('href', '/caminos');
+          setPill(card, '🔒 Con suscripción', 'locked');
+        } else {
+          card.removeAttribute('href');
+          setPill(card, '🔒 Bloqueada', 'locked');
         }
+      } else if (!teTocaAsignado) {
+        teTocaAsignado = true;
+        card.classList.add('es-aqui');
+        setPill(card, '⭐ ¡Te toca!', '');
+      } else {
+        setPill(card, '🚀 Disponible', '');
+      }
     });
 
-    function stopDrag() {
-        isDown = false;
-        slider.classList.remove('active');
-        slider.style.cursor = 'grab';
-        
-        // Re-enable snap logic
-        requestAnimationFrame(() => {
-            // Only horizontal snap makes sense for a reel, but we can keep it
-            slider.style.scrollSnapType = 'x mandatory'; 
-        });
+    // Contador por zona ("3 de 5") y zona completa.
+    panel.querySelectorAll<HTMLElement>('.zona').forEach(zona => {
+      const zonaCards = zona.querySelectorAll('.mision-card');
+      const done = zona.querySelectorAll('.mision-card.completada').length;
+      const countEl = zona.querySelector('[data-zona-count]');
+      if (countEl) countEl.textContent = `${done} de ${zonaCards.length}`;
+      zona.classList.toggle('zona--completa', done === zonaCards.length && zonaCards.length > 0);
+    });
+
+    // Progreso global del tramo visible.
+    const percent = cards.length ? Math.min(100, Math.round((completadas / cards.length) * 100)) : 0;
+    const bar = document.getElementById('global-bar');
+    const text = document.getElementById('global-percent');
+    if (bar) bar.style.width = `${percent}%`;
+    if (text) text.textContent = `${percent}%`;
+
+    // Llevar la vista a "te toca" si ya hay progreso (retomar donde estaba).
+    if (completadas > 0) {
+      panel.querySelector('.es-aqui')?.scrollIntoView({ block: 'center', behavior: 'auto' });
     }
+  }
 
-    // Prevent clicks if we were dragging
-    const cardsForDrag = document.querySelectorAll('.mission-card-v3');
-    cardsForDrag.forEach(card => {
-        card.addEventListener('click', (e) => {
-            if (isDragging) {
-                e.preventDefault();
-                e.stopPropagation(); // Stop navigation
-                console.log('[Map] Click blocked due to drag');
-            }
-        }, true); // Capture phase to intercept early
-    });
-
-    // 6. Scroll Arrows Logic
-    const btnLeft = document.getElementById('scroll-left');
-    const btnRight = document.getElementById('scroll-right');
-    
-    if (btnLeft && btnRight && slider) {
-        btnLeft.addEventListener('click', () => {
-            slider.scrollBy({ left: -400, behavior: 'smooth' });
-        });
-        
-        btnRight.addEventListener('click', () => {
-             slider.scrollBy({ left: 400, behavior: 'smooth' });
-        });
-    }
-
-    // 7. 3D Tilt Effect (Moved from Card component for better performance)
-    const tiltCards = document.querySelectorAll('.mission-card-v3');
-    tiltCards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            if (card.classList.contains('locked')) return;
-            
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateX = ((y - centerY) / centerY) * -10; // Max 10deg
-            const rotateY = ((x - centerX) / centerX) * 10;
-            
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
-            card.style.zIndex = '100'; // Bring to front when tilting
-        });
-        
-        card.addEventListener('mouseleave', () => {
-             card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
-             card.style.zIndex = 'auto';
-        });
-    });
+  init();
 </script>
 
 <style>
-    /* Container adjustments to center the strip */
-    .map-container {
-        width: 100vw;
-        height: 100vh;
-        position: relative;
-        display: block; /* Removed flex centering */
-        /* Deep Space Premium Gradient */
-        background: radial-gradient(circle at 50% 50%, #0f172a 0%, #020617 100%);
-        overflow: hidden; 
-    }
-    
-    .map-header {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 100; /* Ensure on top */
-        padding: 2rem 4rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: linear-gradient(to bottom, rgba(2, 6, 23, 0.8) 0%, transparent 100%);
-        pointer-events: none; /* Let clicks pass through if needed, but controls need pointer-events: auto */
+  .mapa {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: var(--k-space-8) var(--k-space-4) var(--k-space-24);
+  }
+
+  /* ---------- Cabecera ---------- */
+
+  .mapa-head {
+    margin-bottom: var(--k-space-12);
+  }
+
+  .mapa-title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--k-space-3);
+    flex-wrap: wrap;
+  }
+
+  .mapa-title-row h1 {
+    background: linear-gradient(135deg, var(--k-brand-primary), var(--k-brand-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  #map-tramo-pill.hidden {
+    display: none;
+  }
+
+  .mapa-sub {
+    margin: var(--k-space-2) 0 var(--k-space-5);
+    max-width: 55ch;
+  }
+
+  .mapa-progress {
+    display: flex;
+    align-items: center;
+    gap: var(--k-space-3);
+    max-width: 420px;
+  }
+
+  .mapa-progress-label {
+    font-size: var(--k-text-xs);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--k-text-muted);
+  }
+
+  .mapa-progress :global(.mapa-progress-bar) {
+    flex: 1;
+  }
+
+  #global-percent {
+    color: var(--k-brand-primary);
+    font-weight: 800;
+    min-width: 3ch;
+    text-align: right;
+  }
+
+  .tramo-panel.hidden {
+    display: none;
+  }
+
+  /* ---------- Zona ---------- */
+
+  .zona {
+    margin-bottom: var(--k-space-16);
+  }
+
+  .zona-head {
+    display: flex;
+    align-items: center;
+    gap: var(--k-space-4);
+    margin-bottom: var(--k-space-6);
+  }
+
+  .zona-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    font-size: var(--k-text-xl);
+    font-weight: 800;
+    color: var(--zona-accent);
+    background: color-mix(in srgb, var(--zona-accent) 14%, transparent);
+    border: 2px solid color-mix(in srgb, var(--zona-accent) 45%, transparent);
+  }
+
+  .zona-head-text {
+    display: flex;
+    align-items: center;
+    gap: var(--k-space-3);
+    flex-wrap: wrap;
+  }
+
+  .zona-head-text h2 {
+    color: var(--k-text-strong);
+  }
+
+  .zona-count {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--k-border-subtle);
+    color: var(--k-text-muted);
+  }
+
+  .zona--completa .zona-num {
+    background: color-mix(in srgb, var(--k-state-success) 15%, transparent);
+    border-color: var(--k-state-success);
+    color: var(--k-state-success);
+  }
+
+  .zona--completa .zona-count {
+    color: var(--k-state-success);
+    border-color: color-mix(in srgb, var(--k-state-success) 40%, transparent);
+  }
+
+  /* ---------- Camino de misiones ---------- */
+
+  .zona-path {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 var(--k-space-10);
+    position: relative;
+  }
+
+  /* Línea vertical del camino */
+  .zona-path::before {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: var(--k-space-2);
+    bottom: var(--k-space-2);
+    width: 3px;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--zona-accent) 30%, transparent);
+  }
+
+  .zona-path li {
+    position: relative;
+    margin-bottom: var(--k-space-4);
+  }
+
+  /* Nodo del camino */
+  .zona-path li::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--k-space-10) + 12px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--k-bg-page);
+    border: 3px solid color-mix(in srgb, var(--zona-accent) 55%, transparent);
+  }
+
+  .zona-path li:has(.completada)::before {
+    background: var(--zona-accent);
+    border-color: var(--zona-accent);
+  }
+
+  .zona-path li:has(.es-aqui)::before {
+    background: var(--k-brand-primary);
+    border-color: var(--k-brand-primary);
+    box-shadow: 0 0 12px rgba(34, 211, 238, 0.8);
+  }
+
+  /* ---------- Tarjeta de misión ---------- */
+
+  .mision-card {
+    display: flex;
+    align-items: center;
+    gap: var(--k-space-4);
+    background: var(--k-bg-surface);
+    border: 1px solid var(--k-border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--k-space-4) var(--k-space-5);
+    transition:
+      transform var(--k-motion-base) var(--k-ease-out),
+      border-color var(--k-motion-base) var(--k-ease-out),
+      box-shadow var(--k-motion-base) var(--k-ease-out);
+  }
+
+  a.mision-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--zona-accent) 50%, transparent);
+    box-shadow: var(--shadow-md);
+  }
+
+  .mision-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: var(--radius-sm);
+    font-weight: 800;
+    font-size: var(--k-text-sm);
+    color: var(--zona-accent);
+    background: color-mix(in srgb, var(--zona-accent) 12%, transparent);
+  }
+
+  .mision-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mision-body h3 {
+    font-size: var(--k-text-lg);
+    color: var(--k-text-strong);
+    margin-bottom: 2px;
+  }
+
+  .mision-body p {
+    margin: 0;
+    font-size: var(--k-text-sm);
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .mision-pill {
+    flex-shrink: 0;
+  }
+
+  /* Estados */
+  .mision-card.completada {
+    border-color: color-mix(in srgb, var(--k-state-success) 35%, transparent);
+  }
+
+  .mision-card.es-aqui {
+    border-color: var(--k-brand-primary);
+    box-shadow: var(--k-glow-primary);
+  }
+
+  .mision-card.bloqueada {
+    opacity: 0.6;
+  }
+
+  .mision-card.bloqueada:not([href]) {
+    cursor: default;
+  }
+
+  a.mision-card.bloqueada:not([href]):hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--k-border-subtle);
+  }
+
+  .mision-card--especial {
+    border-style: dashed;
+    border-color: color-mix(in srgb, var(--zona-accent) 45%, transparent);
+    background: color-mix(in srgb, var(--zona-accent) 6%, var(--k-bg-surface));
+  }
+
+  /* ---------- Móvil ---------- */
+
+  @media (max-width: 600px) {
+    .mapa {
+      padding-top: var(--k-space-6);
     }
 
-    .map-header > * {
-        pointer-events: auto;
+    .zona-path {
+      padding-left: var(--k-space-6);
     }
 
-    .map-header h1 {
-        font-size: 2.5rem;
-        font-weight: 800;
-        margin: 0;
-        letter-spacing: -0.05em;
-        text-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+    .zona-path::before {
+      left: 5px;
     }
 
-    .title-row {
-        display: flex;
-        align-items: center;
-        gap: 0.9rem;
-        flex-wrap: wrap;
+    .zona-path li::before {
+      left: calc(-1 * var(--k-space-6));
     }
 
-    .tramo-pill {
-        background: rgba(139, 92, 246, 0.15);
-        border: 1px solid rgba(139, 92, 246, 0.4);
-        color: #c4b5fd;
-        font-size: 0.8rem;
-        font-weight: 700;
-        padding: 0.35rem 0.9rem;
-        border-radius: 99px;
-        white-space: nowrap;
+    .mision-card {
+      flex-wrap: wrap;
+      gap: var(--k-space-3);
     }
 
-    .tramo-pill.hidden {
-        display: none;
+    .mision-body {
+      flex-basis: calc(100% - 44px - var(--k-space-3));
     }
 
-    .map-description {
-        color: #94a3b8;
-        margin: 0.5rem 0 0 0;
-        font-size: 1rem;
-        max-width: 500px;
+    .mision-pill {
+      margin-left: calc(44px + var(--k-space-3));
     }
-
-    .map-controls {
-        display: flex;
-        gap: 2rem;
-        align-items: center;
-    }
-
-    /* Progress Bar Styled */
-    .global-progress {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 0.25rem;
-        position: relative; /* For tooltip */
-        cursor: help;
-    }
-    
-    /* TOOLTIPS */
-    .tooltip-container {
-        position: relative; /* Anchor */
-    }
-    
-    .tooltip-box {
-        position: absolute;
-        top: 120%;
-        right: 0;
-        width: 200px;
-        padding: 1rem;
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 0.8rem;
-        color: white;
-        font-size: 0.85rem;
-        line-height: 1.4;
-        box-shadow: 0 10px 30px -5px rgba(0,0,0,0.5);
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-10px);
-        transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-        pointer-events: none;
-        z-index: 200;
-        text-align: center;
-    }
-    
-    .tooltip-container:hover .tooltip-box {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-    }
-    
-    /* Custom tooltip position for button */
-    .tooltip-right {
-        right: 0;
-        top: 130%; /* Shift down slightly more */
-    }
-
-    .progress-label {
-        font-size: 0.7rem;
-        font-weight: 700;
-        letter-spacing: 0.1em;
-        color: rgba(255, 255, 255, 0.5);
-    }
-
-    .progress-track {
-        width: 200px;
-        height: 8px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 4px;
-        overflow: hidden;
-        position: relative;
-    }
-
-    .progress-fill {
-        height: 100%;
-        background: var(--color-primary);
-        box-shadow: 0 0 10px var(--color-primary);
-        width: 0%;
-        transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .progress-text {
-        display: block; 
-        position: absolute;
-        right: 0;
-        top: -1.2rem;
-        font-weight: 800;
-        color: var(--color-primary);
-        text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
-    }
-
-    /* Deep Mode Button */
-    .btn-deep-mode {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 0.75rem 1.5rem;
-        border-radius: 99px;
-        color: white;
-        font-weight: 600;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-    }
-
-    .btn-deep-mode:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: translateY(-2px);
-    }
-
-    .btn-deep-mode.active {
-        border-color: var(--color-secondary);
-        box-shadow: 0 0 15px rgba(232, 121, 249, 0.3);
-    }
-
-    .btn-deep-mode .status-indicator {
-        font-size: 0.7rem;
-        background: rgba(0,0,0,0.3);
-        padding: 0.2rem 0.5rem;
-        border-radius: 4px;
-        color: var(--color-secondary);
-    }
-    
-    .btn-action:hover {
-        transform: scale(1.02);
-        box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
-    }
-
-    /* Carousel Grid */
-    .mission-grid {
-        display: flex;
-        gap: 6rem;
-        /* Increase top padding to avoid header overlap (approx 140px) */
-        padding: 140px calc(50vw - 200px) 4rem;
-        
-        /* Layout */
-        width: 100%;
-        height: 100%; 
-        
-        /* Alignment */
-        align-items: flex-start; /* Start from top (respecting padding) */
-        
-        /* Overflow - Allow 2D Scroll */
-        overflow: auto; 
-        
-        /* Snapping */
-        scroll-snap-type: x mandatory;
-        
-        /* Show scrollbars for debug/usability if drag fails */
-        /* scrollbar-width: none; */
-        /* -ms-overflow-style: none; */
-        
-        cursor: grab;
-        /* user-select: none; */
-    }
-
-    .mission-grid.active {
-        cursor: grabbing;
-        scroll-behavior: auto; 
-    }
-
-    /* .mission-grid::-webkit-scrollbar { 
-        display: none; 
-    } */
-    
-    /* Ensure cards alignment */
-    :global(.mission-card-v3) {
-        flex: 0 0 400px;
-        scroll-snap-align: center;
-        /* Safe vertical centering */
-        margin-top: auto;
-        margin-bottom: auto;
-        
-        perspective: 1000px;
-        position: relative;
-    }
-
-    /* Neon Connections between cards */
-    :global(.mission-card-v3:not(:last-child))::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 100%; /* Start from right edge */
-        width: 6rem; /* Match grid gap */
-        height: 4px;
-        background: linear-gradient(90deg, 
-            rgba(34, 211, 238, 0.2) 0%, 
-            rgba(232, 121, 249, 0.5) 50%, 
-            rgba(34, 211, 238, 0.2) 100%
-        );
-        box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
-        transform: translateY(-50%);
-        opacity: 0.6;
-        pointer-events: none;
-        z-index: 1; /* Lift above background but below hover state/content if needed */
-    }
-    
-    /* Connect to next card visually even if tilted */
-    :global(.mission-card-v3:hover:not(:last-child))::after {
-        opacity: 1;
-        box-shadow: 0 0 25px rgba(232, 121, 249, 0.6);
-        transition: all 0.3s ease;
-    }
-    
-    /* Navigation Arrows */
-    .nav-arrow {
-        position: fixed;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(15, 23, 42, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: white;
-        font-size: 3rem;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        z-index: 50;
-        backdrop-filter: blur(10px);
-        transition: all 0.2s ease;
-        line-height: 0;
-        padding-bottom: 0.5rem; /* Optical center adjustment */
-    }
-    
-    .nav-arrow:hover {
-        background: rgba(34, 211, 238, 0.2);
-        scale: 1.1;
-        box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
-    }
-    
-    .nav-arrow.prev {
-        left: 2rem;
-    }
-    
-    .nav-arrow.next {
-        right: 2rem;
-    }
-    
-    @media (max-width: 768px) {
-        .nav-arrow {
-            width: 40px;
-            height: 40px;
-            font-size: 2rem;
-        }
-        .nav-arrow.prev { left: 1rem; }
-        .nav-arrow.next { right: 1rem; }
-    }
+  }
 </style>

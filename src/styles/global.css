@@ -1,34 +1,8 @@
-:root {
-  --color-bg: #09090b;
-  --color-text: #e4e4e7;
-  --color-text-muted: #94a3b8;
-  --color-primary: #22d3ee; /* Cyan */
-  --color-secondary: #e879f9; /* Pink */
-  --color-accent: #8b5cf6; /* Purple */
-  --color-surface: #18181b;
-
-  --font-body: 'Outfit', sans-serif;
-
-  --glow-primary: 0 0 20px rgba(34, 211, 238, 0.5);
-  --glow-secondary: 0 0 20px rgba(232, 121, 249, 0.5);
-
-  /* Radios (alineados con src/styles/constructor.css) */
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-pill: 9999px;
-
-  /* Sombras (alineadas con src/styles/constructor.css) */
-  --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.4), 0 2px 6px -1px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.5), 0 4px 10px -2px rgba(0, 0, 0, 0.3);
-
-  /* Escala tipográfica */
-  --text-hero: clamp(2.75rem, 5vw, 4.5rem);
-  --text-h1: clamp(2rem, 3.5vw, 2.75rem);
-  --text-h2: clamp(1.5rem, 2.5vw, 2rem);
-  --text-h3: 1.25rem;
-}
+/* Tokens del sistema de diseño (docs/mejora/03-sistema-diseno.md).
+   Aquí solo viven reglas base y utilidades; los valores, en tokens.css
+   y los componentes .k-*, en components.css. */
+@import './tokens.css';
+@import './components.css';
 
 * {
   box-sizing: border-box;
@@ -87,6 +61,27 @@ p {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* Accesibilidad: foco visible en todo elemento interactivo.
+   Solo con navegación por teclado (:focus-visible), no al hacer click. */
+:focus-visible {
+  outline: 2px solid var(--k-border-focus);
+  outline-offset: 2px;
+}
+
+/* Accesibilidad: si el usuario pide menos movimiento, se anulan
+   animaciones y transiciones en todo el sitio. Las celebraciones de
+   gamificación deben ofrecer su variante estática (doc 04 §5). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Utilities */

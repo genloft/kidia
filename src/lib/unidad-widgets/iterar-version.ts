@@ -50,10 +50,10 @@ export function mountIterarVersion(
 
         container.appendChild(el('p', 'ua-prompt', '¿Harías una versión 3?'));
         const row = el('div', 'ua-choice-row');
-        const siBtn = el('button', 'btn btn-secondary', 'Sí, otra mejora más');
+        const siBtn = el('button', 'k-btn k-btn--secondary k-btn--lg', 'Sí, otra mejora más');
         siBtn.type = 'button';
         siBtn.addEventListener('click', () => onComplete({ cambioElegido: cambio.label, quiereV3: true }));
-        const noBtn = el('button', 'btn btn-primary', 'No, esta ya me gusta');
+        const noBtn = el('button', 'k-btn k-btn--primary k-btn--lg', 'No, esta ya me gusta');
         noBtn.type = 'button';
         noBtn.addEventListener('click', () => onComplete({ cambioElegido: cambio.label, quiereV3: false }));
         row.appendChild(siBtn);

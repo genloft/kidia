@@ -1,0 +1,19 @@
+---
+// Pill/etiqueta del sistema de diseño (doc 03 §3).
+interface Props {
+  variant?: 'primary' | 'accent' | 'success' | 'warning' | 'danger' | 'locked';
+  id?: string;
+  class?: string;
+  [key: string]: any;
+}
+
+const { variant = 'primary', id, class: extraClass, ...rest } = Astro.props;
+---
+
+<span
+  id={id}
+  class:list={['k-pill', variant !== 'primary' && `k-pill--${variant}`, extraClass]}
+  {...rest}
+>
+  <slot />
+</span>

@@ -1,50 +1,101 @@
 ---
+// Header con modos (doc 02 §1): dos audiencias, dos shells.
+//  - aventura: el del niño/a — logo → Mapa, nav mínima de juego (Mapa,
+//    Insignias, Constructor), su hijo/a activo y un único acceso discreto
+//    "Familia 🔒" (el gate con PIN vive en las páginas de adulto).
+//  - familia: el del adulto — Panel Familiar, Mi Cuenta, Blog, Metodología,
+//    menú de cuenta con logout y botón para devolver la tablet al niño/a
+//    ("Modo Aventura", que además vuelve a echar el candado).
+//  - publico (default): el de marketing/login, como siempre.
+interface Props {
+  mode?: 'aventura' | 'familia' | 'publico';
+}
+
+const { mode = 'publico' } = Astro.props;
 const currentPath = Astro.url.pathname;
 const isActive = (path: string) => currentPath === path ? 'active' : '';
 ---
 
-<header class="header">
+<header class={`header header--${mode}`} data-mode={mode}>
   <div class="logo">
-    <a href="/">
+    <a href={mode === 'aventura' ? '/mapa' : mode === 'familia' ? '/parents' : '/'}>
       <span class="logo-text">Kidia</span>
       <span class="logo-beta">beta</span>
     </a>
   </div>
 
-  <nav class="main-nav">
-    <a href="/mapa" class={`nav-link ${isActive('/mapa')}`}>Mapa</a>
-    <a href="/insignias" class={`nav-link ${isActive('/insignias')}`}>Insignias</a>
-    <a href="/constructor" class={`nav-link ${isActive('/constructor')}`}>Constructor</a>
-    <a href="/caminos" class={`nav-link ${isActive('/caminos')}`}>Caminos</a>
-    <a href="/metodologia" class={`nav-link ${isActive('/metodologia')}`}>Metodología</a>
-    <a href="/blog" class={`nav-link ${isActive('/blog')}`}>Blog</a>
-    <a href="/about" class={`nav-link ${isActive('/about')}`}>Info</a>
-  </nav>
+  {mode === 'publico' && (
+    <nav class="main-nav">
+      <a href="/mapa" class={`nav-link ${isActive('/mapa')}`}>Mapa</a>
+      <a href="/insignias" class={`nav-link ${isActive('/insignias')}`}>Insignias</a>
+      <a href="/constructor" class={`nav-link ${isActive('/constructor')}`}>Constructor</a>
+      <a href="/caminos" class={`nav-link ${isActive('/caminos')}`}>Caminos</a>
+      <a href="/metodologia" class={`nav-link ${isActive('/metodologia')}`}>Metodología</a>
+      <a href="/blog" class={`nav-link ${isActive('/blog')}`}>Blog</a>
+      <a href="/about" class={`nav-link ${isActive('/about')}`}>Info</a>
+    </nav>
+  )}
+
+  {mode === 'aventura' && (
+    <nav class="main-nav main-nav--aventura">
+      <a href="/mapa" class={`nav-link nav-link--big ${isActive('/mapa')}`}>🗺️ <span class="nav-label">Mapa</span></a>
+      <a href="/insignias" class={`nav-link nav-link--big ${isActive('/insignias')}`}>🏅 <span class="nav-label">Insignias</span></a>
+      <a href="/constructor" class={`nav-link nav-link--big ${isActive('/constructor')}`}>🤖 <span class="nav-label">Constructor</span></a>
+    </nav>
+  )}
+
+  {mode === 'familia' && (
+    <nav class="main-nav">
+      <a href="/parents" class={`nav-link ${isActive('/parents')}`}>Panel Familiar</a>
+      <a href="/perfil" class={`nav-link ${isActive('/perfil')}`}>Mi Cuenta</a>
+      <a href="/metodologia" class={`nav-link ${isActive('/metodologia')}`}>Metodología</a>
+      <a href="/blog" class={`nav-link ${isActive('/blog')}`}>Blog</a>
+    </nav>
+  )}
 
   <div class="right-cluster">
-      <div id="parent-zone-guest" class="parent-zone">
-          <a href="/parents" class={`nav-link parent-link ${isActive('/parents')}`}>Zona Padres 🔒</a>
-      </div>
-      <div id="auth-loading" class="auth-loading">
-          <div class="skeleton-btn"></div>
-      </div>
-      <div id="active-child-zone" class="active-child-zone hidden">
-          <button id="child-menu-btn" class="child-text-btn" type="button">
-              <span class="child-dot"></span>
-              <span class="child-label">Jugando como</span> <strong id="active-child-name">-</strong>
-              <span id="active-child-tramo" class="child-tramo-pill hidden"></span>
-              <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
-          </button>
-          <div id="child-dropdown" class="user-dropdown" style="display: none;">
-              <div class="dropdown-body" id="child-dropdown-list"></div>
-              <div class="dropdown-footer">
-                  <a href="/perfil#hijos" class="dropdown-item">Gestionar hijos/as</a>
-              </div>
-          </div>
-      </div>
-      <div id="auth-ui" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
-          <a href="/login" class="btn-login">Acceder</a>
-      </div>
+      {mode === 'publico' && (
+        <div id="parent-zone-guest" class="parent-zone">
+            <a href="/parents" class={`nav-link parent-link ${isActive('/parents')}`}>Zona Padres 🔒</a>
+        </div>
+      )}
+
+      {(mode === 'publico' || mode === 'familia') && (
+        <div id="auth-loading" class="auth-loading">
+            <div class="skeleton-btn"></div>
+        </div>
+      )}
+
+      {mode === 'aventura' && (
+        <div id="active-child-zone" class="active-child-zone hidden">
+            <button id="child-menu-btn" class="child-text-btn" type="button">
+                <span class="child-dot"></span>
+                <span class="child-label">Jugando como</span> <strong id="active-child-name">-</strong>
+                <span id="active-child-tramo" class="child-tramo-pill hidden"></span>
+                <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div id="child-dropdown" class="user-dropdown" style="display: none;">
+                <div class="dropdown-body" id="child-dropdown-list"></div>
+                <div class="dropdown-footer">
+                    <a href="/parents" class="dropdown-item">Gestionar hijos/as 🔒</a>
+                </div>
+            </div>
+        </div>
+      )}
+
+      {mode === 'aventura' && (
+        <a href="/parents" class="nav-link parent-link">Familia 🔒</a>
+      )}
+
+      {mode === 'familia' && (
+        <a href="/mapa" id="btn-modo-aventura" class="btn-modo-aventura">Modo Aventura 🚀</a>
+      )}
+
+      {(mode === 'publico' || mode === 'familia') && (
+        <div id="auth-ui" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+            <a href="/login" class="btn-login">Acceder</a>
+        </div>
+      )}
   </div>
 </header>
 
@@ -54,11 +105,17 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
     import { ChildrenService } from '../lib/children-service';
     import { activeChild } from '../lib/active-child';
     import { tramoForChild } from '../lib/tramos';
+    import { FamiliaGate } from '../lib/familia-gate';
 
     const authUi = document.getElementById('auth-ui');
 
-    // Indicador de hijo/a activo, visible en toda la web mientras haya
-    // sesión y un hijo/a seleccionado (ver src/lib/active-child.ts).
+    // "Modo Aventura 🚀" (header familia): al devolver la tablet al niño/a,
+    // volver a echar el candado del gate antes de salir al Mapa.
+    document.getElementById('btn-modo-aventura')?.addEventListener('click', () => {
+        FamiliaGate.lock();
+    });
+
+    // Indicador de hijo/a activo (solo existe en el header del Modo Aventura).
     async function updateActiveChildBadge() {
         const zone = document.getElementById('active-child-zone');
         if (!zone) return;
@@ -136,61 +193,63 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
 
     async function updateAuth() {
         const { data: { session } } = await supabase.auth.getSession();
-        
+
         if (session?.user) {
             const email = session.user.email || '';
             const displayEmail = email.length > 20 ? email.substring(0, 17) + '...' : email;
-            
+
             // Ocultamos el botón general de "Zona Padres" porque lo pondremos en su caja personal
             const guestParentZone = document.getElementById('parent-zone-guest');
             if(guestParentZone) guestParentZone.style.display = 'none';
-            
-            authUi!.innerHTML = `
-                <div class="user-menu-container">
-                    <button id="user-menu-btn" class="user-text-btn">
-                        Hola, <strong>${displayEmail}</strong>
-                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
-                    </button>
-                    
-                    <div id="user-dropdown" class="user-dropdown" style="display: none;">
-                        <div class="dropdown-body">
-                            <a href="/perfil" class="dropdown-item">Mi Perfil (Cambiar Datos)</a>
-                            <a href="/parents" class="dropdown-item">Zona de Padres 🔒</a>
-                        </div>
-                        <div class="dropdown-footer">
-                            <button id="logout-btn" class="dropdown-item btn-logout">Cerrar Sesión</button>
+
+            if (authUi) {
+                authUi.innerHTML = `
+                    <div class="user-menu-container">
+                        <button id="user-menu-btn" class="user-text-btn">
+                            Hola, <strong>${displayEmail}</strong>
+                            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
+                        </button>
+
+                        <div id="user-dropdown" class="user-dropdown" style="display: none;">
+                            <div class="dropdown-body">
+                                <a href="/perfil" class="dropdown-item">Mi Perfil (Cambiar Datos)</a>
+                                <a href="/parents" class="dropdown-item">Zona de Padres 🔒</a>
+                            </div>
+                            <div class="dropdown-footer">
+                                <button id="logout-btn" class="dropdown-item btn-logout">Cerrar Sesión</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
-            
-            const menuBtn = document.getElementById('user-menu-btn');
-            const dropdown = document.getElementById('user-dropdown');
-            
-            menuBtn?.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (dropdown?.style.display === 'none') {
-                    dropdown.style.display = 'block';
-                    menuBtn.classList.add('open');
-                } else {
-                    dropdown!.style.display = 'none';
-                    menuBtn.classList.remove('open');
-                }
-            });
+                `;
 
-            document.addEventListener('click', (e) => {
-                if (authUi && !authUi.contains(e.target as Node)) {
-                    dropdown!.style.display = 'none';
-                    menuBtn?.classList.remove('open');
-                }
-            });
+                const menuBtn = document.getElementById('user-menu-btn');
+                const dropdown = document.getElementById('user-dropdown');
 
-            const logoutBtn = document.getElementById('logout-btn');
-            logoutBtn?.addEventListener('click', async () => {
-                await supabase.auth.signOut();
-                window.location.href = '/';
-            });
-            
+                menuBtn?.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (dropdown?.style.display === 'none') {
+                        dropdown.style.display = 'block';
+                        menuBtn.classList.add('open');
+                    } else {
+                        dropdown!.style.display = 'none';
+                        menuBtn.classList.remove('open');
+                    }
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (authUi && !authUi.contains(e.target as Node)) {
+                        dropdown!.style.display = 'none';
+                        menuBtn?.classList.remove('open');
+                    }
+                });
+
+                const logoutBtn = document.getElementById('logout-btn');
+                logoutBtn?.addEventListener('click', async () => {
+                    await supabase.auth.signOut();
+                    window.location.href = '/';
+                });
+            }
+
             // Sync progress on session detection
             SyncService.onLogin()
                 .catch(err => console.error('[Header] Sync failed:', err))
@@ -198,19 +257,21 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
         } else {
             document.getElementById('active-child-zone')?.classList.add('hidden');
         }
-        
-        // Show the UI after processing
+
+        // Show the UI after processing (solo existe en publico/familia)
         const authLoading = document.getElementById('auth-loading');
         if (authLoading) authLoading.style.display = 'none';
-        authUi!.style.display = 'block';
-        // peq delay to allow DOM update before opacity transition
-        setTimeout(() => {
-            authUi!.style.opacity = '1';
-        }, 10);
+        if (authUi) {
+            authUi.style.display = 'block';
+            // peq delay to allow DOM update before opacity transition
+            setTimeout(() => {
+                authUi.style.opacity = '1';
+            }, 10);
+        }
     }
-    
+
     updateAuth();
-    
+
     // Listen for auth changes
     supabase.auth.onAuthStateChange((event) => {
         if (event === 'SIGNED_IN') {
@@ -228,9 +289,9 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 2rem;
-    background: rgba(15, 23, 42, 0.85);
+    background: var(--k-bg-overlay);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--k-border-subtle);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -247,7 +308,7 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
     font-weight: 800;
     font-size: 1.8rem;
     letter-spacing: -0.04em;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    background: linear-gradient(135deg, var(--k-brand-primary), var(--k-brand-secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -256,7 +317,7 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
   .logo-beta {
     font-size: 0.65rem;
     background: rgba(255, 255, 255, 0.1);
-    color: #94a3b8;
+    color: var(--k-text-muted);
     padding: 0.15rem 0.4rem;
     border-radius: 4px;
     margin-left: 0.5rem;
@@ -274,7 +335,7 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
   .nav-link {
     font-weight: 600;
     font-size: 0.95rem;
-    color: #94a3b8;
+    color: var(--k-text-muted);
     text-decoration: none;
     transition: all 0.2s ease;
     position: relative;
@@ -282,9 +343,9 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
   }
 
   .nav-link:hover, .nav-link.active {
-    color: #f8fafc;
+    color: var(--k-text-strong);
   }
-  
+
   .nav-link.active::after {
     content: '';
     position: absolute;
@@ -292,9 +353,15 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
     left: 0;
     width: 100%;
     height: 2px;
-    background: var(--color-primary);
+    background: var(--k-brand-primary);
     border-radius: 2px;
     box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+  }
+
+  /* Nav del Modo Aventura: menos enlaces, más grandes (objetivo táctil) */
+  .main-nav--aventura .nav-link--big {
+    font-size: 1.05rem;
+    padding: 0.65rem 0.25rem;
   }
 
   /* ===== RIGHT CLUSTER ===== */
@@ -304,28 +371,48 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
     gap: 1.5rem;
   }
 
-  /* ===== PARENT ZONE GUEST ===== */
+  /* ===== PARENT ZONE GUEST / FAMILIA (aventura) ===== */
   .parent-link {
-    color: #94a3b8;
+    color: var(--k-text-muted);
     font-size: 0.85rem;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid var(--k-border-subtle);
     padding: 0.4rem 0.8rem;
-    border-radius: 99px;
+    border-radius: var(--radius-pill);
     background: rgba(255, 255, 255, 0.03);
   }
-  
+
   .parent-link:hover, .parent-link.active {
     background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.2);
+    color: var(--k-text-strong);
+    border-color: var(--k-border-strong);
+  }
+
+  /* ===== BOTÓN MODO AVENTURA (header familia) ===== */
+  .btn-modo-aventura {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--k-text-inverse);
+    background: linear-gradient(135deg, var(--k-brand-primary), var(--k-brand-accent));
+    text-decoration: none;
+    padding: 0.45rem 1.1rem;
+    border-radius: 99px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(34, 211, 238, 0.3);
+    white-space: nowrap;
+  }
+
+  .btn-modo-aventura:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(34, 211, 238, 0.45);
+    filter: brightness(1.1);
   }
 
   /* ===== LOGIN BTN GUEST ===== */
   .btn-login {
     font-size: 0.95rem;
     font-weight: 600;
-    color: #09090b;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    color: var(--k-text-inverse);
+    background: linear-gradient(135deg, var(--k-brand-primary), var(--k-brand-accent));
     text-decoration: none;
     padding: 0.45rem 1.2rem;
     border-radius: 99px;
@@ -354,7 +441,7 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
     gap: 0.5rem;
     background: rgba(34, 211, 238, 0.08);
     border: 1px solid rgba(34, 211, 238, 0.25);
-    color: #e2e8f0;
+    color: var(--k-text-body);
     font-size: 0.85rem;
     font-weight: 500;
     cursor: pointer;
@@ -366,7 +453,7 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
 
   .child-text-btn strong {
     font-weight: 700;
-    color: #f8fafc;
+    color: var(--k-text-strong);
   }
 
   .child-text-btn:hover, .child-text-btn.open {
@@ -382,15 +469,15 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #22d3ee;
-    box-shadow: 0 0 6px #22d3ee;
+    background: var(--k-brand-primary);
+    box-shadow: 0 0 6px var(--k-brand-primary);
     flex-shrink: 0;
   }
 
   .child-tramo-pill {
     background: rgba(139, 92, 246, 0.15);
     border: 1px solid rgba(139, 92, 246, 0.35);
-    color: #c4b5fd;
+    color: var(--k-brand-accent-soft);
     font-size: 0.7rem;
     font-weight: 700;
     padding: 0.15rem 0.55rem;
@@ -403,7 +490,7 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
   }
 
   .child-option.is-current {
-    color: #22d3ee;
+    color: var(--k-brand-primary);
     font-weight: 600;
   }
 
@@ -411,57 +498,57 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
   .user-menu-container {
     position: relative;
   }
-  
+
   .user-text-btn {
     display: flex;
     align-items: center;
     gap: 0.4rem;
     background: transparent;
     border: none;
-    color: #f8fafc;
+    color: var(--k-text-strong);
     font-size: 0.95rem;
     cursor: pointer;
     padding: 0.5rem;
     transition: color 0.2s ease;
     font-family: inherit;
   }
-  
+
   .user-text-btn:hover, .user-text-btn.open {
-    color: var(--color-primary);
+    color: var(--k-brand-primary);
   }
-  
+
   .user-text-btn strong {
     font-weight: 600;
   }
-  
+
   .chevron {
     transition: transform 0.2s ease;
   }
-  
+
   .user-text-btn.open .chevron {
     transform: rotate(180deg);
   }
-  
+
   /* ===== USER DROPDOWN ===== */
   .user-dropdown {
     position: absolute;
     top: calc(100% + 5px);
     right: 0;
     width: 220px;
-    background: rgba(15, 23, 42, 0.98);
+    background: var(--k-bg-surface-raised);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--k-border-subtle);
     border-radius: 0.75rem;
     box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
     overflow: hidden;
     z-index: 200;
   }
-  
+
   /* Open dropdown on hover for desktop */
   .user-menu-container:hover .user-dropdown {
     display: block !important;
   }
-  
+
   .dropdown-body {
     padding: 0.5rem;
   }
@@ -469,7 +556,7 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
   .dropdown-item {
     display: block;
     padding: 0.65rem 1rem;
-    color: #cbd5e1;
+    color: var(--k-text-body);
     text-decoration: none;
     border-radius: 0.5rem;
     font-size: 0.9rem;
@@ -482,24 +569,24 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
     cursor: pointer;
     font-family: inherit;
   }
-  
+
   .dropdown-item:hover {
     background: rgba(255, 255, 255, 0.05);
-    color: #f8fafc;
+    color: var(--k-text-strong);
   }
-  
+
   .dropdown-footer {
     padding: 0.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid var(--k-border-subtle);
   }
-  
+
   .btn-logout {
-    color: #fca5a5;
+    color: var(--k-state-danger);
   }
-  
+
   .btn-logout:hover {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
+    background: rgba(248, 113, 113, 0.1);
+    color: var(--k-state-danger);
   }
 
   /* ===== SKELETON LOADER ===== */
@@ -509,7 +596,7 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
     justify-content: center;
     height: 38px;
   }
-  
+
   .skeleton-btn {
     width: 80px;
     height: 34px;
@@ -528,6 +615,12 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
   @media (max-width: 768px) {
     .header { padding: 1rem 5%; }
     .main-nav { display: none; } /* Hide on mobile to save space */
+    /* La nav del niño/a sí sobrevive en móvil/tablet (solo 3 enlaces y es
+       su única forma de llegar a Insignias/Constructor): se ocultan los
+       rótulos y quedan los emojis como iconos táctiles grandes. */
+    .header--aventura .main-nav--aventura { display: flex; gap: 0.25rem; }
+    .main-nav--aventura .nav-link--big { font-size: 1.35rem; padding: 0.5rem 0.45rem; }
+    .main-nav--aventura .nav-label { display: none; }
     .parent-zone { display: none; }
     .child-text-btn { padding: 0.4rem 0.7rem; font-size: 0.8rem; }
     .child-text-btn .child-label { display: none; }

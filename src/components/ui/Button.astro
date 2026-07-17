@@ -1,0 +1,42 @@
+---
+// Botón del sistema de diseño (doc 03 §3). Wrapper fino sobre las clases
+// .k-btn de src/styles/components.css — el DOM generado por JS (unidad-engine)
+// usa esas mismas clases directamente.
+interface Props {
+  variant?: 'primary' | 'secondary' | 'ghost';
+  // xl = acción principal del niño en Modo Aventura (objetivo táctil >= 48px)
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  href?: string;
+  type?: 'button' | 'submit';
+  disabled?: boolean;
+  id?: string;
+  class?: string;
+  // resto de atributos (data-*, aria-*...) se propagan al elemento
+  [key: string]: any;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  type = 'button',
+  disabled = false,
+  id,
+  class: extraClass,
+  ...rest
+} = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  id={id}
+  class:list={['k-btn', `k-btn--${variant}`, `k-btn--${size}`, extraClass]}
+  href={href}
+  type={href ? undefined : type}
+  disabled={href ? undefined : disabled || undefined}
+  aria-disabled={href && disabled ? 'true' : undefined}
+  {...rest}
+>
+  <slot />
+</Tag>

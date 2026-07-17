@@ -26,7 +26,7 @@ export function mountCompararVersiones(
             const card = el('div', 'ua-palabra-card');
             card.appendChild(el('strong', 'ua-palabra-nombre', v.label));
             card.appendChild(el('p', 'ua-palabra-def', v.descripcion));
-            const btn = el('button', 'btn btn-secondary', 'Elegir esta');
+            const btn = el('button', 'k-btn k-btn--secondary k-btn--lg', 'Elegir esta');
             btn.type = 'button';
             btn.addEventListener('click', () => renderRazon(v));
             card.appendChild(btn);

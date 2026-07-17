@@ -1,0 +1,31 @@
+---
+// Tarjeta del sistema de diseño (doc 03 §3). Si recibe href se vuelve
+// enlace-tarjeta e interactiva por defecto.
+interface Props {
+  href?: string;
+  interactive?: boolean;
+  locked?: boolean;
+  id?: string;
+  class?: string;
+  [key: string]: any;
+}
+
+const { href, interactive, locked = false, id, class: extraClass, ...rest } = Astro.props;
+
+const Tag = href ? 'a' : 'div';
+const isInteractive = interactive ?? Boolean(href);
+---
+
+<Tag
+  id={id}
+  class:list={[
+    'k-card',
+    isInteractive && 'k-card--interactive',
+    locked && 'k-card--locked',
+    extraClass,
+  ]}
+  href={href}
+  {...rest}
+>
+  <slot />
+</Tag>
