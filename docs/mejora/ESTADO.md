@@ -11,9 +11,9 @@
   ver checkboxes en [05-roadmap.md](05-roadmap.md))
 - **Último update:** 17/07/2026 (Modo Aventura/Familia implementado, Fase 1
   cerrada, roadmap sincronizado; Supabase caído — ver Pendiente)
-- **Git:** TODO el trabajo de Fase 0 + lo que sigue está **sin commitear** a
-  propósito (decisión del 16/07): se commiteará más adelante. No hacer `git
-  checkout/reset` destructivo sin revisar `git status` primero.
+- **Git:** el trabajo acumulado de las fases 0-2 se commiteó el 17/07
+  (`f6b9f08`, 80 ficheros) a petición del usuario. A partir de aquí,
+  commits normales por bloque de trabajo.
 
 ## Hecho
 
