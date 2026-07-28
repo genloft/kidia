@@ -405,3 +405,85 @@
   gap: var(--k-space-3);
   margin-top: var(--k-space-4);
 }
+
+/* ---------- Celebración unificada (doc 04 §5, montada por celebration.ts) ---------- */
+
+.k-celebrate-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 900; /* por debajo de modales (k-modal es top-layer nativo) */
+  overflow: hidden;
+}
+
+.k-celebrate-particula {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: k-celebrate-burst 1.2s var(--k-ease-out) forwards;
+}
+
+@keyframes k-celebrate-burst {
+  from {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--dx, 0), var(--dy, -80px)) scale(0.4) rotate(var(--rot, 0deg));
+  }
+}
+
+.k-celebrate-confeti {
+  position: absolute;
+  top: -3vh;
+  width: 9px;
+  height: 14px;
+  border-radius: 2px;
+  animation: k-celebrate-caida 2.4s ease-in forwards;
+}
+
+@keyframes k-celebrate-caida {
+  from {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(105vh) rotate(var(--rot, 360deg));
+  }
+}
+
+.k-celebrate-mensaje {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  transform: translateX(-50%);
+  background: var(--k-bg-surface-raised);
+  border: 1px solid rgba(251, 191, 36, 0.5);
+  border-radius: var(--radius-pill);
+  padding: var(--k-space-3) var(--k-space-8);
+  font-weight: 800;
+  font-size: var(--k-text-lg);
+  color: var(--k-text-strong);
+  box-shadow: var(--shadow-lg);
+  animation: k-celebrate-mensaje-in var(--k-motion-celebrate) var(--k-ease-spring);
+}
+
+.k-celebrate-mensaje--grande {
+  font-size: var(--text-h3);
+  border-color: rgba(251, 191, 36, 0.8);
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.25), var(--shadow-lg);
+}
+
+@keyframes k-celebrate-mensaje-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}

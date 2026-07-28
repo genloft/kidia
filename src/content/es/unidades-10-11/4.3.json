@@ -1,0 +1,133 @@
+{
+  "id": "4.3",
+  "nivel": 4,
+  "zona": {
+    "nombre": "Construir",
+    "colorPrimario": "#fbbf24",
+    "colorFondo": "#FBF3E0"
+  },
+  "unidadCurricular": "4.3 · Proyecto: idea con impacto (sin Morti, adaptado 10-11)",
+  "titulo": "Una idea para mejorar mi cole o mi barrio",
+  "objetivoBloom": "Crear / Pensar en los demás: diseñar una idea sencilla que mejore su entorno (cole, barrio, casa) y hacer una primera reflexión sobre a quién ayuda y a quién podría no convenir. (Semilla de ética, sin Morti.)",
+  "competenciaFoco": "pensamiento_critico",
+  "ai4k12": "Impacto social (versión sencilla).",
+  "duracionMinutos": 30,
+  "producto": "Propuesta «Mi idea para mejorar»",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Si pudieras cambiar UNA cosa de tu cole o tu barrio para mejor, ¿cuál sería?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "idea_para_ayudar",
+    "destinatarios": [
+      {
+        "id": "mi_clase",
+        "label": "Mi clase",
+        "valor": "clase"
+      },
+      {
+        "id": "mi_barrio",
+        "label": "Mi barrio",
+        "valor": "barrio"
+      },
+      {
+        "id": "mi_casa",
+        "label": "Mi casa",
+        "valor": "casa"
+      }
+    ],
+    "necesidadesPorDestinatario": {
+      "mi_clase": [
+        {
+          "id": "recreo_para_todos",
+          "label": "Juegos de recreo en los que nadie se quede fuera",
+          "valor": "recreo_para_todos"
+        },
+        {
+          "id": "rincon_tranquilo",
+          "label": "Un rincón tranquilo para leer o descansar",
+          "valor": "rincon_tranquilo"
+        }
+      ],
+      "mi_barrio": [
+        {
+          "id": "parque_limpio",
+          "label": "Un parque más limpio y cuidado",
+          "valor": "parque_limpio"
+        },
+        {
+          "id": "pasos_seguros",
+          "label": "Cruces más seguros para ir andando al cole",
+          "valor": "pasos_seguros"
+        }
+      ],
+      "mi_casa": [
+        {
+          "id": "menos_desperdicio",
+          "label": "Desperdiciar menos comida",
+          "valor": "menos_desperdicio"
+        },
+        {
+          "id": "tareas_repartidas",
+          "label": "Repartir mejor las tareas entre todos",
+          "valor": "tareas_repartidas"
+        }
+      ]
+    }
+  },
+  "crea": {
+    "tipo": "propuesta_mejora",
+    "instrucciones": "Ponle NOMBRE a tu idea. Se guardará tu propuesta con su destinatario y tu reflexión: ¿a quién ayuda y a quién podría no convenir?",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Tu idea deja a alguien fuera?",
+      "¿Cómo la harías más justa para todos?"
+    ]
+  },
+  "familia": {
+    "nombre": "El primer paso pequeño",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Contad la idea en casa y pensad un primer paso pequeño para hacerla realidad.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "primerPaso"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Las buenas ideas ayudan a alguien. Pero conviene pensar también a quién podría no gustarle o a quién deja fuera.» · «¿Quién usaría tu idea — y quién no?» · «Pensar en los demás hace mejores ideas.»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "idea_con_destinatario_claro",
+    "reflexion_a_quien_ayuda",
+    "tono_positivo"
+  ],
+  "web": {
+    "tituloPantalla": "Tu idea para mejorar el mundo (de al lado)",
+    "introVael": "Las mejores ideas ayudan a la gente de tu alrededor. ¿Qué se te ocurre para tu cole o tu barrio… y a quién ayudaría?",
+    "pasos": [
+      "Elige qué mejorar y para quién.",
+      "Dale forma a tu idea y ponle nombre.",
+      "Haz un cartel o una propuesta.",
+      "Piensa: ¿a quién ayuda y a quién podría no convenir?"
+    ],
+    "cierreVael": "¡Gran idea! Pensar en los demás la hace todavía mejor. 🌍"
+  }
+}

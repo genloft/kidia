@@ -125,7 +125,7 @@ const competenciaLabel = scenario.competencia_foco ? COMPETENCIA_LABELS[scenario
 
   <script>
     // Dynamic Kidia expression system
-    const kidiaExpressions = {
+    const kidiaExpressions: Record<string, string> = {
       explaining: '/dravael-work.webp',
       thinking: '/dravael-doubt.webp',
       surprised: '/dravael-no.webp',
@@ -133,8 +133,8 @@ const competenciaLabel = scenario.competencia_foco ? COMPETENCIA_LABELS[scenario
       celebrating: '/dravael-dance.webp'
     };
 
-    function setKidiaExpression(expression) {
-      const kidiaImg = document.getElementById('kidia-expression');
+    function setKidiaExpression(expression: string) {
+      const kidiaImg = document.getElementById('kidia-expression') as HTMLImageElement | null;
       if (kidiaImg && kidiaExpressions[expression]) {
         kidiaImg.src = kidiaExpressions[expression];
         kidiaImg.alt = `Kidia ${expression}`;
@@ -143,7 +143,7 @@ const competenciaLabel = scenario.competencia_foco ? COMPETENCIA_LABELS[scenario
 
     // Listen for custom events to change Kidia's expression
     window.addEventListener('kidia:expression', (e) => {
-      const { expression } = e.detail;
+      const { expression } = (e as CustomEvent<{ expression: string }>).detail;
       setKidiaExpression(expression);
     });
 

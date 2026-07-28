@@ -1,0 +1,88 @@
+{
+  "id": "3.3",
+  "nivel": 3,
+  "zona": {
+    "nombre": "Crear",
+    "colorPrimario": "#e879f9",
+    "colorFondo": "#FBE9FB"
+  },
+  "unidadCurricular": "3.3 · Crea una imagen describiéndola",
+  "titulo": "Identidad visual",
+  "objetivoBloom": "Crear / Evaluar: crear una identidad visual coherente (logo, paleta y estilo) para un proyecto inventado, describiéndola, y evaluar su coherencia y el mensaje que transmite.",
+  "competenciaFoco": "calidad_preguntas",
+  "ai4k12": "Percepción.",
+  "duracionMinutos": 40,
+  "producto": "Mini-kit de identidad visual",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Toda marca que recuerdas tiene una identidad visual potente. Diseña la tuya.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "afinar_prompt_detalles",
+    "promptBase": "La identidad visual de mi proyecto",
+    "banco": [
+      { "id": "proyecto_app", "label": "una app para plantar árboles en el barrio", "categoria": "proyecto" },
+      { "id": "proyecto_club", "label": "un club de ciencia del instituto", "categoria": "proyecto" },
+      { "id": "logo_hoja", "label": "un logo con una hoja que forma una chispa", "categoria": "logo" },
+      { "id": "paleta_verde", "label": "paleta de verdes y un naranja que resalta", "categoria": "paleta" },
+      { "id": "estilo_limpio", "label": "estilo limpio y moderno, líneas simples", "categoria": "estilo" },
+      { "id": "mensaje_cercano", "label": "que transmita cercanía y ganas de actuar", "categoria": "mensaje" }
+    ],
+    "preguntaClave": "¿El logo, los colores y el estilo hablan todos el mismo idioma (coherencia)?"
+  },
+  "crea": {
+    "tipo": "kit_identidad",
+    "instrucciones": "Ponle nombre a tu mini-kit de identidad. Se guarda tu logo, paleta y estilo, y el mensaje que quieres transmitir. Evalúa si todo encaja, no solo si es bonito.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Tu identidad transmite lo que querías?",
+      "¿El logo y el estilo son coherentes entre sí?"
+    ]
+  },
+  "familia": {
+    "nombre": "La identidad de una marca",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Analizad la identidad visual de una marca que os guste: ¿qué transmite?",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "marcaAnalizada"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Una identidad visual es más que un logo: es un estilo y unos colores que transmiten una idea.» · «La clave es la coherencia: que todo hable el mismo idioma.» · «¿Alguien captaría tu mensaje sin que se lo expliques?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "identidad_coherente",
+    "evalua_capacidad_de_comunicar",
+    "ajusta_hasta_encajar"
+  ],
+  "web": {
+    "tituloPantalla": "Diseña una identidad visual",
+    "introVael": "Las marcas que recuerdas tienen una identidad visual coherente. Hoy diseñas la de tu propio proyecto.",
+    "pasos": [
+      "Define el proyecto y qué quiere transmitir.",
+      "Describe su logo, colores y estilo.",
+      "Créala y evalúa si es coherente.",
+      "Ajústala hasta que todo encaje."
+    ],
+    "cierreVael": "Coherencia y mensaje: piensas ya como diseñador de marca. 🎨"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "id": "3.2",
+  "nivel": 3,
+  "zona": {
+    "nombre": "Crear",
+    "colorPrimario": "#e879f9",
+    "colorFondo": "#FBE9FB"
+  },
+  "unidadCurricular": "3.2 · Crea una historia o cómic",
+  "titulo": "Relato o guion con giro",
+  "objetivoBloom": "Crear: escribir un relato o guion más largo con estructura (planteamiento, desarrollo, giro, desenlace) y voz propia, dirigiendo a la IA y reescribiendo lo que propone.",
+  "competenciaFoco": "autonomia_creativa",
+  "ai4k12": "Interacción natural.",
+  "duracionMinutos": 45,
+  "producto": "Relato o guion con giro",
+  "palabras": [],
+  "dependeDe": ["3.1"],
+  "mision": {
+    "textoVael": "Un buen giro deja a todos boquiabiertos. ¿Escribimos uno que nadie vea venir?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "construir_historia",
+    "principios": [
+      { "id": "carta_sin_firma", "label": "El protagonista recibe una carta sin firma" },
+      { "id": "puerta_prohibida", "label": "Descubre una puerta que siempre estuvo prohibida" },
+      { "id": "doble_identico", "label": "Se cruza con alguien idéntico a sí mismo" }
+    ],
+    "problemas": [
+      { "id": "nadie_recuerda", "label": "Nadie más recuerda lo que él vio" },
+      { "id": "tiempo_agota", "label": "El tiempo para decidir se agota" },
+      { "id": "aliado_dudoso", "label": "Su único aliado esconde algo" }
+    ],
+    "finales": [
+      { "id": "giro_era_el", "label": "El giro: el culpable era quien menos sospechaba" },
+      { "id": "todo_era_prueba", "label": "El giro: todo era una prueba preparada para él" },
+      { "id": "elige_no_saber", "label": "Elige no descubrir la verdad, y eso lo cambia" }
+    ],
+    "permiteGiroLibre": true
+  },
+  "crea": {
+    "tipo": "relato_con_giro",
+    "instrucciones": "Ponle título a tu relato. Se guarda tu estructura (planteamiento, desarrollo, giro, desenlace). Reescribe con TU voz lo que la IA propuso: que suene a ti, no a una máquina.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Se nota tu voz o la de la IA?",
+      "¿El giro está bien preparado o llega de la nada?"
+    ]
+  },
+  "familia": {
+    "nombre": "El giro que preparó",
+    "duracionMinutos": 10,
+    "modo": "offline",
+    "instrucciones": "Leed la historia y comentad el giro que preparó.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "comentarioGiro"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Una buena historia tiene estructura y una voz propia.» · «La IA aporta borradores; tú diriges, eliges y reescribes para que suene a ti.» · «¿El giro está bien preparado o llega de la nada?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "relato_estructurado",
+    "voz_propia_al_reescribir",
+    "giro_bien_preparado"
+  ],
+  "web": {
+    "tituloPantalla": "Escribe una historia con giro",
+    "introVael": "Lo que separa una historia buena de una genial suele ser un buen giro. Tú lo diriges; la IA te ayuda a escribirlo.",
+    "pasos": [
+      "Diseña la estructura y planea el giro.",
+      "Escribe cada parte con ayuda de la IA.",
+      "Reescríbela para que suene a ti.",
+      "Revisa el ritmo y el efecto del giro."
+    ],
+    "cierreVael": "Tu voz, tu giro. La IA solo sostuvo el bolígrafo. ✍️"
+  }
+}

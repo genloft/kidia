@@ -19,7 +19,18 @@ export interface ParentReportExtra {
     vocabularyCount?: number;
 }
 
-export const PARENT_REPORT_RULES = [
+// Estado que evalúan las reglas: el progreso clásico + las señales extra.
+export type ParentReportState = {
+    completedScenarios: string[];
+    badges: string[];
+} & ParentReportExtra;
+
+interface ParentReportRule {
+    condition: (p: ParentReportState) => boolean;
+    text: string | ((p: ParentReportState) => string);
+}
+
+export const PARENT_REPORT_RULES: ParentReportRule[] = [
     {
         condition: (p) => unidadesCompletadas(p.completedScenarios).has('1'),
         text: "Ha dado su primer paso: ya distingue qué es y qué no es una IA."
@@ -45,15 +56,15 @@ export const PARENT_REPORT_RULES = [
         text: "Ya ha conseguido su primera insignia."
     },
     {
-        condition: (p: any) => (p.familyMissionsCompleted?.length || 0) >= 1,
-        text: (p: any) => `Ha completado la Misión en familia "${p.familyMissionsCompleted[0].mision_id}" contigo. Puedes verla en su Cuaderno de Inventor/a.`
+        condition: (p) => (p.familyMissionsCompleted?.length || 0) >= 1,
+        text: (p) => `Ha completado la Misión en familia "${p.familyMissionsCompleted?.[0]?.mision_id ?? ''}" contigo. Puedes verla en su Cuaderno de Inventor/a.`
     },
     {
-        condition: (p: any) => (p.familyMissionsCompleted?.length || 0) >= 4,
+        condition: (p) => (p.familyMissionsCompleted?.length || 0) >= 4,
         text: "Ha hecho las 4 misiones en familia de la Zona Descubre — ¡gracias por co-jugar con él/ella!"
     },
     {
-        condition: (p: any) => (p.vocabularyCount || 0) >= 5,
-        text: (p: any) => `Ya ha coleccionado ${p.vocabularyCount} palabras en su Muro de Palabras.`
+        condition: (p) => (p.vocabularyCount || 0) >= 5,
+        text: (p) => `Ya ha coleccionado ${p.vocabularyCount} palabras en su Muro de Palabras.`
     }
 ];

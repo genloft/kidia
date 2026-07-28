@@ -6,14 +6,16 @@
 </div>
 
 <script>
-    const container = document.getElementById('anim-growth');
-    const canvas = document.getElementById('growth-canvas') as HTMLCanvasElement;
-    const ctx = canvas?.getContext('2d');
-    const paramCount = document.getElementById('param-count');
+    interface GrowthNode { x: number; y: number; r: number }
+    interface GrowthParticle { x: number; y: number; vx: number; vy: number }
 
-    let nodes = [];
-    let particles = [];
-    let animationFrame;
+    const container = document.getElementById('anim-growth') as HTMLElement;
+    const canvas = document.getElementById('growth-canvas') as HTMLCanvasElement;
+    const ctx = canvas?.getContext('2d') as CanvasRenderingContext2D;
+    const paramCount = document.getElementById('param-count') as HTMLElement;
+
+    let nodes: GrowthNode[] = [];
+    let particles: GrowthParticle[] = [];
     let params = 100;
 
     window.addEventListener('kidia:play-animation', (e) => {
@@ -64,7 +66,7 @@
         }, 100);
     }
     
-    function createNodes(count) {
+    function createNodes(count: number): GrowthNode[] {
         return Array.from({length: count}, () => ({
             x: Math.random() * 400,
             y: Math.random() * 300,

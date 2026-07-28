@@ -33,7 +33,7 @@
         container.classList.remove('hidden');
         
         // Trigger animations
-        const bars = container.querySelectorAll('.bar-fill');
+        const bars = container.querySelectorAll<HTMLElement>('.bar-fill');
         bars.forEach(b => {
             b.style.width = '0%';
             setTimeout(() => {

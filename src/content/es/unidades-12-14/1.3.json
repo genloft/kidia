@@ -1,0 +1,88 @@
+{
+  "id": "1.3",
+  "nivel": 1,
+  "zona": {
+    "nombre": "Entender",
+    "colorPrimario": "#22d3ee",
+    "colorFondo": "#E0F7FB"
+  },
+  "unidadCurricular": "1.3 · ¿Qué es un prompt?",
+  "titulo": "Ingeniería de prompts",
+  "objetivoBloom": "Aplicar / Crear: diseñar prompts avanzados usando rol, objetivo, contexto, formato, ejemplos y restricciones, e iterar para mejorar el resultado. Crear un «kit de prompts» reutilizable para una tarea propia.",
+  "competenciaFoco": "calidad_preguntas",
+  "ai4k12": "Interacción natural.",
+  "duracionMinutos": 40,
+  "producto": "«Kit de prompts» para una tarea",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Los que sacan lo mejor de la IA no tienen suerte: saben pedir. Vamos a que tú también.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "afinar_prompt_detalles",
+    "promptBase": "Ayúdame a estudiar para el examen de ciencias",
+    "banco": [
+      { "id": "rol_profe", "label": "actúa como un profesor paciente", "categoria": "rol" },
+      { "id": "objetivo_repasar", "label": "para repasar la fotosíntesis", "categoria": "objetivo" },
+      { "id": "contexto_2eso", "label": "soy de 2º de la ESO", "categoria": "contexto" },
+      { "id": "formato_preguntas", "label": "hazme 5 preguntas con respuesta al final", "categoria": "formato" },
+      { "id": "ejemplo_estilo", "label": "por ejemplo: «¿qué necesita una planta para...?»", "categoria": "ejemplo" },
+      { "id": "restriccion_facil", "label": "en lenguaje sencillo, sin tecnicismos", "categoria": "restricción" }
+    ],
+    "preguntaClave": "¿Qué elemento (rol, contexto, formato…) mejoró más el resultado?"
+  },
+  "crea": {
+    "tipo": "kit_prompts",
+    "instrucciones": "Ponle nombre a tu «kit de prompts». Guardará tu prompt profesional con sus elementos (rol, objetivo, contexto, formato, restricciones) para reutilizarlo.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Qué elemento mejoró más el resultado?",
+      "¿Cuándo conviene darle un ejemplo a la IA?"
+    ]
+  },
+  "familia": {
+    "nombre": "Con contexto y sin contexto",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Probad en casa a pedirle algo a una IA con y sin contexto y comparad.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "diferenciaNotada"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Un prompt profesional puede incluir un ROL, el OBJETIVO, el CONTEXTO, el FORMATO de salida, EJEMPLOS y RESTRICCIONES.» · «Casi nunca sale perfecto a la primera: se itera, evaluando cada resultado.» · «Compara tu primer prompt con el refinado: ¿en qué mejoró?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "prompt_con_elementos_avanzados",
+    "iteracion_con_criterio",
+    "evalua_calidad_no_solo_funciona"
+  ],
+  "web": {
+    "tituloPantalla": "Conviértete en ingeniero de prompts",
+    "introVael": "Hablar bien con la IA es una habilidad real, muy valorada. Hoy aprendes a pedir como un profesional.",
+    "pasos": [
+      "Elige una tarea real que quieras resolver.",
+      "Diseña tu prompt: rol, objetivo, contexto, formato y límites.",
+      "Pruébalo, evalúa el resultado y refínalo.",
+      "Guarda tu kit de prompts para reutilizarlo."
+    ],
+    "cierreVael": "¡Ingeniería de prompts desbloqueada! Esta habilidad te servirá toda la vida. ⚙️"
+  }
+}

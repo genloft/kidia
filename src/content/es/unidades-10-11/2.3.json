@@ -1,0 +1,93 @@
+{
+  "id": "2.3",
+  "nivel": 2,
+  "zona": {
+    "nombre": "Usar bien",
+    "colorPrimario": "#8b5cf6",
+    "colorFondo": "#EFE9FB"
+  },
+  "unidadCurricular": "2.3 · Comparar y mejorar",
+  "titulo": "El jurado experto",
+  "objetivoBloom": "Evaluar: comparar dos o tres versiones contra un criterio explícito (no por gusto), elegir la mejor y proponer una mejora concreta para ella.",
+  "competenciaFoco": "pensamiento_critico",
+  "ai4k12": "Representación y razonamiento.",
+  "duracionMinutos": 30,
+  "producto": "Veredicto con criterio + mejora",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Eres el jurado de un concurso de la IA. Pero ojo: hay reglas para puntuar.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "comparar_versiones",
+    "encargo": "Un cartel para el club de lectura del cole. Reglas del jurado: que diga qué día es, que se lea de un vistazo y que sea original.",
+    "versiones": [
+      {
+        "id": "version_a",
+        "label": "Versión 1",
+        "descripcion": "«Club de lectura — todos los jueves en la biblioteca». Letras grandes, un dibujo de un libro-cohete despegando, se entiende en dos segundos.",
+        "cumpleEncargo": true
+      },
+      {
+        "id": "version_b",
+        "label": "Versión 2",
+        "descripcion": "Un dibujo precioso lleno de detalles y colores… pero no dice qué día es, y el nombre del club está en letra pequeñita en una esquina.",
+        "cumpleEncargo": false
+      }
+    ]
+  },
+  "crea": {
+    "tipo": "veredicto_jurado",
+    "instrucciones": "Ponle nombre a tu veredicto de jurado. Guardará qué versión ganó según el criterio, tu razón y tu propuesta de mejora.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Elegiste por el criterio o por tu gusto?",
+      "¿Qué le falta a la ganadora para ser perfecta?"
+    ]
+  },
+  "familia": {
+    "nombre": "La mejor merienda según 3 criterios",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Elegid algo en casa con reglas claras (la mejor merienda según 3 criterios).",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "eleccionConCriterio"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Un buen jurado no elige por gusto, sino por un criterio: ¿cumple lo que se pedía? ¿es claro? ¿es original?» · «¿Tu elección cumple el criterio dado — o uno que te has inventado tú?» · «¿Qué mejora concreta le harías a la ganadora?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "eleccion_justificada_contra_criterio",
+    "no_eligio_por_gusto",
+    "mejora_concreta_propuesta"
+  ],
+  "web": {
+    "tituloPantalla": "El jurado experto",
+    "introVael": "Concurso de creaciones de la IA. Tú decides quién gana… pero con reglas de jurado de verdad.",
+    "pasos": [
+      "Lee las reglas para puntuar (el criterio).",
+      "Puntúa cada versión según esas reglas.",
+      "Elige la ganadora.",
+      "Propón una mejora para que sea aún mejor."
+    ],
+    "cierreVael": "¡Veredicto justo, jurado! Elegir con criterio es de expertos. ⚖️"
+  }
+}

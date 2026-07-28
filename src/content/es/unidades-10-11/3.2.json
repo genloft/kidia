@@ -1,0 +1,94 @@
+{
+  "id": "3.2",
+  "nivel": 3,
+  "zona": {
+    "nombre": "Crear",
+    "colorPrimario": "#e879f9",
+    "colorFondo": "#FBE9FB"
+  },
+  "unidadCurricular": "3.2 · Crea una historia o cómic",
+  "titulo": "Tu cómic de 4 viñetas",
+  "objetivoBloom": "Crear: crear un cómic de cuatro viñetas con principio, nudo, giro y final —diálogos incluidos— dirigiendo la historia y usando la IA como ayudante de texto e imagen.",
+  "competenciaFoco": "autonomia_creativa",
+  "ai4k12": "Interacción natural.",
+  "duracionMinutos": 45,
+  "producto": "Cómic de 4 viñetas",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Tu personaje protagoniza su primer cómic. ¿Qué aventura le toca vivir?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "construir_historia",
+    "principios": [
+      { "id": "mapa_misterioso", "label": "Tu personaje encuentra un mapa misterioso" },
+      { "id": "dia_intercambio", "label": "Un día todo el mundo amanece hablando al revés" },
+      { "id": "maquina_dormida", "label": "En el desván hay una máquina que nadie recuerda" }
+    ],
+    "problemas": [
+      { "id": "camino_bloqueado", "label": "El camino está bloqueado y nadie sabe seguir" },
+      { "id": "mensaje_borroso", "label": "El mensaje importante está medio borrado" },
+      { "id": "nadie_le_cree", "label": "Nadie cree lo que ha descubierto" }
+    ],
+    "finales": [
+      { "id": "solucion_equipo", "label": "Lo resuelve en equipo con una idea suya" },
+      { "id": "descubrimiento", "label": "Descubre algo mejor de lo que buscaba" },
+      { "id": "vuelta_a_casa", "label": "Vuelve a casa con una historia increíble que contar" }
+    ],
+    "permiteGiroLibre": true
+  },
+  "crea": {
+    "tipo": "comic_4_vinetas",
+    "instrucciones": "Ponle título a tu cómic. Se guardarán tus 4 viñetas —principio, lío, giro y final— con sus diálogos.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Se entiende la historia sin que tú la expliques?",
+      "¿Qué viñeta cambiarías para que quede mejor?"
+    ]
+  },
+  "familia": {
+    "nombre": "El giro del cómic",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Leed el cómic juntos y que el niño cuente el «giro» que inventó.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "giroContado"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Un cómic cuenta mucho en pocas viñetas: principio, lío, un giro y final.» · «Tú diriges la historia; yo dibujo y escribo lo que tú decidas.» · «¿Las cuatro viñetas juntas cuentan una historia completa?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "historia_coherente_4_vinetas",
+    "dialogos_propios",
+    "corrige_lo_que_la_ia_hizo_distinto"
+  ],
+  "web": {
+    "tituloPantalla": "Dibuja tu primer cómic",
+    "introVael": "Cuatro viñetas, una gran aventura. Tú eres el director; yo, tu ayudante de estudio. ¡Acción!",
+    "pasos": [
+      "Decide qué pasa en cada viñeta: principio, lío, giro y final.",
+      "Escribe un diálogo corto para cada una.",
+      "Crea las imágenes.",
+      "Ajusta lo que no encaje: ¡es tu historia!"
+    ],
+    "cierreVael": "¡Corten! Has dirigido tu primer cómic de principio a fin. 🎞️"
+  }
+}

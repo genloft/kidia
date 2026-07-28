@@ -61,6 +61,28 @@ export const UnidadService = {
         return data || [];
     },
 
+    /**
+     * Borra una creación del Cuaderno (derecho de supresión). Requiere la
+     * policy DELETE de supabase/migrations/005_child_artifacts_delete.sql —
+     * sin ella, Supabase no da error pero tampoco borra ninguna fila (así
+     * se descubrió el hueco: ver docs/mejora/06-auditoria-rls.md #3).
+     */
+    async deleteArtifact(artifactId: string): Promise<{ error?: string }> {
+        const { error, count } = await supabase
+            .from('child_artifacts')
+            .delete({ count: 'exact' })
+            .eq('id', artifactId);
+
+        if (error) {
+            console.error('[UnidadService] deleteArtifact error:', error);
+            return { error: error.message };
+        }
+        if (count === 0) {
+            return { error: 'No se pudo borrar (falta la policy de permisos en Supabase).' };
+        }
+        return {};
+    },
+
     /** Añade palabras nuevas al Muro de Palabras del hijo/a (sin duplicar). */
     async collectPalabras(childId: string, unidadId: string, palabras: string[]): Promise<{ error?: string }> {
         const { data: child, error: fetchError } = await supabase
@@ -92,6 +114,21 @@ export const UnidadService = {
             return { error: error.message };
         }
         return {};
+    },
+
+    /** Palabras coleccionadas por el hijo/a, para el Diccionario de Palabras Poderosas. */
+    async getVocabulario(childId: string): Promise<VocabularioEntry[]> {
+        const { data, error } = await supabase
+            .from('children')
+            .select('vocabulary')
+            .eq('id', childId)
+            .single();
+
+        if (error) {
+            console.error('[UnidadService] getVocabulario error:', error);
+            return [];
+        }
+        return data?.vocabulary || [];
     },
 
     /** Registra una Misión en familia completada; queda visible en el Panel Familiar. */

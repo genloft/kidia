@@ -1,0 +1,110 @@
+{
+  "id": "2.4",
+  "nivel": 2,
+  "zona": {
+    "nombre": "Usar bien",
+    "colorPrimario": "#8b5cf6",
+    "colorFondo": "#EFE9FB"
+  },
+  "unidadCurricular": "2.4 · Límites y responsabilidad",
+  "titulo": "¿Quién es responsable?",
+  "objetivoBloom": "Comprender / Evaluar (ética): comprender que la IA no tiene intención ni responsabilidad propia; reflexionar sobre de quién es la responsabilidad de lo que la IA produce, y tratar la privacidad y los datos en serio (consentimiento, RGPD).",
+  "competenciaFoco": "pensamiento_critico",
+  "ai4k12": "Impacto social.",
+  "duracionMinutos": 40,
+  "producto": "Cuaderno «Responsabilidad y datos»",
+  "palabras": [],
+  "mision": {
+    "textoVael": "La IA es una herramienta poderosa, pero no tiene intenciones ni responsabilidad. Vamos a pensar quién responde de lo que hace… y a cuidar tus datos en serio.",
+    "audioUrl": null
+  },
+  "morti": {
+    "texto": "No tengo intenciones ni siento nada. Entonces, cuando algo sale mal por mi culpa… ¿quién responde? Piénsalo bien."
+  },
+  "investiga": {
+    "tipo": "decision_consecuencia",
+    "escenarios": [
+      {
+        "id": "consejo_malo",
+        "situacion": "Una IA da un consejo equivocado sobre un trabajo del cole y el alumno lo copia sin comprobar. La nota baja. ¿De quién es la responsabilidad?",
+        "opciones": [
+          { "id": "de_quien_usa", "label": "De quien la usó sin verificar", "segura": true, "consecuencia": "Sí: la IA es una herramienta, no responde de nada. Quien la usa decide si comprobar o no — y ahí está su responsabilidad." },
+          { "id": "de_la_ia", "label": "De la IA, que se equivocó", "segura": false, "consecuencia": "La IA no tiene intención ni responsabilidad: no «decide» hacerlo mal. Responde quien la usa (y, en parte, quien la diseñó)." },
+          { "id": "de_nadie", "label": "De nadie, fue mala suerte", "segura": false, "consecuencia": "Sí hay responsabilidad: usar una herramienta implica hacerse cargo de cómo se usa. Verificar era posible." }
+        ]
+      },
+      {
+        "id": "diseno_dañino",
+        "situacion": "Una empresa lanza una IA que da respuestas peligrosas porque no la probó bien. ¿Quién responde ahí?",
+        "opciones": [
+          { "id": "quien_disena", "label": "Quien la diseñó y la lanzó sin probarla", "segura": true, "consecuencia": "Correcto. Quien diseña y publica una herramienta responde de que sea segura. La responsabilidad también es de quien la crea, no solo de quien la usa." },
+          { "id": "usuarios", "label": "Solo los usuarios", "segura": false, "consecuencia": "Los usuarios no pueden preverlo todo: si el fallo viene del diseño, la empresa que la lanzó también responde." },
+          { "id": "la_maquina", "label": "La máquina, que es mala", "segura": false, "consecuencia": "La máquina no es «mala»: no tiene intenciones. La responsabilidad es humana, de quien la diseñó." }
+        ]
+      },
+      {
+        "id": "dato_personal",
+        "situacion": "Una IA te pide tu dirección y tu edad exacta para «personalizar» tus respuestas.",
+        "opciones": [
+          { "id": "no_dar", "label": "No dar datos personales: es privado y hay leyes que lo protegen", "segura": true, "consecuencia": "Perfecto. Los datos personales no se comparten con una IA. El RGPD protege especialmente a los menores: menos datos, más seguridad." },
+          { "id": "dar_si_ayuda", "label": "Dárselos si eso mejora la respuesta", "segura": false, "consecuencia": "Una mejor respuesta no compensa el riesgo. Los datos personales de un menor están especialmente protegidos: no se comparten." },
+          { "id": "solo_edad", "label": "Darle solo la edad exacta", "segura": false, "consecuencia": "La edad exacta también es un dato personal. La regla es minimizar: cuanto menos compartas, mejor." }
+        ]
+      }
+    ]
+  },
+  "crea": {
+    "tipo": "cuaderno_responsabilidad",
+    "instrucciones": "Ponle título a tu «cuaderno de responsabilidad y datos». Guardará tus conclusiones sobre quién responde de lo que hace una IA y qué datos no compartirías nunca.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Puede una máquina «tener la culpa» de algo?",
+      "¿Por qué las leyes protegen más a los menores?"
+    ]
+  },
+  "familia": {
+    "nombre": "Qué datos proteger siempre",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Hablad en casa de qué datos personales conviene proteger siempre y por qué.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "datosAProteger"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«La IA no tiene intención ni es responsable: es una herramienta. Responde quien la usa y quien la diseña.» · «¿Puede una máquina tener la culpa de algo?» · «Tus datos importan: por eso no compartes datos personales y existen leyes (RGPD) que protegen a los menores.»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "argumenta_la_responsabilidad",
+    "reconoce_buenas_practicas_privacidad",
+    "interioriza_minimizacion_de_datos"
+  ],
+  "web": {
+    "tituloPantalla": "IA, responsabilidad y tus datos",
+    "introVael": "La IA es una herramienta poderosa, pero no tiene intenciones ni responsabilidad. Vamos a pensar quién responde de lo que hace… y a cuidar tus datos en serio.",
+    "pasos": [
+      "Resuelve los dilemas de responsabilidad de Morti.",
+      "Razona quién es responsable en cada caso y por qué.",
+      "Repasa qué datos no darías nunca a una IA.",
+      "Anota tus conclusiones."
+    ],
+    "cierreVael": "Pensar la responsabilidad y proteger tus datos: eso es usar la IA con madurez. 🛡️"
+  }
+}

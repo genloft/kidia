@@ -1,0 +1,134 @@
+{
+  "id": "4.1",
+  "nivel": 4,
+  "zona": {
+    "nombre": "Construir",
+    "colorPrimario": "#fbbf24",
+    "colorFondo": "#FBF3E0"
+  },
+  "unidadCurricular": "4.1 · Proyecto: juego o web sencilla",
+  "titulo": "Tu mini-quiz interactivo",
+  "objetivoBloom": "Crear: construir un quiz de cinco preguntas (con respuestas y pistas) sobre un tema elegido, usando la IA como ayudante, verificando las respuestas y probándolo con la clase (reto colectivo).",
+  "competenciaFoco": "autonomia_creativa",
+  "ai4k12": "Las cinco ideas, en versión sencilla.",
+  "duracionMinutos": 45,
+  "producto": "Quiz de 5 preguntas (reto colectivo)",
+  "palabras": [],
+  "mision": {
+    "textoVael": "¿Te atreves a crear un quiz que rete a toda tu clase?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "construir_juego",
+    "temas": [
+      { "id": "animales", "label": "Animales", "valor": "animales" },
+      { "id": "espacio", "label": "El espacio", "valor": "espacio" },
+      { "id": "inventos", "label": "Grandes inventos", "valor": "inventos" }
+    ],
+    "bancoAdivinanzas": [
+      {
+        "id": "pulpo_corazones",
+        "pregunta": "¿Cuántos corazones tiene un pulpo?",
+        "pista": "Más de uno… y menos de cuatro no es.",
+        "respuesta": "Tres",
+        "dificultad": "media"
+      },
+      {
+        "id": "animal_mas_grande",
+        "pregunta": "¿Cuál es el animal más grande que ha existido?",
+        "pista": "Vive en el mar y sigue entre nosotros.",
+        "respuesta": "La ballena azul",
+        "dificultad": "facil"
+      },
+      {
+        "id": "planeta_grande",
+        "pregunta": "¿Cuál es el planeta más grande del sistema solar?",
+        "pista": "Tiene una gran mancha roja.",
+        "respuesta": "Júpiter",
+        "dificultad": "facil"
+      },
+      {
+        "id": "luna_luz",
+        "pregunta": "¿La Luna tiene luz propia?",
+        "pista": "Piensa de dónde viene su brillo.",
+        "respuesta": "No: refleja la luz del Sol",
+        "dificultad": "media"
+      },
+      {
+        "id": "invento_rueda",
+        "pregunta": "¿Qué se inventó antes: la rueda o la escritura?",
+        "pista": "Una sirvió para mover; la otra, para recordar.",
+        "respuesta": "La rueda",
+        "dificultad": "dificil"
+      },
+      {
+        "id": "telefono_bell",
+        "pregunta": "¿Para qué sirvió el primer teléfono?",
+        "pista": "Igual que hoy, pero con cables.",
+        "respuesta": "Para hablar a distancia",
+        "dificultad": "facil"
+      },
+      {
+        "id": "sonido_espacio",
+        "pregunta": "¿Se puede oír un ruido en el espacio?",
+        "pista": "El sonido necesita algo para viajar.",
+        "respuesta": "No: sin aire no viaja el sonido",
+        "dificultad": "dificil"
+      }
+    ]
+  },
+  "crea": {
+    "tipo": "quiz_colectivo",
+    "instrucciones": "Ponle nombre a tu quiz. Guardará tus 5 preguntas elegidas con sus pistas, ya verificadas y ordenadas de fácil a difícil.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Comprobaste que todas las respuestas son correctas?",
+      "¿Alguna pregunta era confusa?"
+    ]
+  },
+  "familia": {
+    "nombre": "El quiz en casa",
+    "duracionMinutos": 10,
+    "modo": "offline",
+    "instrucciones": "Jugad en casa al quiz que creó el niño.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "quienGanoEnCasa"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«La IA propone; tú eliges, corriges, compruebas y ordenas. Tú decides qué entra.» · «¿Esa respuesta está comprobada, o solo suena bien?» · «Ordena de fácil a difícil: un buen quiz va calentando.»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "quiz_completo_5_preguntas",
+    "respuestas_verificadas",
+    "ordenado_por_dificultad"
+  ],
+  "web": {
+    "tituloPantalla": "Crea un quiz para tu clase",
+    "introVael": "Hora de retar a tus compañeros. Vamos a construir un quiz tuyo… ¡y a comprobar que no tiene trampas!",
+    "pasos": [
+      "Elige el tema del quiz.",
+      "Elige 5 preguntas, corrígelas y ponles una pista.",
+      "Comprueba que todas las respuestas son correctas.",
+      "Ordénalas de fácil a difícil y reta a tu clase."
+    ],
+    "cierreVael": "¡Quiz publicado! Lo creaste tú… y sin trampas, porque lo verificaste. 🎯"
+  }
+}

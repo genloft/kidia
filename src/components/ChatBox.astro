@@ -47,11 +47,11 @@ const { scenario } = Astro.props;
     // dispara el evento del primer paso.
     const STEP_ORDER = ['chispa', 'explora', 'crea', 'reflexiona', 'comparte'];
     window.addEventListener('kidia:step', (e) => {
-        const step = e.detail?.step;
+        const step = (e as CustomEvent<{ step: string }>).detail?.step;
         if (!step) return;
         const idx = STEP_ORDER.indexOf(step);
         document.querySelectorAll('#step-indicator .step-item').forEach(item => {
-            const itemIdx = STEP_ORDER.indexOf(item.getAttribute('data-step'));
+            const itemIdx = STEP_ORDER.indexOf(item.getAttribute('data-step') || '');
             item.classList.toggle('active', itemIdx === idx);
             item.classList.toggle('done', itemIdx < idx);
         });

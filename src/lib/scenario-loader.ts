@@ -84,20 +84,35 @@ export async function loadScenariosForTramo(tramo: Tramo, lang: 'es' | 'en' = 'e
     return result.sort((a, b) => (parseFloat(a.unidad || '0') - parseFloat(b.unidad || '0')));
 }
 
-// --- Formato "unidad-aventura" (rediseño 8-9, ver src/schemas/unidad.ts) ---
+// --- Formato "unidad-aventura" (ver src/schemas/unidad.ts) ---
 // Contenido independiente de los escenarios de diálogo de arriba: vive en
-// src/content/es/unidades-8-9/ y no pasa por scenarioCache ni por loadScenarios().
+// src/content/es/unidades-<tramo>/ y no pasa por scenarioCache ni por
+// loadScenarios(). El 8-9 tiene el programa completo (16+4); el 10-11 está
+// en migración incremental desde su docx (Fase 4) — cada unidad que exista
+// aquí sustituye a su reto legacy en el mapa.
 
-let unidadesAventuraCache: UnidadAventuraSchema[] | null = null;
-let misionesEspecialesCache: MisionEspecialSchema[] | null = null;
+interface UnidadesTramoCache {
+    unidades: UnidadAventuraSchema[];
+    especiales: MisionEspecialSchema[];
+}
 
-async function loadUnidadesAventuraRaw(): Promise<void> {
-    if (unidadesAventuraCache && misionesEspecialesCache) return;
+const unidadesPorTramo: Partial<Record<Tramo, UnidadesTramoCache>> = {};
 
-    const modules = import.meta.glob('/src/content/es/unidades-8-9/*.json');
+// import.meta.glob exige literales: un glob por carpeta de tramo.
+const GLOBS: Record<Tramo, Record<string, () => Promise<unknown>>> = {
+    '8-9': import.meta.glob('/src/content/es/unidades-8-9/*.json'),
+    '10-11': import.meta.glob('/src/content/es/unidades-10-11/*.json'),
+    '12-14': import.meta.glob('/src/content/es/unidades-12-14/*.json'),
+};
+
+async function loadUnidadesTramo(tramo: Tramo): Promise<UnidadesTramoCache> {
+    const cached = unidadesPorTramo[tramo];
+    if (cached) return cached;
+
     const unidades: UnidadAventuraSchema[] = [];
     const especiales: MisionEspecialSchema[] = [];
 
+    const modules = GLOBS[tramo] || {};
     for (const path in modules) {
         const mod = await modules[path]() as any;
         const data = mod.default || mod;
@@ -109,32 +124,25 @@ async function loadUnidadesAventuraRaw(): Promise<void> {
     }
 
     unidades.sort((a, b) => parseFloat(a.id) - parseFloat(b.id));
-    unidadesAventuraCache = unidades;
-    misionesEspecialesCache = especiales;
+    const result = { unidades, especiales };
+    unidadesPorTramo[tramo] = result;
+    return result;
 }
 
-/**
- * Unidades del formato "unidad-aventura". Por ahora solo existe contenido
- * para el tramo 8-9 (Nivel 1 · Zona Descubre); otros tramos devuelven [].
- */
+/** Unidades del formato "unidad-aventura" del tramo (vacío si aún no hay carpeta/contenido). */
 export async function loadUnidadesAventura(tramo: Tramo): Promise<UnidadAventuraSchema[]> {
-    if (tramo !== '8-9') return [];
-    await loadUnidadesAventuraRaw();
-    return unidadesAventuraCache || [];
+    return (await loadUnidadesTramo(tramo)).unidades;
 }
 
-export async function getUnidadAventuraById(id: string): Promise<UnidadAventuraSchema | undefined> {
-    await loadUnidadesAventuraRaw();
-    return (unidadesAventuraCache || []).find(u => u.id === id);
+/** Los ids de unidad ("1.1") se repiten entre tramos: siempre se resuelve dentro de uno. */
+export async function getUnidadAventuraById(id: string, tramo: Tramo = '8-9'): Promise<UnidadAventuraSchema | undefined> {
+    return (await loadUnidadesTramo(tramo)).unidades.find(u => u.id === id);
 }
 
 export async function loadMisionesEspeciales(tramo: Tramo): Promise<MisionEspecialSchema[]> {
-    if (tramo !== '8-9') return [];
-    await loadUnidadesAventuraRaw();
-    return misionesEspecialesCache || [];
+    return (await loadUnidadesTramo(tramo)).especiales;
 }
 
-export async function getMisionEspecialById(id: string): Promise<MisionEspecialSchema | undefined> {
-    await loadUnidadesAventuraRaw();
-    return (misionesEspecialesCache || []).find(m => m.id === id);
+export async function getMisionEspecialById(id: string, tramo: Tramo = '8-9'): Promise<MisionEspecialSchema | undefined> {
+    return (await loadUnidadesTramo(tramo)).especiales.find(m => m.id === id);
 }

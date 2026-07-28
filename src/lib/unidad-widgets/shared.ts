@@ -3,6 +3,7 @@
 // introducir una dependencia nueva (React/Svelte) solo para este módulo.
 
 import { moderationGate, mensajeRedireccionVael } from '../moderation';
+import { celebrate } from '../celebration';
 
 export function el<K extends keyof HTMLElementTagNameMap>(
     tag: K,
@@ -42,6 +43,7 @@ const ICON_MAP: Record<string, string> = {
     bug: '🐝', sparkles: '✨', type: '🔤', search: '🔍', image: '🖼️',
     'alert-triangle': '⚠️', wand: '🪄', 'check-circle': '✅',
     gato: '🐱', perro: '🐶', dragon: '🐉', unicornio: '🦄', pajaro: '🐦',
+    map: '🗺️', key: '🔑',
 };
 
 export function iconEmoji(icono: string): string {
@@ -113,5 +115,65 @@ function startVoiceInput(input: HTMLInputElement) {
 export function showFeedback(target: HTMLElement, correct: boolean) {
     target.classList.add(correct ? 'ua-feedback-correct' : 'ua-feedback-incorrect');
     fireVaelAction(correct ? 'happy' : 'think');
+    if (correct) celebrate('micro', { target }); // doc 04 §5: intensidad micro en aciertos
     setTimeout(() => target.classList.remove('ua-feedback-correct', 'ua-feedback-incorrect'), 900);
+}
+
+// Etiquetas amigables para las claves de investigaResultado (variable según
+// el tipo de "Investiga" de cada unidad — ver src/schemas/unidad.ts). Vive
+// aquí (no en unidad-engine.ts) porque también las usa el Cuaderno de
+// Inventos (cuaderno.astro) para releer creaciones pasadas.
+export const RESUMEN_LABELS: Record<string, string> = {
+    reglaFormulada: 'Tu regla',
+    objetosInvestigados: 'Cosas investigadas',
+    motivos: 'Tus motivos',
+    prediccionInicialCorrecta: 'Tu primera predicción',
+    promptFinal: 'Tu hechizo',
+    aciertos: 'Errores cazados',
+    total: 'Frases investigadas',
+    eleccion: 'Tus elecciones',
+    detalleLibre: 'Tu detalle',
+    detallesAnadidos: 'Detalles añadidos',
+    detalleClave: 'El detalle clave',
+    fuenteElegida: 'Fuente consultada',
+    afirmacionEraCorrecta: '¿Era verdad?',
+    conclusion: 'Tu conclusión',
+    versionElegida: 'Versión elegida',
+    razon: 'Tu razón',
+    eligioLaQueCumple: '¿Cumplía el encargo?',
+    combinacion: 'Tu combinación',
+    decisionesSeguras: 'Decisiones seguras',
+    principio: 'Cómo empieza',
+    problema: 'El problema',
+    giro: 'Tu giro',
+    final: 'Cómo termina',
+    edicion: 'Lo que cambiaste',
+    cambioElegido: 'Qué mejoraste',
+    quiereV3: '¿Habrá versión 3?',
+    tema: 'Tema del juego',
+    adivinanzasElegidas: 'Tus adivinanzas',
+    paginas: 'Páginas del libro',
+    destinatario: 'A quién ayuda',
+    necesidad: 'Qué necesita',
+    idea: 'Tu idea',
+    respuestas: 'Tus respuestas',
+    totalCreaciones: 'Creaciones en tu Cuaderno',
+    eleccionInicial: 'Tu corazonada',
+    veredictoFinal: 'Tu veredicto',
+    veredictoCorrecto: '¿Acertaste?',
+    cambioTrasComprobar: '¿Cambiaste al comprobar?',
+    cambiosRealizados: 'Tus mejoras',
+    versionFavorita: 'Tu versión favorita',
+    fuentesConsultadas: 'Fuentes cruzadas',
+    veredicto: 'Tu veredicto',
+    confianza: 'Grado de confianza',
+};
+
+export function formatearValor(value: any): string {
+    if (Array.isArray(value)) return value.join(', ');
+    if (typeof value === 'boolean') return value ? 'Sí' : 'No';
+    if (value && typeof value === 'object') {
+        return Object.entries(value).map(([k, v]) => `${k}: ${v}`).join(' · ');
+    }
+    return String(value);
 }

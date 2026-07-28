@@ -3,9 +3,9 @@ import { storage } from './storage-simple';
 export class GameEngine {
     private scenario: any;
     private container: HTMLElement;
-    private messagesList: HTMLElement;
-    private optionsArea: HTMLElement;
-    private continueArea: HTMLElement;
+    private messagesList!: HTMLElement;
+    private optionsArea!: HTMLElement;
+    private continueArea!: HTMLElement;
 
     constructor(scenarioData: any, containerId: string) {
         console.log('GameEngine Initializing for:', scenarioData.id);

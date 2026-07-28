@@ -1,0 +1,88 @@
+{
+  "id": "3.3",
+  "nivel": 3,
+  "zona": {
+    "nombre": "Crear",
+    "colorPrimario": "#e879f9",
+    "colorFondo": "#FBE9FB"
+  },
+  "unidadCurricular": "3.3 · Crea una imagen describiéndola",
+  "titulo": "El cartel con estilo",
+  "objetivoBloom": "Aplicar / Crear: crear una imagen-cartel describiéndola por capas e incluyendo un estilo concreto (acuarela, cómic, pixel-art), y evaluar si cumple su intención y transmite su mensaje.",
+  "competenciaFoco": "calidad_preguntas",
+  "ai4k12": "Percepción.",
+  "duracionMinutos": 30,
+  "producto": "Cartel con estilo + descripción",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Diseña el cartel de un evento inventado… ¡con el estilo que tú elijas!",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "afinar_prompt_detalles",
+    "promptBase": "Un cartel para la gran feria de inventos del barrio",
+    "banco": [
+      { "id": "capa_lugar", "label": "en la plaza, al atardecer", "categoria": "capa: lugar" },
+      { "id": "capa_elementos", "label": "con máquinas voladoras y luces de colores", "categoria": "capa: elementos" },
+      { "id": "capa_detalle", "label": "y un robot pequeñito saludando en una esquina", "categoria": "capa: detalle" },
+      { "id": "estilo_acuarela", "label": "estilo acuarela", "categoria": "estilo" },
+      { "id": "estilo_comic", "label": "estilo cómic", "categoria": "estilo" },
+      { "id": "estilo_pixel", "label": "estilo pixel-art", "categoria": "estilo" }
+    ],
+    "preguntaClave": "¿El estilo que elegiste encaja con el mensaje del cartel?"
+  },
+  "crea": {
+    "tipo": "cartel_con_estilo",
+    "instrucciones": "Ponle nombre a tu cartel. Se guardará tu descripción por capas, el estilo elegido y el mensaje que quiere transmitir.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿El estilo encaja con el mensaje?",
+      "¿Alguien entendería de qué va el cartel sin que se lo expliques?"
+    ]
+  },
+  "familia": {
+    "nombre": "El cartel de la calle",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Buscad en casa un cartel real y comentad qué estilo y mensaje tiene.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "cartelComentado"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Además del qué, puedes pedir un ESTILO: acuarela, cómic, pixel. El estilo cambia el sentimiento del cartel.» · «¿Tu mensaje se capta a la primera?» · «Un buen cartel habla por sí solo.»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "descripcion_por_capas",
+    "estilo_con_intencion",
+    "evalua_claridad_del_mensaje"
+  ],
+  "web": {
+    "tituloPantalla": "Diseña un cartel con tu estilo",
+    "introVael": "Hoy eres diseñador. Elige un estilo (acuarela, cómic, pixel…) y haz que tu cartel hable por sí solo.",
+    "pasos": [
+      "Decide el evento y su mensaje.",
+      "Describe la imagen por capas.",
+      "Elige un estilo que pegue con el mensaje.",
+      "Créalo y comprueba: ¿se entiende a la primera?"
+    ],
+    "cierreVael": "¡Cartelazo! Has elegido el estilo con intención, como un pro. 🎨"
+  }
+}

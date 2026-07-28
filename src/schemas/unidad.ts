@@ -3,7 +3,13 @@
 // no un grafo de diálogo, sino una secuencia fija de pantallas por unidad, con bancos de
 // contenido cerrados (sin generación de IA en vivo) para investigar/crear.
 
-export type ZonaNombre = 'Zona Descubre' | 'Zona Taller' | 'Zona Creación' | 'Zona Gran Invento';
+// Los cuatro primeros son las zonas del rediseño 8-9; los cuatro últimos son
+// los nombres de nivel del método que usa el programa 10-11 (el docx de ese
+// tramo no define zonas con nombre propio, así que el mapa agrupa por el
+// nombre real del nivel: Entender → Usar bien → Crear → Construir).
+export type ZonaNombre =
+    | 'Zona Descubre' | 'Zona Taller' | 'Zona Creación' | 'Zona Gran Invento'
+    | 'Entender' | 'Usar bien' | 'Crear' | 'Construir';
 
 export interface Zona {
     nombre: ZonaNombre;
@@ -20,6 +26,16 @@ export interface PalabraPoderosa {
 export interface Mision {
     textoVael: string;
     audioUrl: string | null;
+}
+
+// Morti (tramo 12-14): segundo personaje, una IA fría y lógica que hace de
+// abogado del diablo para detonar la reflexión ética. Aparece solo en las
+// unidades que lo declaran (sesgo, responsabilidad, dilema del proyecto).
+// El docx marca su voz en morado dentro de "Lo que ve el alumno"; el motor
+// la muestra como una intervención propia tras la de Vael en la pantalla
+// de misión. Opcional: las unidades de 8-9/10-11 no lo traen.
+export interface MortiIntervencion {
+    texto: string;
 }
 
 // --- Investiga: un tipo por mecánica, cada uno con su banco de contenido cerrado ---
@@ -117,6 +133,42 @@ export interface VerificarConFuenteInvestiga {
     esCorrecta: boolean;
 }
 
+// 2.2 del tramo 10-11: la IA da DOS respuestas contradictorias a la misma
+// pregunta; el niño registra su intuición, comprueba en una fuente segura y
+// emite un veredicto. La señal pedagógica del docx es comparar la elección
+// intuitiva inicial con la final basada en evidencia.
+export interface DosRespuestasVerificaInvestiga {
+    tipo: 'dos_respuestas_verifica';
+    pregunta: string;
+    respuestaA: string;
+    respuestaB: string;
+    /** 'A' | 'B': cuál es la correcta según las fuentes. */
+    correcta: 'A' | 'B';
+    fuentes: FuenteOpcion[];
+}
+
+// 2.2 del tramo 12-14: verificación cruzada. El alumno contrasta una
+// afirmación con VARIAS fuentes (cada una fiable o no, y a favor o en contra),
+// marca coincidencias/contradicciones y emite un veredicto con su grado de
+// confianza — la señal es decidir por convergencia de fuentes fiables, no por
+// una sola. Distinto de verificar_con_fuente (una fuente) y de
+// dos_respuestas_verifica (dos respuestas de la IA).
+export interface FuenteCruzada {
+    id: string;
+    label: string;
+    contenido: string;
+    fiable: boolean;
+    apoyaAfirmacion: boolean;
+}
+
+export interface VerificacionCruzadaInvestiga {
+    tipo: 'verificacion_cruzada';
+    afirmacionIA: string;
+    fuentes: FuenteCruzada[];
+    /** ¿La afirmación es cierta según el consenso de las fuentes fiables? */
+    afirmacionEsCierta: boolean;
+}
+
 // 2.3: comparar dos versiones contra un encargo y combinarlas.
 export interface VersionOpcion {
     id: string;
@@ -166,6 +218,10 @@ export interface CambioOpcion {
 export interface IterarVersionInvestiga {
     tipo: 'iterar_version';
     cambiosPosibles: CambioOpcion[];
+    /** 10-11 (3.4 «De la v1 a la v3»): 2 iteraciones documentadas. Default 1 (8-9). */
+    iteraciones?: 1 | 2;
+    /** 10-11: cada cambio se anota con su porqué (gated input). Default false. */
+    pideMotivo?: boolean;
 }
 
 // 4.1: elegir/ordenar adivinanzas de un banco para montar un mini-juego.
@@ -209,6 +265,8 @@ export type Investiga =
     | DetectarInvencionInvestiga
     | AfinarPromptDetallesInvestiga
     | VerificarConFuenteInvestiga
+    | DosRespuestasVerificaInvestiga
+    | VerificacionCruzadaInvestiga
     | CompararVersionesInvestiga
     | DecisionConsecuenciaInvestiga
     | ConstruirHistoriaInvestiga
@@ -278,6 +336,7 @@ export interface UnidadAventuraSchema {
     producto: string;
     palabras: PalabraPoderosa[];
     mision: Mision;
+    morti?: MortiIntervencion; // solo 12-14 en unidades de ética/sesgo/verificación
     investiga: Investiga;
     crea: Crea;
     detective: Detective;

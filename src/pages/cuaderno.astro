@@ -1,0 +1,377 @@
+---
+// Cuaderno de Inventor/a navegable (doc 04 §3.5): child_artifacts se
+// guardaba en cada unidad-aventura (paso "Crea") pero solo se releía para
+// resolver dependencias entre unidades (dependeDe) — UnidadService.getCuaderno
+// ya existía, pero no había ninguna pantalla para que el niño/a volviera a
+// ver sus propias creaciones. Portada personalizable (doc 04 §3.4, cosméticos)
+// queda fuera de esta pieza — es la mecánica de "sumidero de chispas" del
+// ledger, que todavía no existe.
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import { loadUnidadesAventura } from '../lib/scenario-loader';
+
+const unidadesAventura = await loadUnidadesAventura('8-9');
+const unidadInfo = Object.fromEntries(unidadesAventura.map(u => [u.id, {
+    titulo: u.titulo,
+    producto: u.producto,
+    zonaNombre: u.zona.nombre,
+    nivel: u.nivel,
+    publicaEnGaleria: u.comparte.publicaEnGaleria,
+}]));
+---
+
+<Layout title="Kidia - Cuaderno de Inventor/a" description="Todo lo que has creado en tus misiones, guardado en tu propio cuaderno.">
+  <Header mode="aventura" />
+
+  <main class="cuaderno-page">
+    <div class="page-header">
+      <h1>🧪 Cuaderno de Inventor/a</h1>
+      <p>Aquí guardas todo lo que creas en tus misiones. Vuelve cuando quieras a mirarlo.</p>
+    </div>
+
+    <section class="avatar-seccion">
+      <h2>Tu avatar</h2>
+      <p class="avatar-sub">Elige quién te representa. Algunos se desbloquean subiendo de Nivel de Inventor/a ⚡.</p>
+      <div id="avatar-grid" class="avatar-grid" role="radiogroup" aria-label="Elige tu avatar"></div>
+    </section>
+
+    <div id="cuaderno-lista" class="cuaderno-lista" aria-busy="true">
+      <p class="cuaderno-cargando">Cargando tu cuaderno...</p>
+    </div>
+  </main>
+
+  <script type="application/json" id="unidad-info" is:inline set:html={JSON.stringify(unidadInfo)} />
+</Layout>
+
+<script>
+    import { requireActiveChild } from '../lib/require-auth';
+    import { activeChild } from '../lib/active-child';
+    import { ChildrenService } from '../lib/children-service';
+    import { UnidadService, type ChildArtifact } from '../lib/unidad-service';
+    import { ChispasService } from '../lib/chispas-service';
+    import { AVATARES, avatarDesbloqueado } from '../lib/avatares';
+    import { RESUMEN_LABELS, formatearValor } from '../lib/unidad-widgets/shared';
+    import { celebrate } from '../lib/celebration';
+    import { showToast } from '../lib/toast';
+
+    interface UnidadInfoEntry {
+        titulo: string;
+        producto: string;
+        zonaNombre: string;
+        nivel: number;
+        publicaEnGaleria: boolean;
+    }
+
+    const lista = document.getElementById('cuaderno-lista') as HTMLElement;
+    const infoEl = document.getElementById('unidad-info');
+    const unidadInfo: Record<string, UnidadInfoEntry> = infoEl ? JSON.parse(infoEl.textContent || '{}') : {};
+
+    function escapeHtml(str: string): string {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    const ESTADO_LABEL: Record<ChildArtifact['moderation_status'], string> = {
+        pending: '🔍 Vael la está revisando',
+        approved: '✨ En la galería',
+        rejected: '💌 Solo para ti',
+    };
+
+    function renderResumen(contenido: Record<string, any>): string {
+        return Object.entries(contenido)
+            .filter(([key, value]) => key !== 'tituloArtefacto' && value !== undefined && value !== null && value !== '')
+            .map(([key, value]) => {
+                const label = RESUMEN_LABELS[key] || key;
+                return `<p class="artefacto-dato"><strong>${escapeHtml(label)}:</strong> ${escapeHtml(formatearValor(value))}</p>`;
+            })
+            .join('');
+    }
+
+    function renderCard(artefacto: ChildArtifact): string {
+        const info = unidadInfo[artefacto.unidad_id];
+        const titulo = artefacto.contenido?.tituloArtefacto || info?.producto || 'Tu creación';
+        const fecha = new Date(artefacto.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+        const zonaAccent = info ? `var(--k-zona-${info.nivel})` : 'var(--k-brand-primary)';
+        const mostrarEstado = info?.publicaEnGaleria;
+
+        return `
+            <article class="artefacto-card" style="--zona-accent: ${zonaAccent}" data-id="${artefacto.id}">
+                <div class="artefacto-head">
+                    <strong class="artefacto-titulo">${escapeHtml(titulo)}</strong>
+                    ${mostrarEstado ? `<span class="k-pill artefacto-estado">${ESTADO_LABEL[artefacto.moderation_status]}</span>` : ''}
+                </div>
+                <p class="artefacto-meta">${info ? `${escapeHtml(info.zonaNombre)} · ${escapeHtml(info.titulo)}` : `Unidad ${escapeHtml(artefacto.unidad_id)}`} — ${fecha}</p>
+                <div class="artefacto-resumen">${renderResumen(artefacto.contenido || {})}</div>
+                <button type="button" class="k-btn k-btn--ghost k-btn--sm artefacto-borrar" data-id="${artefacto.id}" data-titulo="${escapeHtml(titulo)}">Eliminar</button>
+            </article>
+        `;
+    }
+
+    function wireBorrar() {
+        lista.querySelectorAll<HTMLButtonElement>('.artefacto-borrar').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const titulo = btn.dataset.titulo || 'esta creación';
+                if (!confirm(`¿Seguro que quieres borrar "${titulo}"? No se puede deshacer.`)) return;
+
+                btn.disabled = true;
+                const { error } = await UnidadService.deleteArtifact(btn.dataset.id!);
+                if (error) {
+                    showToast(error, { variant: 'danger', duration: 5000 });
+                    btn.disabled = false;
+                    return;
+                }
+                showToast(`"${titulo}" borrada.`, { variant: 'default' });
+                btn.closest('.artefacto-card')?.remove();
+                if (!lista.querySelector('.artefacto-card')) {
+                    lista.innerHTML = `<p class="cuaderno-vacio">Tu cuaderno está vacío todavía. <a href="/mapa">Completa una misión</a> y tu primera creación aparecerá aquí.</p>`;
+                }
+            });
+        });
+    }
+
+    // ---- Avatar (doc 04 §3.4 v1: desbloqueo por Nivel de Inventor/a) ----
+
+    const avatarGrid = document.getElementById('avatar-grid') as HTMLElement;
+
+    async function initAvatar(childId: string) {
+        const [children, chispasTotal] = await Promise.all([
+            ChildrenService.listChildren(),
+            ChispasService.getTotalChispas(childId),
+        ]);
+        const child = children.find(c => c.id === childId);
+        const actual = child?.avatar || null;
+
+        avatarGrid.innerHTML = '';
+        AVATARES.forEach(av => {
+            const desbloqueado = avatarDesbloqueado(av, chispasTotal);
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'avatar-opcion';
+            btn.setAttribute('role', 'radio');
+            btn.setAttribute('aria-checked', String(av.emoji === actual));
+            btn.classList.toggle('avatar-opcion--actual', av.emoji === actual);
+            btn.classList.toggle('avatar-opcion--bloqueado', !desbloqueado);
+            btn.disabled = !desbloqueado;
+            btn.title = desbloqueado ? av.nombre : `${av.nombre} — se desbloquea siendo ${av.nivelRequerido}`;
+            btn.innerHTML = `
+                <span class="avatar-emoji" aria-hidden="true">${av.emoji}</span>
+                <span class="avatar-nombre">${desbloqueado ? av.nombre : `🔒 ${av.nivelRequerido}`}</span>
+            `;
+            if (desbloqueado) {
+                btn.addEventListener('click', async () => {
+                    const { error } = await ChildrenService.updateChild(childId, { avatar: av.emoji });
+                    if (error) {
+                        showToast('No se pudo guardar tu avatar. Prueba otra vez.', { variant: 'danger' });
+                        return;
+                    }
+                    celebrate('media', { mensaje: `${av.emoji} ¡Avatar nuevo!` });
+                    // Refrescar la selección y avisar al header (badge del hijo)
+                    initAvatar(childId);
+                    window.dispatchEvent(new CustomEvent('active-child:changed', { detail: childId }));
+                });
+            }
+            avatarGrid.appendChild(btn);
+        });
+    }
+
+    async function init() {
+        const childId = activeChild.get();
+        if (!childId) return;
+
+        initAvatar(childId);
+
+        const artefactos = await UnidadService.getCuaderno(childId);
+        lista.setAttribute('aria-busy', 'false');
+
+        if (artefactos.length === 0) {
+            lista.innerHTML = `<p class="cuaderno-vacio">Tu cuaderno está vacío todavía. <a href="/mapa">Completa una misión</a> y tu primera creación aparecerá aquí.</p>`;
+            return;
+        }
+
+        const ordenados = [...artefactos].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        lista.innerHTML = ordenados.map(renderCard).join('');
+        wireBorrar();
+    }
+
+    requireActiveChild().then(allowed => {
+        if (!allowed) return;
+        init();
+        window.addEventListener('active-child:changed', init);
+        window.addEventListener('progress:updated', init);
+    });
+</script>
+
+<style>
+    .cuaderno-page {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: var(--k-space-8) var(--k-space-4) var(--k-space-16);
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: var(--k-space-10);
+    }
+
+    h1 {
+        font-size: var(--text-h1);
+        background: linear-gradient(to right, var(--k-brand-primary), var(--k-brand-accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: var(--k-space-2);
+    }
+
+    .page-header p {
+        color: var(--k-text-muted);
+        font-size: var(--k-text-lg);
+    }
+
+    /* ---- Selector de avatar ---- */
+
+    .avatar-seccion {
+        margin-bottom: var(--k-space-10);
+        background: var(--k-bg-surface);
+        border: 1px solid var(--k-border-subtle);
+        border-radius: var(--radius-lg);
+        padding: var(--k-space-6);
+    }
+
+    .avatar-seccion h2 {
+        margin: 0 0 var(--k-space-1);
+        font-size: var(--text-h3);
+        color: var(--k-text-strong);
+    }
+
+    .avatar-sub {
+        margin: 0 0 var(--k-space-4);
+        font-size: var(--k-text-sm);
+        color: var(--k-text-muted);
+    }
+
+    .avatar-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        gap: var(--k-space-3);
+    }
+
+    .avatar-grid :global(.avatar-opcion) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--k-space-1);
+        background: var(--k-bg-page-deep);
+        border: 2px solid var(--k-border-subtle);
+        border-radius: var(--radius-md);
+        padding: var(--k-space-3);
+        min-height: 88px;
+        cursor: pointer;
+        font-family: inherit;
+        transition: border-color var(--k-motion-base) var(--k-ease-out), transform var(--k-motion-base) var(--k-ease-out);
+    }
+
+    .avatar-grid :global(.avatar-opcion:hover:not(:disabled)) {
+        transform: translateY(-2px);
+        border-color: var(--k-brand-primary);
+    }
+
+    .avatar-grid :global(.avatar-opcion--actual) {
+        border-color: var(--k-brand-primary);
+        box-shadow: var(--k-glow-primary);
+    }
+
+    .avatar-grid :global(.avatar-opcion--bloqueado) {
+        cursor: not-allowed;
+        opacity: 0.55;
+    }
+
+    .avatar-grid :global(.avatar-opcion--bloqueado .avatar-emoji) {
+        filter: grayscale(1);
+    }
+
+    .avatar-grid :global(.avatar-emoji) {
+        font-size: 2rem;
+    }
+
+    .avatar-grid :global(.avatar-nombre) {
+        font-size: var(--k-text-xs);
+        color: var(--k-text-muted);
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .cuaderno-lista {
+        display: flex;
+        flex-direction: column;
+        gap: var(--k-space-4);
+    }
+
+    .cuaderno-cargando,
+    .cuaderno-vacio {
+        text-align: center;
+        color: var(--k-text-muted);
+        padding: var(--k-space-8) 0;
+    }
+
+    .cuaderno-vacio :global(a) {
+        color: var(--k-brand-primary);
+        text-decoration: underline;
+    }
+
+    .cuaderno-lista :global(.artefacto-card) {
+        background: var(--k-bg-surface);
+        border: 1px solid var(--k-border-subtle);
+        border-left: 4px solid var(--zona-accent);
+        border-radius: var(--radius-md);
+        padding: var(--k-space-5) var(--k-space-6);
+    }
+
+    .cuaderno-lista :global(.artefacto-head) {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: var(--k-space-3);
+        flex-wrap: wrap;
+        margin-bottom: var(--k-space-1);
+    }
+
+    .cuaderno-lista :global(.artefacto-titulo) {
+        font-size: var(--k-text-xl);
+        color: var(--k-text-strong);
+    }
+
+    .cuaderno-lista :global(.artefacto-estado) {
+        white-space: nowrap;
+        font-size: var(--k-text-xs);
+    }
+
+    .cuaderno-lista :global(.artefacto-meta) {
+        margin: 0 0 var(--k-space-3);
+        font-size: var(--k-text-sm);
+        color: var(--k-text-muted);
+    }
+
+    .cuaderno-lista :global(.artefacto-resumen) {
+        display: flex;
+        flex-direction: column;
+        gap: var(--k-space-1);
+    }
+
+    .cuaderno-lista :global(.artefacto-dato) {
+        margin: 0;
+        font-size: var(--k-text-sm);
+        color: var(--k-text-body);
+        line-height: 1.5;
+    }
+
+    .cuaderno-lista :global(.artefacto-dato strong) {
+        color: var(--k-text-muted);
+        font-weight: 600;
+    }
+
+    .cuaderno-lista :global(.artefacto-borrar) {
+        margin-top: var(--k-space-4);
+        color: var(--k-text-muted);
+    }
+</style>

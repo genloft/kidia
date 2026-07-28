@@ -1,0 +1,111 @@
+{
+  "id": "3.1",
+  "nivel": 3,
+  "zona": {
+    "nombre": "Crear",
+    "colorPrimario": "#e879f9",
+    "colorFondo": "#FBE9FB"
+  },
+  "unidadCurricular": "3.1 · Crea un personaje",
+  "titulo": "Diseña tu personaje (ficha completa)",
+  "objetivoBloom": "Crear: crear un personaje propio con ficha completa (nombre, aspecto, personalidad y una habilidad) describiéndolo, y ajustar la imagen hasta que coincida con su idea.",
+  "competenciaFoco": "autonomia_creativa",
+  "ai4k12": "Interacción natural.",
+  "duracionMinutos": 30,
+  "producto": "Ficha de personaje + imagen (v1/v2)",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Vas a crear un personaje tan completo que parezca salido de una peli de verdad.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "construir_prompt_imagen",
+    "categorias": [
+      {
+        "label": "Aspecto",
+        "opciones": [
+          { "id": "zorro_capa", "label": "Zorro con capa de explorador", "valor": "zorro" },
+          { "id": "robot_brillante", "label": "Robot pequeño y brillante", "valor": "robot" },
+          { "id": "dragona_gafas", "label": "Dragona con gafas de inventora", "valor": "dragon" }
+        ]
+      },
+      {
+        "label": "Personalidad",
+        "opciones": [
+          { "id": "valiente", "label": "Valiente aunque le dé miedo", "valor": "valiente" },
+          { "id": "curiosa", "label": "Curiosa sin remedio", "valor": "curiosa" },
+          { "id": "bromista", "label": "Bromista de buen corazón", "valor": "bromista" }
+        ]
+      },
+      {
+        "label": "Habilidad",
+        "opciones": [
+          { "id": "inventa_maquinas", "label": "Inventa máquinas con cualquier cosa", "valor": "inventa" },
+          { "id": "habla_animales", "label": "Habla con los animales", "valor": "habla_animales" },
+          { "id": "encuentra_caminos", "label": "Encuentra caminos que nadie ve", "valor": "caminos" }
+        ]
+      }
+    ],
+    "permiteDetalleLibre": true,
+    "comparaCambiandoUna": true
+  },
+  "crea": {
+    "tipo": "ficha_personaje",
+    "instrucciones": "Ponle NOMBRE a tu personaje. Su ficha completa (aspecto, personalidad y habilidad) y sus dos versiones se guardan en tu Cuaderno.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿La imagen muestra su personalidad o solo su aspecto?",
+      "¿Qué cambiarías para que se note quién es?"
+    ]
+  },
+  "familia": {
+    "nombre": "El casting en casa",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Presenta tu personaje en casa: cómo es, cómo se porta y qué sabe hacer.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "reaccionFamiliar"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": {
+      "id": "creador-personajes",
+      "name": "Creador de personajes",
+      "icon": "🎬",
+      "description": "Diseñó un personaje con ficha completa y lo iteró hasta acercarlo a su idea."
+    },
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Un buen personaje no es solo cómo se ve: también tiene una forma de ser y algo que sabe hacer.» · «¿Se nota su personalidad en la imagen, o solo su aspecto?» · «¿Qué UNA cosa cambiarías en la segunda versión?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "ficha_completa_coherente",
+    "al_menos_una_iteracion",
+    "personaje_propio_no_copiado"
+  ],
+  "web": {
+    "tituloPantalla": "Crea un personaje de película",
+    "introVael": "No vamos a hacer un dibujo cualquiera: vamos a crear un personaje con historia, carácter y poder. ¡Empieza el casting!",
+    "pasos": [
+      "Ponle nombre y aspecto.",
+      "Dale una personalidad (cómo es).",
+      "Dale una habilidad (qué sabe hacer).",
+      "Créalo… y mejóralo con una segunda versión."
+    ],
+    "cierreVael": "¡Personaje fichado! Tú lo diseñaste de arriba abajo. 🎬"
+  }
+}

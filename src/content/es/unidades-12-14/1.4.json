@@ -1,0 +1,105 @@
+{
+  "id": "1.4",
+  "nivel": 1,
+  "zona": {
+    "nombre": "Entender",
+    "colorPrimario": "#22d3ee",
+    "colorFondo": "#E0F7FB"
+  },
+  "unidadCurricular": "1.4 · La IA se equivoca",
+  "titulo": "Caza el error: sesgos y verdades a medias",
+  "objetivoBloom": "Analizar / Evaluar: detectar en una respuesta de la IA afirmaciones plausibles pero falsas y posibles sesgos, verificarlas con fuentes y argumentar la corrección. (Mecánica de firma, escalón 12-14; primera aparición de Morti en un reto de caza.)",
+  "competenciaFoco": "pensamiento_critico",
+  "ai4k12": "Impacto social.",
+  "duracionMinutos": 35,
+  "producto": "Respuesta verificada y argumentada + insignia",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Esta respuesta de la IA suena perfecta. Apuesto a que no encuentras lo que esconde.",
+    "audioUrl": null
+  },
+  "morti": {
+    "texto": "Yo soy frío y lógico, pero hasta yo me equivoco. ¿Serás tú quien me pille con la evidencia en la mano?"
+  },
+  "investiga": {
+    "tipo": "verificar_con_fuente",
+    "afirmacionIA": "La Gran Muralla China es la única construcción humana visible desde el espacio a simple vista.",
+    "fuentes": [
+      {
+        "id": "agencia_espacial",
+        "label": "🛰️ Declaraciones de agencias espaciales",
+        "contenido": "Varios astronautas han aclarado que la Gran Muralla NO se distingue a simple vista desde la órbita: es larga pero muy estrecha. Y desde el espacio sí se ven otras cosas (ciudades de noche, aeropuertos). La afirmación es falsa por partida doble."
+      },
+      {
+        "id": "enciclopedia",
+        "label": "📚 Enciclopedia de ciencia",
+        "contenido": "El mito de la Gran Muralla visible desde el espacio está desmentido. Su anchura (unos metros) la hace indistinguible desde la órbita sin ayuda. Además, no es la «única» estructura observable."
+      },
+      {
+        "id": "blog_anonimo",
+        "label": "💬 Un comentario en una red social",
+        "contenido": "«Pues yo lo he leído mil veces, será verdad.» (Sin fuente ni datos: repetir algo no lo hace cierto.)"
+      }
+    ],
+    "esCorrecta": false
+  },
+  "crea": {
+    "tipo": "respuesta_verificada",
+    "instrucciones": "Ponle título a tu respuesta verificada. Guardará el error que cazaste, la fuente fiable que usaste y tu argumento con la corrección.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Cómo distingues una fuente fiable de una que no lo es?",
+      "¿Por qué los errores que «suenan bien» son los más peligrosos?"
+    ]
+  },
+  "familia": {
+    "nombre": "Sonaba a verdad y era falso",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Comentad una noticia o dato que «sonaba verdad» y resultó ser falso.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "casoFamiliar"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": {
+      "id": "verificador-experto",
+      "name": "Verificador experto",
+      "icon": "🧠",
+      "description": "Detectó un error plausible, lo verificó con una fuente fiable y argumentó la corrección con evidencia."
+    },
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«En este nivel los errores son listos: datos plausibles pero falsos, o afirmaciones con sesgo.» · «No basta con que suene bien: ¿con qué fuente lo compruebas?» · «Distingue una fuente fiable de un simple comentario sin datos.»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "detecta_error_o_sesgo",
+    "verifica_con_fuente_fiable",
+    "argumento_apoyado_en_evidencia"
+  ],
+  "web": {
+    "tituloPantalla": "Caza el error: nivel experto",
+    "introVael": "Subimos al máximo nivel. Ahora los errores se disfrazan de verdad y a veces esconden sesgos. Tu arma: la verificación con fuentes.",
+    "pasos": [
+      "Lee la respuesta que te trae Morti.",
+      "Detecta la afirmación falsa o el sesgo escondido.",
+      "Verifícalo con fuentes fiables.",
+      "Argumenta por qué está mal y escribe la corrección."
+    ],
+    "cierreVael": "Eso es pensamiento crítico de verdad: ni a Morti se la cuelas. 🧠"
+  }
+}

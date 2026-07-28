@@ -1,0 +1,117 @@
+{
+  "id": "1.4",
+  "nivel": 1,
+  "zona": {
+    "nombre": "Entender",
+    "colorPrimario": "#22d3ee",
+    "colorFondo": "#E0F7FB"
+  },
+  "unidadCurricular": "1.4 · La IA se equivoca",
+  "titulo": "Caza el error: nivel sutil",
+  "objetivoBloom": "Analizar: detectar errores sutiles en una respuesta de la IA (un dato falso que suena verdadero), explicar POR QUÉ está mal y escribir la versión corregida. (Mecánica de firma, escalón 10-11.)",
+  "competenciaFoco": "pensamiento_critico",
+  "ai4k12": "Impacto social.",
+  "duracionMinutos": 25,
+  "producto": "Respuesta corregida + insignia",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Esta vez la IA no dice tonterías: dice algo que SUENA a verdad pero está mal. ¿Lo cazas?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "detectar_invencion",
+    "banco": [
+      {
+        "id": "sol_estrella",
+        "texto": "El Sol es una estrella.",
+        "esVerdadera": true
+      },
+      {
+        "id": "muralla_luna",
+        "texto": "La Gran Muralla China se ve desde la Luna a simple vista.",
+        "esVerdadera": false,
+        "pistaSiFalsa": "Suena a verdad y mucha gente lo repite, pero los astronautas confirman que desde la Luna no se distingue a simple vista. Un dato puede sonar bien y estar mal."
+      },
+      {
+        "id": "luna_tierra",
+        "texto": "La Luna gira alrededor de la Tierra.",
+        "esVerdadera": true
+      },
+      {
+        "id": "delfines_mamiferos",
+        "texto": "Los delfines son mamíferos.",
+        "esVerdadera": true
+      },
+      {
+        "id": "murcielagos_ciegos",
+        "texto": "Los murciélagos son ciegos.",
+        "esVerdadera": false,
+        "pistaSiFalsa": "«Ciego como un murciélago» es solo un dicho: los murciélagos ven, y además se orientan con el eco. Los errores sutiles se disfrazan de frases famosas."
+      },
+      {
+        "id": "agua_hierve",
+        "texto": "El agua hierve a 100 grados al nivel del mar.",
+        "esVerdadera": true
+      }
+    ]
+  },
+  "crea": {
+    "tipo": "expediente_error",
+    "instrucciones": "Ponle nombre a tu expediente de detective. Guardará los errores que cazaste, por qué estaban mal y tu versión corregida.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Cómo distingues un dato verdadero de uno que solo suena bien?",
+      "¿Qué harías para asegurarte del todo?"
+    ]
+  },
+  "familia": {
+    "nombre": "Sonaba a verdad",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Contad una vez que algo «sonaba a verdad» pero resultó ser falso.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "anecdotaFamiliar"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": {
+      "id": "cazaerrores-2",
+      "name": "Cazaerrores Nivel 2",
+      "icon": "🔎",
+      "description": "Detectó un error sutil, explicó por qué estaba mal y aportó la corrección."
+    },
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Antes de marcar, adivina: ¿cuál suena demasiado bien?» · «¿Por qué crees que ese dato está mal?» · «¿Cómo lo comprobarías del todo?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "errores_sutiles_detectados",
+    "justificacion_de_cada_error",
+    "propuesta_de_comprobacion"
+  ],
+  "web": {
+    "tituloPantalla": "Cazaerrores: misión difícil",
+    "introVael": "Subimos de nivel, detective. Ahora los errores se disfrazan de verdad. Necesito tu mejor lupa.",
+    "pasos": [
+      "Lee la respuesta de la IA con atención.",
+      "Caza el error o los errores escondidos.",
+      "Explica POR QUÉ está mal.",
+      "Escribe la versión corregida."
+    ],
+    "cierreVael": "¡Gran trabajo, detective! Ya no te la cuela ni un dato disfrazado. 🔎"
+  }
+}

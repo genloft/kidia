@@ -1,0 +1,88 @@
+{
+  "id": "3.4",
+  "nivel": 3,
+  "zona": {
+    "nombre": "Crear",
+    "colorPrimario": "#e879f9",
+    "colorFondo": "#FBE9FB"
+  },
+  "unidadCurricular": "3.4 · Mejora e itera",
+  "titulo": "De la v1 a la v3: el taller del inventor",
+  "objetivoBloom": "Evaluar / Crear: practicar la mejora iterativa real — crear tres versiones de una creación, cada una mejor que la anterior, anotando qué cambió y por qué.",
+  "competenciaFoco": "verificacion",
+  "ai4k12": "Representación y razonamiento.",
+  "duracionMinutos": 30,
+  "producto": "Trío v1-v2-v3 + notas",
+  "palabras": [],
+  "dependeDe": ["3.1"],
+  "mision": {
+    "textoVael": "Los grandes inventos no salen a la primera. ¿Llegamos juntos a la versión 3?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "iterar_version",
+    "iteraciones": 2,
+    "pideMotivo": true,
+    "cambiosPosibles": [
+      { "id": "cambiar_fondo", "label": "Cambiar el fondo o el lugar" },
+      { "id": "cambiar_colores", "label": "Cambiar los colores" },
+      { "id": "anadir_detalle", "label": "Añadir un detalle que cuente algo" },
+      { "id": "cambiar_pose", "label": "Cambiar la pose o la expresión" },
+      { "id": "quitar_algo", "label": "Quitar algo que distrae" }
+    ]
+  },
+  "crea": {
+    "tipo": "trio_versiones",
+    "instrucciones": "Ponle nombre a tu trío v1-v2-v3. Se guardarán tus dos mejoras con sus motivos y cuál elegiste como favorita.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Cada versión mejoró de verdad?",
+      "¿Cuál es tu favorita y por qué?"
+    ]
+  },
+  "familia": {
+    "nombre": "Mejorar algo de casa en dos pasos",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Mejorad algo de casa en dos pasos, anotando qué cambiasteis cada vez.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "mejoraDeCasa"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Mejorar es un superpoder: en cada versión cambias UNA cosa con intención y compruebas si mejoró.» · «¿Por qué cambias eso? Los inventores apuntan sus motivos.» · «Las tres juntas: ¿en qué mejoró cada paso?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "dos_iteraciones_documentadas",
+    "motivo_claro_por_cambio",
+    "eleccion_final_con_criterio"
+  ],
+  "web": {
+    "tituloPantalla": "El taller del inventor: v1 → v3",
+    "introVael": "Ningún invento sale perfecto a la primera. Vamos a tu taller a mejorarlo paso a paso hasta la versión 3.",
+    "pasos": [
+      "Coge una creación tuya: es la v1.",
+      "Cambia UNA cosa y anota por qué: v2.",
+      "Cambia otra y anota por qué: v3.",
+      "Pon las tres juntas: ¿cuánto mejoró?"
+    ],
+    "cierreVael": "¡Eso es ser inventor! Mejorar paso a paso es pensar como un profesional. 🛠️"
+  }
+}

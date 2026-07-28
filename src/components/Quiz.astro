@@ -1,6 +1,8 @@
 ---
+import type { ScenarioSchema } from '../schemas/scenario';
+
 interface Props {
-  scenario: any;
+  scenario: ScenarioSchema;
 }
 
 const { scenario } = Astro.props;
@@ -52,48 +54,49 @@ const { scenario } = Astro.props;
 
 <script>
     import { storage, syncWithCloud } from '../lib/storage-simple';
+    import type { ScenarioSchema, QuizQuestion } from '../schemas/scenario';
 
-    // Elements
-    const container = document.getElementById('quiz-container');
-    const introEl = document.getElementById('quiz-intro');
-    const playEl = document.getElementById('quiz-play');
-    const resultsEl = document.getElementById('quiz-results');
-    
+    // Elements (todos existen en el template de arriba; el cast los tipa)
+    const container = document.getElementById('quiz-container') as HTMLElement;
+    const introEl = document.getElementById('quiz-intro') as HTMLElement;
+    const playEl = document.getElementById('quiz-play') as HTMLElement;
+    const resultsEl = document.getElementById('quiz-results') as HTMLElement;
+
     // Parse scenario from data attribute
-    let scenario;
+    let scenario: ScenarioSchema | null = null;
     try {
-        scenario = JSON.parse(container.dataset.scenario);
+        scenario = JSON.parse(container.dataset.scenario || 'null');
     } catch (e) {
         console.error('[Quiz] Failed to parse scenario data', e);
     }
-    
+
     // Play Elements
-    const qCounter = document.getElementById('q-counter');
-    const questionEl = document.getElementById('quiz-question');
-    const optionsEl = document.getElementById('quiz-options');
-    const feedbackEl = document.getElementById('quiz-feedback');
-    const nextBtn = document.getElementById('quiz-next');
-    
+    const qCounter = document.getElementById('q-counter') as HTMLElement;
+    const questionEl = document.getElementById('quiz-question') as HTMLElement;
+    const optionsEl = document.getElementById('quiz-options') as HTMLElement;
+    const feedbackEl = document.getElementById('quiz-feedback') as HTMLElement;
+    const nextBtn = document.getElementById('quiz-next') as HTMLButtonElement;
+
     // Result Elements
-    const finalScoreEl = document.getElementById('final-score');
-    const reactionEl = document.getElementById('kidia-reaction');
-    
-    const questions = scenario?.quiz?.questions || [];
-    
+    const finalScoreEl = document.getElementById('final-score') as HTMLElement;
+    const reactionEl = document.getElementById('kidia-reaction') as HTMLElement;
+
+    const questions: QuizQuestion[] = scenario?.quiz?.questions || [];
+
     let currentIdx = 0;
     let correctCount = 0;
 
     // Listeners
     window.addEventListener('startQuiz', (e) => {
-        // console.log('[Quiz] Event received for:', e.detail.scenarioId);
-        if (scenario && e.detail.scenarioId === scenario.id) {
+        const detail = (e as CustomEvent<{ scenarioId: string }>).detail;
+        if (scenario && detail?.scenarioId === scenario.id) {
             container.classList.remove('hidden');
             showIntro();
         }
     });
 
-    document.getElementById('btn-start').onclick = startQuiz;
-    
+    (document.getElementById('btn-start') as HTMLButtonElement).onclick = startQuiz;
+
     // Close / Do Later button
     const closeBtn = document.getElementById('btn-close');
     if (closeBtn) {
@@ -113,7 +116,7 @@ const { scenario } = Astro.props;
             try {
                 storage.update(s => {
                     const scenarioProgress = { ...(s.scenarioProgress || {}) };
-                    delete scenarioProgress[scenario.id];
+                    if (scenario) delete scenarioProgress[scenario.id];
                     return { ...s, scenarioProgress };
                 });
                 await syncWithCloud();
@@ -124,7 +127,7 @@ const { scenario } = Astro.props;
         };
     }
 
-    document.getElementById('btn-finish').onclick = async () => {
+    (document.getElementById('btn-finish') as HTMLButtonElement).onclick = async () => {
         // Igual que el reinicio: asegura que la puntuación/insignia de
         // finishQuiz() ya han llegado a Supabase antes de salir de la página.
         try {
@@ -170,13 +173,13 @@ const { scenario } = Astro.props;
                 <span class="quiz-option-text"></span>
                 <span class="quiz-option-icon"></span>
             `;
-            btn.querySelector('.quiz-option-text').textContent = text;
+            (btn.querySelector('.quiz-option-text') as HTMLElement).textContent = text;
             btn.onclick = () => checkAnswer(index, btn, q);
             optionsEl.appendChild(btn);
         });
     }
 
-    function checkAnswer(index, btn, question) {
+    function checkAnswer(index: number, btn: HTMLButtonElement, question: QuizQuestion) {
         optionsEl.querySelectorAll('button').forEach(b => b.disabled = true);
 
         const isCorrect = index === question.correct_index;
@@ -215,46 +218,65 @@ const { scenario } = Astro.props;
         }
     }
 
-    function finishQuiz() {
+    async function finishQuiz() {
         playEl.classList.add('hidden');
         resultsEl.classList.remove('hidden');
         qCounter.innerText = '';
-        
+
         const score = Math.round((correctCount / questions.length) * 100);
-        
+
         finalScoreEl.innerText = score.toString();
-        
+
         // Kidia Reaction
         let reaction = "";
         if (score === 100) reaction = "¡Increíble! 🌟 ¡Eres un gurú de la IA!";
         else if (score >= 70) reaction = "¡Muy bien! 🧠 Ya casi lo dominas todo.";
         else reaction = "¡Buen intento! 💪 Repasa un poco y vuelve a intentarlo.";
-        
+
         reactionEl.innerText = reaction;
 
         // Save Logic (a través de storage-simple.ts para que quede por hijo activo, no global)
         try {
-            const badgeNotif = document.getElementById('badge-notification');
-            const badgeIconEl = document.getElementById('badge-icon');
-            const badgeNameEl = document.getElementById('badge-name');
-            const badgeDescEl = document.getElementById('badge-desc');
-            const earnedBadge = score >= 70 && scenario.badge;
+            if (!scenario) return;
+            const sc = scenario;
+            const badgeNotif = document.getElementById('badge-notification') as HTMLElement;
+            const badgeIconEl = document.getElementById('badge-icon') as HTMLElement;
+            const badgeNameEl = document.getElementById('badge-name') as HTMLElement;
+            const badgeDescEl = document.getElementById('badge-desc') as HTMLElement;
+            const earnedBadge = score >= 70 && sc.badge;
 
             storage.update(s => ({
                 ...s,
-                completedScenarios: [...new Set([...(s.completedScenarios || []), scenario.id])],
-                scores: { ...(s.scores || {}), [scenario.id]: score },
+                completedScenarios: [...new Set([...(s.completedScenarios || []), sc.id])],
+                scores: { ...(s.scores || {}), [sc.id]: score },
                 badges: earnedBadge
-                    ? [...new Set([...(s.badges || []), scenario.badge.id])]
+                    ? [...new Set([...(s.badges || []), sc.badge.id])]
                     : (s.badges || [])
             }));
 
             if (earnedBadge) {
-                badgeIconEl.innerText = scenario.badge.icon || '🏆';
-                badgeNameEl.innerText = scenario.badge.name;
-                badgeDescEl.innerText = scenario.badge.description || '';
+                badgeIconEl.innerText = sc.badge.icon || '🏆';
+                badgeNameEl.innerText = sc.badge.name;
+                badgeDescEl.innerText = sc.badge.description || '';
                 badgeNotif.classList.remove('hidden');
                 badgeNotif.classList.add('animate-pop');
+            }
+
+            // Paridad de gamificación (doc 04 §3.1): este quiz es el cierre
+            // de misión de los tramos 10-11/12-14 — los mismos hechos del
+            // ledger que otorga el tramo 8-9 en unidad-engine. Aprobar
+            // (>= 70) = misión completada; la insignia va aparte. Idempotente
+            // en el servidor: repetir el quiz no vuelve a dar chispas.
+            if (score >= 70) {
+                const { ChispasService, CHISPAS } = await import('../lib/chispas-service');
+                const { activeChild } = await import('../lib/active-child');
+                const childId = activeChild.get();
+                if (childId) {
+                    await ChispasService.logEvent(childId, 'mision_completada', sc.id, CHISPAS.mision_completada);
+                    if (earnedBadge) {
+                        await ChispasService.logEvent(childId, 'insignia_ganada', sc.badge.id, CHISPAS.insignia_ganada);
+                    }
+                }
             }
         } catch(e) {
             console.error('[Quiz] Save error', e);

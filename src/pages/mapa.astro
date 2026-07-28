@@ -23,11 +23,62 @@ const zonas89 = [1, 2, 3, 4].map(nivel => {
   };
 });
 
-// --- Tramos 10-11 y 12-14: retos legacy (formato scenario), solo Nivel 1 ---
+// --- Tramos 10-11 y 12-14: migración incremental a unidad-aventura (Fase 4,
+// desde los docx del método). Cada parada del mapa es o una unidad migrada
+// (formato nuevo) o un reto legacy aún sin migrar; se agrupan por nivel en
+// secciones de zona, con el nombre real del nivel del método si hay unidades
+// migradas que lo aporten (zona.nombre).
 const scenarios = await loadScenarios('es');
-const panelesLegacy = (['10-11', '12-14'] as const).map(tramo => ({
-  tramo,
-  scenarios: scenarios.filter(s => s.tramo === tramo),
+
+interface ParadaLegacy {
+  tipo: 'legacy';
+  scenario: (typeof scenarios)[number];
+  reqUnidadMigrada?: string;
+}
+interface ParadaMigrada {
+  tipo: 'migrada';
+  unidad: Awaited<ReturnType<typeof loadUnidadesAventura>>[number];
+}
+type Parada = ParadaLegacy | ParadaMigrada;
+
+const panelesLegacy = await Promise.all((['10-11', '12-14'] as const).map(async tramo => {
+  const migradas = await loadUnidadesAventura(tramo);
+  const migradasPorUnidad = new Map(migradas.map(u => [u.id, u]));
+  const delTramo = scenarios.filter(s => s.tramo === tramo);
+
+  // Paradas: todas las unidades migradas + los legacy cuya unidad NO migró.
+  const paradas: Parada[] = [
+    ...migradas.map(u => ({ tipo: 'migrada', unidad: u } as ParadaMigrada)),
+    ...delTramo
+      .filter(s => !(s.unidad && migradasPorUnidad.has(s.unidad)))
+      .map(s => {
+        // Si el reto ANTERIOR de la cadena está migrado, su insignia legacy
+        // ya no se otorga: la tarjeta pasa a desbloquearse por "unidad
+        // migrada completada" (data-req-unidad), manteniendo la insignia
+        // vieja como llave alternativa para quien ya la tuviera ganada.
+        const requisitoDe = s.required_badge_id
+          ? delTramo.find(x => x.badge.id === s.required_badge_id)
+          : undefined;
+        const reqUnidadMigrada = requisitoDe?.unidad && migradasPorUnidad.has(requisitoDe.unidad)
+          ? requisitoDe.unidad
+          : undefined;
+        return { tipo: 'legacy', scenario: s, reqUnidadMigrada } as ParadaLegacy;
+      }),
+  ].sort((a, b) => {
+    const ua = a.tipo === 'migrada' ? a.unidad.id : (a.scenario.unidad ?? '99');
+    const ub = b.tipo === 'migrada' ? b.unidad.id : (b.scenario.unidad ?? '99');
+    return parseFloat(ua) - parseFloat(ub);
+  });
+
+  // Secciones por nivel (1-4), con el nombre de zona que aporten las migradas.
+  const niveles = [...new Set(paradas.map(p => p.tipo === 'migrada' ? p.unidad.nivel : (p.scenario.nivel ?? 1)))].sort();
+  const secciones = niveles.map(nivel => {
+    const delNivel = paradas.filter(p => (p.tipo === 'migrada' ? p.unidad.nivel : (p.scenario.nivel ?? 1)) === nivel);
+    const nombreZona = delNivel.find((p): p is ParadaMigrada => p.tipo === 'migrada')?.unidad.zona.nombre ?? `Nivel ${nivel}`;
+    return { nivel, nombreZona, paradas: delNivel };
+  });
+
+  return { tramo, secciones };
 }));
 ---
 
@@ -101,40 +152,59 @@ const panelesLegacy = (['10-11', '12-14'] as const).map(tramo => ({
       ))}
     </div>
 
-    <!-- ============ Paneles tramos 10-11 y 12-14 (retos legacy) ============ -->
+    <!-- ==== Paneles tramos 10-11 y 12-14 (migración incremental + legacy) ==== -->
     {panelesLegacy.map(panel => (
       <div data-tramo-panel={panel.tramo} class="tramo-panel hidden">
-        <section class="zona" style="--zona-accent: var(--k-zona-1)">
-          <header class="zona-head">
-            <span class="zona-num" aria-hidden="true">1</span>
-            <div class="zona-head-text">
-              <h2>Nivel 1</h2>
-              <span class="zona-count k-pill" data-zona-count>· / ·</span>
-            </div>
-          </header>
+        {panel.secciones.map(seccion => (
+          <section class="zona" style={`--zona-accent: var(--k-zona-${seccion.nivel})`}>
+            <header class="zona-head">
+              <span class="zona-num" aria-hidden="true">{seccion.nivel}</span>
+              <div class="zona-head-text">
+                <h2>{seccion.nombreZona}</h2>
+                <span class="zona-count k-pill" data-zona-count>· / ·</span>
+              </div>
+            </header>
 
-          <ol class="zona-path">
-            {panel.scenarios.map(s => (
-              <li>
-                <a
-                  class="mision-card"
-                  href={`/scenario/${s.id}`}
-                  data-id={s.id}
-                  data-unidad={s.unidad}
-                  data-badge={s.badge?.id}
-                  data-req={s.required_badge_id}
-                >
-                  <span class="mision-num" aria-hidden="true">{s.unidad}</span>
-                  <span class="mision-body">
-                    <h3>{s.title.replace(/^[\d.]+\s*/, '')}</h3>
-                    <p>{s.description}</p>
-                  </span>
-                  <span class="k-pill mision-pill" data-pill>…</span>
-                </a>
-              </li>
-            ))}
-          </ol>
-        </section>
+            <ol class="zona-path">
+              {seccion.paradas.map(parada => (
+                <li>
+                  {parada.tipo === 'migrada' ? (
+                    <a
+                      class="mision-card"
+                      href={`/laboratorio/${panel.tramo}/${parada.unidad.id}`}
+                      data-id={parada.unidad.id}
+                      data-unidad={parada.unidad.id}
+                    >
+                      <span class="mision-num" aria-hidden="true">{parada.unidad.id}</span>
+                      <span class="mision-body">
+                        <h3>{parada.unidad.titulo}</h3>
+                        <p>{parada.unidad.mision.textoVael}</p>
+                      </span>
+                      <span class="k-pill mision-pill" data-pill>…</span>
+                    </a>
+                  ) : (
+                    <a
+                      class="mision-card"
+                      href={`/scenario/${parada.scenario.id}`}
+                      data-id={parada.scenario.id}
+                      data-unidad={parada.scenario.unidad}
+                      data-badge={parada.scenario.badge?.id}
+                      data-req={parada.scenario.required_badge_id}
+                      data-req-unidad={parada.reqUnidadMigrada}
+                    >
+                      <span class="mision-num" aria-hidden="true">{parada.scenario.unidad}</span>
+                      <span class="mision-body">
+                        <h3>{parada.scenario.title.replace(/^[\d.]+\s*/, '')}</h3>
+                        <p>{parada.scenario.description}</p>
+                      </span>
+                      <span class="k-pill mision-pill" data-pill>…</span>
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </section>
+        ))}
       </div>
     ))}
   </main>
@@ -206,6 +276,13 @@ const panelesLegacy = (['10-11', '12-14'] as const).map(tramo => ({
       const isEarned = badgeId ? state.badges.includes(badgeId) : isCompleted;
 
       let locked = Boolean(reqBadge && !state.badges.includes(reqBadge));
+      // El reto anterior está migrado a unidad-aventura (sin insignia legacy):
+      // completar la unidad nueva también abre esta tarjeta; la insignia
+      // vieja sigue valiendo como llave para quien ya la tuviera.
+      const reqUnidad = card.dataset.reqUnidad;
+      if (locked && reqUnidad && state.completedScenarios.includes(reqUnidad)) {
+        locked = false;
+      }
       let needsSubscription = false;
       if (!hasPlan && unidad !== '1.1') {
         locked = true;
@@ -256,9 +333,17 @@ const panelesLegacy = (['10-11', '12-14'] as const).map(tramo => ({
     if (bar) bar.style.width = `${percent}%`;
     if (text) text.textContent = `${percent}%`;
 
-    // Llevar la vista a "te toca" si ya hay progreso (retomar donde estaba).
+    // Llevar la vista a "te toca" solo si queda FUERA de la pantalla (retomar
+    // donde estaba). Antes se centraba en cada carga aunque la tarjeta ya
+    // fuera visible, lo que daba un tirón brusco al abrir el mapa; ahora solo
+    // se desplaza cuando de verdad hace falta.
     if (completadas > 0) {
-      panel.querySelector('.es-aqui')?.scrollIntoView({ block: 'center', behavior: 'auto' });
+      const teToca = panel.querySelector('.es-aqui') as HTMLElement | null;
+      if (teToca) {
+        const rect = teToca.getBoundingClientRect();
+        const fueraDeVista = rect.top < 90 || rect.bottom > window.innerHeight;
+        if (fueraDeVista) teToca.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
     }
   }
 

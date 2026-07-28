@@ -1,0 +1,88 @@
+{
+  "id": "2.1",
+  "nivel": 2,
+  "zona": {
+    "nombre": "Usar bien",
+    "colorPrimario": "#8b5cf6",
+    "colorFondo": "#EFE9FB"
+  },
+  "unidadCurricular": "2.1 · De vago a específico",
+  "titulo": "Cirujano de prompts",
+  "objetivoBloom": "Aplicar / Analizar: reescribir un prompt vago en uno preciso añadiendo detalle, estilo y una restricción, y comprobar cómo cambia el resultado.",
+  "competenciaFoco": "calidad_preguntas",
+  "ai4k12": "Interacción natural.",
+  "duracionMinutos": 30,
+  "producto": "Prompt «operado» + antes/después",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Este prompt está enfermo de vago. ¿Lo operamos para curarlo?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "afinar_prompt_detalles",
+    "promptBase": "Cuéntame algo de los animales",
+    "banco": [
+      { "id": "detalle_oceano", "label": "sobre los animales del océano", "categoria": "detalle" },
+      { "id": "detalle_dormir", "label": "sobre cómo duermen los animales", "categoria": "detalle" },
+      { "id": "estilo_cuento", "label": "contado como un cuento", "categoria": "estilo" },
+      { "id": "estilo_facil", "label": "en lenguaje fácil", "categoria": "estilo" },
+      { "id": "limite_3_ideas", "label": "solo 3 ideas", "categoria": "restricción" },
+      { "id": "limite_5_lineas", "label": "en 5 líneas como mucho", "categoria": "restricción" }
+    ],
+    "preguntaClave": "¿Qué cambió más el resultado: el detalle, el estilo o la restricción?"
+  },
+  "crea": {
+    "tipo": "prompt_operado",
+    "instrucciones": "Ponle nombre a tu prompt «operado». Guardará el antes y el después, y qué añadido produjo el mayor cambio.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Qué cambió más: el detalle, el estilo o la restricción?",
+      "¿Cuándo conviene poner límites a la IA?"
+    ]
+  },
+  "familia": {
+    "nombre": "Pon la mesa (con detalles)",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Mejorad juntos una instrucción de casa («pon la mesa» → con detalles).",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "instruccionMejorada"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«¿Qué le falta a este prompt para dejar de ser vago?» · «Prueba con un límite: las restricciones también guían a la IA hacia lo que quieres.» · «Compara los dos resultados: ¿cuál de tus añadidos cambió más las cosas?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "tres_tipos_de_mejora_aplicados",
+    "comparacion_antes_despues",
+    "identifica_el_mayor_cambio"
+  ],
+  "web": {
+    "tituloPantalla": "Doctor de prompts",
+    "introVael": "¡Código rojo! Un prompt vago acaba de entrar en quirófano. Ponte la bata: vamos a operarlo.",
+    "pasos": [
+      "Lee el prompt vago «enfermo».",
+      "Añádele detalle, un estilo y una restricción.",
+      "Crea el resultado «curado».",
+      "Compara: ¿a que ahora está mucho mejor?"
+    ],
+    "cierreVael": "¡Operación con éxito, doctor! Un prompt preciso vale por mil vagos. 🩺"
+  }
+}

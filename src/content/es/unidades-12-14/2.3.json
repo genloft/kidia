@@ -1,0 +1,106 @@
+{
+  "id": "2.3",
+  "nivel": 2,
+  "zona": {
+    "nombre": "Usar bien",
+    "colorPrimario": "#8b5cf6",
+    "colorFondo": "#EFE9FB"
+  },
+  "unidadCurricular": "2.3 · Comparar y mejorar · Sesgos",
+  "titulo": "Detecta (y corrige) el sesgo",
+  "objetivoBloom": "Analizar / Evaluar: analizar una respuesta de la IA buscando sesgos (de género, cultural, etc.), explicar su efecto y proponer cómo corregir el prompt o el resultado, comprobando la mejora. (Morti detona el dilema.)",
+  "competenciaFoco": "pensamiento_critico",
+  "ai4k12": "Impacto social.",
+  "duracionMinutos": 40,
+  "producto": "Análisis + corrección de un sesgo",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Mira esta respuesta. A mí me parece de lo más normal. ¿A ti te parece justa?",
+    "audioUrl": null
+  },
+  "morti": {
+    "texto": "Para mí todo es lógica. Pero tú tienes algo que yo no: sentido de la justicia. Úsalo."
+  },
+  "investiga": {
+    "tipo": "decision_consecuencia",
+    "escenarios": [
+      {
+        "id": "profesiones",
+        "situacion": "Pides a la IA «describe a una enfermera y a un jefe». Describe a la enfermera como una mujer dulce y al jefe como un hombre firme.",
+        "opciones": [
+          { "id": "sesgo_genero", "label": "Hay un sesgo de género: asocia cada rol a un sexo", "segura": true, "consecuencia": "Bien visto. La IA aprendió esa asociación de sus datos y la repite como si fuera «lo normal». Deja fuera a enfermeros y a jefas." },
+          { "id": "normal", "label": "Es normal, así es la vida", "segura": false, "consecuencia": "Cuidado: que sea frecuente no lo hace justo ni obligatorio. Hay enfermeros y jefas — la respuesta los invisibiliza." },
+          { "id": "error_tecnico", "label": "Es un error técnico del programa", "segura": false, "consecuencia": "No es un fallo de código: es un sesgo aprendido de los datos. Se corrige cambiando el prompt o revisando el resultado, no reparando un «bug»." }
+        ]
+      },
+      {
+        "id": "corregir",
+        "situacion": "Quieres corregir ese sesgo. ¿Qué ajuste funciona mejor?",
+        "opciones": [
+          { "id": "prompt_neutro", "label": "Pedir ejemplos variados y sin asumir el género", "segura": true, "consecuencia": "Eso es. Un prompt que pide diversidad («personas de distintos géneros y orígenes») reduce el sesgo. Luego se comprueba que mejoró." },
+          { "id": "repetir_igual", "label": "Volver a pedir lo mismo y esperar suerte", "segura": false, "consecuencia": "Sin cambiar el prompt, es probable que repita el sesgo. Hay que dirigir a la IA hacia lo que quieres." },
+          { "id": "aceptar", "label": "Dejarlo, total ya está hecho", "segura": false, "consecuencia": "El sesgo afecta a quién se siente representado. Corregirlo es parte de usar la IA con criterio." }
+        ]
+      }
+    ]
+  },
+  "crea": {
+    "tipo": "correccion_sesgo",
+    "instrucciones": "Ponle título a tu análisis. Guardará el sesgo que detectaste, a quién afectaba y el ajuste con el que lo corregiste.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿A quién afecta este sesgo y cómo?",
+      "¿Se puede eliminar del todo o solo reducir?"
+    ]
+  },
+  "familia": {
+    "nombre": "Algo «normal» que era injusto",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Hablad de una vez en que algo «normal» resultó ser injusto al mirarlo de cerca.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "ejemploFamiliar"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": {
+      "id": "analista-sesgos",
+      "name": "Analista de sesgos",
+      "icon": "🔬",
+      "description": "Detectó un sesgo en una respuesta de la IA y propuso una corrección efectiva."
+    },
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«A veces la IA da respuestas con sesgo aunque suenen normales.» · «Detectarlo es mirar a quién deja fuera o a quién trata distinto, y preguntarse por qué.» · «Prueba tu corrección: ¿la nueva respuesta mejora?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "identifica_el_sesgo",
+    "explica_su_impacto",
+    "propone_correccion_efectiva"
+  ],
+  "web": {
+    "tituloPantalla": "Detective de sesgos",
+    "introVael": "A veces la IA da respuestas que «suenan normales» pero esconden un sesgo. Tu misión: detectarlo, explicarlo y corregirlo.",
+    "pasos": [
+      "Analiza la respuesta que trae Morti.",
+      "Detecta el sesgo: ¿a quién deja fuera o trata distinto?",
+      "Propón un ajuste para corregirlo.",
+      "Comprueba si mejora."
+    ],
+    "cierreVael": "Detectar y corregir sesgos es de las habilidades más valiosas con IA. ⚖️"
+  }
+}

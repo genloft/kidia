@@ -11,10 +11,10 @@
 </div>
 
 <script>
-    const container = document.getElementById('anim-token-process');
-    const textEl = document.getElementById('tokens-text');
-    const numsEl = document.getElementById('tokens-numbers');
-    const outEl = document.getElementById('tokens-output');
+    const container = document.getElementById('anim-token-process') as HTMLElement;
+    const textEl = document.getElementById('tokens-text') as HTMLElement;
+    const numsEl = document.getElementById('tokens-numbers') as HTMLElement;
+    const outEl = document.getElementById('tokens-output') as HTMLElement;
 
     window.addEventListener('kidia:play-animation', (e) => {
         if ((e as CustomEvent).detail.name === 'token-process') {

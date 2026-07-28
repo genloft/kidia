@@ -1,0 +1,127 @@
+{
+  "id": "4.1",
+  "nivel": 4,
+  "zona": {
+    "nombre": "Construir",
+    "colorPrimario": "#fbbf24",
+    "colorFondo": "#FBF3E0"
+  },
+  "unidadCurricular": "4.1 · Proyecto: juego o web sencilla",
+  "titulo": "Prototipo jugable o web",
+  "objetivoBloom": "Crear: construir, en varias sesiones, un prototipo funcional (mini-juego, web sencilla o app de preguntas) usando la IA como copiloto, probándolo con alguien y mejorándolo según lo observado.",
+  "competenciaFoco": "autonomia_creativa",
+  "ai4k12": "Las cinco ideas, integradas.",
+  "duracionMinutos": 45,
+  "producto": "Prototipo jugable o usable",
+  "palabras": [],
+  "mision": {
+    "textoVael": "¿Y si lo que imaginas se pudiera USAR de verdad? Vamos a construir tu prototipo.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "construir_juego",
+    "temas": [
+      { "id": "ciencia", "label": "Ciencia y tecnología", "valor": "ciencia" },
+      { "id": "historia", "label": "Historia y sociedad", "valor": "historia" },
+      { "id": "medio_ambiente", "label": "Medio ambiente", "valor": "medio_ambiente" }
+    ],
+    "bancoAdivinanzas": [
+      {
+        "id": "energia_renovable",
+        "pregunta": "¿Qué fuente de energía NO se agota: el carbón o el sol?",
+        "pista": "Una tarda millones de años en formarse.",
+        "respuesta": "El sol (energía renovable)",
+        "dificultad": "facil"
+      },
+      {
+        "id": "internet_paquetes",
+        "pregunta": "Cuando envías un mensaje por internet, ¿viaja entero o troceado en paquetes?",
+        "pista": "Se reparte para llegar mejor.",
+        "respuesta": "Troceado en paquetes",
+        "dificultad": "dificil"
+      },
+      {
+        "id": "vacunas",
+        "pregunta": "¿Una vacuna te mete la enfermedad o entrena a tu cuerpo para reconocerla?",
+        "pista": "Es como un simulacro para las defensas.",
+        "respuesta": "Entrena al cuerpo para reconocerla",
+        "dificultad": "media"
+      },
+      {
+        "id": "reciclaje_vidrio",
+        "pregunta": "¿Cuántas veces se puede reciclar el vidrio: una o infinitas?",
+        "pista": "No pierde calidad al fundirse.",
+        "respuesta": "Infinitas veces",
+        "dificultad": "media"
+      },
+      {
+        "id": "imprenta",
+        "pregunta": "¿Qué invento disparó que la gente pudiera leer libros: la imprenta o la radio?",
+        "pista": "Permitió copiar textos muy rápido.",
+        "respuesta": "La imprenta",
+        "dificultad": "facil"
+      },
+      {
+        "id": "capa_ozono",
+        "pregunta": "¿La capa de ozono nos protege del sol o nos da calor?",
+        "pista": "Filtra una radiación dañina.",
+        "respuesta": "Nos protege de la radiación ultravioleta",
+        "dificultad": "dificil"
+      }
+    ]
+  },
+  "crea": {
+    "tipo": "prototipo_app_preguntas",
+    "instrucciones": "Ponle nombre a tu prototipo (una app de preguntas). Guardará tus preguntas verificadas y ordenadas. Pruébalo con alguien y anota qué mejorarías.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Funciona como esperabas?",
+      "¿Qué cambiarías después de verlo en uso?"
+    ]
+  },
+  "familia": {
+    "nombre": "Probad el prototipo",
+    "duracionMinutos": 10,
+    "modo": "offline",
+    "instrucciones": "Probad en casa el prototipo y dadle ideas de mejora.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "ideasDeMejora"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Un prototipo es una primera versión que funciona, aunque sea sencilla.» · «La IA es tu copiloto: te ayuda, pero tú decides qué construir y compruebas que funciona.» · «¿Qué cambiarías después de verlo en uso?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "prototipo_funcional",
+    "probado_con_alguien",
+    "mejorado_segun_lo_observado"
+  ],
+  "web": {
+    "tituloPantalla": "Construye un prototipo de verdad",
+    "introVael": "Hora de pasar de la idea a algo que se puede usar. La IA es tu copiloto; tú, quien decide y construye.",
+    "pasos": [
+      "Define qué construyes y para quién.",
+      "Crea la primera versión con la IA.",
+      "Pruébala con alguien.",
+      "Mejórala según lo que veas."
+    ],
+    "cierreVael": "De la idea a algo que funciona. Eso es construir con IA. 🚀"
+  }
+}

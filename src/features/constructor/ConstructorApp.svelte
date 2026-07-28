@@ -1,7 +1,6 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import ConstructorPage from './ConstructorPage.svelte';
-	export let data;
-	
+
 	import TooltipGlobal from "$lib/components/ui/TooltipGlobal.svelte";
 	import TopBar from "$lib/components/TopBar.svelte";
 	import { game, showSingularityModal } from "$lib/stores/game";

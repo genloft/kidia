@@ -8,10 +8,10 @@
 </div>
 
 <script>
-    const container = document.getElementById('anim-gazapo');
-    const word = document.getElementById('glitch-word');
-    const scanner = document.getElementById('scanner-line');
-    const alertBox = document.getElementById('alert-box');
+    const container = document.getElementById('anim-gazapo') as HTMLElement;
+    const word = document.getElementById('glitch-word') as HTMLElement;
+    const scanner = document.getElementById('scanner-line') as HTMLElement;
+    const alertBox = document.getElementById('alert-box') as HTMLElement;
 
     window.addEventListener('kidia:play-animation', (e) => {
         if ((e as CustomEvent).detail.name === 'gazapo') {

@@ -54,7 +54,7 @@ import { PLANS } from '../lib/subscription-service';
   import { supabase } from '../lib/supabase';
   import { SubscriptionService, PLANS } from '../lib/subscription-service';
 
-  const statusBox = document.getElementById('planes-status');
+  const statusBox = document.getElementById('planes-status') as HTMLElement;
 
   async function refreshStatus() {
     const { data: { session } } = await supabase.auth.getSession();
@@ -73,7 +73,7 @@ import { PLANS } from '../lib/subscription-service';
     }
   }
 
-  document.querySelectorAll('.btn-subscribe').forEach(btn => {
+  document.querySelectorAll<HTMLButtonElement>('.btn-subscribe').forEach(btn => {
     btn.addEventListener('click', async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
@@ -81,7 +81,8 @@ import { PLANS } from '../lib/subscription-service';
         return;
       }
 
-      const planId = btn.dataset.plan;
+      const planId = btn.dataset.plan as import('../lib/subscription-service').PlanId | undefined;
+      if (!planId) return;
       btn.disabled = true;
       const original = btn.textContent;
       btn.textContent = 'Activando...';

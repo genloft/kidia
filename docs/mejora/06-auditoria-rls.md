@@ -96,6 +96,10 @@ del email admin — también sigue funcionando. La allowlist de email sigue dupl
 
 - [ ] P0: cerrar la autoaprobación (trigger INSERT + protección UPDATE).
 - [ ] P1: vista para la galería sin `child_id`.
-- [ ] P1: policy DELETE para padres.
+- [x] P1: policy DELETE para padres — SQL listo en
+      `supabase/migrations/005_child_artifacts_delete.sql`, pendiente de
+      pegar (confirmado el 17/07/2026 que el hueco es real: un DELETE sin
+      policy no da error, simplemente no borra ninguna fila — se detectó
+      probando el Cuaderno de Inventos navegable nuevo, ver ESTADO.md).
 - [ ] P2: tabla de roles de admin (junto con backend de Fase 0).
 - [ ] P2: verificar en el panel de Supabase que lo desplegado == lo del repo.

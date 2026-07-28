@@ -1,0 +1,125 @@
+{
+  "id": "1.1",
+  "nivel": 1,
+  "zona": {
+    "nombre": "Entender",
+    "colorPrimario": "#22d3ee",
+    "colorFondo": "#E0F7FB"
+  },
+  "unidadCurricular": "1.1 · ¿Qué es (y qué no) una IA?",
+  "titulo": "El mapa de la IA en mi día",
+  "objetivoBloom": "Comprender / Explicar: identificar dónde aparece la IA en su vida diaria (recomendaciones, filtros, asistentes de voz, mapas, corrector) y explicar qué hace cada una, entendiendo que la IA está en muchos sitios aunque no se vea.",
+  "competenciaFoco": "criterio",
+  "ai4k12": "Percepción · Impacto social — la IA está presente y a menudo invisible.",
+  "duracionMinutos": 30,
+  "producto": "Mapa «Mi día con IA»",
+  "palabras": [],
+  "mision": {
+    "textoVael": "¿Cuántas veces al día usas una IA sin darte cuenta? Te apuesto a que más de las que crees.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "hipotesis_prueba_regla",
+    "preguntaLinterna": "¿Hay una IA escondida en este momento de tu día?",
+    "banco": [
+      {
+        "id": "recomendador_videos",
+        "label": "La app te sugiere el siguiente vídeo",
+        "icono": "video",
+        "usaIA": true,
+        "pista": "Cuando una app te sugiere el siguiente vídeo, una IA decidió mostrártelo a ti."
+      },
+      {
+        "id": "filtro_fotos",
+        "label": "Un filtro te cambia la cara en una foto",
+        "icono": "image",
+        "usaIA": true,
+        "pista": "El filtro reconoce dónde está tu cara en la foto: eso lo hace una IA que aprendió mirando muchísimas caras."
+      },
+      {
+        "id": "mapa_atascos",
+        "label": "El mapa te lleva por otra calle para evitar un atasco",
+        "icono": "map",
+        "usaIA": true,
+        "pista": "El mapa aprende del tráfico de mucha gente y calcula la ruta que evita el atasco."
+      },
+      {
+        "id": "corrector_movil",
+        "label": "El móvil te corrige una palabra mal escrita",
+        "icono": "type",
+        "usaIA": true,
+        "pista": "El corrector ha aprendido de millones de textos cómo se escriben las palabras — y hasta adivina la siguiente."
+      },
+      {
+        "id": "asistente_voz",
+        "label": "Le pides una canción al altavoz por voz",
+        "icono": "microphone",
+        "usaIA": true,
+        "pista": "Entender tu voz y saber qué canción quieres: trabajo de una IA que aprendió escuchando."
+      },
+      {
+        "id": "puerta_llave",
+        "label": "Abres la puerta de casa con la llave",
+        "icono": "key",
+        "usaIA": false,
+        "pista": "La llave y la cerradura no aprenden nada: funcionan igual siempre. ¡Aquí no hay ninguna IA!"
+      }
+    ],
+    "minimoObjetos": 4,
+    "maximoObjetos": 6
+  },
+  "crea": {
+    "tipo": "mapa_dia_ia",
+    "instrucciones": "Ponle nombre a tu «Mapa de mi día con IA». Guardará los momentos de tu día que investigaste y qué hace la IA escondida en cada uno.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Qué IA te ayuda de verdad y cuál solo quiere que pases más tiempo en la app?",
+      "¿Quién decide lo que ves en tu pantalla?"
+    ]
+  },
+  "familia": {
+    "nombre": "Tres IA en la cena",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Contad en la cena tres IA que habéis usado hoy y para qué.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "iaEnCasa"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«¿Dónde crees tú que se esconde la IA en ese momento?» · «Piensa: ¿la app decide algo por ti sin que se lo pidas?» · «Mira este ejemplo: cuando te sugiere el siguiente vídeo, una IA lo eligió. ¿Encuentras otro momento parecido?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "momentos_con_ia_identificados",
+    "explicaciones_correctas",
+    "trampa_sin_ia_detectada"
+  ],
+  "web": {
+    "tituloPantalla": "El mapa secreto de la IA en tu día",
+    "introVael": "La IA es como un agente secreto: está metida en tu día y casi no la ves. ¿La localizamos juntos en el mapa?",
+    "pasos": [
+      "Recorre tu día: mañana, cole, recreo, tarde.",
+      "En cada momento, marca si hay una IA escondida.",
+      "Explica qué hace esa IA.",
+      "¡Cuidado! Un momento NO tiene IA: no lo marques."
+    ],
+    "cierreVael": "¡Mapa completado! Ya ves la IA que antes era invisible. 🗺️"
+  }
+}

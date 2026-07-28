@@ -1,0 +1,104 @@
+{
+  "id": "2.2",
+  "nivel": 2,
+  "zona": {
+    "nombre": "Usar bien",
+    "colorPrimario": "#8b5cf6",
+    "colorFondo": "#EFE9FB"
+  },
+  "unidadCurricular": "2.2 · ¿Es verdad? Verificar",
+  "titulo": "El detective de datos",
+  "objetivoBloom": "Analizar / Evaluar: ante dos respuestas distintas de la IA a la misma pregunta, investigar con una fuente de confianza, elegir la correcta y argumentar por qué. (Reto insignia de la metodología, ampliado.)",
+  "competenciaFoco": "verificacion",
+  "ai4k12": "Impacto social · Razonamiento.",
+  "duracionMinutos": 30,
+  "producto": "Veredicto argumentado + insignia",
+  "palabras": [],
+  "mision": {
+    "textoVael": "La IA te ha dado dos respuestas distintas a la misma pregunta. ¿Cuál te crees?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "dos_respuestas_verifica",
+    "pregunta": "¿Cuántas patas tiene una araña?",
+    "respuestaA": "Las arañas tienen 8 patas. Por eso no son insectos: los insectos tienen 6.",
+    "respuestaB": "Las arañas tienen 6 patas, como las hormigas y los escarabajos.",
+    "correcta": "A",
+    "fuentes": [
+      {
+        "id": "guia_naturaleza",
+        "label": "📗 Guía de pequeños animales (biblioteca)",
+        "contenido": "Las arañas pertenecen al grupo de los arácnidos y tienen 8 patas. Los insectos, como las hormigas y los escarabajos, tienen 6. Contar las patas es la forma más rápida de distinguirlos."
+      },
+      {
+        "id": "enciclopedia_infantil",
+        "label": "📘 Enciclopedia infantil de la naturaleza",
+        "contenido": "Arácnidos: animales de 8 patas y dos partes en el cuerpo, como las arañas y los escorpiones. A diferencia de los insectos, no tienen antenas ni alas."
+      },
+      {
+        "id": "museo_ciencias",
+        "label": "🏛️ Panel del museo de ciencias",
+        "contenido": "¿Sabías que…? Si cuentas 8 patas, es un arácnido (como la araña). Si cuentas 6, es un insecto. ¡Las patas nunca mienten!"
+      }
+    ]
+  },
+  "crea": {
+    "tipo": "veredicto_detective",
+    "instrucciones": "Ponle nombre a tu veredicto de detective. Guardará el caso, la fuente que usaste y cómo lo comprobaste.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Cómo lo comprobaste?",
+      "¿Qué te hizo dudar de la otra respuesta?"
+    ]
+  },
+  "familia": {
+    "nombre": "La primera versión era falsa",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Contad un caso en que comprobasteis algo y la primera versión era falsa.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "casoFamiliar"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": {
+      "id": "detective-datos",
+      "name": "Detective de datos",
+      "icon": "🕵️",
+      "description": "Verificó con una fuente cuál de dos respuestas era correcta y lo argumentó."
+    },
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«La IA puede sonar muy segura y aun así equivocarse.» · «Antes de decidir: ¿dónde lo puedes comprobar?» · «¿Qué dice la evidencia — y qué decía tu corazonada?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "eligio_fuente_antes_de_decidir",
+    "veredicto_apoyado_en_evidencia",
+    "cambio_o_confirmo_su_intuicion"
+  ],
+  "web": {
+    "tituloPantalla": "El detective de datos",
+    "introVael": "Caso abierto: dos respuestas, una sola verdad. Tú eres quien investiga. ¿Resuelves el misterio?",
+    "pasos": [
+      "Lee las dos respuestas de la IA.",
+      "Elige una fuente de confianza para investigar.",
+      "Decide cuál es la correcta.",
+      "Escribe tu veredicto: ¿cómo lo comprobaste?"
+    ],
+    "cierreVael": "¡Caso cerrado, detective! Comprobar te hace más listo que cualquier IA. 🕵️"
+  }
+}

@@ -41,7 +41,7 @@ export const SyncService = {
             return { success: true };
         } catch (e) {
             console.error('[SyncService] Sync error:', e);
-            return { success: false, error: e.message };
+            return { success: false, error: e instanceof Error ? e.message : String(e) };
         }
     },
 
@@ -86,7 +86,7 @@ export const SyncService = {
             return { success: true };
         } catch (e) {
             console.error('[SyncService] Sync error:', e);
-            return { success: false, error: e.message };
+            return { success: false, error: e instanceof Error ? e.message : String(e) };
         }
     },
 
@@ -137,7 +137,7 @@ export const SyncService = {
             return await this.syncLocalToCloud();
         } catch (e) {
             console.error('[SyncService] Merge error:', e);
-            return { success: false, error: e.message };
+            return { success: false, error: e instanceof Error ? e.message : String(e) };
         }
     },
 

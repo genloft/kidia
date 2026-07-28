@@ -1,0 +1,88 @@
+{
+  "id": "2.1",
+  "nivel": 2,
+  "zona": {
+    "nombre": "Usar bien",
+    "colorPrimario": "#8b5cf6",
+    "colorFondo": "#EFE9FB"
+  },
+  "unidadCurricular": "2.1 · De vago a específico",
+  "titulo": "Prompt como un profesional",
+  "objetivoBloom": "Aplicar / Evaluar: diseñar y refinar iterativamente un prompt completo para una tarea real, y evaluar la calidad del resultado con criterios propios explícitos.",
+  "competenciaFoco": "calidad_preguntas",
+  "ai4k12": "Interacción natural.",
+  "duracionMinutos": 40,
+  "producto": "Prompt final + registro de iteraciones",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Una tarea real, un prompt que la resuelva bien. ¿Lo diseñas como un pro?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "afinar_prompt_detalles",
+    "promptBase": "Escríbeme un resumen del cambio climático",
+    "banco": [
+      { "id": "rol_divulgador", "label": "actúa como un divulgador científico", "categoria": "rol" },
+      { "id": "objetivo_exposicion", "label": "para una exposición de clase", "categoria": "objetivo" },
+      { "id": "contexto_3eso", "label": "para compañeros de 3º de la ESO", "categoria": "contexto" },
+      { "id": "formato_puntos", "label": "en 5 puntos con un dato cada uno", "categoria": "formato" },
+      { "id": "restriccion_fuentes", "label": "señala qué habría que verificar", "categoria": "restricción" },
+      { "id": "criterio_claro", "label": "que se entienda sin saber del tema", "categoria": "criterio de evaluación" }
+    ],
+    "preguntaClave": "¿Tu evaluación de cada versión fue por criterios o por gusto?"
+  },
+  "crea": {
+    "tipo": "prompt_profesional",
+    "instrucciones": "Ponle nombre a tu prompt profesional. Guardará tu prompt final, los criterios con los que lo evaluaste y el registro de tus iteraciones.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Tu evaluación fue por criterios o por gusto?",
+      "¿Cuándo conviene dejar de iterar?"
+    ]
+  },
+  "familia": {
+    "nombre": "Qué hace buena a una instrucción",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Definid juntos qué hace que una instrucción sea «buena» (clara, completa, útil).",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "definicionBuena"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Un prompt profesional se diseña pensando en el resultado que quieres y se mejora por iteraciones.» · «Evalúa cada salida con criterios: ¿es clara? ¿completa? ¿útil para tu objetivo?» · «¿Cuándo conviene dejar de iterar?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "itera_al_menos_dos_veces",
+    "evalua_con_criterios_explicitos",
+    "juzga_calidad_no_solo_funciona"
+  ],
+  "web": {
+    "tituloPantalla": "Diseña un prompt profesional",
+    "introVael": "Coge una tarea real y diséñale un prompt que la resuelva de verdad. Y, como un pro, mejóralo paso a paso.",
+    "pasos": [
+      "Define tu tarea real.",
+      "Diseña el prompt y pruébalo.",
+      "Evalúa el resultado con tus criterios.",
+      "Refínalo al menos dos veces."
+    ],
+    "cierreVael": "Iterar con criterio: así trabajan los profesionales. 🎯"
+  }
+}

@@ -1,0 +1,336 @@
+---
+// Diccionario de Palabras Poderosas (doc 04 §3.5): children.vocabulary se
+// coleccionaba desde cada unidad-aventura (UnidadService.collectPalabras)
+// pero no existía ninguna pantalla para volver a verlas — hueco motivacional
+// real (el niño acumula algo que nunca vuelve a mirar). Esta página lo
+// resuelve: las palabras como cartas por zona, coleccionadas con su
+// definición y audio, las que faltan como silueta "¿?" (nunca revela el
+// contenido de una palabra no ganada, solo que existe).
+//
+// Solo el tramo 8-9 tiene contenido en este formato hoy (ver
+// scenario-loader.ts loadUnidadesAventura): el catálogo se construye una
+// vez en SSR; el filtrado por tramo del hijo/a activo pasa al cliente.
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import { loadUnidadesAventura } from '../lib/scenario-loader';
+
+interface PalabraCatalogEntry {
+    palabra: string;
+    definicion: string;
+    icono: string;
+    zonaNombre: string;
+    nivel: number;
+}
+
+const unidadesAventura = await loadUnidadesAventura('8-9');
+
+const vistas = new Set<string>();
+const catalogo: PalabraCatalogEntry[] = [];
+for (const u of unidadesAventura) {
+    for (const p of u.palabras) {
+        if (vistas.has(p.palabra)) continue;
+        vistas.add(p.palabra);
+        catalogo.push({
+            palabra: p.palabra,
+            definicion: p.definicion,
+            icono: p.icono,
+            zonaNombre: u.zona.nombre,
+            nivel: u.nivel,
+        });
+    }
+}
+
+const zonas = [...new Map(catalogo.map(p => [p.nivel, p.zonaNombre])).entries()]
+    .sort(([a], [b]) => a - b);
+---
+
+<Layout title="Kidia - Diccionario de Palabras Poderosas" description="Las palabras que vas descubriendo en tus misiones, coleccionadas como cartas.">
+  <Header mode="aventura" />
+
+  <main class="palabras-page">
+    <div class="page-header">
+      <h1>📖 Palabras Poderosas</h1>
+      <p>Cada misión te enseña una palabra nueva. Tócala para escucharla.</p>
+
+      <div class="stats-overview">
+        <div class="stat-box">
+          <span class="stat-value" id="total-palabras">0</span>
+          <span class="stat-label">Descubiertas</span>
+        </div>
+      </div>
+    </div>
+
+    {catalogo.length === 0 ? (
+      <p class="palabras-vacio">Todavía no hay palabras cargadas.</p>
+    ) : (
+      zonas.map(([nivel, zonaNombre]) => (
+        <section class="zona-palabras" style={`--zona-accent: var(--k-zona-${nivel})`}>
+          <h2>{zonaNombre}</h2>
+          <div class="palabras-grid">
+            {catalogo.filter(p => p.nivel === nivel).map(p => (
+              // Sin el texto real de la palabra/definición aquí a propósito: si
+              // se sirviera en el HTML (aunque solo lo ocultara el CSS), cualquiera
+              // que mirara el código fuente vería las palabras que el niño/a aún
+              // no ha desbloqueado — reventaría el efecto "silueta". El contenido
+              // real solo llega por JS (ver #palabras-data) y solo se pinta para
+              // las palabras ya coleccionadas.
+              <button type="button" class="palabra-card" data-idx={catalogo.indexOf(p)}>
+                <span class="palabra-icono" aria-hidden="true"></span>
+                <span class="palabra-silueta" aria-hidden="true">¿?</span>
+                <span class="palabra-texto"></span>
+                <span class="palabra-def"></span>
+              </button>
+            ))}
+          </div>
+        </section>
+      ))
+    )}
+
+    <p id="palabras-otro-tramo" class="palabras-vacio hidden">Las Palabras Poderosas todavía solo existen para el tramo 8-9. ¡Muy pronto también para el tuyo!</p>
+  </main>
+
+  <script type="application/json" id="palabras-data" is:inline set:html={JSON.stringify(catalogo)} />
+</Layout>
+
+<script>
+    import { requireActiveChild } from '../lib/require-auth';
+    import { ChildrenService } from '../lib/children-service';
+    import { activeChild } from '../lib/active-child';
+    import { tramoForChild } from '../lib/tramos';
+    import { UnidadService } from '../lib/unidad-service';
+    import { speak } from '../lib/speech';
+
+    interface PalabraCatalogEntry {
+        palabra: string;
+        definicion: string;
+        icono: string;
+        zonaNombre: string;
+        nivel: number;
+    }
+
+    const main = document.querySelector('.palabras-page') as HTMLElement;
+    const cards = Array.from(document.querySelectorAll<HTMLButtonElement>('.palabra-card'));
+    const totalEl = document.getElementById('total-palabras');
+    const otroTramoMsg = document.getElementById('palabras-otro-tramo');
+
+    const dataEl = document.getElementById('palabras-data');
+    const catalogo: PalabraCatalogEntry[] = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
+
+    // El contenido real (icono/palabra/definición) solo se pinta aquí, y
+    // solo para las palabras ya coleccionadas — las bloqueadas se quedan
+    // con la silueta "¿?" que ya trae el HTML servido.
+    function pintarColeccionadas(coleccionadasSet: Set<string>) {
+        cards.forEach(card => {
+            // Ya pintada en una pasada anterior (init() se repite al cambiar de
+            // hijo/a o al actualizarse el progreso): no re-pintar ni re-enganchar
+            // el listener de clic, o sonarían varias voces superpuestas.
+            if (card.classList.contains('collected')) return;
+
+            const idx = Number(card.dataset.idx);
+            const p = catalogo[idx];
+            if (!p || !coleccionadasSet.has(p.palabra)) return;
+
+            card.classList.add('collected');
+            const icono = card.querySelector('.palabra-icono') as HTMLElement;
+            const texto = card.querySelector('.palabra-texto') as HTMLElement;
+            const def = card.querySelector('.palabra-def') as HTMLElement;
+            icono.textContent = p.icono;
+            texto.textContent = p.palabra;
+            def.textContent = p.definicion;
+
+            card.addEventListener('click', () => speak(`${p.palabra}. ${p.definicion}`));
+        });
+    }
+
+    async function init() {
+        const childId = activeChild.get();
+        if (!childId) return;
+
+        const children = await ChildrenService.listChildren();
+        const child = children.find(c => c.id === childId);
+        const tramo = child ? tramoForChild(child.birth_date) : null;
+
+        if (tramo && tramo.id !== '8-9') {
+            main.querySelectorAll('.zona-palabras').forEach(z => z.classList.add('hidden'));
+            otroTramoMsg?.classList.remove('hidden');
+            if (totalEl) totalEl.textContent = '0';
+            return;
+        }
+
+        // Simétrico al caso anterior: si se cambia de un hijo/a de otro tramo
+        // de vuelta a uno de 8-9, deshacer el estado "sin palabras para ti".
+        main.querySelectorAll('.zona-palabras').forEach(z => z.classList.remove('hidden'));
+        otroTramoMsg?.classList.add('hidden');
+
+        const coleccionadas = await UnidadService.getVocabulario(childId);
+        const coleccionadasSet = new Set(coleccionadas.map(v => v.palabra));
+
+        pintarColeccionadas(coleccionadasSet);
+        if (totalEl) totalEl.textContent = `${coleccionadasSet.size} / ${cards.length}`;
+    }
+
+    requireActiveChild().then(allowed => {
+        if (!allowed) return;
+        init();
+        window.addEventListener('active-child:changed', init);
+        window.addEventListener('progress:updated', init);
+    });
+</script>
+
+<style>
+    .palabras-page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: var(--k-space-8) var(--k-space-4) var(--k-space-16);
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: var(--k-space-10);
+    }
+
+    h1 {
+        font-size: var(--text-h1);
+        background: linear-gradient(to right, var(--k-brand-primary), var(--k-brand-accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: var(--k-space-2);
+    }
+
+    .page-header p {
+        color: var(--k-text-muted);
+        font-size: var(--k-text-lg);
+    }
+
+    .stats-overview {
+        display: flex;
+        justify-content: center;
+        margin-top: var(--k-space-6);
+    }
+
+    .stat-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: var(--k-bg-surface);
+        padding: var(--k-space-3) var(--k-space-8);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--k-border-subtle);
+    }
+
+    .stat-value {
+        font-size: var(--text-h2);
+        font-weight: 800;
+        color: var(--k-text-strong);
+    }
+
+    .stat-label {
+        font-size: var(--k-text-xs);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--k-text-muted);
+    }
+
+    .zona-palabras {
+        margin-bottom: var(--k-space-10);
+    }
+
+    .zona-palabras h2 {
+        color: var(--zona-accent);
+        margin-bottom: var(--k-space-4);
+        font-size: var(--text-h3);
+    }
+
+    .palabras-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: var(--k-space-4);
+    }
+
+    .palabra-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: var(--k-space-1);
+        background: var(--k-bg-surface);
+        border: 1px solid var(--k-border-subtle);
+        border-radius: var(--radius-md);
+        padding: var(--k-space-5) var(--k-space-3);
+        min-height: 160px;
+        cursor: pointer;
+        font-family: inherit;
+        transition:
+            transform var(--k-motion-base) var(--k-ease-out),
+            border-color var(--k-motion-base) var(--k-ease-out);
+    }
+
+    .palabra-card.collected:hover {
+        transform: translateY(-4px);
+        border-color: var(--zona-accent);
+        box-shadow: 0 0 15px color-mix(in srgb, var(--zona-accent) 30%, transparent);
+    }
+
+    .palabra-card:not(.collected) {
+        cursor: default;
+    }
+
+    /* Icono y silueta se alternan: por defecto (no coleccionada) la
+       silueta "¿?" oculta que existe la palabra sin revelar cuál es. */
+    .palabra-icono {
+        display: none;
+        font-size: 2.25rem;
+        filter: drop-shadow(0 0 8px color-mix(in srgb, var(--zona-accent) 50%, transparent));
+    }
+
+    .palabra-silueta {
+        font-size: 2rem;
+        color: var(--k-text-muted);
+        opacity: 0.4;
+    }
+
+    .palabra-card.collected .palabra-icono { display: block; }
+    .palabra-card.collected .palabra-silueta { display: none; }
+
+    .palabra-texto {
+        font-weight: 800;
+        color: var(--k-text-strong);
+        display: none;
+    }
+
+    .palabra-card:not(.collected) .palabra-texto {
+        display: block;
+        color: var(--k-text-muted);
+        font-weight: 600;
+    }
+
+    .palabra-card:not(.collected) .palabra-texto::before {
+        content: 'Palabra por descubrir';
+    }
+
+    .palabra-card.collected .palabra-texto {
+        display: block;
+    }
+
+    .palabra-def {
+        display: none;
+        font-size: var(--k-text-xs);
+        color: var(--k-text-muted);
+        line-height: 1.4;
+    }
+
+    .palabra-card.collected .palabra-def {
+        display: block;
+    }
+
+    .palabras-vacio {
+        text-align: center;
+        color: var(--k-text-muted);
+        padding: var(--k-space-8) 0;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+</style>

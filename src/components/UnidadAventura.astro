@@ -10,7 +10,10 @@ interface Props {
 }
 const { unidad } = Astro.props;
 
-const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective', 'Familia', 'Comparte'];
+// La pantalla "Palabras" solo existe si la unidad trae Palabras Poderosas
+// (mecánica del programa 8-9; el 10-11 no la define — ver unidad-engine).
+const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective', 'Familia', 'Comparte']
+  .filter(l => l !== 'Palabras' || unidad.palabras.length > 0);
 ---
 
 <div id="ua-root" class="ua-layout" data-unidad={JSON.stringify(unidad)}>
@@ -222,9 +225,61 @@ const PROGRESS_LABELS = ['Misión', 'Palabras', 'Investiga', 'Crea', 'Detective'
     margin: 0;
   }
 
+  /* Morti (12-14): voz propia, fría y lógica. Color morado como marca el
+     docx, con borde izquierdo para distinguirla de la voz de Vael. */
+  .ua-morti {
+    border-left: 3px solid var(--k-brand-accent);
+    background: rgba(139, 92, 246, 0.06);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: 0.85rem 1.1rem;
+    margin: 0.25rem 0;
+  }
+
+  .ua-morti-nombre {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--k-brand-accent);
+    margin-bottom: 0.35rem;
+  }
+
+  .ua-morti-texto {
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: var(--k-text-body);
+    margin: 0;
+    font-style: italic;
+  }
+
   .ua-cierre-texto {
     text-align: center;
     font-size: 1.3rem;
+  }
+
+  /* Chispas ganadas en el cierre (doc 04 §3.1) */
+  .ua-chispas-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--k-space-1);
+    background: rgba(251, 191, 36, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    border-radius: var(--radius-md);
+    padding: var(--k-space-4) var(--k-space-6);
+  }
+
+  .ua-chispas-num {
+    font-size: var(--k-text-xl);
+    font-weight: 800;
+    color: var(--k-amber-400, #fbbf24);
+  }
+
+  .ua-chispas-nivel {
+    margin: 0;
+    font-size: var(--k-text-sm);
+    color: var(--k-text-muted);
   }
 
   .ua-prompt {

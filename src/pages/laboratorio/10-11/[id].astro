@@ -1,0 +1,50 @@
+---
+// Unidades-aventura del tramo 10-11 (Fase 4: migración incremental desde
+// Kidia_Programa_Retos_10-11.docx). Ruta propia por tramo porque los ids de
+// unidad ("1.1") se repiten entre tramos: /laboratorio/1.1 es el 8-9,
+// /laboratorio/10-11/1.1 es esta. Misma plantilla y mismo motor.
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import UnidadAventura from '../../../components/UnidadAventura.astro';
+import { loadUnidadesAventura, getUnidadAventuraById } from '../../../lib/scenario-loader';
+
+export async function getStaticPaths() {
+  const unidades = await loadUnidadesAventura('10-11');
+  return unidades.map(u => ({ params: { id: u.id } }));
+}
+
+const { id } = Astro.params;
+const unidad = await getUnidadAventuraById(id || '', '10-11');
+
+if (!unidad) {
+  return Astro.redirect('/404');
+}
+---
+
+<Layout title={`Kidia - ${unidad.titulo}`} description={unidad.mision.textoVael} showFooter={false}>
+  <Header mode="aventura" />
+  <main data-unidad-id={unidad.id}>
+    <UnidadAventura unidad={unidad} />
+  </main>
+
+  <script>
+    // Mismo guard que laboratorio/[id].astro: sesión + hijo/a activo
+    // siempre; suscripción activa salvo la 1.1 (gratuita en todos los tramos).
+    import { requireActiveChild } from '../../../lib/require-auth';
+    import { SubscriptionService } from '../../../lib/subscription-service';
+
+    const unidadId = document.querySelector('main')?.getAttribute('data-unidad-id') || '';
+
+    (async () => {
+      const allowed = await requireActiveChild();
+      if (!allowed) return;
+
+      if (unidadId === '1.1') return;
+
+      const hasPlan = await SubscriptionService.hasActivePlan();
+      if (!hasPlan) {
+        window.location.href = '/caminos';
+      }
+    })();
+  </script>
+</Layout>

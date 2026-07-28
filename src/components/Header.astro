@@ -40,6 +40,8 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
     <nav class="main-nav main-nav--aventura">
       <a href="/mapa" class={`nav-link nav-link--big ${isActive('/mapa')}`}>🗺️ <span class="nav-label">Mapa</span></a>
       <a href="/insignias" class={`nav-link nav-link--big ${isActive('/insignias')}`}>🏅 <span class="nav-label">Insignias</span></a>
+      <a href="/palabras" class={`nav-link nav-link--big ${isActive('/palabras')}`}>📖 <span class="nav-label">Palabras</span></a>
+      <a href="/cuaderno" class={`nav-link nav-link--big ${isActive('/cuaderno')}`}>🧪 <span class="nav-label">Cuaderno</span></a>
       <a href="/constructor" class={`nav-link nav-link--big ${isActive('/constructor')}`}>🤖 <span class="nav-label">Constructor</span></a>
     </nav>
   )}
@@ -72,6 +74,8 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
                 <span class="child-dot"></span>
                 <span class="child-label">Jugando como</span> <strong id="active-child-name">-</strong>
                 <span id="active-child-tramo" class="child-tramo-pill hidden"></span>
+                <span id="active-child-chispas" class="chispas-pill hidden" title="Tus chispas"></span>
+                <span id="active-child-racha" class="racha-pill hidden"></span>
                 <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></svg>
             </button>
             <div id="child-dropdown" class="user-dropdown" style="display: none;">
@@ -144,6 +148,44 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
                 tramoEl.classList.remove('hidden');
             } else {
                 tramoEl.classList.add('hidden');
+            }
+        }
+
+        // Chispas ⚡ y racha 🔥 (doc 04 §3.1 y §3.3). Si el ledger no está
+        // disponible (migración 006 sin pegar) todo queda a 0 y las pills
+        // simplemente no aparecen.
+        const chispasEl = document.getElementById('active-child-chispas');
+        const rachaEl = document.getElementById('active-child-racha');
+        if (chispasEl || rachaEl) {
+            const { ChispasService, nivelInventor } = await import('../lib/chispas-service');
+
+            // Entrar a cualquier página del Modo Aventura cuenta como
+            // actividad del día (la racha premia volver, no rendir).
+            await ChispasService.registrarActividadHoy(childId);
+
+            if (chispasEl) {
+                const total = await ChispasService.getTotalChispas(childId);
+                if (total > 0) {
+                    const nivel = nivelInventor(total);
+                    chispasEl.textContent = `⚡ ${total}`;
+                    chispasEl.title = `${nivel.icono} ${nivel.nombre}`;
+                    chispasEl.classList.remove('hidden');
+                } else {
+                    chispasEl.classList.add('hidden');
+                }
+            }
+
+            if (rachaEl) {
+                const racha = await ChispasService.getRacha(childId);
+                // Desde 2 días: un "🔥 1" en la primera visita es ruido, y
+                // la regla de oro es no mostrar nunca la racha en negativo.
+                if (racha >= 2) {
+                    rachaEl.textContent = `🔥 ${racha}`;
+                    rachaEl.title = `¡Racha de ${racha} días de laboratorio!`;
+                    rachaEl.classList.remove('hidden');
+                } else {
+                    rachaEl.classList.add('hidden');
+                }
             }
         }
 
@@ -486,6 +528,36 @@ const isActive = (path: string) => currentPath === path ? 'active' : '';
   }
 
   .child-tramo-pill.hidden {
+    display: none;
+  }
+
+  .chispas-pill {
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    color: var(--k-amber-400);
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 0.15rem 0.55rem;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+
+  .chispas-pill.hidden {
+    display: none;
+  }
+
+  .racha-pill {
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.4);
+    color: #fb923c;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 0.15rem 0.55rem;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+
+  .racha-pill.hidden {
     display: none;
   }
 

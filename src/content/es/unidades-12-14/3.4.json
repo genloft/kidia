@@ -1,0 +1,88 @@
+{
+  "id": "3.4",
+  "nivel": 3,
+  "zona": {
+    "nombre": "Crear",
+    "colorPrimario": "#e879f9",
+    "colorFondo": "#FBE9FB"
+  },
+  "unidadCurricular": "3.4 · Mejora e itera · Crítica y revisión",
+  "titulo": "Crítica y revisión",
+  "objetivoBloom": "Evaluar / Crear: aplicar el ciclo crítica → revisión — recibir feedback (de Vael y de un compañero) sobre una creación, filtrarlo con criterio y revisarla a fondo de forma fundamentada.",
+  "competenciaFoco": "verificacion",
+  "ai4k12": "Representación y razonamiento.",
+  "duracionMinutos": 40,
+  "producto": "Obra revisada + bitácora de cambios",
+  "palabras": [],
+  "dependeDe": ["3.1"],
+  "mision": {
+    "textoVael": "Los profesionales no temen las críticas: las usan para mejorar. ¿Lo probamos con tu obra?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "iterar_version",
+    "iteraciones": 2,
+    "pideMotivo": true,
+    "cambiosPosibles": [
+      { "id": "reforzar_idea", "label": "Reforzar la idea central que se perdía" },
+      { "id": "recortar_sobra", "label": "Recortar lo que sobra y distrae" },
+      { "id": "mejorar_coherencia", "label": "Arreglar algo que rompía la coherencia" },
+      { "id": "subir_impacto", "label": "Darle más impacto al momento clave" },
+      { "id": "aclarar_mensaje", "label": "Aclarar el mensaje para que se entienda" }
+    ]
+  },
+  "crea": {
+    "tipo": "obra_revisada",
+    "instrucciones": "Ponle nombre a tu obra revisada. La bitácora guarda cada cambio con su porqué — decide qué feedback aplicas y cuál ignoras, y justifícalo.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Qué feedback ignoraste y por qué?",
+      "¿La versión revisada es mejor? ¿En qué exactamente?"
+    ]
+  },
+  "familia": {
+    "nombre": "Pedir una opinión y decidir",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Pedid una opinión sobre algo que hayáis hecho y decidid juntos qué aplicar.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "queAplicasteis"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Revisar a fondo no es retocar: es escuchar feedback, decidir qué es útil y reconstruir con criterio.» · «Un buen creador distingue la crítica que ayuda de la que no.» · «¿Qué feedback ignoraste, y por qué?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "filtra_feedback_con_criterio",
+    "revision_fundamentada",
+    "justifica_cada_cambio"
+  ],
+  "web": {
+    "tituloPantalla": "Crítica y revisión",
+    "introVael": "Los grandes creadores usan las críticas para mejorar. Vamos a coger tu obra, escuchar feedback y revisarla como un profesional.",
+    "pasos": [
+      "Presenta tu creación.",
+      "Recibe feedback de Vael y de un compañero.",
+      "Decide qué aplicas y por qué (no todo vale).",
+      "Revisa tu obra y anota los cambios."
+    ],
+    "cierreVael": "Filtrar el feedback y revisar con criterio: así crece un creador. 🔁"
+  }
+}

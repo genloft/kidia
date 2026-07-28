@@ -40,7 +40,7 @@ export const ChildrenService = {
         return { data };
     },
 
-    async updateChild(id: string, fields: { name?: string; birth_date?: string | null }): Promise<{ error?: string }> {
+    async updateChild(id: string, fields: { name?: string; birth_date?: string | null; avatar?: string | null }): Promise<{ error?: string }> {
         const { error } = await supabase
             .from('children')
             .update({ ...fields, updated_at: new Date().toISOString() })

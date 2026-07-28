@@ -1,0 +1,93 @@
+{
+  "id": "1.2",
+  "nivel": 1,
+  "zona": {
+    "nombre": "Entender",
+    "colorPrimario": "#22d3ee",
+    "colorFondo": "#E0F7FB"
+  },
+  "unidadCurricular": "1.2 · ¿Cómo aprende una máquina?",
+  "titulo": "Entrena (y rompe) la máquina",
+  "objetivoBloom": "Comprender / Analizar: entender que una IA aprende de datos y que, si los datos son pocos o están «torcidos», la IA se equivoca. Entrenar un clasificador, provocar un fallo a propósito y luego arreglarlo.",
+  "competenciaFoco": "pensamiento_critico",
+  "ai4k12": "Aprendizaje — la calidad de los datos cambia el resultado.",
+  "duracionMinutos": 30,
+  "producto": "Clasificador «roto y arreglado»",
+  "palabras": [],
+  "mision": {
+    "textoVael": "¿Y si te enseño a hacer fallar a una IA a propósito? Vas a conocer su punto débil: los datos.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "entrenar_clasificador",
+    "categorias": ["perro", "no_perro"],
+    "bancoEntrenamiento": [
+      { "id": "perro_marron_1", "label": "Perro marrón grande", "icono": "dog", "categoria": "perro" },
+      { "id": "perro_marron_2", "label": "Perro marrón pequeño", "icono": "dog", "categoria": "perro" },
+      { "id": "perro_marron_3", "label": "Perro marrón de orejas largas", "icono": "dog", "categoria": "perro" }
+    ],
+    "ejemploTrampa": { "id": "perro_blanco", "label": "Perro blanco", "icono": "dog", "categoria": "perro" },
+    "bancoReentrenamiento": [
+      { "id": "perro_blanco_2", "label": "Perro blanco", "icono": "dog", "categoria": "perro" },
+      { "id": "perro_marron_4", "label": "Perro marrón", "icono": "dog", "categoria": "perro" },
+      { "id": "perro_negro", "label": "Perro negro con manchas", "icono": "dog", "categoria": "perro" },
+      { "id": "gato", "label": "Gato", "icono": "gato", "categoria": "no_perro" },
+      { "id": "pajaro", "label": "Pájaro", "icono": "pajaro", "categoria": "no_perro" },
+      { "id": "pez", "label": "Pez", "icono": "fish", "categoria": "no_perro" }
+    ]
+  },
+  "crea": {
+    "tipo": "clasificador_roto_arreglado",
+    "instrucciones": "Ponle nombre a tu clasificador «roto y arreglado». Guardará qué falló, por qué, y la regla que descubriste al arreglarlo.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Por qué falló la segunda vez?",
+      "Si una IA eligiera quién gana un premio y solo hubiera visto un tipo de ejemplo, ¿sería justo?"
+    ]
+  },
+  "familia": {
+    "nombre": "Fotos de un solo plato",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Pensad en casa: ¿qué pasaría si una IA solo hubiera visto fotos de un tipo de comida?",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "queImaginasteis"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Antes de probar: ¿acertará tu máquina con el perro blanco? ¡Predícelo!» · «¿Qué le faltó ver para reconocerlo?» · «Mira: solo vio perros marrones. ¿Qué ejemplos añadirías tú para arreglarla?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "prediccion_antes_de_probar",
+    "explicacion_datos_pobres_errores",
+    "clasificador_corregido"
+  ],
+  "web": {
+    "tituloPantalla": "Hazle una trampa a la IA",
+    "introVael": "Hoy descubrirás el punto débil de la IA: aprende solo de lo que le enseñas. ¿La engañamos un poco para entenderla mejor?",
+    "pasos": [
+      "Entrena tu IA con ejemplos variados y pruébala.",
+      "Ahora «tuércela»: enséñale solo un tipo de ejemplo.",
+      "Pruébala con algo nuevo… ¿ves cómo falla?",
+      "Arréglala añadiendo ejemplos variados."
+    ],
+    "cierreVael": "¡Caso resuelto! La IA es tan lista (o tan torpe) como los datos que le das. 🧠"
+  }
+}

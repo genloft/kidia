@@ -1,0 +1,103 @@
+{
+  "id": "1.1",
+  "nivel": 1,
+  "zona": {
+    "nombre": "Entender",
+    "colorPrimario": "#22d3ee",
+    "colorFondo": "#E0F7FB"
+  },
+  "unidadCurricular": "1.1 · ¿Qué es (y qué no) una IA?",
+  "titulo": "¿Qué hay dentro de una IA?",
+  "objetivoBloom": "Comprender / Explicar: entender a grandes rasgos cómo funciona una IA generativa (predice lo más probable a partir de patrones aprendidos de muchísimos datos; no «entiende» ni «es consciente») y desmontar el mito de la IA que piensa o siente como un humano.",
+  "competenciaFoco": "criterio",
+  "ai4k12": "Representación y razonamiento · Aprendizaje.",
+  "duracionMinutos": 40,
+  "producto": "Infografía «Cómo funciona (y cómo no) una IA»",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Todo el mundo habla de la IA como si pensara. ¿Y si te enseño qué hace de verdad por dentro?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "detectar_invencion",
+    "banco": [
+      {
+        "id": "ia_predice",
+        "texto": "Una IA generativa ha aprendido patrones de muchísimos textos e imágenes, y predice lo más probable que viene después.",
+        "esVerdadera": true
+      },
+      {
+        "id": "mito_piensa",
+        "texto": "La IA piensa igual que una persona.",
+        "esVerdadera": false,
+        "pistaSiFalsa": "Mito desmontado: la IA no «sabe» como tú. Calcula lo más probable a partir de patrones — no razona con intenciones ni con comprensión."
+      },
+      {
+        "id": "mito_siente",
+        "texto": "La IA siente emociones cuando habla contigo.",
+        "esVerdadera": false,
+        "pistaSiFalsa": "Mito desmontado: no tiene conciencia ni emociones. Puede IMITAR el tono emocional porque lo aprendió de textos humanos, pero no hay nadie sintiendo ahí dentro."
+      },
+      {
+        "id": "mito_verdad",
+        "texto": "Si la IA lo dice con seguridad, es que sabe la verdad.",
+        "esVerdadera": false,
+        "pistaSiFalsa": "Mito desmontado: puede sonar segura y equivocarse, porque no comprende lo que dice — calcula lo más probable. Por eso se verifica."
+      }
+    ]
+  },
+  "crea": {
+    "tipo": "infografia_ia",
+    "instrucciones": "Ponle título a tu infografía «Cómo funciona (y cómo no) una IA» y escribe tu mejor argumento: elige un mito y desmóntalo con tus palabras.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "Si la IA solo predice patrones, ¿por qué a veces acierta tanto?",
+      "¿Qué significa exactamente que «no entiende» lo que dice?"
+    ]
+  },
+  "familia": {
+    "nombre": "¿Creíais que la IA piensa?",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Comentad en casa: ¿creíais que la IA «piensa»? ¿Qué hace en realidad?",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "queCreianEnCasa"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Una IA generativa no ‘sabe’ como tú: predice lo más probable que viene después.» · «¿Por qué puede sonar segura y aun así equivocarse?» · «Elige un mito y refútalo con un argumento — eso es entender de verdad.»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "explica_prediccion_de_patrones",
+    "mito_refutado_con_argumento",
+    "distingue_sonar_seguro_de_ser_verdad"
+  ],
+  "web": {
+    "tituloPantalla": "Mira dentro de la IA",
+    "introVael": "Todos hablan de la IA como si pensara y sintiera. Hoy vas a ver qué hace de verdad por dentro… y a desmontar unos cuantos mitos.",
+    "pasos": [
+      "Juega a adivinar la siguiente palabra, como hace la IA.",
+      "Compara tu forma de hacerlo con la suya.",
+      "Desmonta tres mitos: ¿la IA piensa, siente, sabe la verdad?",
+      "Crea tu infografía «Cómo funciona (y cómo no) una IA»."
+    ],
+    "cierreVael": "Ya sabes lo que casi nadie sabe: la IA predice patrones, no piensa. 🧠"
+  }
+}

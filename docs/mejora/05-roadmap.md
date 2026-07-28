@@ -116,14 +116,47 @@ sin callejones sin salida, en móvil.
 
 Objetivo: el bucle jugar → recompensa → progreso → volver, completo.
 
-- [ ] Ledger `child_events` + chispas + niveles de inventor/a (migrando los
-      agregados actuales; resuelve la doble fuente de progreso).
-- [ ] Sistema de celebración unificado (3 intensidades).
-- [ ] Diccionario de Palabras Poderosas + Cuaderno de Inventos navegable.
-- [ ] Insignias v2 (cómo conseguir cada una).
-- [ ] Racha amable + misiones en familia con bonus y rastro en el panel adulto.
-- [ ] Retirar "Modo profundo" → "Reto extra de Vael".
-- [ ] Avatar/laboratorio personalizable (v1 pequeña: 6-8 cosméticos).
+- [x] Ledger `child_events` + chispas + niveles de inventor/a — migración 006
+      (append-only, idempotente), `chispas-service.ts`, hooks en el motor,
+      "+N chispas" en el cierre y pill ⚡ en el header aventura. La parte
+      "migrando los agregados actuales" (badges/completedScenarios al ledger)
+      queda para más adelante — el ledger convive con ellos de momento.
+      Detalle en ESTADO.md. *(17/07/2026)*
+- [x] Sistema de celebración unificado (3 intensidades) — `celebration.ts`:
+      micro en aciertos (vía showFeedback), media al completar misión,
+      grande con insignia o subida de nivel; versión estática con el mismo
+      contenido si `prefers-reduced-motion`. Detalle en ESTADO.md.
+      *(17/07/2026)*
+- [x] Diccionario de Palabras Poderosas: página `/palabras`, cartas por zona,
+      coleccionadas con definición + tocar para escuchar, las que faltan
+      como silueta "¿?" (sin fuga del contenido real en el HTML servido).
+      Detalle en ESTADO.md. *(17/07/2026)*
+- [x] Cuaderno de Inventos navegable: página `/cuaderno`, creaciones en
+      orden cronológico con resumen legible y botón Eliminar (RGPD).
+      Portada personalizable queda para cuando exista el sumidero de
+      chispas (§3.4). Detalle en ESTADO.md. *(17/07/2026)*
+- [x] Insignias v2 (cómo conseguir cada una) — catálogo fusionado (legacy +
+      unidad-aventura) y hint de "cómo conseguirla" en bloqueadas. Detalle en
+      ESTADO.md. *(17/07/2026)*
+- [x] Racha amable — evento `actividad_diaria` idempotente por fecha en el
+      ledger, `calcularRacha` puro (huecos de hasta 3 días protegidos),
+      pill 🔥 en el header aventura desde 2 días, nunca en negativo. La
+      congelación semanal de Vael queda como refinamiento futuro. Las
+      misiones en familia ya tienen bonus (20 chispas, el mayor) y rastro
+      en el Panel Familiar. Detalle en ESTADO.md. *(17/07/2026)*
+- [ ] Retirar "Modo profundo" → "Reto extra de Vael". **BLOQUEADO POR
+      CONTENIDO, no por código** (verificado 17/07): el toggle ya se retiró
+      en el mapa v2, pero `deep_mode.content_markdown` está vacío en los 8
+      escenarios legacy — no hay material real del método con el que montar
+      el Reto extra, y las preguntas curriculares no se inventan. Necesita
+      contenido de los docx del método.
+- [x] Avatar personalizable v1: 8 avatares emoji, 2 libres + 6 desbloqueados
+      por Nivel de Inventor/a (decisión v1: desbloqueo por nivel, no gasto de
+      chispas — el ledger es append-only; la economía de gasto y el
+      laboratorio decorable quedan para la v2). Selector en /cuaderno,
+      persistido en children.avatar. Detalle en ESTADO.md. *(17/07/2026)*
+- [ ] Laboratorio personalizable v2 (gasto de chispas, decoración, marcos
+      del Cuaderno) — pendiente de decidir la mecánica de débito.
 
 **Hecho cuando:** al completar una misión el niño ve chispas + celebración + su
 mapa avanzar, y tiene algo que mirar (colecciones) y algo que querer (cosméticos).
@@ -134,10 +167,31 @@ Objetivo: que un hijo de 10 o 13 años tenga una experiencia tan completa como u
 de 8. Se arranca solo cuando el tramo 8-9 haya alcanzado el nivel objetivo de las
 Fases 1-3 (es el molde que se replica).
 
-- [ ] Extender el schema unidad-aventura con los grados de autonomía de 10-11
-      (semiguiado) y 12-14 (autónomo + Morti).
-- [ ] Producir las 16 unidades de 10-11 y las de 12-14 desde los docx del método
-      (mismo pipeline JSON que 8-9).
+- [~] Extender el schema unidad-aventura con los grados de autonomía de 10-11
+      (semiguiado) y 12-14 (autónomo + Morti). EMPEZADO: ZonaNombre acepta
+      los nombres de nivel del método (el docx 10-11 no usa zonas), el motor
+      salta la pantalla Palabras cuando la unidad no las define (el 10-11 no
+      las tiene), y el andamiaje 'medio' ya existía. Morti y el resto, al
+      llegar 12-14. *(18/07/2026)*
+- [~] Producir las 16 unidades de 10-11 y las de 12-14 desde los docx del
+      método (mismo pipeline JSON que 8-9). **TRAMO 10-11 COMPLETO: las 16
+      unidades y las 4 insignias del docx** — Nivel 1 "Entender" (1.1-1.4,
+      «Cazaerrores Nivel 2»), Nivel 2 "Usar bien" (2.1-2.4, widget nuevo
+      `dos_respuestas_verifica`, «Detective de datos»), Nivel 3 "Crear"
+      (3.1-3.4, «Creador de personajes», `iterar_version` extendido) y
+      Nivel 4 "Construir" (4.1 mini-quiz, 4.2 audiocuento con dependeDe,
+      4.3 idea con impacto, 4.4 presentación final — «Constructor con IA
+      10-11»). El mapa 10-11 ya no tiene NINGÚN reto legacy: 4 zonas del
+      método, todo formato unidad-aventura.
+      **TRAMO 12-14 COMPLETO (16/16)**: los 4 niveles, con **Morti**
+      integrado en el schema (campo `morti`, voz morada en la misión) en
+      las unidades de ética/sesgo/verificación (1.2, 1.4, 2.3, 2.4, 4.3),
+      las 4 insignias del docx (Verificador experto, Analista de sesgos,
+      Creador de mundos, Constructor con impacto) y 2 widgets nuevos
+      (`verificacion_cruzada`, `iterar_version` extendido reutilizado).
+      **LOS 3 TRAMOS (8-9, 10-11, 12-14) tienen ya su programa completo de
+      Fase 1.** Pendiente: las "fotos de nivel" (instrumento de medición).
+      Detalle en ESTADO.md. *(19/07/2026)*
 - [ ] Migrar los 12 retos legacy al formato nuevo; jubilar `game-engine.ts`,
       `scenario/[slug]` y el Quiz separado (el quiz pasa a ser pantalla del motor).
 - [ ] Chat con Vael/Morti real (si Fase 0 eligió backend): system prompt desde la

@@ -1,0 +1,137 @@
+{
+  "id": "4.3",
+  "nivel": 4,
+  "zona": {
+    "nombre": "Construir",
+    "colorPrimario": "#fbbf24",
+    "colorFondo": "#FBF3E0"
+  },
+  "unidadCurricular": "4.3 · Proyecto: idea con impacto + ética (Morti)",
+  "titulo": "Mi proyecto con impacto + dilema ético",
+  "objetivoBloom": "Crear / Evaluar (ética): crear y presentar una idea de proyecto con impacto usando la IA como apoyo, y razonar su ética a fondo con Morti como detonante (a quién perjudica, qué datos pide, si es justa). Buque insignia del tramo.",
+  "competenciaFoco": "pensamiento_critico",
+  "ai4k12": "Impacto social.",
+  "duracionMinutos": 45,
+  "producto": "Proyecto con impacto + análisis ético",
+  "palabras": [],
+  "mision": {
+    "textoVael": "¿Qué problema de tu mundo te gustaría resolver de verdad?",
+    "audioUrl": null
+  },
+  "morti": {
+    "texto": "Tu idea es brillante. Pero toda idea poderosa puede ayudar o hacer daño. Vamos a mirarla muy de cerca, sin miedo."
+  },
+  "investiga": {
+    "tipo": "idea_para_ayudar",
+    "destinatarios": [
+      {
+        "id": "mi_comunidad",
+        "label": "Mi comunidad o barrio",
+        "valor": "comunidad"
+      },
+      {
+        "id": "gente_mayor",
+        "label": "Personas mayores",
+        "valor": "mayores"
+      },
+      {
+        "id": "el_planeta",
+        "label": "El planeta",
+        "valor": "planeta"
+      }
+    ],
+    "necesidadesPorDestinatario": {
+      "mi_comunidad": [
+        {
+          "id": "conectar_vecinos",
+          "label": "Una app para pedir y ofrecer ayuda entre vecinos",
+          "valor": "ayuda_vecinos"
+        },
+        {
+          "id": "info_accesible",
+          "label": "Información local fácil de entender para todos",
+          "valor": "info_local"
+        }
+      ],
+      "gente_mayor": [
+        {
+          "id": "menos_soledad",
+          "label": "Conectar a mayores solos con voluntarios",
+          "valor": "soledad"
+        },
+        {
+          "id": "usar_movil",
+          "label": "Enseñarles a usar el móvil sin agobios",
+          "valor": "movil"
+        }
+      ],
+      "el_planeta": [
+        {
+          "id": "reducir_residuos",
+          "label": "Reducir residuos en el instituto",
+          "valor": "residuos"
+        },
+        {
+          "id": "mapa_verde",
+          "label": "Un mapa de zonas verdes que cuidar",
+          "valor": "mapa_verde"
+        }
+      ]
+    }
+  },
+  "crea": {
+    "tipo": "proyecto_impacto",
+    "instrucciones": "Ponle NOMBRE a tu proyecto con impacto. Guardará el problema, tu solución y —lo más importante— tu análisis ético: a quién ayuda, a quién podría perjudicar, qué datos pide y si es justa. La ética no es un añadido: ajusta tu proyecto con ella.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿A quién podría perjudicar tu idea?",
+      "¿Qué datos pedirías y por qué? ¿Son realmente necesarios?",
+      "¿Es justa para todos?"
+    ]
+  },
+  "familia": {
+    "nombre": "El pitch y el dilema",
+    "duracionMinutos": 10,
+    "modo": "offline",
+    "instrucciones": "Que el alumno exponga su proyecto en casa como un «pitch» y cuente el dilema ético.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "dilemaContado"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Un proyecto con impacto resuelve un problema real. La IA te ayuda a darle forma, pero las decisiones —y la ética— son tuyas.» · «Morti entra a poner a prueba tu idea, no para hundirla: para hacerla mejor y más justa.» · «¿Qué datos pedirías, y son realmente necesarios?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "proyecto_con_impacto_real",
+    "analisis_etico_serio",
+    "ajusta_segun_consecuencias"
+  ],
+  "web": {
+    "tituloPantalla": "Tu proyecto con impacto (y el reto de Morti)",
+    "introVael": "Vas a crear un proyecto que resuelva un problema real de tu mundo. Y, cuando esté listo, Morti lo pondrá a prueba con preguntas difíciles para hacerlo mejor y más justo.",
+    "pasos": [
+      "Define el problema y tu idea para resolverlo.",
+      "Crea nombre, identidad, descripción y un plan con la IA.",
+      "Enfréntate al dilema ético de Morti y ajusta tu proyecto.",
+      "Prepara tu pitch para presentarlo."
+    ],
+    "cierreVael": "Una gran idea que además es justa. Eso es crear con impacto. 🌟"
+  }
+}

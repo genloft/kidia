@@ -1,0 +1,89 @@
+{
+  "id": "4.4",
+  "nivel": 4,
+  "zona": {
+    "nombre": "Construir",
+    "colorPrimario": "#fbbf24",
+    "colorFondo": "#FBF3E0"
+  },
+  "unidadCurricular": "4.4 · Presenta y comparte",
+  "titulo": "Presenta tu proyecto al equipo",
+  "objetivoBloom": "Comunicar / Integrar todo: elegir su mejor proyecto del tramo, presentarlo a la comunidad/clase explicando qué hizo y cómo, y dar y recibir un comentario amable (feedback entre pares moderado).",
+  "competenciaFoco": "comunicacion",
+  "ai4k12": "Impacto social.",
+  "duracionMinutos": 30,
+  "producto": "Presentación + feedback entre pares",
+  "palabras": [],
+  "dependeDe": ["4.1"],
+  "mision": {
+    "textoVael": "Tu proyecto está listo. Toca presentarlo… ¡y aprender de lo que crean los demás!",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "presentar_creacion",
+    "preguntasGuia": [
+      "¿Qué es tu proyecto?",
+      "¿Cómo lo hiciste?",
+      "¿Qué aprendiste haciéndolo?"
+    ]
+  },
+  "crea": {
+    "tipo": "presentacion_final",
+    "instrucciones": "Ponle título a tu presentación. Guardará tu guion de tres puntos: qué es, cómo lo hiciste y qué aprendiste.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Tu comentario ayuda a mejorar o solo dice «me gusta»?",
+      "¿Qué aprendiste de otro proyecto?"
+    ]
+  },
+  "familia": {
+    "nombre": "La presentación en casa",
+    "duracionMinutos": 10,
+    "modo": "offline",
+    "instrucciones": "Que el niño os haga su presentación en casa y cuente qué aprendió.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "queAprendio"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": {
+      "id": "constructor-ia-10-11",
+      "name": "Constructor con IA 10-11",
+      "icon": "🏗️",
+      "description": "Completó y presentó un proyecto de varios pasos, explicando su proceso."
+    },
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Presentar es contar qué hiciste, cómo lo hiciste y qué aprendiste.» · «¿Tu presentación explica el proceso, no solo el resultado?» · «Un buen equipo se da comentarios amables que ayudan a mejorar, no solo ‘me gusta’.»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "presentacion_explica_el_proceso",
+    "feedback_constructivo_a_otro",
+    "integra_lo_aprendido_del_tramo"
+  ],
+  "web": {
+    "tituloPantalla": "Presenta tu proyecto al equipo",
+    "introVael": "Hora de brillar y de aprender de los demás. Presenta lo tuyo y deja un buen consejo a otro creador.",
+    "pasos": [
+      "Elige tu mejor proyecto del viaje.",
+      "Prepara tu presentación: qué es, cómo lo hiciste, qué aprendiste.",
+      "Compártelo con el equipo.",
+      "Deja un comentario amable y útil a otro proyecto."
+    ],
+    "cierreVael": "¡Gran presentación, creador con IA! Y tu consejo ayudó a otro a mejorar. 🌟"
+  }
+}

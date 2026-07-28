@@ -1,0 +1,86 @@
+{
+  "id": "4.2",
+  "nivel": 4,
+  "zona": {
+    "nombre": "Construir",
+    "colorPrimario": "#fbbf24",
+    "colorFondo": "#FBF3E0"
+  },
+  "unidadCurricular": "4.2 · Proyecto: libro o podcast",
+  "titulo": "Tu audiocuento o mini-podcast",
+  "objetivoBloom": "Crear: crear un proyecto de audio de varios pasos (un audiocuento o un mini-podcast sobre un tema), escribiendo el guion con la IA como ayudante y montándolo hasta que se entienda al escucharlo.",
+  "competenciaFoco": "autonomia_creativa",
+  "ai4k12": "Las cinco ideas, en versión sencilla.",
+  "duracionMinutos": 45,
+  "producto": "Audiocuento / mini-podcast",
+  "palabras": [],
+  "dependeDe": ["3.2"],
+  "mision": {
+    "textoVael": "¿Y si tu historia se pudiera ESCUCHAR? Vamos a crear tu propio audiocuento.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "montar_libro",
+    "estructuraSugerida": [
+      "Saludo y presentación",
+      "Empieza la historia",
+      "El momento más emocionante",
+      "El final",
+      "Despedida"
+    ]
+  },
+  "crea": {
+    "tipo": "audiocuento",
+    "instrucciones": "Ponle título a tu audiocuento. Se guardará tu guion por partes, listo para grabarlo o escucharlo con la lectura en voz alta.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿El guion se entiende al escucharlo, no solo al leerlo?",
+      "¿Qué parte mejorarías?"
+    ]
+  },
+  "familia": {
+    "nombre": "Cuento de buenas noches",
+    "duracionMinutos": 10,
+    "modo": "offline",
+    "instrucciones": "Escuchad juntos el audiocuento como cuento de buenas noches.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "comoFueLaEscucha"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Un audiocuento tiene un guion: qué se cuenta y en qué orden.» · «Léelo en voz alta: ¿suena bien o se atasca?» · «Tú decides la historia y cómo suena; yo solo ayudo a darle forma.»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "guion_por_partes_completo",
+    "ajustado_para_sonar_bien",
+    "comprensible_al_escucharlo"
+  ],
+  "web": {
+    "tituloPantalla": "Crea tu audiocuento",
+    "introVael": "Tu historia merece oírse. Escribimos el guion juntos y la convertimos en un cuento para escuchar.",
+    "pasos": [
+      "Elige tu historia o tema.",
+      "Escribe el guion por partes.",
+      "Ajústalo para que suene genial.",
+      "Móntalo como audio y… ¡escúchate!"
+    ],
+    "cierreVael": "¡Tu voz, tu historia! Has creado algo que se puede escuchar. 🎙️"
+  }
+}

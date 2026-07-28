@@ -1,11 +1,106 @@
 ---
-import { loadScenarios } from '../lib/scenario-loader';
+import { loadScenarios, loadUnidadesAventura } from '../lib/scenario-loader';
 
-// Las insignias reales vienen del contenido (una por unidad×tramo, ver
-// src/content/es/*.json), no de un catálogo aparte — así nunca hay
-// insignias que el niño pueda ganar pero que aquí no aparezcan (o viceversa).
+// Catálogo unificado de insignias (doc 04 §3.5, "Insignias v2"): hay dos
+// sistemas de contenido independientes que otorgan al MISMO array
+// children.badges (ver unidad-engine.ts renderComparte) — el legacy
+// (loadScenarios, tramos 10-11/12-14, 4 unidades) y el unidad-aventura
+// (loadUnidadesAventura, tramo 8-9, 16 unidades). Antes de esto, BadgeGrid
+// solo leía el legacy: los 3 badges reales del tramo 8-9 (cazaerrores-n1,
+// guardian-secretos, creador-ia-8-9) se ganaban y persistían pero nunca
+// aparecían en esta pantalla. Se fusionan aquí en un solo catálogo.
+interface BadgeCatalogEntry {
+    id: string;
+    name: string;
+    icon: string;
+    description: string;
+    nivel: number;
+    tramo: string;
+    origenLabel: string; // qué mostrar bajo el nombre ("Unidad 1.2" / "Zona Descubre")
+    earnHint: string; // cómo conseguirla, para cuando está bloqueada
+    // El reto legacy que la otorgaba ya está migrado a unidad-aventura y la
+    // unidad nueva no da esta insignia (las por-reto del legacy no salen del
+    // docx del método): ya no hay camino para ganarla. Solo se muestra a
+    // quien YA la tenga (lo ganado no se quita) — el resto no debe ver una
+    // insignia imposible.
+    huerfana?: boolean;
+}
+
 const scenarios = await loadScenarios('es');
-const niveles = [...new Set(scenarios.map(s => s.nivel).filter(Boolean))].sort();
+const unidades89 = await loadUnidadesAventura('8-9');
+const unidades1011 = await loadUnidadesAventura('10-11');
+
+const migradasPorTramo = new Map<string, Set<string>>([
+    ['8-9', new Set(unidades89.map(u => u.id))],
+    ['10-11', new Set(unidades1011.map(u => u.id))],
+]);
+const insigniasAventura = new Set(
+    [...unidades89, ...unidades1011]
+        .map(u => u.comparte.insigniaPosible?.id)
+        .filter((id): id is string => Boolean(id))
+);
+
+const legacyEntries: BadgeCatalogEntry[] = scenarios
+    .filter(s => s.tramo)
+    .map(s => ({
+        id: s.badge.id,
+        name: s.badge.name,
+        icon: s.badge.icon,
+        description: s.badge.description,
+        nivel: s.nivel ?? 1,
+        tramo: s.tramo!,
+        origenLabel: `Unidad ${s.unidad}`,
+        earnHint: s.required_badge_id
+            ? `Antes consigue la insignia "${scenarios.find(x => x.badge.id === s.required_badge_id)?.badge.name ?? ''}"`
+            : `Completa el reto "${s.title.replace(/^\d+(\.\d+)?\s*/, '')}"`,
+        huerfana: Boolean(
+            s.unidad
+            && migradasPorTramo.get(s.tramo!)?.has(s.unidad)
+            && !insigniasAventura.has(s.badge.id)
+        ),
+    }));
+
+// Las insignias del tramo 8-9 se otorgan al terminar la última unidad de
+// cada zona (comparte.insigniaPosible) — no todas las zonas tienen una hoy
+// (Zona Creación aún no, es un hueco de contenido real, no de código).
+const unidadesPorZona = new Map<string, number>();
+unidades89.forEach(u => unidadesPorZona.set(u.zona.nombre, (unidadesPorZona.get(u.zona.nombre) ?? 0) + 1));
+
+const aventuraEntries89: BadgeCatalogEntry[] = unidades89
+    .filter(u => u.comparte.insigniaPosible)
+    .map(u => ({
+        id: u.comparte.insigniaPosible!.id,
+        name: u.comparte.insigniaPosible!.name,
+        icon: u.comparte.insigniaPosible!.icon,
+        description: u.comparte.insigniaPosible!.description,
+        nivel: u.nivel,
+        tramo: '8-9',
+        origenLabel: u.zona.nombre,
+        earnHint: `Completa las ${unidadesPorZona.get(u.zona.nombre) ?? 4} misiones de la ${u.zona.nombre}`,
+    }));
+
+// En 10-11 la insignia va ligada al reto concreto que la otorga (el docx del
+// programa define 4, una por nivel — p. ej. Cazaerrores Nivel 2 en el 1.4).
+const aventuraEntries1011: BadgeCatalogEntry[] = unidades1011
+    .filter(u => u.comparte.insigniaPosible)
+    .map(u => ({
+        id: u.comparte.insigniaPosible!.id,
+        name: u.comparte.insigniaPosible!.name,
+        icon: u.comparte.insigniaPosible!.icon,
+        description: u.comparte.insigniaPosible!.description,
+        nivel: u.nivel,
+        tramo: '10-11',
+        origenLabel: `Misión ${u.id}`,
+        earnHint: `Completa la misión "${u.titulo}"`,
+    }));
+
+// Dedupe por id de insignia: cuando un reto legacy ya está migrado a
+// unidad-aventura, su insignia aparece en ambos catálogos (mismo id, p. ej.
+// cazaerrores-2) — gana la entrada de la unidad migrada, que es la vigente.
+const badgeCatalogMap = new Map<string, BadgeCatalogEntry>();
+[...legacyEntries, ...aventuraEntries89, ...aventuraEntries1011].forEach(b => badgeCatalogMap.set(b.id, b));
+const badgeCatalog = [...badgeCatalogMap.values()];
+const niveles = [...new Set(badgeCatalog.map(b => b.nivel))].sort((a, b) => a - b);
 ---
 
 <div class="badges-interface">
@@ -17,17 +112,16 @@ const niveles = [...new Set(scenarios.map(s => s.nivel).filter(Boolean))].sort()
     </div>
 
     <div class="badges-grid">
-        {scenarios.map(s => (
-            <div class="badge-card" data-cat={`nivel-${s.nivel}`} data-id={s.badge.id} data-tramo={s.tramo}>
+        {badgeCatalog.map(b => (
+            <div class="badge-card" data-cat={`nivel-${b.nivel}`} data-id={b.id} data-tramo={b.tramo} data-huerfana={b.huerfana ? 'true' : undefined}>
                 <div class="hologram-effect"></div>
-                <div class="badge-icon">{s.badge.icon}</div>
+                <div class="lock-badge" aria-hidden="true">🔒</div>
+                <div class="badge-icon">{b.icon}</div>
                 <div class="badge-info">
-                    <h4>{s.badge.name}</h4>
-                    <span class="badge-cat">Unidad {s.unidad}</span>
-                    <p class="badge-desc">{s.badge.description}</p>
-                </div>
-                <div class="lock-overlay">
-                    <span>❓</span>
+                    <h4>{b.name}</h4>
+                    <span class="badge-cat">{b.origenLabel}</span>
+                    <p class="badge-desc badge-desc--earned">{b.description}</p>
+                    <p class="badge-desc badge-desc--hint">{b.earnHint}</p>
                 </div>
             </div>
         ))}
@@ -58,7 +152,13 @@ const niveles = [...new Set(scenarios.map(s => s.nivel).filter(Boolean))].sort()
 
         let visibleCount = 0;
         cards.forEach(card => {
-            const matches = !myTramo || card.getAttribute('data-tramo') === myTramo;
+            const delTramo = !myTramo || card.getAttribute('data-tramo') === myTramo;
+            // Huérfana (su reto legacy migró y la unidad nueva no la da): solo
+            // se enseña a quien ya la ganó — requiere que initBadges() haya
+            // marcado .earned ANTES de este filtro (ver init()).
+            const huerfanaNoGanada = (card as HTMLElement).dataset.huerfana === 'true'
+                && !card.classList.contains('earned');
+            const matches = delTramo && !huerfanaNoGanada;
             card.classList.toggle('wrong-tramo', !matches);
             if (matches) visibleCount++;
         });
@@ -76,14 +176,14 @@ const niveles = [...new Set(scenarios.map(s => s.nivel).filter(Boolean))].sort()
         const userBadges = state.badges || [];
 
         cards.forEach(card => {
-            const id = card.getAttribute('data-id');
+            const id = card.getAttribute('data-id') || '';
             card.classList.toggle('earned', userBadges.includes(id));
         });
     }
 
     async function init() {
+        initBadges(); // primero: filterByTramo necesita saber qué está ganado
         await filterByTramo();
-        initBadges();
     }
 
     if (document.readyState === 'loading') {
@@ -188,28 +288,44 @@ const niveles = [...new Set(scenarios.map(s => s.nivel).filter(Boolean))].sort()
         display: none;
     }
 
-    /* Locked State */
-    .lock-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2rem;
-        z-index: 10;
-        backdrop-filter: blur(1px);
-        color: rgba(255,255,255,0.3);
+    /* Locked State — insignias v2 (doc 04 §3.5): en vez de tapar la
+       tarjeta entera con un "❓", se ve el icono apagado y el texto de
+       "cómo conseguirla" en vez de la descripción, para que sea una guía
+       y no solo un misterio. */
+    .badge-card:not(.earned) .badge-icon {
+        filter: grayscale(1) opacity(0.5);
     }
 
-    /* Earned State */
-    .badge-card.earned .lock-overlay {
+    .lock-badge {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        font-size: 0.9rem;
+        opacity: 0.5;
+        z-index: 3;
+    }
+
+    .badge-card.earned .lock-badge {
         display: none;
     }
 
+    .badge-desc--earned {
+        display: none;
+    }
+
+    .badge-card.earned .badge-desc--earned {
+        display: block;
+    }
+
+    .badge-desc--hint {
+        font-style: italic;
+    }
+
+    .badge-card.earned .badge-desc--hint {
+        display: none;
+    }
+
+    /* Earned State */
     .badge-card.earned {
         border-color: var(--color-primary);
         box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);

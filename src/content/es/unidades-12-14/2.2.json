@@ -1,0 +1,103 @@
+{
+  "id": "2.2",
+  "nivel": 2,
+  "zona": {
+    "nombre": "Usar bien",
+    "colorPrimario": "#8b5cf6",
+    "colorFondo": "#EFE9FB"
+  },
+  "unidadCurricular": "2.2 · ¿Es verdad? Verificar",
+  "titulo": "Verificación cruzada",
+  "objetivoBloom": "Evaluar: verificar una afirmación de la IA contrastando varias fuentes, detectar coincidencias y contradicciones, y distinguir fuentes fiables de no fiables, emitiendo un veredicto con su grado de confianza.",
+  "competenciaFoco": "verificacion",
+  "ai4k12": "Impacto social.",
+  "duracionMinutos": 40,
+  "producto": "Veredicto con fuentes contrastadas",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Una sola fuente puede engañarte. ¿Y si comparamos varias, como hace un buen periodista?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "verificacion_cruzada",
+    "afirmacionIA": "Beber ocho vasos de agua al día es una regla científica obligatoria para todo el mundo.",
+    "afirmacionEsCierta": false,
+    "fuentes": [
+      {
+        "id": "organizacion_salud",
+        "label": "🏥 Guía de una organización de salud",
+        "contenido": "La cantidad de agua que necesita cada persona varía según su edad, el clima y la actividad. No hay una cifra única obligatoria: parte del agua llega también con la comida. «8 vasos» es una regla orientativa, no una ley científica.",
+        "fiable": true,
+        "apoyaAfirmacion": false
+      },
+      {
+        "id": "revista_cientifica",
+        "label": "🔬 Artículo de divulgación científica",
+        "contenido": "El origen de «los 8 vasos» no tiene una base científica firme; los estudios muestran necesidades muy distintas entre personas. Lo importante es beber cuando se tiene sed y más si hace calor o hay ejercicio.",
+        "fiable": true,
+        "apoyaAfirmacion": false
+      },
+      {
+        "id": "anuncio_agua",
+        "label": "📣 Anuncio de una marca de agua embotellada",
+        "contenido": "«¡Bebe 8 vasos al día de nuestra agua para estar sano!» (Es publicidad: quiere vender, no informar.)",
+        "fiable": false,
+        "apoyaAfirmacion": true
+      }
+    ]
+  },
+  "crea": {
+    "tipo": "veredicto_cruzado",
+    "instrucciones": "Ponle título a tu veredicto. Guardará las fuentes que cruzaste, cuáles descartaste y tu grado de confianza.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Qué hace fiable a una fuente?",
+      "¿Qué harías si las fuentes se contradicen entre sí?"
+    ]
+  },
+  "familia": {
+    "nombre": "Un dato dudoso en dos sitios",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Comprobad juntos un dato dudoso mirando en dos sitios distintos.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "datoComprobado"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Verificar de verdad es cruzar varias fuentes y ver si coinciden.» · «¿Quién escribe cada fuente? ¿Tiene datos y fecha, o solo opina (o vende)?» · «¿Qué harías si dos fuentes se contradicen?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "cruza_varias_fuentes",
+    "distingue_fiable_de_no_fiable",
+    "veredicto_con_grado_de_confianza"
+  ],
+  "web": {
+    "tituloPantalla": "Verificación cruzada",
+    "introVael": "Como un periodista de investigación: no te fíes de una sola fuente. Cruza varias y decide con cabeza.",
+    "pasos": [
+      "Lee la afirmación de la IA.",
+      "Consulta varias fuentes de confianza.",
+      "Marca dónde coinciden y dónde no.",
+      "Emite tu veredicto con tu nivel de confianza."
+    ],
+    "cierreVael": "Verificar cruzando fuentes es un superpoder contra la desinformación. 📰"
+  }
+}

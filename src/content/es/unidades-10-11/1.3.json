@@ -1,0 +1,88 @@
+{
+  "id": "1.3",
+  "nivel": 1,
+  "zona": {
+    "nombre": "Entender",
+    "colorPrimario": "#22d3ee",
+    "colorFondo": "#E0F7FB"
+  },
+  "unidadCurricular": "1.3 · ¿Qué es un prompt?",
+  "titulo": "La receta del buen prompt",
+  "objetivoBloom": "Aplicar: conocer las partes de un buen prompt —qué quiero, cómo lo quiero y contexto— y escribir prompts más completos con autonomía semiguiada.",
+  "competenciaFoco": "calidad_preguntas",
+  "ai4k12": "Interacción natural.",
+  "duracionMinutos": 30,
+  "producto": "Prompt «receta» + resultado",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Un buen prompt es como una buena receta: si te falta un ingrediente, el plato sale raro.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "afinar_prompt_detalles",
+    "promptBase": "Un cartel",
+    "banco": [
+      { "id": "divertido", "label": "divertido", "categoria": "cómo lo quiero" },
+      { "id": "colores_alegres", "label": "con colores alegres", "categoria": "cómo lo quiero" },
+      { "id": "estilo_comic", "label": "estilo cómic", "categoria": "cómo lo quiero" },
+      { "id": "feria_ciencias", "label": "para anunciar la feria de ciencias", "categoria": "contexto" },
+      { "id": "mi_clase", "label": "para mi clase", "categoria": "contexto" },
+      { "id": "que_todos_lean", "label": "para que se lea desde lejos", "categoria": "contexto" }
+    ],
+    "preguntaClave": "¿Qué ingrediente le faltaba a tu primer intento: el QUÉ, el CÓMO o el CONTEXTO?"
+  },
+  "crea": {
+    "tipo": "prompt_receta",
+    "instrucciones": "Ponle nombre a tu «prompt receta». Guardará tu prompt completo con sus tres ingredientes y lo que descubriste al compararlo.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Qué ingrediente le faltaba a tu primer intento?",
+      "¿El contexto cambió mucho el resultado?"
+    ]
+  },
+  "familia": {
+    "nombre": "La receta con todos sus ingredientes",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "En casa, describid un plato con todos sus «ingredientes», como un prompt completo.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "platoDescrito"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«¿Qué quieres exactamente? Empieza por ahí.» · «¿Cómo lo quieres: divertido, serio, con qué estilo?» · «Mira la diferencia: «un cartel» frente a «un cartel divertido para anunciar la feria de ciencias de mi clase, con colores alegres». ¿Qué cambió?»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "prompt_con_tres_ingredientes",
+    "diagnostico_ingrediente_faltante",
+    "reescritura_si_conviene"
+  ],
+  "web": {
+    "tituloPantalla": "La receta del prompt perfecto",
+    "introVael": "Te voy a dar mi receta secreta para hablarle a la IA. Tres ingredientes… ¡y casi nunca falla!",
+    "pasos": [
+      "Piensa QUÉ quieres.",
+      "Añade CÓMO lo quieres (estilo, tono).",
+      "Añade un poco de CONTEXTO (para qué o para quién).",
+      "Crea el resultado y mira si faltó algún ingrediente."
+    ],
+    "cierreVael": "¡Receta lista, chef de prompts! Cuantos más ingredientes buenos, mejor sale. 👨‍🍳"
+  }
+}

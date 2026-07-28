@@ -7,6 +7,8 @@
 import type { UnidadAventuraSchema } from '../schemas/unidad';
 import { storage, syncWithCloud } from './storage-simple';
 import { UnidadService } from './unidad-service';
+import { ChispasService, CHISPAS, nivelInventor } from './chispas-service';
+import { celebrate } from './celebration';
 import { activeChild } from './active-child';
 import { mountHipotesisPruebaRegla } from './unidad-widgets/hipotesis-prueba-regla';
 import { mountEntrenarClasificador } from './unidad-widgets/entrenar-clasificador';
@@ -14,6 +16,8 @@ import { mountConstruirPromptImagen } from './unidad-widgets/construir-prompt-im
 import { mountDetectarInvencion } from './unidad-widgets/detectar-invencion';
 import { mountAfinarPromptDetalles } from './unidad-widgets/afinar-prompt-detalles';
 import { mountVerificarConFuente } from './unidad-widgets/verificar-con-fuente';
+import { mountDosRespuestasVerifica } from './unidad-widgets/dos-respuestas-verifica';
+import { mountVerificacionCruzada } from './unidad-widgets/verificacion-cruzada';
 import { mountCompararVersiones } from './unidad-widgets/comparar-versiones';
 import { mountDecisionConsecuencia } from './unidad-widgets/decision-consecuencia';
 import { mountConstruirHistoria } from './unidad-widgets/construir-historia';
@@ -22,7 +26,7 @@ import { mountConstruirJuego } from './unidad-widgets/construir-juego';
 import { mountMontarLibro } from './unidad-widgets/montar-libro';
 import { mountIdeaParaAyudar } from './unidad-widgets/idea-para-ayudar';
 import { mountPresentarCreacion } from './unidad-widgets/presentar-creacion';
-import { el, iconEmoji, createGatedInput, fireVaelAction } from './unidad-widgets/shared';
+import { el, iconEmoji, createGatedInput, fireVaelAction, RESUMEN_LABELS, formatearValor } from './unidad-widgets/shared';
 import { stopSpeaking } from './speech';
 
 type Screen = 'portada' | 'mision' | 'palabras' | 'investiga' | 'crea' | 'detective' | 'familia' | 'comparte' | 'cierre';
@@ -41,64 +45,51 @@ interface ResumeState {
     savedAt: number;
 }
 
-const RESUMEN_LABELS: Record<string, string> = {
-    reglaFormulada: 'Tu regla',
-    objetosInvestigados: 'Cosas investigadas',
-    motivos: 'Tus motivos',
-    prediccionInicialCorrecta: 'Tu primera predicción',
-    promptFinal: 'Tu hechizo',
-    aciertos: 'Errores cazados',
-    total: 'Frases investigadas',
-    eleccion: 'Tus elecciones',
-    detalleLibre: 'Tu detalle',
-    detallesAnadidos: 'Detalles añadidos',
-    detalleClave: 'El detalle clave',
-    fuenteElegida: 'Fuente consultada',
-    afirmacionEraCorrecta: '¿Era verdad?',
-    conclusion: 'Tu conclusión',
-    versionElegida: 'Versión elegida',
-    razon: 'Tu razón',
-    eligioLaQueCumple: '¿Cumplía el encargo?',
-    combinacion: 'Tu combinación',
-    decisionesSeguras: 'Decisiones seguras',
-    principio: 'Cómo empieza',
-    problema: 'El problema',
-    giro: 'Tu giro',
-    final: 'Cómo termina',
-    edicion: 'Lo que cambiaste',
-    cambioElegido: 'Qué mejoraste',
-    quiereV3: '¿Habrá versión 3?',
-    tema: 'Tema del juego',
-    adivinanzasElegidas: 'Tus adivinanzas',
-    paginas: 'Páginas del libro',
-    destinatario: 'A quién ayuda',
-    necesidad: 'Qué necesita',
-    idea: 'Tu idea',
-    respuestas: 'Tus respuestas',
-    totalCreaciones: 'Creaciones en tu Cuaderno',
-};
-
-function formatearValor(value: any): string {
-    if (Array.isArray(value)) return value.join(', ');
-    if (typeof value === 'boolean') return value ? 'Sí' : 'No';
-    if (value && typeof value === 'object') {
-        return Object.entries(value).map(([k, v]) => `${k}: ${v}`).join(' · ');
-    }
-    return String(value);
-}
-
 export class UnidadEngine {
     private unidad: UnidadAventuraSchema;
     private container: HTMLElement;
     private childId: string;
     private investigaResultado: Record<string, any> | null = null;
     private artifactId: string | null = null;
+    // Chispas ganadas en ESTA pasada (doc 04 §3.1). No se persiste en el
+    // resume state a propósito: el ledger es la fuente de verdad y su
+    // índice único hace que retomar/rejugar no dupliquen recompensas.
+    private chispasGanadas = 0;
+    private insigniaRecienGanada = false;
+
+    private async otorgarChispas(tipo: import('./chispas-service').EventoTipo, refId: string, cantidad: number) {
+        if (!this.childId) return;
+        const { otorgadas } = await ChispasService.logEvent(this.childId, tipo, refId, cantidad);
+        this.chispasGanadas += otorgadas;
+    }
 
     constructor(unidad: UnidadAventuraSchema, containerId: string) {
         this.unidad = unidad;
         this.container = document.getElementById(containerId) as HTMLElement;
         this.childId = activeChild.get() || '';
+        this.setupScrollReset();
         this.init();
+    }
+
+    // Bug de "saltos al responder": no solo las pantallas (renderScreen)
+    // reemplazan su contenido — también los widgets de Investiga re-renderizan
+    // por dentro (elegir tarjeta, revelar pista, siguiente pregunta…). Al
+    // sustituir contenido más corto que el anterior, el navegador recorta la
+    // posición de scroll de forma inconsistente y parece dar saltos. Un único
+    // observador lleva la vista al inicio de la misión ante CUALQUIER
+    // re-render de contenido dentro de la etapa, así el flujo es continuo.
+    private setupScrollReset() {
+        if (typeof MutationObserver === 'undefined') return;
+        const obs = new MutationObserver(mutaciones => {
+            // Solo re-renders de contenido (nodos añadidos), no cambios de
+            // clase (showFeedback) ni las partículas de celebración (que van
+            // a un overlay fuera de la etapa). Se llama directo (no en rAF):
+            // el nodo ya está en el DOM y así funciona aunque la pestaña no
+            // esté componiendo frames. Varias llamadas seguidas son inocuas
+            // (mismo destino).
+            if (mutaciones.some(m => m.addedNodes.length > 0)) this.scrollToTop();
+        });
+        obs.observe(this.container, { childList: true, subtree: true });
     }
 
     private async init() {
@@ -126,9 +117,20 @@ export class UnidadEngine {
         this.container.appendChild(link);
     }
 
+    // Pantallas de progreso reales de ESTA unidad: el programa 10-11 no
+    // define Palabras Poderosas por reto (es una mecánica del 8-9), así que
+    // si la unidad no trae palabras esa pantalla no existe — ni en la barra
+    // ni en la secuencia (ver renderPalabras/renderMision).
+    private progressScreens(): Screen[] {
+        return this.unidad.palabras.length > 0
+            ? PROGRESS_SCREENS
+            : PROGRESS_SCREENS.filter(s => s !== 'palabras');
+    }
+
     private updateProgress(screen: Screen) {
+        const screens = this.progressScreens();
         window.dispatchEvent(new CustomEvent('unidad:step', {
-            detail: { screen, index: PROGRESS_SCREENS.indexOf(screen), total: PROGRESS_SCREENS.length },
+            detail: { screen, index: screens.indexOf(screen), total: screens.length },
         }));
     }
 
@@ -162,7 +164,7 @@ export class UnidadEngine {
             const raw = localStorage.getItem(this.resumeKey());
             if (!raw) return null;
             const parsed = JSON.parse(raw) as ResumeState;
-            if (!PROGRESS_SCREENS.includes(parsed.screen)) return null;
+            if (!this.progressScreens().includes(parsed.screen)) return null;
             // "Crea" sin resultado de investiga no puede reconstruirse: se
             // retoma desde investiga.
             if (parsed.screen === 'crea' && !parsed.investigaResultado) {
@@ -196,6 +198,22 @@ export class UnidadEngine {
             cierre: () => this.renderCierre(),
         };
         map[screen]();
+
+        // Cada pantalla arranca desde su inicio (bug de "saltos"): sin esto,
+        // al pasar de una pantalla larga —donde el niño hizo scroll para
+        // responder— a otra más corta, el navegador recorta la posición de
+        // scroll de forma inconsistente y el contenido parece dar saltos.
+        // Llevar la vista al principio de la misión hace el flujo continuo.
+        this.scrollToTop();
+    }
+
+    private scrollToTop() {
+        if (typeof window === 'undefined') return;
+        // Al inicio de la unidad, no al top absoluto de la página: así el
+        // header sticky no tapa nada y se ve la cabecera de Vael + progreso.
+        const layout = this.container.closest('.ua-layout') as HTMLElement | null;
+        const top = layout ? layout.getBoundingClientRect().top + window.scrollY - 12 : 0;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
     }
 
     private continueButton(label: string, onClick: () => void): HTMLButtonElement {
@@ -241,7 +259,20 @@ export class UnidadEngine {
         fireVaelAction('talk');
         this.container.appendChild(el('p', 'ua-eyebrow', 'La misión'));
         this.container.appendChild(el('p', 'ua-vael-texto', this.unidad.web.introVael));
-        this.container.appendChild(this.continueButton('¡Vamos! →', () => this.renderScreen('palabras')));
+
+        // Morti (12-14): su intervención aparece tras la de Vael, con voz y
+        // color propios (morado, como marca el docx) — es el detonante ético.
+        if (this.unidad.morti) {
+            const bloque = el('div', 'ua-morti');
+            bloque.appendChild(el('span', 'ua-morti-nombre', 'Morti'));
+            bloque.appendChild(el('p', 'ua-morti-texto', this.unidad.morti.texto));
+            this.container.appendChild(bloque);
+        }
+
+        this.container.appendChild(this.continueButton('¡Vamos! →', () => {
+            // Sin palabras que coleccionar (programa 10-11/12-14): directo a investigar.
+            this.renderScreen(this.unidad.palabras.length > 0 ? 'palabras' : 'investiga');
+        }));
     }
 
     private renderPalabras() {
@@ -260,6 +291,7 @@ export class UnidadEngine {
         this.container.appendChild(this.continueButton('Coleccionar palabras →', async () => {
             if (this.childId) {
                 await UnidadService.collectPalabras(this.childId, this.unidad.id, this.unidad.palabras.map(p => p.palabra));
+                await this.otorgarChispas('palabras_coleccionadas', this.unidad.id, this.unidad.palabras.length * CHISPAS.palabras_coleccionadas);
             }
             this.renderScreen('investiga');
         }));
@@ -295,6 +327,12 @@ export class UnidadEngine {
                 break;
             case 'verificar_con_fuente':
                 mountVerificarConFuente(widgetContainer, investiga, onDone);
+                break;
+            case 'dos_respuestas_verifica':
+                mountDosRespuestasVerifica(widgetContainer, investiga, onDone);
+                break;
+            case 'verificacion_cruzada':
+                mountVerificacionCruzada(widgetContainer, investiga, onDone);
                 break;
             case 'comparar_versiones':
                 mountCompararVersiones(widgetContainer, investiga, onDone);
@@ -412,6 +450,8 @@ export class UnidadEngine {
         this.container.appendChild(this.continueButton('Ya lo hicimos ✓', async () => {
             if (this.childId) {
                 await UnidadService.completeFamilyMission(this.childId, this.unidad.familia.nombre, this.unidad.id, detalle || undefined);
+                // El bonus más alto del sistema: co-jugar es lo que más se premia.
+                await this.otorgarChispas('mision_familia', this.unidad.id, CHISPAS.mision_familia);
             }
             this.renderScreen('comparte');
         }));
@@ -429,10 +469,17 @@ export class UnidadEngine {
         this.container.appendChild(this.continueButton(label, async () => {
             if (this.artifactId && this.unidad.comparte.publicaEnGaleria) {
                 await UnidadService.submitToGallery(this.artifactId);
+                await this.otorgarChispas('creacion_publicada', this.unidad.id, CHISPAS.creacion_publicada);
             }
             if (this.childId && this.unidad.comparte.insigniaPosible) {
+                // Señal de "primera vez" para la celebración del cierre:
+                // independiente del ledger de chispas (que puede no estar
+                // migrado aún) — lo que importa es si la insignia es nueva.
+                this.insigniaRecienGanada = !storage.hasBadge(this.unidad.comparte.insigniaPosible.id);
                 await UnidadService.awardBadge(this.childId, this.unidad.comparte.insigniaPosible.id);
+                await this.otorgarChispas('insignia_ganada', this.unidad.comparte.insigniaPosible.id, CHISPAS.insignia_ganada);
             }
+            await this.otorgarChispas('mision_completada', this.unidad.id, CHISPAS.mision_completada);
             // Mismo array completedScenarios/badges que usan mapa.astro, insignias.astro
             // y el Panel Familiar — se reutiliza en vez de crear un sistema paralelo.
             storage.update(s => ({
@@ -450,6 +497,46 @@ export class UnidadEngine {
     private renderCierre() {
         fireVaelAction('celebrate');
         this.container.appendChild(el('p', 'ua-vael-texto ua-cierre-texto', this.unidad.web.cierreVael));
+
+        // Celebración unificada (doc 04 §5): media al completar la misión;
+        // grande si además cayó una insignia o una subida de nivel.
+        const insignia = this.unidad.comparte.insigniaPosible;
+
+        // Recompensa inmediata visible (doc 04 §2): solo si el ledger otorgó
+        // algo de verdad — en un replay (chispas ya ganadas) o sin la
+        // migración 006 pegada, no se enseña nada en vez de mentir.
+        if (this.chispasGanadas > 0) {
+            const box = el('div', 'ua-chispas-box');
+            box.appendChild(el('span', 'ua-chispas-num', `⚡ +${this.chispasGanadas} chispas`));
+            this.container.appendChild(box);
+
+            if (this.childId) {
+                ChispasService.getTotalChispas(this.childId).then(total => {
+                    const nivel = nivelInventor(total);
+                    const linea = el('p', 'ua-chispas-nivel', `${nivel.icono} ${nivel.nombre} · ${total} chispas en total`);
+                    if (nivel.siguiente) {
+                        linea.textContent += ` · a ${nivel.siguiente.faltan} de ${nivel.siguiente.nombre}`;
+                    }
+                    box.appendChild(linea);
+
+                    // ¿Estas chispas cruzaron un umbral de nivel? → grande.
+                    const nivelAntes = nivelInventor(total - this.chispasGanadas);
+                    if (nivelAntes.nombre !== nivel.nombre) {
+                        celebrate('grande', { mensaje: `${nivel.icono} ¡Ahora eres ${nivel.nombre}!` });
+                    }
+                });
+            }
+        }
+
+        if (insignia && this.insigniaRecienGanada) {
+            // Grande solo la primera vez que se gana ESTA insignia — la señal
+            // viene de storage (badges), no del ledger de chispas: funciona
+            // igual aunque la migración 006 no esté aplicada.
+            celebrate('grande', { mensaje: `${insignia.icon} ¡Insignia: ${insignia.name}!` });
+        } else {
+            celebrate('media');
+        }
+
         const link = el('a', 'k-btn k-btn--primary k-btn--lg', 'Volver al Mapa');
         link.setAttribute('href', '/mapa');
         this.container.appendChild(link);

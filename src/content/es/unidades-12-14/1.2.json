@@ -1,0 +1,101 @@
+{
+  "id": "1.2",
+  "nivel": 1,
+  "zona": {
+    "nombre": "Entender",
+    "colorPrimario": "#22d3ee",
+    "colorFondo": "#E0F7FB"
+  },
+  "unidadCurricular": "1.2 · ¿Cómo aprende una máquina?",
+  "titulo": "Datos, patrones y sesgo",
+  "objetivoBloom": "Analizar: comprender que la IA aprende de datos masivos creados por personas y que esos datos pueden contener sesgos que la IA reproduce e incluso amplifica. Analizar un caso sencillo de sesgo y proponer cómo corregirlo.",
+  "competenciaFoco": "pensamiento_critico",
+  "ai4k12": "Aprendizaje · Impacto social.",
+  "duracionMinutos": 40,
+  "producto": "Análisis de un caso de sesgo",
+  "palabras": [],
+  "mision": {
+    "textoVael": "Si la IA aprende de lo que hay en internet… ¿qué pasa con lo injusto que también hay ahí?",
+    "audioUrl": null
+  },
+  "morti": {
+    "texto": "Yo soy pura lógica y datos. ¿De verdad crees que eso me hace justo? Demuéstrame que entiendes de dónde sale el problema."
+  },
+  "investiga": {
+    "tipo": "decision_consecuencia",
+    "escenarios": [
+      {
+        "id": "buscador_cientifico",
+        "situacion": "Un buscador de imágenes: al escribir «científico», casi todas las fotos son de hombres.",
+        "opciones": [
+          { "id": "datos", "label": "El problema está en los datos con los que aprendió", "segura": true, "consecuencia": "Exacto. Si en las fotos que vio había sobre todo hombres etiquetados como «científicos», el buscador copió ese desequilibrio. El sesgo viene de los datos." },
+          { "id": "maldad", "label": "El buscador es machista a propósito", "segura": false, "consecuencia": "Ojo: la máquina no tiene intenciones. No es «maldad»: reproduce el desequilibrio que había en sus datos y en cómo se etiquetaron." },
+          { "id": "azar", "label": "Es pura casualidad", "segura": false, "consecuencia": "No es azar: es un patrón. Si repites la búsqueda, se mantiene — señal de que viene de los datos, no de la suerte." }
+        ]
+      },
+      {
+        "id": "corregir_sesgo",
+        "situacion": "Quieres que ese buscador sea más justo. ¿Qué haría falta?",
+        "opciones": [
+          { "id": "datos_variados", "label": "Datos más variados y revisión humana", "segura": true, "consecuencia": "Eso es. Con ejemplos variados (científicas de muchos tipos) y una revisión humana del resultado, se corrige el sesgo." },
+          { "id": "borrar_todo", "label": "Apagar la IA para siempre", "segura": false, "consecuencia": "Demasiado drástico: el problema no es la herramienta, son los datos. Se arregla mejorándolos, no destruyéndola." },
+          { "id": "nada", "label": "Nada, ya es como debe ser", "segura": false, "consecuencia": "Un resultado sesgado deja fuera a mucha gente. Sí conviene corregirlo — pensar en a quién perjudica es parte del trabajo." }
+        ]
+      }
+    ]
+  },
+  "crea": {
+    "tipo": "analisis_sesgo",
+    "instrucciones": "Ponle título a tu análisis del caso de sesgo. Guardará de dónde venía el sesgo, tu propuesta de corrección y tu mini-conclusión.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿A quién perjudica un sesgo así?",
+      "¿Es «culpa» de la IA, de los datos o de quien la entrenó?"
+    ]
+  },
+  "familia": {
+    "nombre": "Algo injusto que una máquina podría aprender",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Buscad un ejemplo de algo injusto que una máquina podría aprender sin querer.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "ejemploFamiliar"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«La IA aprende de datos hechos por personas, que a veces están desequilibrados o son injustos.» · «¿De dónde venía el sesgo: qué datos faltaban o sobraban?» · «¿Es culpa de la máquina, o de los datos y de quien la entrenó?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "identifica_origen_del_sesgo",
+    "propone_correccion_razonada",
+    "entiende_sesgo_de_datos_y_decisiones"
+  ],
+  "web": {
+    "tituloPantalla": "El sesgo escondido en los datos",
+    "introVael": "La IA aprende de datos hechos por personas. Y las personas, a veces, somos injustas sin querer. Vamos a cazar un sesgo y entender de dónde viene.",
+    "pasos": [
+      "Observa el caso: ¿qué tiene de injusto?",
+      "Descubre de dónde viene el sesgo (qué datos fallaban).",
+      "Propón cómo corregirlo.",
+      "Escribe tu conclusión."
+    ],
+    "cierreVael": "Acabas de entender uno de los mayores retos de la IA. Eso es pensar de verdad. 🔬"
+  }
+}

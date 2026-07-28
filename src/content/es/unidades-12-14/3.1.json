@@ -1,0 +1,111 @@
+{
+  "id": "3.1",
+  "nivel": 3,
+  "zona": {
+    "nombre": "Crear",
+    "colorPrimario": "#e879f9",
+    "colorFondo": "#FBE9FB"
+  },
+  "unidadCurricular": "3.1 · Crea un personaje · Mundo",
+  "titulo": "Crea un mundo (worldbuilding)",
+  "objetivoBloom": "Crear: diseñar un universo coherente (idea central, reglas, personajes, lugares, conflicto) usando la IA como ayudante, manteniendo la coherencia interna y la voz propia.",
+  "competenciaFoco": "autonomia_creativa",
+  "ai4k12": "Interacción natural · Las cinco ideas.",
+  "duracionMinutos": 45,
+  "producto": "«Biblia» de un mundo",
+  "palabras": [],
+  "mision": {
+    "textoVael": "¿Y si construyes un mundo entero, con sus reglas, sus héroes y sus secretos?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "construir_prompt_imagen",
+    "categorias": [
+      {
+        "label": "Idea central del mundo",
+        "opciones": [
+          { "id": "islas_flotantes", "label": "Islas que flotan en el cielo", "valor": "islas" },
+          { "id": "bajo_mar", "label": "Ciudades bajo el mar", "valor": "mar" },
+          { "id": "tras_apagon", "label": "Un mundo tras el gran apagón", "valor": "apagon" }
+        ]
+      },
+      {
+        "label": "Regla que TODOS respetan",
+        "opciones": [
+          { "id": "magia_cuesta", "label": "La magia siempre cuesta algo a cambio", "valor": "magia_precio" },
+          { "id": "nadie_miente", "label": "Nadie puede decir una mentira", "valor": "sin_mentiras" },
+          { "id": "recuerdos_moneda", "label": "Los recuerdos son la moneda", "valor": "recuerdos" }
+        ]
+      },
+      {
+        "label": "Conflicto que da vida al mundo",
+        "opciones": [
+          { "id": "recurso_se_acaba", "label": "El recurso que lo sostiene se está acabando", "valor": "recurso" },
+          { "id": "dos_bandos", "label": "Dos bandos interpretan la regla al revés", "valor": "bandos" },
+          { "id": "secreto_fundacion", "label": "Un secreto de su fundación sale a la luz", "valor": "secreto" }
+        ]
+      }
+    ],
+    "permiteDetalleLibre": true,
+    "comparaCambiandoUna": false
+  },
+  "crea": {
+    "tipo": "biblia_mundo",
+    "instrucciones": "Ponle NOMBRE a tu mundo. Su «biblia» (idea central, reglas, conflicto y tu detalle propio) se guarda en el Cuaderno. Tú eres el arquitecto: corrige lo que la IA proponga si rompe tus reglas.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Hubo algo que la IA propuso que rompía tus reglas? ¿Lo corregiste?",
+      "¿Qué hace único a tu mundo?"
+    ]
+  },
+  "familia": {
+    "nombre": "Presenta tu mundo",
+    "duracionMinutos": 10,
+    "modo": "offline",
+    "instrucciones": "Que el alumno os presente su mundo y sus reglas.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "reaccionFamiliar"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": {
+      "id": "creador-mundos",
+      "name": "Creador de mundos",
+      "icon": "🌍",
+      "description": "Construyó un universo coherente dirigiendo a la IA y guardando su propia visión."
+    },
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Un buen mundo es coherente: sus reglas se respetan y sus personajes encajan.» · «La IA expande, pero TÚ guardas la coherencia y la visión: eres el arquitecto.» · «¿Algo de lo que propuso rompía tus reglas? Corrígelo.»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "mundo_coherente",
+    "corrige_lo_que_rompe_las_reglas",
+    "voz_propia_mantenida"
+  ],
+  "web": {
+    "tituloPantalla": "Construye tu propio mundo",
+    "introVael": "No un dibujo: un universo entero, con sus reglas, sus personajes y sus secretos. Tú eres el arquitecto; la IA, tu equipo.",
+    "pasos": [
+      "Define la idea central y las reglas de tu mundo.",
+      "Crea personajes y lugares que encajen.",
+      "Añade un conflicto que lo haga interesante.",
+      "Revisa que todo sea coherente."
+    ],
+    "cierreVael": "Has creado un mundo coherente de la nada. Eso es autoría de verdad. 🌍"
+  }
+}

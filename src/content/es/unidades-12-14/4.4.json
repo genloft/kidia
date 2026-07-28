@@ -1,0 +1,89 @@
+{
+  "id": "4.4",
+  "nivel": 4,
+  "zona": {
+    "nombre": "Construir",
+    "colorPrimario": "#fbbf24",
+    "colorFondo": "#FBF3E0"
+  },
+  "unidadCurricular": "4.4 · Presenta y comparte",
+  "titulo": "Presenta, defiende y colabora",
+  "objetivoBloom": "Comunicar / Integrar todo: presentar el proyecto como un pitch, defenderlo respondiendo a preguntas con argumentos, y participar en un proyecto colaborativo dando feedback crítico-constructivo.",
+  "competenciaFoco": "comunicacion",
+  "ai4k12": "Impacto social.",
+  "duracionMinutos": 40,
+  "producto": "Pitch + colaboración + feedback",
+  "palabras": [],
+  "dependeDe": ["4.3"],
+  "mision": {
+    "textoVael": "Tu proyecto está listo. Ahora toca defenderlo… y construir con otros.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "presentar_creacion",
+    "preguntasGuia": [
+      "¿Qué problema resuelve tu proyecto y para quién?",
+      "¿Cómo lo hiciste, y qué papel tuvo la IA?",
+      "¿Qué dilema ético tuviste que resolver, y cómo?"
+    ]
+  },
+  "crea": {
+    "tipo": "pitch_final",
+    "instrucciones": "Ponle título a tu pitch. Guardará tu guion (problema, solución, impacto y ética), listo para presentarlo y defenderlo ante preguntas.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Tu feedback ayudó a mejorar o solo juzgó?",
+      "¿Qué te llevas de defender tu propia idea ante preguntas?"
+    ]
+  },
+  "familia": {
+    "nombre": "El pitch en casa",
+    "duracionMinutos": 10,
+    "modo": "offline",
+    "instrucciones": "Que el alumno os haga su pitch y os explique cómo respondió a las preguntas difíciles.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "comoRespondio"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": {
+      "id": "constructor-impacto",
+      "name": "Constructor con impacto",
+      "icon": "🚀",
+      "description": "Completó un proyecto con impacto, superó el dilema ético y lo presentó defendiéndolo con argumentos."
+    },
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Presentar bien es contar el porqué, el cómo y el impacto; defender es responder a las preguntas con argumentos.» · «Colaborar es sumar y dar feedback que ayuda de verdad, no que solo juzga.» · «¿Tu pitch incluye la dimensión ética?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "presenta_con_argumentos_e_impacto",
+    "incluye_la_dimension_etica",
+    "feedback_util_y_respetuoso"
+  ],
+  "web": {
+    "tituloPantalla": "Presenta, defiende y colabora",
+    "introVael": "Tu gran momento: presenta tu proyecto, defiéndelo ante las preguntas y construye con otros dando feedback que ayude de verdad.",
+    "pasos": [
+      "Prepara tu pitch: problema, solución, impacto y ética.",
+      "Preséntalo a la comunidad.",
+      "Defiéndelo respondiendo a las preguntas.",
+      "Colabora y deja feedback crítico-constructivo."
+    ],
+    "cierreVael": "Presentar, defender y colaborar: has completado tu viaje en Kidia. ¡Felicidades, creador con IA! 🏆"
+  }
+}

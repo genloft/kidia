@@ -1,0 +1,116 @@
+{
+  "id": "2.4",
+  "nivel": 2,
+  "zona": {
+    "nombre": "Usar bien",
+    "colorPrimario": "#8b5cf6",
+    "colorFondo": "#EFE9FB"
+  },
+  "unidadCurricular": "2.4 · Límites de la IA (sin sesgos profundos, adaptado 10-11)",
+  "titulo": "La IA inventa (y otros límites)",
+  "objetivoBloom": "Comprender: entender límites clave de la IA en versión 10-11 — a veces inventa cosas que suenan ciertas, no conoce lo más reciente, no tiene opinión propia, y nunca se le dan datos personales.",
+  "competenciaFoco": "criterio",
+  "ai4k12": "Impacto social.",
+  "duracionMinutos": 30,
+  "producto": "Tarjeta «Conozco los límites de la IA»",
+  "palabras": [],
+  "mision": {
+    "textoVael": "¿Sabías que la IA a veces se INVENTA cosas con total seguridad? Hasta libros que no existen.",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "decision_consecuencia",
+    "escenarios": [
+      {
+        "id": "dos_mas_dos",
+        "situacion": "Le preguntas a la IA cuánto es 2+2.",
+        "opciones": [
+          { "id": "sabe_seguro", "label": "Lo sabe seguro", "segura": true, "consecuencia": "¡Eso es! Las matemáticas básicas no cambian ni dependen de noticias: la IA las tiene bien aprendidas." },
+          { "id": "podria_inventar", "label": "Podría inventarlo", "segura": false, "consecuencia": "Aquí no hace falta dudar: 2+2 es un dato fijo que la IA conoce de sobra. Guarda la lupa para los datos raros." },
+          { "id": "dato_personal", "label": "Es un dato personal", "segura": false, "consecuencia": "No hay nada tuyo en esta pregunta: es solo una cuenta matemática." }
+        ]
+      },
+      {
+        "id": "libro_raro",
+        "situacion": "Le pides el resumen de un libro muy raro que casi nadie conoce.",
+        "opciones": [
+          { "id": "sabe_seguro", "label": "Lo sabe seguro", "segura": false, "consecuencia": "¡Cuidado! Con libros muy raros la IA puede inventarse el resumen entero… con total seguridad. Lo llamamos «alucinar»." },
+          { "id": "podria_inventar", "label": "Podría inventarlo", "segura": true, "consecuencia": "¡Exacto! Si el libro es muy raro, la IA puede inventarse personajes y finales que no existen. Aquí toca comprobar." },
+          { "id": "dato_personal", "label": "Es un dato personal", "segura": false, "consecuencia": "Un libro no es un dato tuyo — el peligro aquí es otro: que la IA se lo invente." }
+        ]
+      },
+      {
+        "id": "partido_anoche",
+        "situacion": "Le preguntas quién ganó el partido de anoche.",
+        "opciones": [
+          { "id": "sabe_seguro", "label": "Lo sabe seguro", "segura": false, "consecuencia": "La IA no conoce lo más reciente: lo de anoche puede no estar en lo que aprendió. Puede responder… inventando." },
+          { "id": "podria_inventar", "label": "Podría inventarlo", "segura": true, "consecuencia": "¡Muy bien! La IA no conoce lo de hoy ni lo de anoche. Para lo reciente, mejor una fuente actualizada." },
+          { "id": "dato_personal", "label": "Es un dato personal", "segura": false, "consecuencia": "El resultado de un partido no es un dato tuyo — el problema es que la IA no conoce lo más reciente." }
+        ]
+      },
+      {
+        "id": "tu_direccion",
+        "situacion": "La IA te pregunta tu dirección para «ayudarte mejor».",
+        "opciones": [
+          { "id": "sabe_seguro", "label": "Lo sabe seguro", "segura": false, "consecuencia": "¡Alto ahí! Tu dirección es un dato personal: NUNCA se comparte con una IA, da igual lo que prometa." },
+          { "id": "podria_inventar", "label": "Podría inventarlo", "segura": false, "consecuencia": "El problema no es que lo invente: es que tu dirección es un dato personal y NUNCA se comparte." },
+          { "id": "dato_personal", "label": "Es un dato personal — no se comparte", "segura": true, "consecuencia": "¡Perfecto! Los datos personales (dirección, teléfono, cole…) no se comparten con una IA. Jamás." }
+        ]
+      }
+    ]
+  },
+  "crea": {
+    "tipo": "tarjeta_limites",
+    "instrucciones": "Ponle nombre a tu tarjeta «Conozco los límites de la IA». Guardará las tres situaciones que ya sabes distinguir y tu regla para los datos personales.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Cuándo conviene comprobar lo que dice la IA?",
+      "¿Por qué nunca le damos datos personales?"
+    ]
+  },
+  "familia": {
+    "nombre": "Qué comprobamos y qué no se comparte",
+    "duracionMinutos": 5,
+    "modo": "offline",
+    "instrucciones": "Acordad en casa qué cosas conviene comprobar siempre y qué datos no se comparten.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "acuerdoFamiliar"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": false,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«La IA a veces «inventa» (lo llamamos alucinar): da respuestas falsas que parecen verdad.» · «¿Cómo comprobarías ese dato dudoso?» · «Recuerda: los datos personales NO se comparten. Nunca.»",
+  "andamiaje": "medio",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "distingue_las_tres_situaciones",
+    "propone_como_comprobar",
+    "regla_datos_personales_interiorizada"
+  ],
+  "web": {
+    "tituloPantalla": "Los superpoderes (y los fallos) de la IA",
+    "introVael": "La IA es genial, pero no es perfecta: a veces se inventa cosas con mucha seguridad. Vamos a conocer sus límites para usarla mejor.",
+    "pasos": [
+      "Mira cada tarjeta.",
+      "Decide: ¿la IA lo sabe seguro, podría inventarlo, o es un dato personal?",
+      "Coloca cada una en su sitio y explica por qué.",
+      "Recuerda: los datos personales NO se comparten."
+    ],
+    "cierreVael": "¡Ya conoces los límites de la IA! Por eso la usas con cabeza. 🧩"
+  }
+}

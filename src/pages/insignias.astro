@@ -2,10 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import BadgeGrid from '../components/BadgeGrid.astro';
-import { ProgressService } from '../lib/progress-service';
 
-// We can get static data here, but user progress is client-side in our current architecture
-// (unless we used cookies/session for SSR, but we used localStorage for simplicity).
+// El progreso vive en el cliente (localStorage por hijo/a activo): el
+// script de abajo importa ProgressService; aquí en SSR no hace falta.
 ---
 
 <Layout title="Kidia - Colección de Insignias" description="Consulta las insignias que has desbloqueado completando retos de IA en Kidia y descubre cuáles te faltan por conseguir.">
@@ -42,7 +41,7 @@ import { ProgressService } from '../lib/progress-service';
         const state = ProgressService.getState();
         const earnedCount = state.badges.length;
 
-        document.getElementById('total-badges').innerText = totalReachable ? `${earnedCount} / ${totalReachable}` : `${earnedCount}`;
+        (document.getElementById('total-badges') as HTMLElement).innerText = totalReachable ? `${earnedCount} / ${totalReachable}` : `${earnedCount}`;
 
         // Rangos en proporción a las insignias que este hijo/a puede llegar a ganar
         const ranks = totalReachable > 0
@@ -56,12 +55,13 @@ import { ProgressService } from '../lib/progress-service';
             : [{ limit: 0, title: 'Novato' }];
 
         const currentRank = [...ranks].reverse().find(r => earnedCount >= r.limit) || ranks[0];
-        document.getElementById('global-rank').innerText = currentRank.title;
-        document.getElementById('global-rank').style.color = 'var(--color-primary)';
+        const rankEl = document.getElementById('global-rank') as HTMLElement;
+        rankEl.innerText = currentRank.title;
+        rankEl.style.color = 'var(--color-primary)';
     }
 
     window.addEventListener('badges:tramo-ready', (e) => {
-        totalReachable = e.detail?.total || 0;
+        totalReachable = (e as CustomEvent<{ total: number }>).detail?.total || 0;
         updateStats();
     });
 

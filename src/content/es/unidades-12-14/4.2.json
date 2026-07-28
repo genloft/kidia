@@ -1,0 +1,86 @@
+{
+  "id": "4.2",
+  "nivel": 4,
+  "zona": {
+    "nombre": "Construir",
+    "colorPrimario": "#fbbf24",
+    "colorFondo": "#FBF3E0"
+  },
+  "unidadCurricular": "4.2 · Proyecto: libro o podcast",
+  "titulo": "Entregable publicado: podcast, libro o campaña",
+  "objetivoBloom": "Crear: producir un entregable completo y publicable (serie de podcast, libro ilustrado o campaña de concienciación) de varias sesiones, decidiendo contenido y forma y dirigiéndolo hasta el final.",
+  "competenciaFoco": "autonomia_creativa",
+  "ai4k12": "Las cinco ideas · Impacto social.",
+  "duracionMinutos": 45,
+  "producto": "Entregable publicado",
+  "palabras": [],
+  "dependeDe": ["4.1"],
+  "mision": {
+    "textoVael": "Algo tuyo, terminado y publicado de verdad. ¿Qué quieres que el mundo escuche o lea?",
+    "audioUrl": null
+  },
+  "investiga": {
+    "tipo": "montar_libro",
+    "estructuraSugerida": [
+      "Título y gancho: por qué importa",
+      "Parte 1: presenta el tema",
+      "Parte 2: profundiza con un ejemplo",
+      "Parte 3: la idea que quieres dejar",
+      "Cierre y llamada a la acción"
+    ]
+  },
+  "crea": {
+    "tipo": "entregable_publicado",
+    "instrucciones": "Ponle título a tu entregable (podcast, libro o campaña). Guardará tu plan por partes, listo para producir y publicar. Diríjelo tú de principio a fin.",
+    "guardaEnCuaderno": true
+  },
+  "detective": {
+    "preguntas": [
+      "¿Tu mensaje llega claro a quien lo recibe?",
+      "¿Qué aprendiste produciéndolo de principio a fin?"
+    ]
+  },
+  "familia": {
+    "nombre": "El entregable terminado",
+    "duracionMinutos": 10,
+    "modo": "offline",
+    "instrucciones": "Disfrutad juntos del entregable terminado y comentadlo.",
+    "capturaEnApp": {
+      "tipo": "texto_corto",
+      "campo": "comentarioFamiliar"
+    }
+  },
+  "comparte": {
+    "publicaEnGaleria": true,
+    "insigniaPosible": null,
+    "palabrasAlMuro": false
+  },
+  "guionVael": "«Un entregable publicado tiene un plan: qué dices, en qué orden y para quién.» · «La IA ayuda a producirlo; tú lo diriges de principio a fin.» · «¿Tu mensaje llega claro a quien lo recibe?»",
+  "andamiaje": "bajo",
+  "accesibilidad": {
+    "audioEnTodo": true,
+    "entradaPorVoz": true,
+    "sinLimiteTiempo": true
+  },
+  "seguridad": {
+    "bancoObjetosCerrado": true,
+    "vozFiltrada": true,
+    "sinDatosPersonales": true
+  },
+  "senales": [
+    "entregable_coherente_completo",
+    "dirigido_de_principio_a_fin",
+    "mensaje_claro"
+  ],
+  "web": {
+    "tituloPantalla": "Publica algo tuyo de verdad",
+    "introVael": "Un podcast, un libro o una campaña: algo terminado y publicado. ¿Qué quieres que el mundo escuche o lea?",
+    "pasos": [
+      "Elige formato y tema.",
+      "Planifica las partes.",
+      "Prodúcelo con la IA.",
+      "Revísalo y publícalo."
+    ],
+    "cierreVael": "Has llevado un proyecto hasta el final y lo has publicado. ¡Enorme! 🎙️"
+  }
+}
