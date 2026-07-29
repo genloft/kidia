@@ -3,6 +3,8 @@
     import type { Piece, SlotCategory } from "../types";
     import Tooltip from "./ui/Tooltip.svelte";
     import { t } from "../stores/i18n";
+    import { tramo } from "../stores/tramo";
+    import { pieceName } from "../utils/pieceText";
 
     export let slotName: SlotCategory;
     export let pData: Piece | undefined;
@@ -44,6 +46,7 @@
     </div>
     <div
         id="slot-{slotName}"
+        data-slot={slotName}
         class="slot {pData ? 'filled' : 'empty'} {isTargeted
             ? 'highlight-drop'
             : ''}"
@@ -53,20 +56,22 @@
         on:drop={(e) => dispatch("drop", { e, slotName })}
         on:keydown={(e) => dispatch("keydown", { e, slotName })}
         on:click={() => dispatch("click")}
-        aria-label="Slot {slotName}. {pData
-            ? `Contiene ${$t.pieces?.[pData.id]?.name || pData.name}. Click para quitar.`
-            : `Vacío. Arrastra o haz click con pieza seleccionada.`}"
+        aria-label="Hueco {slotTitle}. {pData
+            ? `Contiene ${pieceName(pData, $tramo, $t)}. Toca para quitarla.`
+            : isTargeted
+              ? 'Vacío. Toca aquí para colocar la pieza elegida.'
+              : 'Vacío. Elige antes una pieza.'}"
     >
         {#if pData}
-            <span class="p-name"
-                >{$t.pieces?.[pData.id]?.name || pData.name}</span
-            >
+            <span class="p-name">{pieceName(pData, $tramo, $t)}</span>
             <button
                 class="p-remove"
                 on:click|stopPropagation={() => dispatch("remove")}
-                aria-label="Quitar {$t.pieces?.[pData.id]?.name || pData.name}"
+                aria-label="Quitar {pieceName(pData, $tramo, $t)}"
                 >✕</button
             >
+        {:else if isTargeted}
+            <span class="drop-here">👇 Toca aquí</span>
         {:else}
             <span class="placeholder">+ {slotTitle}</span>
         {/if}
@@ -125,10 +130,32 @@
         background: var(--bg-main);
     }
 
+    /* Con una pieza elegida, los huecos libres se anuncian como destino:
+       es la señal que hace descubrible el modo tocar-para-colocar. */
     .slot.highlight-drop {
         border-color: var(--slot-color);
         background: var(--bg-main);
         box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+    }
+    .slot.empty.highlight-drop {
+        animation: awaitDrop 1.4s ease infinite;
+    }
+    @keyframes awaitDrop {
+        0%,
+        100% {
+            box-shadow: 0 0 0 0 var(--slot-color);
+        }
+        50% {
+            box-shadow: 0 0 14px 3px var(--slot-color);
+        }
+    }
+
+    .drop-here {
+        color: var(--slot-color);
+        font-size: 0.9rem;
+        font-weight: 800;
+        text-align: center;
+        line-height: 1.2;
     }
 
     .slot.filled {
@@ -202,6 +229,28 @@
         100% {
             transform: scale(1);
             box-shadow: 0 0 0 rgba(192, 132, 252, 0);
+        }
+    }
+
+    /* En móvil los huecos crecen: 100px es poco para el dedo y deja el
+       nombre de la pieza apretado. */
+    @media (max-width: 640px) {
+        .slot-wrapper {
+            max-width: none;
+        }
+        .slot {
+            height: 84px;
+        }
+    }
+
+    /* El sistema de diseño (03 §5) exige respetar reduced-motion. */
+    @media (prefers-reduced-motion: reduce) {
+        .slot.empty.highlight-drop {
+            animation: none;
+            box-shadow: 0 0 0 3px var(--slot-color);
+        }
+        .shake-anim .slot.filled {
+            animation: none;
         }
     }
 </style>

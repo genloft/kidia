@@ -63,6 +63,12 @@ body {
 		radial-gradient(circle at 50% 50%, rgba(146, 151, 254, 0.03) 0%, transparent 60%);
 	color: var(--text-main);
 	min-height: 100vh;
+	/* global.css pone `overflow-x: hidden` en html y body. En <body> eso hace
+	   que el eje vertical compute a `auto`: el body pasa a ser contenedor de
+	   scroll y la barra de acción `sticky` del tablero se ancla a él (tan alto
+	   como el contenido) en vez de al viewport, así que nunca se pega. El
+	   recorte horizontal lo sigue haciendo <html>. */
+	overflow-x: visible;
 }
 
 h1,

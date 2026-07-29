@@ -150,6 +150,29 @@ const panelesLegacy = await Promise.all((['10-11', '12-14'] as const).map(async 
           </ol>
         </section>
       ))}
+
+      <!-- Capstone: el Constructor cierra el viaje (doc 07, Fase C1). -->
+      <section class="zona zona--capstone" style="--zona-accent: var(--k-zona-4)">
+        <header class="zona-head">
+          <span class="zona-num" aria-hidden="true">🤖</span>
+          <div class="zona-head-text">
+            <h2>Constructor de IA</h2>
+            <span class="zona-count k-pill">Reto final</span>
+          </div>
+        </header>
+        <ol class="zona-path">
+          <li>
+            <a class="capstone-card" href="/constructor" data-capstone>
+              <span class="mision-num" aria-hidden="true">🤖</span>
+              <span class="mision-body">
+                <h3>Construye tu propia IA</h3>
+                <p>Monta una IA pieza a pieza y entrénala. Aquí se ganan las insignias de constructor.</p>
+              </span>
+              <span class="k-pill mision-pill" data-capstone-pill>…</span>
+            </a>
+          </li>
+        </ol>
+      </section>
     </div>
 
     <!-- ==== Paneles tramos 10-11 y 12-14 (migración incremental + legacy) ==== -->
@@ -205,6 +228,29 @@ const panelesLegacy = await Promise.all((['10-11', '12-14'] as const).map(async 
             </ol>
           </section>
         ))}
+
+        <!-- Capstone: el Constructor cierra el viaje (doc 07, Fase C1). -->
+        <section class="zona zona--capstone" style="--zona-accent: var(--k-zona-4)">
+          <header class="zona-head">
+            <span class="zona-num" aria-hidden="true">🤖</span>
+            <div class="zona-head-text">
+              <h2>Constructor de IA</h2>
+              <span class="zona-count k-pill">Reto final</span>
+            </div>
+          </header>
+          <ol class="zona-path">
+            <li>
+              <a class="capstone-card" href="/constructor" data-capstone>
+                <span class="mision-num" aria-hidden="true">🤖</span>
+                <span class="mision-body">
+                  <h3>Construye tu propia IA</h3>
+                  <p>Monta una IA pieza a pieza y entrénala. Aquí se ganan las insignias de constructor.</p>
+                </span>
+                <span class="k-pill mision-pill" data-capstone-pill>…</span>
+              </a>
+            </li>
+          </ol>
+        </section>
       </div>
     ))}
   </main>
@@ -220,8 +266,15 @@ const panelesLegacy = await Promise.all((['10-11', '12-14'] as const).map(async 
 
   type PillVariant = 'success' | 'warning' | 'locked' | 'accent' | '';
 
+  const CONSTRUCTOR_BADGES = [
+    'constructor-arquitecto',
+    'constructor-entrenador',
+    'constructor-seguro',
+    'constructor-ia-completa',
+  ];
+
   function setPill(card: Element, text: string, variant: PillVariant) {
-    const pill = card.querySelector('[data-pill]');
+    const pill = card.querySelector('[data-pill], [data-capstone-pill]');
     if (!pill) return;
     pill.textContent = text;
     pill.className = `k-pill mision-pill${variant ? ` k-pill--${variant}` : ''}`;
@@ -318,6 +371,22 @@ const panelesLegacy = await Promise.all((['10-11', '12-14'] as const).map(async 
     });
 
     // Contador por zona ("3 de 5") y zona completa.
+    // Capstone del Constructor: no es una misión del currículo, así que no
+    // entra en el conteo de zonas ni en el "te toca". Su estado sale de las
+    // insignias de constructor ya ganadas.
+    const capstone = panel.querySelector<HTMLAnchorElement>('[data-capstone]');
+    if (capstone) {
+      const ganadas = CONSTRUCTOR_BADGES.filter(id => state.badges.includes(id)).length;
+      if (state.badges.includes('constructor-ia-completa')) {
+        capstone.classList.add('completada');
+        setPill(capstone, 'IA construida ✓', 'success');
+      } else if (ganadas > 0) {
+        setPill(capstone, `${ganadas}/${CONSTRUCTOR_BADGES.length} insignias`, 'accent');
+      } else {
+        setPill(capstone, 'Reto final', 'accent');
+      }
+    }
+
     panel.querySelectorAll<HTMLElement>('.zona').forEach(zona => {
       const zonaCards = zona.querySelectorAll('.mision-card');
       const done = zona.querySelectorAll('.mision-card.completada').length;
@@ -606,6 +675,39 @@ const panelesLegacy = await Promise.all((['10-11', '12-14'] as const).map(async 
     transform: none;
     box-shadow: none;
     border-color: var(--k-border-subtle);
+  }
+
+  /* Capstone del Constructor: misma anatomía que una misión pero se lee
+     como el reto final del viaje, no como una parada más. */
+  .capstone-card {
+    display: flex;
+    align-items: center;
+    gap: var(--k-space-4);
+    padding: var(--k-space-4);
+    border-radius: var(--k-radius-lg, 20px);
+    border: 2px dashed var(--zona-accent);
+    background: var(--k-bg-surface);
+    color: inherit;
+    text-decoration: none;
+    transition: transform var(--k-motion-fast) var(--k-ease-out),
+      border-color var(--k-motion-fast) var(--k-ease-out);
+  }
+  a.capstone-card:hover {
+    transform: translateY(-2px);
+    border-style: solid;
+  }
+  .capstone-card.completada {
+    border-style: solid;
+    border-color: var(--k-green-400);
+  }
+  .capstone-card .mision-num {
+    font-size: 1.6rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    a.capstone-card:hover {
+      transform: none;
+    }
   }
 
   .mision-card--especial {

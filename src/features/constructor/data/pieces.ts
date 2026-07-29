@@ -4,6 +4,9 @@ export const PIECES: Piece[] = [
     // --- ETAPA 1: Fundamentos Básicos ---
     {
         id: 'p_data_raw',
+        tramos: ['8-9', '10-11', '12-14'],
+        nameByTramo: { '8-9': 'Un montón de fotos y números' },
+        tooltipByTramo: { '8-9': 'Fotos, sonidos y números tal cual, sin ordenar todavía.' },
         name: 'Datos Crudos (Sensores)',
         stage: 1,
         category: 'Datos',
@@ -14,28 +17,38 @@ export const PIECES: Piece[] = [
     },
     {
         id: 'p_labels',
+        tramos: ['10-11', '12-14'],
         name: 'Etiquetas Básicas',
         stage: 1,
         category: 'Entrenamiento',
         recommendedSlot: 'Entrenamiento',
-        prerequisites: ['p_data_raw'],
+        // Sin prerrequisito a propósito: exigía `p_data_raw` en concreto, así
+        // que elegir la pieza MEJOR del hueco Datos (Limpieza) dejaba las
+        // Etiquetas incolocables… y `canTrain` las exige con el modelo simple.
+        // Elegir bien bloqueaba la partida. Que el hueco Datos esté lleno ya
+        // lo comprueba canTrain.
         effects: { accuracy: 15, complexity: 5 },
         tooltip: 'Humanos diciendo: "Esto es un gato", "Esto es un perro".',
         curiousFact: 'Las primeras IAs necesitaron que millones de personas etiquetaran fotos manualmente por internet.'
     },
     {
         id: 'p_cleaning',
+        tramos: ['8-9', '10-11', '12-14'],
+        nameByTramo: { '8-9': 'Ordenar y limpiar' },
+        tooltipByTramo: { '8-9': 'Quitas lo que está roto, borroso o repetido. Así se aprende mejor.' },
         name: 'Limpieza de Datos',
         stage: 1,
         category: 'Datos',
         recommendedSlot: 'Datos',
-        prerequisites: ['p_data_raw'],
         effects: { accuracy: 20, performance: 10, complexity: 8 },
         tooltip: 'Quita basura, imágenes borrosas y números equivocados.',
         curiousFact: 'El 80% del trabajo real de un programador de IA es simplemente limpiar datos feos.'
     },
     {
         id: 'p_model_linear',
+        tramos: ['8-9', '10-11', '12-14'],
+        nameByTramo: { '8-9': 'Cerebro que adivina' },
+        tooltipByTramo: { '8-9': 'Un cerebro sencillo que aprende a adivinar mirando ejemplos.' },
         name: 'Modelo Simple (Regresión)',
         stage: 1,
         category: 'Cerebro',
@@ -46,6 +59,7 @@ export const PIECES: Piece[] = [
     },
     {
         id: 'p_metric_basic',
+        tramos: ['10-11', '12-14'],
         name: 'Métrica de Error',
         stage: 1,
         category: 'Examen',
@@ -56,6 +70,9 @@ export const PIECES: Piece[] = [
     },
     {
         id: 'p_output_text',
+        tramos: ['8-9', '10-11', '12-14'],
+        nameByTramo: { '8-9': 'Responder sí o no' },
+        tooltipByTramo: { '8-9': 'La IA contesta con algo muy cortito: sí o no.' },
         name: 'Salida de Texto Simple',
         stage: 1,
         category: 'Salida',
@@ -68,6 +85,9 @@ export const PIECES: Piece[] = [
     // --- ETAPA 2: El Cerebro Crece ---
     {
         id: 'p_dataset_small',
+        tramos: ['8-9', '10-11', '12-14'],
+        nameByTramo: { '8-9': 'Unos pocos ejemplos' },
+        tooltipByTramo: { '8-9': 'Mil ejemplos bien ordenados. Suficiente para empezar.' },
         name: 'Dataset Pequeño',
         stage: 2,
         category: 'Datos',
@@ -78,6 +98,9 @@ export const PIECES: Piece[] = [
     },
     {
         id: 'p_dataset_large',
+        tramos: ['8-9', '10-11', '12-14'],
+        nameByTramo: { '8-9': 'Muchísimos ejemplos' },
+        tooltipByTramo: { '8-9': 'Millones de ejemplos. Aprende mucho más, pero va más lenta.' },
         name: 'Gran Dataset (Millones)',
         stage: 2,
         category: 'Datos',
@@ -88,6 +111,9 @@ export const PIECES: Piece[] = [
     },
     {
         id: 'p_layers',
+        tramos: ['8-9', '10-11', '12-14'],
+        nameByTramo: { '8-9': 'Cerebro con más capas' },
+        tooltipByTramo: { '8-9': 'Le añades capas por dentro para que entienda cosas más difíciles.' },
         name: 'Capas Ocultas',
         stage: 2,
         category: 'Cerebro',
@@ -98,6 +124,7 @@ export const PIECES: Piece[] = [
     },
     {
         id: 'p_regularization',
+        tramos: ['10-11', '12-14'],
         name: 'Regularización (Dropout)',
         stage: 2,
         category: 'Entrenamiento',
@@ -108,6 +135,7 @@ export const PIECES: Piece[] = [
     },
     {
         id: 'p_traintest_split',
+        tramos: ['10-11', '12-14'],
         name: 'Train / Test Split',
         stage: 2,
         category: 'Examen',
@@ -118,6 +146,9 @@ export const PIECES: Piece[] = [
     },
     {
         id: 'p_output_vision',
+        tramos: ['8-9', '10-11', '12-14'],
+        nameByTramo: { '8-9': 'El que dice qué es' },
+        tooltipByTramo: { '8-9': 'La pieza que dice: "esto es un gato".' },
         name: 'Clasificador Visual',
         stage: 2,
         category: 'Salida',
@@ -130,6 +161,7 @@ export const PIECES: Piece[] = [
     // --- ETAPA 3: La Era Generativa (Magia Negra Inteligente) ---
     {
         id: 'p_tokenizer',
+        tramos: ['10-11', '12-14'],
         name: 'Tokenizador',
         stage: 3,
         category: 'Datos',
@@ -144,13 +176,13 @@ export const PIECES: Piece[] = [
         stage: 3,
         category: 'Datos',
         recommendedSlot: 'Datos',
-        prerequisites: ['p_tokenizer'],
         effects: { accuracy: 20, performance: -25, complexity: 20 },
         tooltip: 'Es como la memoria a corto plazo de la IA. Si es muy grande se acordará de todo tu chat.',
         curiousFact: 'Leer libros enteros de golpe requiere memorias que cuestan miles y miles de dólares.'
     },
     {
         id: 'p_model_transformer',
+        tramos: ['10-11', '12-14'],
         name: 'Modelo Transformer',
         stage: 3,
         category: 'Cerebro',
@@ -162,6 +194,7 @@ export const PIECES: Piece[] = [
     },
     {
         id: 'p_temperature',
+        tramos: ['10-11', '12-14'],
         name: 'Temperatura',
         stage: 3,
         category: 'Entrenamiento',
@@ -176,7 +209,6 @@ export const PIECES: Piece[] = [
         stage: 3,
         category: 'Datos',
         recommendedSlot: 'Datos',
-        prerequisites: ['p_tokenizer'],
         effects: { accuracy: 15, performance: -10, complexity: 15 },
         tooltip: 'Añade capacidad de buscar en una biblioteca enorme antes de responder.',
         curiousFact: 'Convierte documentos enteros en un montón de puntos matemáticos.'
@@ -187,13 +219,13 @@ export const PIECES: Piece[] = [
         stage: 3,
         category: 'Cerebro',
         recommendedSlot: 'Cerebro',
-        prerequisites: ['p_model_transformer'],
         effects: { accuracy: 5, complexity: 5 },
         tooltip: 'Convierte números raros en porcentajes del 0 al 100 de qué token va luego.',
         curiousFact: 'La red calcula esto para literalmente TODO su diccionario por cada palabra de salida.'
     },
     {
         id: 'p_output_chat',
+        tramos: ['10-11', '12-14'],
         name: 'Interfaz de Chat (Streaming)',
         stage: 3,
         category: 'Salida',
@@ -207,6 +239,10 @@ export const PIECES: Piece[] = [
     // --- ETAPA 4: Feedback (Alineamiento) ---
     {
         id: 'p_multimodal_in',
+        tramos: ['8-9', '10-11', '12-14'],
+        stageByTramo: { '8-9': 3 },
+        nameByTramo: { '8-9': 'Ojos y oídos' },
+        tooltipByTramo: { '8-9': '¡Ahora la IA puede ver fotos y escuchar lo que dices!' },
         name: 'Ojos y Oídos',
         stage: 4,
         category: 'Datos',
@@ -217,6 +253,7 @@ export const PIECES: Piece[] = [
     },
     {
         id: 'p_rlhf',
+        tramos: ['10-11', '12-14'],
         name: 'Premios de Entrenadores',
         stage: 4,
         category: 'Entrenamiento',
@@ -228,6 +265,10 @@ export const PIECES: Piece[] = [
     },
     {
         id: 'p_guardrails',
+        tramos: ['8-9', '10-11', '12-14'],
+        stageByTramo: { '8-9': 3 },
+        nameByTramo: { '8-9': 'Escudo protector' },
+        tooltipByTramo: { '8-9': 'Un escudo que para las cosas feas o peligrosas antes de que las leas.' },
         name: 'Escudo Protector',
         stage: 4,
         category: 'Salida',
@@ -238,6 +279,7 @@ export const PIECES: Piece[] = [
     },
     {
         id: 'p_human_eval',
+        tramos: ['10-11', '12-14'],
         name: 'Jueces Expertos',
         stage: 4,
         category: 'Examen',
@@ -248,6 +290,7 @@ export const PIECES: Piece[] = [
     },
     {
         id: 'p_fine_tuning',
+        tramos: ['10-11', '12-14'],
         name: 'Clases Particulares',
         stage: 4,
         category: 'Entrenamiento',
@@ -275,7 +318,6 @@ export const PIECES: Piece[] = [
         stage: 5,
         category: 'Cerebro',
         recommendedSlot: 'Cerebro',
-        prerequisites: ['p_model_transformer'],
         effects: { accuracy: 35, performance: -15, complexity: 7 },
         tooltip: 'No es un cerebro, ¡son 8 minicerebros trabajando juntos! El jefe decide a quién preguntarle según la pregunta.',
         curiousFact: 'Así funcionan los modelos rápidos y potentes; para matemáticas despiertan a un minicerebro, para poemas a otro.'
@@ -326,7 +368,6 @@ export const PIECES: Piece[] = [
         stage: 5,
         category: 'Examen',
         recommendedSlot: 'Examen',
-        prerequisites: ['p_human_feedback'],
         effects: { accuracy: 35, complexity: 40 },
         tooltip: 'Otra IA mil veces más inteligente que tú vigila a la IA principal asegurando que siga tus órdenes.',
         curiousFact: 'Ilya Sutskever dedicó el 20% de los ordenadores de OpenAI persiguiendo este sueño.'
@@ -337,7 +378,7 @@ export const PIECES: Piece[] = [
         stage: 5,
         category: 'Entrenamiento',
         recommendedSlot: 'Entrenamiento',
-        prerequisites: ['p_compute_cluster'],
+        prerequisites: ['p_exascale'],
         effects: { accuracy: 100, complexity: 100 },
         tooltip: 'El código se optimiza a sí mismo en bucle sin intervención humana. (Hipotético).',
         curiousFact: 'El punto de no retorno matemático conocido como la Explosión de Inteligencia.'

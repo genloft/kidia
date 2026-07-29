@@ -2,7 +2,6 @@
 import type { GameState } from '../types';
 import { INITIAL_METRICS, getUnlockedPieces } from './rules';
 
-const STORAGE_KEY = 'kidia-state-v1';
 const CURRENT_VERSION = 1;
 
 export const DEFAULT_STATE: GameState = {

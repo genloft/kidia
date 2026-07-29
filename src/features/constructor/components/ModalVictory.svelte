@@ -1,7 +1,36 @@
 <script lang="ts">
-    import { showVictoryModal, game } from "../stores/game";
+    import { showVictoryModal, game, gameMetrics } from "../stores/game";
     import { t } from "../stores/i18n";
+    import { tramo } from "../stores/tramo";
+    import { getTextosTramo } from "../logic/tramo-config";
+    import { registrarIACompletada } from "../logic/progression";
     import { fade, scale } from "svelte/transition";
+
+    // El cierre lo escribe el tramo: a los 8 años no se ha desatado ninguna
+    // singularidad, se ha construido una primera IA.
+    $: textos = getTextosTramo($tramo);
+    $: cuerpo = (textos?.victoriaCuerpo || $t.game?.victoryBody || "").split(
+        "\n\n",
+    );
+
+    // La IA construida se guarda en el Cuaderno de Inventos con el nombre que
+    // le ponga el niño: es SU creación, igual que los artefactos de las unidades.
+    let nombreIA = "";
+    let guardando = false;
+    let guardada = false;
+
+    async function guardarEnCuaderno() {
+        if (guardando || guardada) return;
+        guardando = true;
+        const res = await registrarIACompletada(
+            $tramo,
+            $game,
+            $gameMetrics,
+            nombreIA,
+        );
+        guardada = res.guardada;
+        guardando = false;
+    }
 
     function restartGame() {
         showVictoryModal.set(false);
@@ -31,15 +60,48 @@
             transition:scale={{ start: 0.8, duration: 600, opacity: 0 }}
         >
             <img class="cosmic-avatar" src="/dravael-dance.webp" alt="Kidia" />
-            <h2>{$t.game?.victoryTitle || "¡Victoria!"}</h2>
+            <h2>{textos?.victoriaTitulo ||
+                $t.game?.victoryTitle ||
+                "¡Victoria!"}</h2>
             <div class="text-body">
                 <p>
-                    {($t.game?.victoryBody || "").split("\n\n")[0]}
+                    {cuerpo[0]}
                 </p>
                 <p class="highlight">
-                    {($t.game?.victoryBody || "").split("\n\n")[1]}
+                    {cuerpo[1]}
                 </p>
             </div>
+            {#if guardada}
+                <p class="guardada">
+                    ✅ Guardada en tu <a href="/cuaderno">Cuaderno de Inventos</a>
+                </p>
+            {:else}
+                <div class="guardar-zona">
+                    <label class="guardar-label" for="nombre-ia">
+                        Ponle nombre a tu IA y guárdala en tu Cuaderno
+                    </label>
+                    <div class="guardar-fila">
+                        <input
+                            id="nombre-ia"
+                            class="guardar-input"
+                            type="text"
+                            maxlength="40"
+                            bind:value={nombreIA}
+                            placeholder="Mi IA increíble"
+                            on:keydown={(e) =>
+                                e.key === "Enter" && guardarEnCuaderno()}
+                        />
+                        <button
+                            class="btn-guardar"
+                            on:click={guardarEnCuaderno}
+                            disabled={guardando}
+                        >
+                            {guardando ? "Guardando…" : "Guardar"}
+                        </button>
+                    </div>
+                </div>
+            {/if}
+
             <button class="btn-restart" on:click={restartGame}>
                 {$t.game?.playAgain || "Volver a jugar"}
             </button>
@@ -127,6 +189,63 @@
         color: var(--color-1);
         font-size: 1.3rem;
         margin-top: 1.5rem;
+    }
+
+    .guardar-zona {
+        width: 100%;
+        margin: 0.25rem 0 1rem;
+        text-align: left;
+    }
+    .guardar-label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        margin-bottom: 0.4rem;
+    }
+    .guardar-fila {
+        display: flex;
+        gap: 0.5rem;
+    }
+    .guardar-input {
+        flex: 1;
+        min-width: 0;
+        padding: 0.7rem 0.9rem;
+        min-height: 48px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border-stone);
+        background: var(--bg-main);
+        color: var(--text-main);
+        font-family: var(--font-body);
+        font-size: 1rem;
+    }
+    .guardar-input:focus {
+        outline: none;
+        border-color: var(--primary);
+    }
+    .btn-guardar {
+        flex-shrink: 0;
+        padding: 0.7rem 1.1rem;
+        min-height: 48px;
+        border: none;
+        border-radius: var(--radius-sm);
+        background: var(--primary);
+        color: var(--bg-deep);
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+    }
+    .btn-guardar:disabled {
+        opacity: 0.6;
+        cursor: default;
+    }
+    .guardada {
+        margin: 0 0 1rem;
+        font-weight: 700;
+        color: var(--color-4);
+    }
+    .guardada a {
+        color: inherit;
     }
 
     .btn-restart {

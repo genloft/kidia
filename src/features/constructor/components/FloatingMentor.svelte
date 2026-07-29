@@ -1,17 +1,12 @@
 <script lang="ts">
-    import { game, stageProgress } from "../stores/game";
+    import { game, stageProgress, boardSlots } from "../stores/game";
     import TooltipText from "./ui/TooltipText.svelte";
     import type { LogEvent, SlotCategory } from "../types";
     import { PIECES } from "../data/pieces";
     import { t } from "../stores/i18n";
 
-    const SLOTS: SlotCategory[] = [
-        "Datos",
-        "Cerebro",
-        "Entrenamiento",
-        "Examen",
-        "Salida",
-    ];
+    // Los huecos dependen del tramo: en 8-9 el tablero solo tiene tres.
+    $: SLOTS = $boardSlots as SlotCategory[];
 
     $: recentLogs = [...$game.logs].reverse().slice(0, 6);
 
@@ -19,7 +14,7 @@
     $: activeHint = (() => {
         if ($game.isTraining) {
             return {
-                message: "⏳ " + $t.trainModel + "...",
+                message: "⏳ Entrenando… vamos a ver qué sale.",
                 type: "info" as const,
             };
         }
@@ -28,11 +23,11 @@
         if (!unmet) {
             if ($game.currentStage < 5)
                 return {
-                    message: $t.readyToTrain,
+                    message: "¡Lo tienes! Dale a Entrenar y vemos qué tal va.",
                     type: "success" as const,
                 };
             return {
-                message: "🤖 " + $t.singularity + " (Estable)",
+                message: "Tu modelo está al límite. Pruébalo y hablamos.",
                 type: "error" as const,
             };
         }
@@ -47,16 +42,27 @@
             )
         ) {
             return {
-                message: `👉 ${$t.unmetObjective}: ${$t[`slot${emptySlot}`]}`,
+                message: `Te falta algo en ${$t[`slot${emptySlot}`]}. ¿Qué le pondrías?`,
                 type: "warn" as const,
             };
         }
 
         return {
-            message: `💡 ${unmet.description}`,
+            message: `Siguiente reto: ${unmet.description.toLowerCase()}.`,
             type: "warn" as const,
         };
     })();
+
+    // La Dra. Vael cambia de gesto según cómo va la cosa: es la misma guía
+    // que acompaña en las misiones, no un asistente anónimo.
+    $: avatarVael =
+        $game.isTraining
+            ? "/dravael-work.webp"
+            : activeHint.type === "success"
+              ? "/dravael-ok.webp"
+              : activeHint.type === "error"
+                ? "/dravael-no.webp"
+                : "/dravael-doubt.webp";
 
     function getTypeColor(type: LogEvent["type"]): string {
         switch (type) {
@@ -122,11 +128,11 @@
     <button
         class="mentor-toggle"
         on:click={toggleMentor}
-        aria-label="Toggle Mentor"
+        aria-label="Abrir o cerrar los consejos de la Dra. Vael"
         aria-expanded={expanded}
     >
         <div class="avatar-icon">
-            <img src="/dravael-doubt.webp" alt="Kidia" class="avatar-img" />
+            <img src={avatarVael} alt="Dra. Vael" class="avatar-img" />
             {#if !expanded && activeHint.type !== "info"}
                 <span
                     class="notification-dot"
@@ -139,7 +145,7 @@
     {#if expanded}
         <div class="mentor-content">
             <div class="feed-header">
-                <h4>{$t.mentorTitle}</h4>
+                <h4>Dra. Vael</h4>
                 <button
                     class="close-btn"
                     on:click={() => {

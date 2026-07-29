@@ -1,6 +1,8 @@
 <script lang="ts">
-    import { game } from "../stores/game";
+    import { game, showVictoryModal } from "../stores/game";
     import { t } from "../stores/i18n";
+    import { tramo } from "../stores/tramo";
+    import { getTextosTramo } from "../logic/tramo-config";
     import { fade, scale } from "svelte/transition";
 
     // Show only if stage > 1, no tutorial is showing, not won yet, not ack'd yet.
@@ -8,11 +10,18 @@
         $game.currentStage > 1 &&
         !$game.stageIntroAck &&
         !$game.hasWonGame &&
+        // Sin esto, al ganar en la última etapa la intro se queda apilada
+        // debajo del modal de victoria y se ven dos diálogos a la vez.
+        !$showVictoryModal &&
         $game.hasSeenWelcomeModal;
 
     // Get the corresponding Title and Description for the current stage.
     // The translations for stages are found inside `tut` as `stgXTitle` and `stgXMsg`
-    $: currentTitle =
+    // 8-9 y 10-11 tienen sus propios textos de etapa; 12-14 usa los de i18n.
+    $: textosTramo = getTextosTramo($tramo);
+    $: propio = textosTramo?.etapas?.[$game.currentStage];
+
+    $: currentTitle = propio ? propio.titulo :
         $game.currentStage === 2
             ? $t.tut?.stg2Title
             : $game.currentStage === 3
@@ -23,7 +32,7 @@
                   ? $t.tut?.stg5Title
                   : "Siguiente Etapa";
 
-    $: currentMsg =
+    $: currentMsg = propio ? propio.mensaje :
         $game.currentStage === 2
             ? $t.tut?.stg2Msg
             : $game.currentStage === 3

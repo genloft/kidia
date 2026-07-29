@@ -1,5 +1,6 @@
 ---
 import { loadScenarios, loadUnidadesAventura } from '../lib/scenario-loader';
+import { INSIGNIAS_CONSTRUCTOR } from '../features/constructor/logic/progression';
 
 // Catálogo unificado de insignias (doc 04 §3.5, "Insignias v2"): hay dos
 // sistemas de contenido independientes que otorgan al MISMO array
@@ -29,13 +30,15 @@ interface BadgeCatalogEntry {
 const scenarios = await loadScenarios('es');
 const unidades89 = await loadUnidadesAventura('8-9');
 const unidades1011 = await loadUnidadesAventura('10-11');
+const unidades1214 = await loadUnidadesAventura('12-14');
 
 const migradasPorTramo = new Map<string, Set<string>>([
     ['8-9', new Set(unidades89.map(u => u.id))],
     ['10-11', new Set(unidades1011.map(u => u.id))],
+    ['12-14', new Set(unidades1214.map(u => u.id))],
 ]);
 const insigniasAventura = new Set(
-    [...unidades89, ...unidades1011]
+    [...unidades89, ...unidades1011, ...unidades1214]
         .map(u => u.comparte.insigniaPosible?.id)
         .filter((id): id is string => Boolean(id))
 );
@@ -94,11 +97,41 @@ const aventuraEntries1011: BadgeCatalogEntry[] = unidades1011
         earnHint: `Completa la misión "${u.titulo}"`,
     }));
 
+// El tramo 12-14 sigue el mismo patrón que 10-11 (insignia ligada al reto).
+// Sin esto sus 4 insignias se ganaban y persistían pero no salían aquí, el
+// mismo fallo que este componente ya arregló para 8-9.
+const aventuraEntries1214: BadgeCatalogEntry[] = unidades1214
+    .filter(u => u.comparte.insigniaPosible)
+    .map(u => ({
+        id: u.comparte.insigniaPosible!.id,
+        name: u.comparte.insigniaPosible!.name,
+        icon: u.comparte.insigniaPosible!.icon,
+        description: u.comparte.insigniaPosible!.description,
+        nivel: u.nivel,
+        tramo: '12-14',
+        origenLabel: `Misión ${u.id}`,
+        earnHint: `Completa la misión "${u.titulo}"`,
+    }));
+
+// Insignias del Constructor (doc 07, Fase C1): son del Nivel 4 "Construir",
+// que es donde el Constructor vive como capstone del viaje.
+const constructorEntries: BadgeCatalogEntry[] = INSIGNIAS_CONSTRUCTOR.map(b => ({
+    id: b.id,
+    name: b.name,
+    icon: b.icon,
+    description: b.description,
+    nivel: 4,
+    tramo: 'todos',
+    origenLabel: 'Constructor de IA',
+    earnHint: b.earnHint,
+}));
+
 // Dedupe por id de insignia: cuando un reto legacy ya está migrado a
 // unidad-aventura, su insignia aparece en ambos catálogos (mismo id, p. ej.
 // cazaerrores-2) — gana la entrada de la unidad migrada, que es la vigente.
 const badgeCatalogMap = new Map<string, BadgeCatalogEntry>();
-[...legacyEntries, ...aventuraEntries89, ...aventuraEntries1011].forEach(b => badgeCatalogMap.set(b.id, b));
+[...legacyEntries, ...aventuraEntries89, ...aventuraEntries1011, ...aventuraEntries1214, ...constructorEntries]
+    .forEach(b => badgeCatalogMap.set(b.id, b));
 const badgeCatalog = [...badgeCatalogMap.values()];
 const niveles = [...new Set(badgeCatalog.map(b => b.nivel))].sort((a, b) => a - b);
 ---

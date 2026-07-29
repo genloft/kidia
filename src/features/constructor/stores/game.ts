@@ -2,8 +2,19 @@ import { writable, derived, get } from 'svelte/store';
 import type { GameState, SlotCategory, StageId, Piece } from '../types';
 import { loadState, saveState, clearState } from '../logic/storage';
 import * as rules from '../logic/rules';
+import { getTramoConfig } from '../logic/tramo-config';
 import { PIECES } from '../data/pieces';
 import { t } from './i18n';
+import { tramo } from './tramo';
+import { pieceName } from '../utils/pieceText';
+import { registrarEtapaCompletada, sincronizarInsignias, otorgarInsigniaEtica } from '../logic/progression';
+import { construirResultado, type ResultadoEntrenamiento } from '../logic/diagnostics';
+import { interlocutorPara } from '../logic/etica';
+
+// Progresión (Fase C1): entrenamientos con éxito e insignias ya otorgadas en
+// esta sesión, para no repetir la concesión ni la celebración.
+let entrenamientosConExito = 0;
+const insigniasOtorgadas = new Set<string>();
 
 const DEFAULT_STATE: GameState = {
     version: 1,
@@ -21,11 +32,24 @@ const DEFAULT_STATE: GameState = {
 export const showSingularityModal = writable(false);
 export const showWelcomeModal = writable(false);
 export const showVictoryModal = writable(false);
+// Resultado del último entrenamiento: qué cambió y qué le pasa al modelo
+// (Fase C2). null = no hay nada que mostrar.
+export const trainResult = writable<ResultadoEntrenamiento | null>(null);
+// Momento ético previo a la victoria (Fase C3): en 12-14 pregunta Morti, en
+// 10-11 la Dra. Vael. En 8-9 no se abre nunca.
+export const showEticaModal = writable(false);
 export const pieceFeedback = writable<{ piece: Piece | null; slot: SlotCategory | null; visible: boolean }>({ piece: null, slot: null, visible: false });
 
 function createGameStore() {
     // Initialize from storage or default
     const state = writable<GameState>(typeof window !== 'undefined' ? loadState() : DEFAULT_STATE);
+
+    // El tramo se resuelve de forma asíncrona (hay que leer el hijo/a activo).
+    // Cuando llega, el catálogo de piezas disponibles cambia y hay que
+    // recalcularlo para la etapa en curso.
+    tramo.subscribe(tr => {
+        state.update(s => ({ ...s, unlockedPieces: rules.getUnlockedPieces(s.currentStage, tr) }));
+    });
 
     // Persist changes with debounce to avoid excessive writes
     let saveTimeout: ReturnType<typeof setTimeout>;
@@ -40,7 +64,7 @@ function createGameStore() {
     const logEvent = (message: string, type: 'info' | 'success' | 'warn' | 'error' = 'info') => {
         state.update(s => {
             const newLog = {
-                id: Math.random().toString(36).substr(2, 9),
+                id: Math.random().toString(36).substring(2, 11),
                 timestamp: Date.now(),
                 message,
                 type
@@ -68,7 +92,7 @@ function createGameStore() {
             state.update(s => {
                 const reqs = rules.validateRequirements(piece, s.placements);
                 if (!reqs.valid) {
-                    logToDispatch = { msg: `${_t.game?.cantUse || "No se puede usar"} "${_t.pieces?.[piece.name]?.name || piece.name}": ${reqs.reason}`, type: 'warn' };
+                    logToDispatch = { msg: `${_t.game?.cantUse || "No se puede usar"} "${pieceName(piece, get(tramo), _t)}": ${reqs.reason}`, type: 'warn' };
                     return s;
                 }
 
@@ -88,7 +112,7 @@ function createGameStore() {
                     if (piece.effects.complexity) effectsText.push(`${_t.difficulty || 'Complejidad'} ${piece.effects.complexity > 0 ? '+' : ''}${piece.effects.complexity}`);
                 }
                 const effectStr = effectsText.length > 0 ? ` [${_t.tut?.impact || 'Impacto'}: ${effectsText.join(', ')}]` : '';
-                logToDispatch = { msg: `${_t.game?.installedLog || "Instalaste"} ${_t.pieces?.[piece.id]?.name || piece.name}. ${_t.pieces?.[piece.id]?.tooltip || piece.tooltip}${effectStr}`, type: 'info' };
+                logToDispatch = { msg: `${_t.game?.installedLog || "Instalaste"} ${pieceName(piece, get(tramo), _t)}. ${_t.pieces?.[piece.id]?.tooltip || piece.tooltip}${effectStr}`, type: 'info' };
 
                 return s;
             });
@@ -106,7 +130,7 @@ function createGameStore() {
 
         removePiece: (slot: SlotCategory) => {
             const _t = get(t);
-            let pName = slot;
+            let pName: string = slot;
             let shouldLog = false;
 
             state.update(s => {
@@ -114,7 +138,7 @@ function createGameStore() {
                 if (pId) {
                     const p = PIECES.find(x => x.id === pId);
                     if (p) {
-                        pName = _t.pieces?.[p.id]?.name || p.name || slot;
+                        pName = pieceName(p, get(tramo), _t) || slot;
                         shouldLog = true;
                     }
                 }
@@ -132,8 +156,9 @@ function createGameStore() {
             let trainReason = '';
             const _t = get(t);
 
+            const tr = get(tramo);
             state.update(s => {
-                const { can, reason } = rules.canTrain(s.placements);
+                const { can, reason } = rules.canTrain(s.placements, tr);
                 canTrain = can;
                 trainReason = reason || '';
 
@@ -145,6 +170,16 @@ function createGameStore() {
 
             if (!canTrain) {
                 logEvent(`${_t.game?.trainError || "Error al iniciar:"} ${trainReason}`, 'error');
+                // Desde que se puede pulsar Entrenar siempre (Fase C2), el
+                // rechazo tiene que verse en pantalla y no solo en el log.
+                trainResult.set({
+                    bloqueo: trainReason,
+                    metricas: rules.calculateMetrics(get(state).placements),
+                    delta: null,
+                    diagnosticos: [],
+                    veredicto: 'Todavía no se puede entrenar.',
+                    mejoro: 'igual'
+                });
                 return;
             }
 
@@ -156,10 +191,14 @@ function createGameStore() {
                 let warningMessage = '';
                 let infoMessage = '';
                 let newStageMessage = '';
+                let etapaSuperada: StageId | null = null;
+                let haGanado = false;
+                let resultado: ResultadoEntrenamiento | null = null;
                 const _tAsync = get(t);
 
                 state.update(s => {
                     const metrics = rules.calculateMetrics(s.placements);
+                    resultado = construirResultado(s, metrics, s.lastTrainedMetrics, tr);
 
                     if (s.placements.Examen === 'p_metric_basic' && s.placements.Entrenamiento) {
                         evaluationNote = ` ${_tAsync.game?.evalMeanErr || "Evaluados: Error Medio."}`;
@@ -169,9 +208,12 @@ function createGameStore() {
                     }
                     successMessage = `${_tAsync.game?.trainDone || "Entrenamiento concluido."}${evaluationNote}`;
 
-                    const check = rules.checkStageCompletion(s.currentStage, s, metrics);
+                    const maxStage = getTramoConfig(tr).maxStage;
+                    const check = rules.checkStageCompletion(s.currentStage, s, metrics, tr);
                     if (check) {
-                        if (s.currentStage < 5) {
+                        etapaSuperada = s.currentStage;
+                        entrenamientosConExito++;
+                        if (s.currentStage < maxStage) {
                             const nextStage = s.currentStage + 1 as StageId;
                             newStageMessage = `${_tAsync.game?.advancedStage || "¡Avanzaste a la Etapa"} ${nextStage}!`;
 
@@ -186,28 +228,38 @@ function createGameStore() {
                                 isTraining: false,
                                 hasSeenSingularityModal: hasSeen,
                                 currentStage: nextStage,
-                                unlockedPieces: rules.getUnlockedPieces(nextStage),
-                                stageIntroAck: false
+                                unlockedPieces: rules.getUnlockedPieces(nextStage, tr),
+                                stageIntroAck: false,
+                                lastTrainedMetrics: metrics
                             };
                         } else {
                             // Won the game!
-                            showVictoryModal.set(true);
+                            haGanado = true;
+                            // Antes de celebrar, la pregunta incómoda sobre lo
+                            // que se acaba de construir. 8-9 va directo a la fiesta.
+                            if (interlocutorPara(tr)) showEticaModal.set(true);
+                            else showVictoryModal.set(true);
                             successMessage = _tAsync.game?.victoryTitle || "¡Victoria!";
                             return {
                                 ...s,
                                 isTraining: false,
-                                hasWonGame: true
+                                hasWonGame: true,
+                                lastTrainedMetrics: metrics,
+                                // Da por vista la intro de la última etapa: si no,
+                                // se queda abierta debajo del modal de victoria y
+                                // el niño ve dos diálogos apilados.
+                                stageIntroAck: true
                             };
                         }
                     } else {
-                        const objs = rules.STAGE_OBJECTIVES[s.currentStage] || [];
+                        const objs = rules.getObjectives(s.currentStage, tr);
                         const missing = objs.filter(o => !o.isMet(s, metrics));
                         if (missing.length > 0) {
                             warningMessage = `${_tAsync.game?.trainAborted || "Entrenamiento abortado. Objetivo faltante:"} ${_tAsync.objectives?.[missing[0].id] || missing[0].description}`;
                         } else {
                             infoMessage = `${_tAsync.game?.metricsStable || 'Métricas estables.'} (Acc: ${metrics.accuracy} | Perf: ${metrics.performance})`;
                         }
-                        return { ...s, isTraining: false };
+                        return { ...s, isTraining: false, lastTrainedMetrics: metrics };
                     }
                 });
 
@@ -216,16 +268,30 @@ function createGameStore() {
                 if (newStageMessage) logEvent(newStageMessage, 'success');
                 if (warningMessage) logEvent(warningMessage, 'warn');
                 if (infoMessage) logEvent(infoMessage, 'success');
+
+                // El antes/después se muestra siempre menos al ganar, donde
+                // el modal de victoria es el protagonista.
+                if (resultado && !haGanado) trainResult.set(resultado);
+
+                // Progresión (Fase C1): chispas por etapa e insignias. Al ganar
+                // no se celebra la etapa, porque el modal de victoria ya lo hace.
+                if (etapaSuperada !== null && !haGanado) {
+                    registrarEtapaCompletada(tr, etapaSuperada);
+                }
+                if (etapaSuperada !== null) {
+                    sincronizarInsignias(get(state), tr, entrenamientosConExito, insigniasOtorgadas);
+                }
             }, 800);
         },
 
         advanceStage: (newStage: StageId) => {
             const _t = get(t);
+            const tr = get(tramo);
             state.update(s => {
                 return {
                     ...s,
                     currentStage: newStage,
-                    unlockedPieces: rules.getUnlockedPieces(newStage),
+                    unlockedPieces: rules.getUnlockedPieces(newStage, tr),
                     stageIntroAck: false
                 };
             });
@@ -235,7 +301,10 @@ function createGameStore() {
         reset: () => {
             const _t = get(t);
             clearState();
-            state.set({ ...DEFAULT_STATE, isTraining: false, unlockedPieces: rules.getUnlockedPieces(1) });
+            // Las insignias ya ganadas NO se quitan (están en el perfil), pero
+            // el contador de la sesión vuelve a cero al empezar de nuevo.
+            entrenamientosConExito = 0;
+            state.set({ ...DEFAULT_STATE, isTraining: false, unlockedPieces: rules.getUnlockedPieces(1, get(tramo)) });
             logEvent(_t.game?.simReset || 'Simulación reseteada al origen.', 'warn');
         },
 
@@ -257,11 +326,8 @@ function createGameStore() {
             if (typeof window !== 'undefined') {
                 const isReturning = sessionStorage.getItem('kidia-active-session');
                 if (isReturning) {
+                    // Al recargar no repetimos el modal de bienvenida ni interrumpimos con avisos.
                     state.update(st => ({ ...st, hasSeenWelcomeModal: true, stageIntroAck: true }));
-                    const _t = get(t);
-                    logEvent(_t.game?.simReset || 'Partida reseteada automáticamente al recargar la página.', 'warn');
-                    // Use a browser alert for guaranteed visibility since modal was requested
-                    setTimeout(() => alert(_t.game?.simReset || 'Partida reseteada automáticamente al recargar la página.'), 500);
                 } else {
                     sessionStorage.setItem('kidia-active-session', 'true');
                     if (!s.hasSeenWelcomeModal) {
@@ -275,16 +341,32 @@ function createGameStore() {
 
 export const game = createGameStore();
 
+/**
+ * Cierra el momento ético y da paso a la victoria. Si el niño asumió la
+ * responsabilidad en vez de esquivarla, se lleva además la insignia.
+ */
+export function cerrarEtica(responsable: boolean): void {
+    showEticaModal.set(false);
+    if (responsable) otorgarInsigniaEtica();
+    showVictoryModal.set(true);
+}
+
 // Derived store to calculate metrics reactively avoiding side-effects everywhere
 export const gameMetrics = derived(game, ($game) => {
     return rules.calculateMetrics($game.placements);
 });
 
-export const stageProgress = derived([game, gameMetrics], ([$game, $metrics]) => {
-    const currentObjectives = rules.STAGE_OBJECTIVES[$game.currentStage] || [];
+export const stageProgress = derived([game, gameMetrics, tramo], ([$game, $metrics, $tramo]) => {
+    const currentObjectives = rules.getObjectives($game.currentStage, $tramo);
     return currentObjectives.map(obj => ({
         id: obj.id,
         description: obj.description,
         met: obj.isMet($game, $metrics)
     }));
 });
+
+/** Huecos del tablero según el tramo (8-9 juega con 3, no con 5). */
+export const boardSlots = derived(tramo, $tramo => getTramoConfig($tramo).slots);
+
+/** Última etapa del viaje en este tramo. */
+export const maxStage = derived(tramo, $tramo => getTramoConfig($tramo).maxStage);

@@ -1,3 +1,5 @@
+import type { TramoId } from '../../lib/tramos';
+
 export type StageId = 1 | 2 | 3 | 4 | 5;
 
 // Analogías infantiles de los Slots
@@ -19,6 +21,18 @@ export interface Piece {
     effects: Partial<Metrics>; // Metrics to add when placed/trained
     tooltip: string;
     curiousFact: string;
+
+    // --- Adaptación por tramo de edad (ver logic/tramo-config.ts) ---
+    // Tramos en los que la pieza aparece. Si falta, la pieza es solo de 12-14
+    // (el catálogo original se escribió con ese vocabulario).
+    tramos?: TramoId[];
+    // Algunas piezas entran antes o después según el tramo: el viaje de 8-9
+    // tiene 3 etapas y el de 12-14 cinco, así que la misma pieza puede caer
+    // en etapas distintas.
+    stageByTramo?: Partial<Record<TramoId, StageId>>;
+    // Vocabulario adaptado: "Capas Ocultas" no significa nada a los 8 años.
+    nameByTramo?: Partial<Record<TramoId, string>>;
+    tooltipByTramo?: Partial<Record<TramoId, string>>;
 }
 
 export interface Placement {
@@ -38,6 +52,9 @@ export interface GameState {
     hasSeenWelcomeModal?: boolean;
     hasWonGame?: boolean;
     stageIntroAck?: boolean;
+    // Métricas del entrenamiento anterior, para poder contar qué cambió
+    // desde entonces (Fase C2: el antes/después es lo que enseña a mejorar).
+    lastTrainedMetrics?: Metrics;
     baseMetrics: Metrics;
     logs: LogEvent[];
 }

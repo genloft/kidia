@@ -1,5 +1,11 @@
 <script lang="ts">
-    import { game, gameMetrics, stageProgress } from "../stores/game";
+    import {
+        game,
+        gameMetrics,
+        stageProgress,
+        boardSlots,
+        maxStage,
+    } from "../stores/game";
     import type { SlotCategory, Piece } from "../types";
     import { PIECES } from "../data/pieces";
     import CircularProgress from "./ui/CircularProgress.svelte";
@@ -9,14 +15,8 @@
     import { showSingularityModal } from "../stores/game";
     import { t } from "../stores/i18n";
     import SlotItem from "./SlotItem.svelte";
+    import TrainResult from "./TrainResult.svelte";
 
-    const SLOTS: SlotCategory[] = [
-        "Datos",
-        "Cerebro",
-        "Entrenamiento",
-        "Examen",
-        "Salida",
-    ];
     import { getSlotColor, getSlotEmoji } from "../utils/slotUtils";
 
     function handleDrop(e: DragEvent, slotName: SlotCategory) {
@@ -101,12 +101,15 @@
         </div>
     </div>
 
+    <!-- Resultado del último entrenamiento: qué cambió y qué le pasa (C2). -->
+    <TrainResult />
+
     <!-- Pipeline -->
     <div class="pipeline-area">
         <div class="pipeline-line {$game.isTraining ? 'flowing' : ''}"></div>
 
         <div class="slots-container stg-{$game.currentStage}">
-            {#each SLOTS as slotName, i}
+            {#each $boardSlots as slotName, i}
                 {@const pData = getPieceDisplay($game.placements[slotName])}
                 {@const isTargeted = !!$game.selectedPieceId}
                 {@const slotColor = getSlotColor(slotName)}
@@ -137,6 +140,20 @@
 
     <!-- Bottom Action Section -->
     <div class="board-action-bar">
+        <!-- Métricas compactas: en móvil las del cabecero quedan fuera de
+             pantalla y se pierde la relación entre colocar y su efecto. -->
+        <div class="metrics-compact" aria-hidden="true">
+            <span class="mc-item" style="--mc: var(--color-4)"
+                >{$t.accuracy}<b>{$gameMetrics.accuracy}</b></span
+            >
+            <span class="mc-item" style="--mc: var(--color-1)"
+                >{$t.speed}<b>{$gameMetrics.performance}</b></span
+            >
+            <span class="mc-item" style="--mc: var(--color-5)"
+                >{$t.difficulty}<b>{$gameMetrics.complexity}</b></span
+            >
+        </div>
+
         <div class="objectives">
             <h4>{$t.objectivesTitle} {$game.currentStage}</h4>
             <ul class="checklist">
@@ -157,12 +174,14 @@
             <button class="btn-reset" on:click={() => showResetModal.set(true)}>
                 {$t.reset}
             </button>
+            <!-- Entrenar siempre que el modelo sea válido: probar, leer el
+                 diagnóstico y ajustar ES el aprendizaje (Fase C2). Los
+                 objetivos deciden si además se AVANZA de etapa, no si se
+                 puede entrenar. -->
             <button
                 id="btn-train"
-                class="btn-train {allObjectivesMet && $game.currentStage < 5
-                    ? 'ready-pulse'
-                    : ''}"
-                disabled={!allObjectivesMet && $game.currentStage < 5}
+                class="btn-train {allObjectivesMet ? 'ready-pulse' : ''}"
+                disabled={!!$game.isTraining}
                 on:click={() => game.train()}
             >
                 {$t.trainModel}
@@ -460,6 +479,35 @@
         background: rgba(239, 68, 68, 0.15);
     }
 
+    /* Métricas compactas: solo en pantallas donde el cabecero se va de vista. */
+    .metrics-compact {
+        display: none;
+        gap: 0.4rem;
+        width: 100%;
+    }
+    .mc-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.1rem;
+        font-size: 0.62rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 700;
+        color: var(--text-muted);
+        background: var(--bg-panel);
+        border: 1px solid var(--border-stone);
+        border-top: 3px solid var(--mc);
+        border-radius: var(--radius-sm);
+        padding: 0.3rem 0.2rem;
+    }
+    .mc-item b {
+        font-size: 1rem;
+        color: var(--mc);
+    }
+
+    /* ---- Tablet ---- */
     @media (max-width: 1024px) {
         .board-action-bar {
             flex-direction: column;
@@ -470,6 +518,91 @@
         }
         .slots-container {
             flex-wrap: wrap;
+        }
+    }
+
+    /* ---- Táctil / móvil: el bucle debe caber en una pantalla ----
+       Antes, "Entrenar" quedaba a ~1.500px del inicio: colocar una pieza y
+       ver su efecto ocupaba dos pantallas de scroll y se perdía la relación
+       causa-efecto, que es lo que el juego enseña. */
+    @media (max-width: 900px) {
+        .board {
+            overflow: visible; /* necesario para que sticky se ancle al viewport */
+        }
+        .board-action-bar {
+            position: sticky;
+            bottom: 0;
+            z-index: 20;
+            gap: 0.6rem;
+            padding: 0.6rem 0.9rem calc(0.6rem + env(safe-area-inset-bottom));
+            box-shadow: 0 -6px 16px -6px rgba(0, 0, 0, 0.7);
+        }
+        .metrics-compact {
+            display: flex;
+        }
+        /* Los objetivos ocupaban mucho junto a la acción principal. */
+        .objectives h4 {
+            margin-bottom: 0.25rem;
+        }
+        .obj-text {
+            max-width: 100%;
+            white-space: normal;
+        }
+        .checklist {
+            gap: 0.3rem;
+        }
+        .checklist li {
+            font-size: 0.78rem;
+            padding: 0.25rem 0.45rem;
+        }
+        .action-buttons {
+            gap: 0.6rem;
+        }
+        .btn-reset,
+        .btn-train {
+            padding: 0.7rem 1rem;
+            min-height: 48px; /* objetivo táctil cómodo */
+        }
+        .btn-reset {
+            flex: 0 0 auto;
+        }
+        .btn-train {
+            flex: 1;
+        }
+        .pipeline-area {
+            padding: 1rem 0.75rem;
+        }
+        .board-header {
+            padding: 0.7rem 0.9rem;
+        }
+    }
+
+    /* ---- Teléfono ---- */
+    @media (max-width: 640px) {
+        .slots-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+        .pipeline-line {
+            display: none; /* la tubería horizontal no aplica en rejilla */
+        }
+        .board-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.6rem;
+        }
+        .metrics {
+            justify-content: space-around;
+            gap: 0.5rem;
+            padding: 0.4rem 0.5rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .btn-train.ready-pulse,
+        .pipeline-line.flowing {
+            animation: none;
         }
     }
 </style>

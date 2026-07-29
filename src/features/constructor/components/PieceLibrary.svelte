@@ -1,5 +1,11 @@
 <script lang="ts">
-    import { game } from "../stores/game";
+    import { game, boardSlots } from "../stores/game";
+    import { tramo } from "../stores/tramo";
+    import {
+        pieceName,
+        pieceTooltip,
+        pieceCuriousFact,
+    } from "../utils/pieceText";
     import { PIECES } from "../data/pieces";
     import type { Piece, SlotCategory } from "../types";
     import TooltipText from "./ui/TooltipText.svelte";
@@ -7,13 +13,8 @@
     import { getSlotColor, getSlotEmoji } from "../utils/slotUtils";
 
     let selectedCategory: SlotCategory | "Todas" = "Todas";
-    const categories: SlotCategory[] = [
-        "Datos",
-        "Cerebro",
-        "Entrenamiento",
-        "Examen",
-        "Salida",
-    ];
+    // Solo las categorías que existen en el tablero de este tramo.
+    $: categories = $boardSlots;
 
     let expandedPiece: string | null = null;
 
@@ -92,9 +93,11 @@
                 }}
                 role="button"
                 aria-pressed={$game.selectedPieceId === piece.id}
-                aria-label="{piece.name}, {piece.category}. {isPlaced
+                aria-label="{pieceName(piece, $tramo, $t)}, {piece.category}. {isPlaced
                     ? 'Ya colocada.'
-                    : 'Selecciónala y arrástrala.'}"
+                    : $game.selectedPieceId === piece.id
+                      ? 'Elegida. Ahora toca un hueco del tablero.'
+                      : 'Toca para elegirla.'}"
             >
                 <div class="p-header">
                     <span class="badge"
@@ -109,20 +112,22 @@
                         <span class="stage-tag">T{piece.stage}</span>
                     </div>
                 </div>
-                <h4>{$t.pieces[piece.id]?.name || piece.name}</h4>
+                <h4>{pieceName(piece, $tramo, $t)}</h4>
+
+                {#if $game.selectedPieceId === piece.id && !isPlaced}
+                    <p class="pick-hint">👇 Ahora toca un hueco del tablero</p>
+                {/if}
 
                 {#if isExpanded}
                     <div class="expanded-info">
                         <p class="tooltip">
                             <TooltipText
-                                text={$t.pieces[piece.id]?.tooltip ||
-                                    piece.tooltip}
+                                text={pieceTooltip(piece, $tramo, $t)}
                             />
                         </p>
                         <p class="curious">
                             💡 <TooltipText
-                                text={$t.pieces[piece.id]?.curiousFact ||
-                                    piece.curiousFact}
+                                text={pieceCuriousFact(piece, $tramo, $t)}
                             />
                         </p>
                     </div>
@@ -238,11 +243,22 @@
         border-left: 4px solid var(--badge-c);
         border-radius: var(--radius-sm);
         padding: 0.75rem;
+        min-height: 44px; /* objetivo táctil mínimo */
         cursor: grab;
         transition: all 0.2s ease;
         user-select: none;
         display: flex;
         flex-direction: column;
+    }
+
+    /* Pista visible del modo "tocar para colocar": sin ella, en táctil el
+       niño no descubre que puede colocar la pieza sin arrastrarla. */
+    .pick-hint {
+        margin: 0.5rem 0 0 0;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--primary);
+        line-height: 1.3;
     }
     .piece-card.selected {
         border-color: var(--primary);
@@ -346,5 +362,29 @@
         color: var(--text-muted);
         font-size: 0.9rem;
         padding: 2rem 0;
+    }
+
+    /* En móvil la biblioteca era una columna larguísima (hasta ~30 piezas en
+       la última etapa) que empujaba el tablero fuera de la pantalla. Aquí se
+       comporta como un cajón con scroll propio. */
+    @media (max-width: 900px) {
+        .piece-library {
+            height: auto;
+            max-height: 40vh;
+        }
+        .pieces-list {
+            padding: 0.6rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .piece-card,
+        .piece-card:hover:not(.selected):not(.placed) {
+            transition: none;
+            transform: none;
+        }
+        .expanded-info {
+            animation: none;
+        }
     }
 </style>

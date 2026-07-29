@@ -1,7 +1,15 @@
 import type { GameState, Metrics, Piece, StageObjective, StageId, SlotCategory } from '../types';
+import type { TramoId } from '../../../lib/tramos';
 import { PIECES } from '../data/pieces';
 import { get } from 'svelte/store';
 import { t } from '../stores/i18n';
+import {
+    OBJETIVOS_POR_TRAMO,
+    TRAMO_POR_DEFECTO,
+    getTramoConfig,
+    pieceInTramo,
+    stageForTramo
+} from './tramo-config';
 
 export const INITIAL_METRICS: Metrics = {
     accuracy: 0,
@@ -55,19 +63,19 @@ export function validateRequirements(piece: Piece, placements: GameState['placem
     return { valid: true };
 }
 
-export function canTrain(placements: Partial<Record<SlotCategory, string>>): { can: boolean; reason?: string } {
+export function canTrain(
+    placements: Partial<Record<SlotCategory, string>>,
+    tramo: TramoId = TRAMO_POR_DEFECTO
+): { can: boolean; reason?: string } {
     const _t = get(t);
     if (!placements['Datos'] || !placements['Cerebro']) {
         return { can: false, reason: _t.game?.needDataBrain || "Necesitas datos y un cerebro para empezar." };
     }
 
-    const modelP = PIECES.find(p => p.id === placements['Cerebro']);
-    if (modelP?.id === 'p_model_supervised' && !placements['Entrenamiento']) {
-        return { can: false, reason: _t.game?.needTraining || "Este cerebro necesita saber cómo Entrenarse (Ej: Etiquetas)." };
-    }
-
-    const modelId = placements['Cerebro'];
-    if (modelId === 'p_model_linear' && placements['Entrenamiento'] === undefined) {
+    // En 8-9 el tablero no tiene hueco de Entrenamiento, así que exigirlo
+    // dejaría al niño bloqueado sin manera de avanzar.
+    const hayEntrenamiento = getTramoConfig(tramo).slots.includes('Entrenamiento');
+    if (hayEntrenamiento && placements['Cerebro'] === 'p_model_linear' && placements['Entrenamiento'] === undefined) {
         return { can: false, reason: _t.game?.reqLabels || 'El modelo simple requiere Etiquetas (Entrenamiento) para saber qué predecir.' };
     }
 
@@ -92,10 +100,13 @@ export const STAGE_OBJECTIVES: Record<StageId, StageObjective[]> = {
                 Object.values(st.placements).includes('p_traintest_split') || Object.values(st.placements).includes('p_regularization')
         }
     ],
+    // Umbrales corregidos: el Transformer exige el Tokenizador en Datos, y esa
+    // combinación topa en 85 de precisión y 70 de complejidad. Pedir ">85" y
+    // ">70" hacía la etapa 3 literalmente imposible de superar.
     3: [
         { id: '3_transformer', description: 'Usa Modelo Transformer', isMet: (st) => Object.values(st.placements).includes('p_model_transformer') },
-        { id: '3_acc', description: 'Precisión mayor a 85', isMet: (_, metrics) => metrics.accuracy > 85 },
-        { id: '3_complex', description: 'Complejidad alta (sobre 70)', isMet: (_, metrics) => metrics.complexity > 70 }
+        { id: '3_acc', description: 'Precisión de 80 o más', isMet: (_, metrics) => metrics.accuracy >= 80 },
+        { id: '3_complex', description: 'Complejidad alta (60 o más)', isMet: (_, metrics) => metrics.complexity >= 60 }
     ],
     4: [
         { id: '4_human', description: 'Agrega feedback humano (RLHF)', isMet: (st) => Object.values(st.placements).includes('p_rlhf') },
@@ -109,13 +120,32 @@ export const STAGE_OBJECTIVES: Record<StageId, StageObjective[]> = {
     ]
 };
 
-export function checkStageCompletion(stage: StageId, state: GameState, metrics: Metrics): boolean {
-    const objectives = STAGE_OBJECTIVES[stage];
-    if (!objectives) return true;
+/**
+ * Objetivos de una etapa para un tramo. 12-14 usa el catálogo original;
+ * 8-9 y 10-11 tienen los suyos, con umbrales alcanzables usando solo las
+ * piezas que existen en su tramo.
+ */
+export function getObjectives(stage: StageId, tramo: TramoId = TRAMO_POR_DEFECTO): StageObjective[] {
+    const propios = OBJETIVOS_POR_TRAMO[tramo];
+    if (propios) return propios[stage] || [];
+    return STAGE_OBJECTIVES[stage] || [];
+}
+
+export function checkStageCompletion(
+    stage: StageId,
+    state: GameState,
+    metrics: Metrics,
+    tramo: TramoId = TRAMO_POR_DEFECTO
+): boolean {
+    const objectives = getObjectives(stage, tramo);
+    if (objectives.length === 0) return true;
     return objectives.every(obj => obj.isMet(state, metrics));
 }
 
-// Retorna las piezas desbloqueadas para una etapa determinada
-export function getUnlockedPieces(currentStage: StageId): string[] {
-    return PIECES.filter(p => p.stage <= currentStage).map(p => p.id);
+// Piezas desbloqueadas para una etapa y tramo: la etapa de entrada puede
+// variar por tramo y las piezas fuera del tramo no se ofrecen.
+export function getUnlockedPieces(currentStage: StageId, tramo: TramoId = TRAMO_POR_DEFECTO): string[] {
+    return PIECES
+        .filter(p => pieceInTramo(p, tramo) && stageForTramo(p, tramo) <= currentStage)
+        .map(p => p.id);
 }

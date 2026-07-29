@@ -1,10 +1,10 @@
 <script lang="ts">
 	import ConstructorPage from './ConstructorPage.svelte';
 
-	import TooltipGlobal from "$lib/components/ui/TooltipGlobal.svelte";
-	import TopBar from "$lib/components/TopBar.svelte";
-	import { game, showSingularityModal } from "$lib/stores/game";
-	import { showResetModal } from "$lib/stores/ui";
+	import TooltipGlobal from "./components/ui/TooltipGlobal.svelte";
+	import TopBar from "./components/TopBar.svelte";
+	import { game, showSingularityModal } from "./stores/game";
+	import { showResetModal } from "./stores/ui";
 
 	function handleReset() {
 		showResetModal.set(true);
@@ -46,11 +46,14 @@
 		.layout {
 			flex: none;
 			min-height: 0;
-			overflow-y: visible;
-			overflow-x: hidden;
+			/* Ambos ejes en `visible`: con overflow-x:hidden el eje vertical
+			   computa a `auto`, se crea un contenedor de scroll y la barra de
+			   acción `sticky` del tablero deja de anclarse al viewport. */
+			overflow: visible;
 		}
 		main {
 			overflow: visible;
+			padding: 0.75rem;
 		}
 	}
 </style>

@@ -20,7 +20,11 @@ export type EventoTipo =
     | 'mision_familia'
     | 'creacion_publicada'
     | 'insignia_ganada'
-    | 'actividad_diaria';
+    | 'actividad_diaria'
+    // El Constructor deja de ser una isla (doc 07, Fase C1): sus etapas y la
+    // IA terminada puntúan en el mismo ledger que las unidades-aventura.
+    | 'constructor_etapa'
+    | 'constructor_ia';
 
 // Cuánto vale cada hecho. La misión en familia es lo más premiado a
 // propósito (doc 04 §3.1: es lo que más queremos incentivar). Las palabras
@@ -33,6 +37,8 @@ export const CHISPAS: Record<EventoTipo, number> = {
     creacion_publicada: 5,
     insignia_ganada: 15,
     actividad_diaria: 0, // la racha es su propia recompensa (doc 04 §3.3)
+    constructor_etapa: 5, // una etapa vale menos que una misión completa
+    constructor_ia: 20, // terminar la IA entera vale como una misión en familia
 };
 
 // Umbrales calibrados a la economía real del tramo 8-9: una unidad completa

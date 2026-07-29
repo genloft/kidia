@@ -1,21 +1,24 @@
 <script lang="ts">
-	export let data;
-	import PieceLibrary from "$lib/components/PieceLibrary.svelte";
-	import Board from "$lib/components/Board.svelte";
-	import FloatingMentor from "$lib/components/FloatingMentor.svelte";
-	import ModalSingularity from "$lib/components/ModalSingularity.svelte";
-	import ModalReset from "$lib/components/ModalReset.svelte";
-	import DevPanel from "$lib/components/DevPanel.svelte";
-	import TutorialOverlay from "$lib/components/TutorialOverlay.svelte";
-	import ModalWelcome from "$lib/components/ModalWelcome.svelte";
-	import ModalVictory from "$lib/components/ModalVictory.svelte";
-	import ModalStageIntro from "$lib/components/ModalStageIntro.svelte";
-	import { game } from "$lib/stores/game";
+	import PieceLibrary from "./components/PieceLibrary.svelte";
+	import Board from "./components/Board.svelte";
+	import FloatingMentor from "./components/FloatingMentor.svelte";
+	import ModalSingularity from "./components/ModalSingularity.svelte";
+	import ModalReset from "./components/ModalReset.svelte";
+	import DevPanel from "./components/DevPanel.svelte";
+	import TutorialOverlay from "./components/TutorialOverlay.svelte";
+	import ModalWelcome from "./components/ModalWelcome.svelte";
+	import ModalVictory from "./components/ModalVictory.svelte";
+	import ModalEtica from "./components/ModalEtica.svelte";
+	import ModalStageIntro from "./components/ModalStageIntro.svelte";
+	import { game } from "./stores/game";
+	import { initTramo } from "./stores/tramo";
 	import { onMount } from "svelte";
 
 	onMount(() => {
 		// Verify if it's the first time so we can show the Welcome Modal
 		game.initCheck();
+		// Adapta piezas, huecos, etapas y vocabulario al tramo del hijo/a activo.
+		initTramo();
 	});
 </script>
 
@@ -36,8 +39,11 @@
 <TutorialOverlay />
 <ModalWelcome />
 <ModalStageIntro />
+<ModalEtica />
 <ModalVictory />
-<DevPanel />
+{#if import.meta.env.DEV}
+	<DevPanel />
+{/if}
 
 <style>
 	.workspace {
