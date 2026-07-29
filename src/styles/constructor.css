@@ -1,52 +1,47 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap');
 
 :root {
-	/* Dark EdTech / AI Theme (Kidia.es Inspired) */
-	--bg-main: #09090b;
-	/* Pitch dark canvas */
-	--bg-panel: #18181b;
-	/* Dark slate for panels */
-	--bg-deep: #0f0f13;
-	/* Deepest inset */
+	/* Paleta del Constructor DERIVADA del sistema de diseño (docs/mejora/03-sistema-diseno.md).
+	   Antes esto era un segundo sistema paralelo con 22 variables de valores
+	   literales: cambiar un color de marca no llegaba nunca hasta aquí. Ahora
+	   estos nombres son alias de los semánticos --k-*, así que el Constructor
+	   hereda el tema como el resto del sitio. Se conservan los NOMBRES viejos
+	   para no reescribir 4.900 líneas de componentes de una sentada. */
 
-	/* Primary and Neutral Colors (alineado con la paleta del sitio, ver src/styles/global.css) */
-	--primary: #22d3ee;
-	/* Cian, igual que --color-primary del sitio */
-	--primary-hover: #8b5cf6;
-	/* Morado, igual que --color-accent del sitio */
+	/* Fondos */
+	--bg-main: var(--k-bg-page);
+	--bg-panel: var(--k-bg-surface);
+	--bg-deep: var(--k-night-850);
 
-	/* Text Colors for Dark Theme */
-	--text-main: #f8fafc;
-	/* Near white for main text */
-	--text-muted: #a1a1aa;
-	/* Zinc 400 for secondary */
-	--border-stone: #27272a;
-	/* Zinc 800 for borders */
-	--border-highlight: #3f3f46;
-	/* Zinc 700 for subtle highlight */
+	/* Marca */
+	--primary: var(--k-brand-primary);
+	--primary-hover: var(--k-brand-accent);
 
-	/* Logical Modules / Category Colors (Vibrant on dark) */
-	--color-1: #30e4f5;
-	/* Datos (Cyan) */
-	--color-2: #ed5bf7;
-	/* Cerebro (Magenta) */
-	--color-3: #f59e0b;
-	/* Entrenamiento (Amber) */
-	--color-4: #10b981;
-	/* Examen (Emerald) */
-	--color-5: #6366f1;
-	/* Salida (Indigo) */
+	/* Texto y bordes */
+	--text-main: var(--k-text-strong);
+	--text-muted: var(--k-text-muted);
+	--border-stone: var(--k-border-subtle);
+	--border-highlight: var(--k-border-strong);
 
-	/* Modern Soft Dark Shadows */
+	/* Colores de categoría de los huecos (Datos, Cerebro, Entrenamiento,
+	   Examen, Salida). Se apoyan en los primitivos de marca y estado. */
+	--color-1: var(--k-cyan-400);
+	--color-2: var(--k-fuchsia-400);
+	--color-3: var(--k-amber-400);
+	--color-4: var(--k-green-400);
+	/* violet-300, no 500: el 500 se queda en 4.18:1 sobre el panel y no
+	   llega a AA para texto pequeño. Este llega a 9:1 y sigue siendo violeta. */
+	--color-5: var(--k-violet-300);
+
+	/* Sombras y radios: el doc 03 §2.3 los da por unificados con el sitio. */
 	--shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
 	--shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.4), 0 2px 6px -1px rgba(0, 0, 0, 0.2);
 	--shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.5), 0 4px 10px -2px rgba(0, 0, 0, 0.3);
 
-	/* Typography & Radius */
-	--font-heading: 'Outfit', system-ui, sans-serif;
-	--font-body: 'Outfit', system-ui, sans-serif;
+	/* Tipografía: la fuente ya viene autoalojada desde el Layout (@fontsource),
+	   así que aquí solo se hereda; el @import a Google Fonts era una petición
+	   externa redundante con la IP del niño. */
+	--font-heading: var(--font-body);
 
-	/* Rounded corners */
 	--radius-sm: 8px;
 	--radius-md: 16px;
 	--radius-lg: 24px;

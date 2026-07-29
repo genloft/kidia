@@ -102,7 +102,7 @@
     }
     /* Morti tiene voz propia: morada, distinta de la guía. */
     .modal-content.morti {
-        --pers-color: #c084fc;
+        --pers-color: var(--k-violet-300);
     }
     .modal-content.vael {
         --pers-color: var(--primary);

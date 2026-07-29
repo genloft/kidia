@@ -378,7 +378,7 @@
 
     h3 {
         margin: 0 0 0.5rem 0;
-        font-weight: 900;
+        font-weight: 800;
         font-size: 1.1rem;
         text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
     }

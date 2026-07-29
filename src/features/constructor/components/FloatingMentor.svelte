@@ -67,7 +67,7 @@
     function getTypeColor(type: LogEvent["type"]): string {
         switch (type) {
             case "error":
-                return "#ef4444";
+                return "var(--k-state-danger)";
             case "warn":
                 return "#f59e0b";
             case "success":

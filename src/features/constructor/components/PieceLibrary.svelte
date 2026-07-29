@@ -210,7 +210,7 @@
 
     .category-select:focus {
         border-color: var(--primary);
-        box-shadow: 0 0 0 2px rgba(146, 151, 254, 0.3);
+        box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 35%, transparent);
     }
 
     .category-select option {
@@ -262,7 +262,7 @@
     }
     .piece-card.selected {
         border-color: var(--primary);
-        box-shadow: 0 0 0 2px rgba(146, 151, 254, 0.3);
+        box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 35%, transparent);
         transform: translateY(-2px);
     }
     .piece-card:hover:not(.selected):not(.placed) {
@@ -349,10 +349,10 @@
         font-size: 0.75rem;
         color: var(--color-3);
         font-style: italic;
-        background: rgba(245, 158, 11, 0.1);
+        background: color-mix(in srgb, var(--color-3) 12%, transparent);
         padding: 0.5rem;
         border-radius: var(--radius-sm);
-        font-weight: 500;
+        font-weight: 600;
         line-height: 1.3;
         border-left: 3px solid var(--color-3);
     }

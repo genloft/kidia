@@ -271,14 +271,14 @@
         border-color: var(--border-highlight);
     }
     .warning-text {
-        color: #fca5a5;
+        color: var(--k-red-400);
         font-weight: 700;
         letter-spacing: 0.5px;
         font-size: 0.8rem;
-        background: rgba(239, 68, 68, 0.15);
+        background: color-mix(in srgb, var(--k-state-danger) 15%, transparent);
         padding: 0.25rem 0.5rem;
         border-radius: var(--radius-sm);
-        border: 1px solid rgba(239, 68, 68, 0.3);
+        border: 1px solid color-mix(in srgb, var(--k-state-danger) 30%, transparent);
     }
     .metrics {
         display: flex;
@@ -393,7 +393,7 @@
     .checklist li.met {
         color: var(--color-4);
         border-color: var(--color-4);
-        background: rgba(16, 185, 129, 0.05);
+        background: color-mix(in srgb, var(--color-4) 8%, transparent);
     }
     .checkbox {
         font-weight: 700;
@@ -425,7 +425,7 @@
         cursor: pointer;
         flex-shrink: 0;
         white-space: nowrap;
-        box-shadow: 0 4px 6px -1px rgba(146, 151, 254, 0.3);
+        box-shadow: 0 4px 6px -1px color-mix(in srgb, var(--primary) 35%, transparent);
     }
     .btn-train:disabled {
         background: var(--border-stone);
@@ -436,7 +436,7 @@
     .btn-train:not(:disabled):hover {
         background: var(--primary-hover);
         transform: translateY(-2px);
-        box-shadow: 0 6px 8px -1px rgba(146, 151, 254, 0.4);
+        box-shadow: 0 6px 8px -1px color-mix(in srgb, var(--primary) 40%, transparent);
     }
 
     .btn-train.ready-pulse {
@@ -444,13 +444,13 @@
     }
     @keyframes trainPulse {
         0% {
-            box-shadow: 0 0 0 0 rgba(89, 204, 89, 0.6);
+            box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-4) 60%, transparent);
         }
         50% {
-            box-shadow: 0 0 20px 5px rgba(89, 204, 89, 0.4);
+            box-shadow: 0 0 20px 5px color-mix(in srgb, var(--color-4) 40%, transparent);
         }
         100% {
-            box-shadow: 0 0 0 0 rgba(89, 204, 89, 0);
+            box-shadow: 0 0 0 0 transparent;
         }
     }
 
@@ -474,9 +474,9 @@
         flex-shrink: 0;
     }
     .btn-reset:hover {
-        border-color: #ef4444;
-        color: #fca5a5;
-        background: rgba(239, 68, 68, 0.15);
+        border-color: var(--k-state-danger);
+        color: var(--k-red-400);
+        background: color-mix(in srgb, var(--k-state-danger) 15%, transparent);
     }
 
     /* Métricas compactas: solo en pantallas donde el cabecero se va de vista. */

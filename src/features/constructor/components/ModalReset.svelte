@@ -94,7 +94,7 @@
     h2 {
         margin: 0;
         font-size: 1.15rem;
-        color: #ef4444;
+        color: var(--k-state-danger);
         font-weight: 700;
     }
 
@@ -126,7 +126,7 @@
     }
 
     .warning-text {
-        color: #ef4444;
+        color: var(--k-state-danger);
         margin-top: 1rem;
         font-weight: 600;
     }
@@ -163,7 +163,7 @@
     }
 
     .btn-danger {
-        background: #ef4444;
+        background: var(--k-state-danger);
         border: none;
         color: white;
     }

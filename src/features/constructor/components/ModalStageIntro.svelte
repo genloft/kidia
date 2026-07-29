@@ -98,7 +98,7 @@
         display: inline-block;
         background: var(--border-highlight);
         color: var(--bg-panel);
-        font-weight: 900;
+        font-weight: 800;
         font-size: 0.9rem;
         text-transform: uppercase;
         letter-spacing: 2px;

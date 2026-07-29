@@ -2,6 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import ConstructorApp from '../features/constructor/ConstructorApp.svelte';
+// El Layout autoaloja Outfit 400/600/800; el Constructor usa además el 700.
+// Sin esto el navegador lo sintetizaría (faux bold) al quitar Google Fonts.
+import '@fontsource/outfit/700.css';
 import '../styles/constructor.css';
 ---
 

@@ -89,7 +89,7 @@
         margin: 0.6rem 0 0;
         padding: 0.6rem 0.75rem;
         border-radius: var(--radius-sm);
-        background: rgba(245, 158, 11, 0.12);
+        background: color-mix(in srgb, var(--color-3) 12%, transparent);
         border-left: 3px solid var(--color-3);
         color: var(--text-main);
         font-size: 0.88rem;
@@ -163,7 +163,7 @@
         color: var(--color-4);
     }
     .tr-delta.baja {
-        color: #fca5a5;
+        color: var(--k-red-400);
     }
     .tr-delta.igual {
         color: var(--text-muted);

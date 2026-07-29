@@ -176,7 +176,9 @@
         color: var(--slot-color);
         font-size: 0.8rem;
         font-weight: 700;
-        opacity: 0.5;
+        /* 0.5 dejaba el nombre del hueco por debajo de cualquier umbral de
+           contraste legible; el hueco vacío es justo lo que hay que leer. */
+        opacity: 0.8;
     }
 
     .p-name {
@@ -209,8 +211,8 @@
         padding: 0;
     }
     .p-remove:hover {
-        color: #ef4444;
-        border-color: #ef4444;
+        color: var(--k-state-danger);
+        border-color: var(--k-state-danger);
     }
 
     .shake-anim .slot.filled {
@@ -220,15 +222,15 @@
     @keyframes pulseSlot {
         0% {
             transform: scale(1);
-            box-shadow: 0 0 0 rgba(192, 132, 252, 0);
+            box-shadow: 0 0 0 transparent;
         }
         50% {
             transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(192, 132, 252, 0.6);
+            box-shadow: 0 0 20px color-mix(in srgb, var(--color-5) 60%, transparent);
         }
         100% {
             transform: scale(1);
-            box-shadow: 0 0 0 rgba(192, 132, 252, 0);
+            box-shadow: 0 0 0 transparent;
         }
     }
 

@@ -1,11 +1,11 @@
 # 07 · Plan de mejora global del Constructor
 
-> Estado: PROPUESTA v2 · 2026-07-28
+> Estado: COMPLETADO · 2026-07-29
 > Decisiones de producto tomadas: **(A) integrar el Constructor a los niveles de Kidia**,
 > **(B) adaptarlo a los 3 tramos** (8-9, 10-11, 12-14) y **(C) rehacer su capa visual y adaptativa**.
 > Objetivo del usuario: *"gamificar cómo se construye y se mejora una IA por niveles"*.
 >
-> **C0, C4, C1, C2 y C3 están hechos y verificados** (ver §3). Queda C5 (migración a tokens del sistema de diseño).
+> **Plan COMPLETO: C0, C1, C2, C3, C4 y C5 hechos y verificados** (ver §3).
 
 ---
 
@@ -256,16 +256,35 @@ imposibles eliminados; la simulación confirma que los 3 tramos son ganables.
 **Leo (8-9)** hasta la victoria, y comprobación de huecos/objetivos con **Marta (10-11)** y
 **Hugo (12-14)**.
 
-### Fase C5 · Sistema de diseño: migrar a tokens · PENDIENTE · 1-2 días
+### ✅ Fase C5 · Sistema de diseño: migrar a tokens · HECHO (2026-07-29)
 
-Lo único que queda del plan. `constructor.css` sigue siendo un sistema paralelo
-(paleta propia `--bg-main`/`--primary`/`--color-1..5`, 23 colores hardcodeados,
-0 tokens `--k-`) y carga la fuente Outfit desde Google Fonts en la primera pintura
-—petición externa en un producto infantil—. Ver §1.2 y `03-sistema-diseno.md`.
+`constructor.css` era un segundo sistema de diseño paralelo: 22 variables con valores
+literales que ningún cambio de marca alcanzaba nunca.
 
-- Remapear las variables de `constructor.css` a los semánticos `--k-`, conservando el *look*.
-- Autoalojar la tipografía y eliminar el `@import` remoto.
-- Piel más clara para 8-9 sobre el mismo contrato de tokens.
+- **Paleta derivada de los tokens**: las 22 variables pasan a ser alias de los semánticos
+  `--k-*` (`--bg-main` → `--k-bg-page`, `--primary` → `--k-brand-primary`, los 5 colores de
+  categoría → primitivos de marca/estado). Se conservan los *nombres* viejos para no
+  reescribir 4.900 líneas de componentes de golpe, pero los *valores* ya vienen del sistema.
+- **Fuera Google Fonts**: el `@import` remoto era redundante —el Layout ya autoaloja Outfit
+  con `@fontsource`— pero seguía pidiendo la fuente a Google en cada carga, con la IP del
+  niño. Verificado: **0 referencias a `fonts.googleapis`/`gstatic` en `dist/`**.
+- **Pesos reales, sin *faux bold***: el Constructor usaba 500/700/900, que el Layout no
+  carga. Se importa el 700 (peso dominante) en la página y se normalizan 500→600 y
+  900→800 sobre la escala del sistema.
+- **27 colores hardcodeados** sustituidos por tokens. Entre ellos, el anillo de foco usaba
+  `rgba(146,151,254,…)` —un primario azulado antiguo— que ya no coincidía con el cian de
+  marca.
+
+**Contraste AA verificado por token** sobre el panel: los 8 colores pasan AA de texto
+(cian 9.80:1, magenta 7.20, ámbar 10.61, verde 10.17, violeta 9.60, texto 16.17, apagado 6.91).
+Dos correcciones a raíz de medirlo:
+- `--color-5` (Salida) se queda en 4.18:1 con `violet-500` → sube a `violet-300` (9.60:1).
+- El nombre del hueco vacío se pintaba a `opacity: 0.5`, ilegible: sube a 0.8.
+
+*Nota:* la migración cambia ligeramente dos colores de categoría (verde y violeta se
+aclaran). Es el efecto buscado al adoptar el sistema, y en ambos casos **mejora** el
+contraste sobre el fondo oscuro.
+
 
 ---
 
@@ -306,7 +325,7 @@ Todas viven en `logic/progression.ts` y aparecen en `/insignias` bajo el Nivel 4
 
 ## 6. Orden recomendado
 
-**C0 ✅ → C4 ✅ → C1 ✅ → C2 ✅ → C3 ✅ → C5.**
+**C0 ✅ → C4 ✅ → C1 ✅ → C2 ✅ → C3 ✅ → C5 ✅ — plan completo.**
 
 Cambio de orden respecto a la v1 del plan: **C4 (adaptación) sube justo detrás de C0**, porque
 contiene los dos 🔴 que impiden *jugar* hoy — sin táctil ni bucle en pantalla, en tablet y móvil el

@@ -63,7 +63,7 @@
         color: var(--text-main);
         font-family: var(--font-body);
         font-size: 0.9rem;
-        font-weight: 500;
+        font-weight: 600;
         padding: 0.4rem 2rem 0.4rem 1rem;
         cursor: pointer;
         transition: all 0.2s;

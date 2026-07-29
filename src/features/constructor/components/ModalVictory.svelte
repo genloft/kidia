@@ -165,7 +165,7 @@
     h2 {
         font-size: 2.2rem;
         margin: 0 0 1.5rem 0;
-        font-weight: 900;
+        font-weight: 800;
         background: linear-gradient(90deg, var(--color-primary), var(--color-accent), var(--color-secondary));
         -webkit-background-clip: text;
         background-clip: text;
@@ -254,7 +254,7 @@
         border: 2px solid var(--color-4);
         padding: 1rem 2.5rem;
         font-size: 1.2rem;
-        font-weight: 900;
+        font-weight: 800;
         border-radius: var(--radius-sm);
         cursor: pointer;
         transition: all 0.3s;
